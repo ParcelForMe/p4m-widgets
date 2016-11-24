@@ -127,9 +127,9 @@
              
                 if (!this._profilePicUrl) {
                     if (this._loggedIn)
-                        this._profilePicUrl = "/Scripts/widgets/p4m-profile/peli-logo-green.png";
+                        this._profilePicUrl = this.resolveUrl("peli-logo-green.png");
                     else
-                        this._profilePicUrl = "/Scripts/widgets/p4m-profile/peli-logo-grey.png";
+                        this._profilePicUrl = this.resolveUrl("peli-logo-grey.png");
                 }
             },
 
