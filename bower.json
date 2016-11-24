@@ -34,7 +34,7 @@
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "main":"",
+  "main":"p4m-checkout/p4m-checkout.html",
   "repository": {
     "type": "git",
     "url": "https://github.com/ParcelForMe/p4m-widgets.git"
