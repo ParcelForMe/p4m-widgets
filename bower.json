@@ -1,6 +1,6 @@
 {
   "name": "p4m-widgets",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "https://github.com/ParcelForMe/p4m-widgets/blob/master/LICENSE",
   "description": "Parcel for Me - Polymer Widgets",
   "dependencies": {
