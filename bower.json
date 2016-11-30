@@ -25,6 +25,7 @@
     "paper-menu-button": "^1.5.2",
     "paper-menu": "^1.2.2",
     "paper-item": "^1.2.1",
+    "paper-input": "^1.1.22",
     "polymer": "~1.6.0",
     "polymer-cookie": "^1.0.3"
   },
