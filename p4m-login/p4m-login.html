@@ -27,18 +27,19 @@
             <p class="restoreCartStatusMessage"><paper-spinner id="dlgSpinner"></paper-spinner>{{_restoreCartStatusMessage}}</p>
             
             <p4m-api id="localApi" is-local="true"></p4m-api>
+            <p4m-api id="p4mApi" is-local="false"></p4m-api>
             <div class="buttons">
                 <div class="p4m-button p4m-button-active no" on-click="_useNewCart">No</div>
                 <div class="p4m-button p4m-button-active" on-click="_useLastCart">Yes</div>
             </div>
         </paper-dialog>
+
         <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
         <polymer-cookie id="p4mStateCookie" name="p4mState" value="{{_state}}"></polymer-cookie>
         <polymer-cookie id="p4mNonceCookie" name="p4mNonce" value="{{_nonce}}"></polymer-cookie>
         <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
         <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
-          
-        
+        <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
     </template>
 
     <style>
@@ -137,6 +138,17 @@
                         }
                     }
                 }
+                else {
+                    // not logged in so we get the closest P4M server
+                    this.$.p4mApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                }
+            },
+
+            _onGotLocale: function (data) {
+                console.log(JSON.stringify(data));
+                if (data.Success) {
+                    document.cookie = "p4mLocale=" + data.Token + "; path=/";
+                }
             },
 
             launchPopup: function()
@@ -171,6 +183,7 @@
                 this.$.p4mStateCookie.eraseCookie();
                 this.$.p4mNonceCookie.eraseCookie();
                 this.$.p4mLocalLoginCookie.eraseCookie();
+                this.$.p4mLocaleCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
             },
 
