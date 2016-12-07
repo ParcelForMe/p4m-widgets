@@ -27,7 +27,7 @@
             <p class="restoreCartStatusMessage"><paper-spinner id="dlgSpinner"></paper-spinner>{{_restoreCartStatusMessage}}</p>
             
             <p4m-api id="localApi" is-local="true"></p4m-api>
-            <p4m-api id="p4mApi" is-local="false"></p4m-api>
+            <p4m-api id="p4mLoginApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
             <div class="buttons">
                 <div class="p4m-button p4m-button-active no" on-click="_useNewCart">No</div>
                 <div class="p4m-button p4m-button-active" on-click="_useLastCart">Yes</div>
@@ -140,7 +140,7 @@
                 }
                 else {
                     // not logged in so we get the closest P4M server
-                    this.$.p4mApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                    this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                 }
             },
 

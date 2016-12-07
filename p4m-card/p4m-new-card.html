@@ -5,7 +5,6 @@
 <dom-module id="p4m-new-card">
 
     <template>
-        <p4m-api id="api" ssl="true" host-base-domain="parcelfor.me" host-type="dev" version="v2"></p4m-api>
         <div id="container" class="loading">
             <p>Your card details are stored securely by our fully PCI compliant payment service. <a href="#">Read more</a></p>
             <paper-spinner id="spinner" active="true"></paper-spinner>
@@ -117,7 +116,8 @@
                 newCardId: {
                     type: String,
                     notify: true,
-                }
+                },
+                api: {type: Object}
             },
 
             observers: [
@@ -126,7 +126,6 @@
 
             ready: function()
             {
-               
             },
 
             onConsumerData: function (consumer) {
@@ -139,7 +138,8 @@
                 var d = new Date();
                 var timeStampStr = (d.getFullYear().toString() + '-' + (d.getMonth() + 1 < 10 ? '0' : '') + (d.getMonth() + 1).toString() + '-' + d.getDate().toString() + "T" + (d.getHours() + 1 < 10 ? '0' : '') + d.getHours().toString() + ':' + (d.getMinutes() + 1 < 10 ? '0' : '') + d.getMinutes().toString() + ':' + (d.getSeconds() + 1 < 10 ? '0' : '') + d.getSeconds().toString());
 
-                this.$.api.call('cardTokenHash',
+                this.api = document.getElementById("p4mCheckoutApi");
+                this.api.call('cardTokenHash',
                 {
                     timestamp: timeStampStr,
                     orderId: this.newCardId,
