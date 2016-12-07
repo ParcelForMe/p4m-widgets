@@ -276,7 +276,8 @@
                 }
             },
 
-            markAsDelivery: function() {
+            markAsDelivery: function () {
+                //debugger;
                 if (this.cartData.AddressId !== this.addressData.Id) {
                     this.isDelivery = true;
                     this.fire('select', { 'isDelivery': true, 'id': this.addressData.Id });
