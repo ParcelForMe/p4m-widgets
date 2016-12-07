@@ -170,7 +170,10 @@
                 this.popupCenter(logoutUrl, "Logout", 450, 500);
                 this.clearCookies();
                 if (this.logoutForm && this.logoutForm != '') {
-                    document.getElementById(this.logoutForm).submit();
+                    var formElem = document.getElementById(this.logoutForm);
+                    if (formElem) {
+                        formElem.submit();
+                    }
                 }
                 else {
                     window.location.reload(true);
