@@ -1233,65 +1233,6 @@
                 this._processNonDayDefiniteData();
             },
 
-            _checkForServices: function (defaultDelivery) {
-                //Preselect delivery option based on default delivery method
-                //TODO: Investigate this code
-                /*if ((defaultDelivery === 'Standard') && (this._data.standardRates.length !== 0)) {
-                    this.showPage_Standard();
-                    this._preselectForStandard();
-                }
-                else if (this._data.standardRates.length === 0) {
-                    this.$$("#standardDeliveriesOption").parentNode.classList.add("hidden");
-                }*/
-
-                //Commented out
-                //TODO: Hide options when there are no services available
-                /*
-                if ((defaultDelivery === 'Standard') && (this._data.standardRates.length !== 0)) {
-                    this.$.standardDeliveryPanel.opened = true;
-                    this.$.standardDeliveriesOption.checked = "checked";
-                    this.$.calendarDeliveriesOption.checked = "";
-                    this.$.dropPointDeliveriesOption.checked = "";
-                    this._preselectForStandard();
-                }
-                else if (this._data.standardRates.length === 0) {
-                    this.$$("#standardDeliveriesOption").parentNode.classList.add("hidden");
-                }
-
-                if (((defaultDelivery === 'Express') || (this._data.standardRates.length === 0)) && (this._data.dayDefinite.length !== 0)) {
-                    if (this._data.standardRates.length === 0)
-                        this.$$("#standardDeliveriesOption").parentNode.classList.add("hidden");
-
-                    this.$.calendarPanel.opened = true;
-                    this.$.standardDeliveriesOption.checked = "";
-                    this.$.calendarDeliveriesOption.checked = "checked";
-                    this.$.dropPointDeliveriesOption.checked = "";
-                    this._preselectForExpress();
-                }
-                else if (this._data.dayDefinite.length === 0) {
-                    this.$$("#calendarDeliveriesOption").parentNode.classList.add("hidden");
-                }*/
-
-                /*
-
-                var deliveryDroppointsSize = Object.keys(this._deliveryDroppoints).length;
-                if (((defaultDelivery === 'CollectionPoint') || (this._data.dayDefinite.length === 0)) && (deliveryDroppointsSize !== 0)) {
-                    this._autoChooseCollectionPoint = true;
-                    if ((this._data.standardRates.length === 0) && (this._data.dayDefinite.length === 0)) {
-                        this.$$("#standardDeliveriesOption").parentNode.classList.add("hidden");
-                        this.$$("#calendarDeliveriesOption").parentNode.classList.add("hidden");
-                    }
-
-                    this.$.dropPointPanel.opened = true;
-                    this.$.standardDeliveriesOption.checked = "";
-                    this.$.calendarDeliveriesOption.checked = "";
-                    this.$.dropPointDeliveriesOption.checked = "checked";
-                }
-                else if (deliveryDroppointsSize === 0) {
-                    this.$$("#dropPointDeliveriesOption").parentNode.classList.add("hidden");
-                }*/
-            },
-
             _showAsLoading: function (loading) {
                 if (loading) {
                     this.$$('#list-spinner').active = true;
@@ -1335,12 +1276,12 @@
                     return true;
                 }              
             },
-
+            /*
             getClosestDroppoint: function (dpList) {
                 return dpList.reduce(function (prev, curr) {
                     return (prev.distanceMeters < curr.distanceInMeters) ? prev : curr;
                 });
-            },
+            },*/
 
             sortServices: function (a, b) {
                 if (a == b) return 0;
@@ -1601,16 +1542,6 @@
                 });
                 */
 
-                //TODO: Take a close look at this. Do we need it?
-                /*google.maps.event.addListener(self._map, 'bounds_changed', function() {
-                    // initialise region manager
-                    self._updateMapViewPort();
-                    if (self._mapViewPort) {
-                        self.$.regionManager.addRegion(self._mapViewPort);
-                        // remove the listener?
-                        google.maps.event.clearListeners(self._map, 'bounds_changed');
-                    }
-                });*/
 
                 // 'idle' event is triggered when the user stopped zooming/dragging;
                 google.maps.event.addListener(self._map, 'idle', function (event) {
@@ -2348,24 +2279,6 @@
 			    this.selectDropPoint(e.detail);
 			},
 
-			_doAutoChooseDroppoint: function () {
-                //Removing this until we have a droppoint API
-                /*
-			    if (!this._selectedDropPoint) {
-			        var closest = null;
-			        if (this._preferredDroppoints && this._preferredDroppoints.length) {
-			            closest = this.getClosestDroppoint(this._preferredDroppoints);
-			        }
-			        else if (this._dropPoints && this._dropPoints.length) {
-			            closest = this.getClosestDroppoint(this._dropPoints);
-			        }
-			        if (closest) {
-			            this.chooseDroppoint(closest);
-			        }
-			    }
-                */
-			},
-
 			broadcastState: function () {
 			    //fire events relating to UI state
 			    if (this.showingDroppoints) {
@@ -2391,7 +2304,6 @@
 			_panToGeoLocation: function (geoLocation) {
                 this._map.panTo(geoLocation);
                 this._mapViewPort = [[ geoLocation.lng - 0.01,geoLocation.lat - 0.01], [geoLocation.lng + 0.01, geoLocation.lat + 0.01]];
-                //this._requestDroppointsByGeoBoxes([this._mapViewPort], function () { });
 			},
 
 			_panToPlace: function (e) {
