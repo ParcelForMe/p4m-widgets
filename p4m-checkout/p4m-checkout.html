@@ -63,6 +63,7 @@
                         </iron-page>
                     </iron-pages>                 
                 </div>
+                <h3>{{cartData.ServiceName}}</h3> 
                 <div id="summaryPanel" class="p4m-panel smallSummary">
                     <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
                     <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" new-drop-point="{{_queuedNewAddress}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
@@ -381,9 +382,7 @@
 
             onCartData: function (data) {
                 this.toggleLoading(false);
-
-                this.$.p4mPurchase.updateUi();
-
+              
                 if (data.Success) {
                     this.cartData = data.Cart;
                     if (this.cartData && this.cartData.Id === null) {
@@ -394,7 +393,8 @@
                 }
                 else {
                     console.error(data.Error);
-                }                
+                }
+                this.$.p4mPurchase.updateUi();
             },
 
             onCartItemsChange: function (e) {
@@ -431,10 +431,10 @@
                 // got new shipping details so we need to get updated tax from the host
                 this.$.localApi.call('updShippingService', null, shippingDetails, function (cartTotals) {
                     //self.updCartTotals(cartTotals); // this updates tax
-                    self.cartData.Carrier = data.carrier;
-                    self.cartData.ShippingAmt = data.shipping;
-                    self.cartData.ServiceName = data.service;
-                    self.cartData.ExpDeliveryDate = data.expDeliveryDate;
+                    self.set('cartData.Carrier', data.carrier);
+                    self.set('cartData.ShippingAmt', data.shipping);
+                    self.set('cartData.ServiceName', data.service);
+                    self.set('cartData.ExpDeliveryDate', data.expDeliveryDate);
                     if (data.collectionPoint) {
                         self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function () {
                             //self.updateP4mCart();
@@ -519,6 +519,8 @@
                 callback(result);
             },
 
+
+
             onPaymentComplete: function () {
             },
 
@@ -591,7 +593,11 @@
                     }                       
                     else if (e.detail.isDelivery) {
                         this.set('cartData.AddressId', e.detail.id);
-                    }                    
+                    }
+                    if (this.$.gfsCheckoutWidget) {
+                        this.$.gfsCheckoutWidget._unselectDropPoint();
+                    }
+                    
                     this.updateP4mCart();
                 }
             },
@@ -775,7 +781,8 @@
             },
 
             onGfsServiceChanged: function (e) {
-                //console.log("p4m widget: onGfsServiceChanged():", e);
+                console.log("p4m widget: onGfsServiceChanged():", e);
+                //debugger;
                 this.updateShippingService(e.detail, function () { console.log("onGfsServiceChanged: updateShippingService complete")});
             },
 

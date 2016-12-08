@@ -1886,6 +1886,7 @@
                     this._hideDropPointDetails();
                     this._selectedDropPoint.chosen = false;
                     this._selectedDropPoint = null;
+                    this._preselectForStandard();
                 }
             },
 
@@ -2085,13 +2086,14 @@
             },
 
             _preselectForStandard: function () {
-                
+                //debugger;
                 if (this.standardRates) {
                     this.set('_selectedDropPoint', null);
-                    this.standardRates[0].selected = true; //zzzzzz                   
+                    this.standardRates[0].selected = true;                
                     this.updateDeliveryOptions(this.standardRates[0].id, this.standardRates[0].deliveryDate);
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
+                    this.fire('selectedservicechanged', this.standardRates[0]);
                 }
 
             },
