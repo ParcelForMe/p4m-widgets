@@ -1886,7 +1886,7 @@
                     this._hideDropPointDetails();
                     this._selectedDropPoint.chosen = false;
                     this._selectedDropPoint = null;
-                    this._preselectForStandard();
+                    //this._preselectForStandard();
                 }
             },
 
@@ -2093,7 +2093,7 @@
                     this.updateDeliveryOptions(this.standardRates[0].id, this.standardRates[0].deliveryDate);
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
-                    this.fire('selectedservicechanged', this.standardRates[0]);
+                    this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
                 }
 
             },
@@ -2245,7 +2245,7 @@
             onShowPage_Calendar: function() {
                 this.showingDroppoints = false;
                 //TODO: Choose soonest option by default
-
+                this.set('_selectedDropPoint', null);
                 this.$.calendar.autoSelect();
                 this.fire('show-calendar');
             },
