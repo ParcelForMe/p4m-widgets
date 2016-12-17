@@ -37,15 +37,18 @@
                 <div id="detailPanel" class="p4m-panel">
                    
                     
-                    <paper-tabs selected="{{selectedTab}}">
+                    <paper-tabs id="p4mTabs" selected="{{selectedTab}}">
                         <paper-tab>My Order</paper-tab>
-                        <paper-tab>Delivery Options</paper-tab>
-                        <paper-tab>Payment Options</paper-tab>
-                        <paper-tab>Addresses</paper-tab>
+                        <paper-tab>My Details</paper-tab>
+                        <paper-tab disabled="true">Delivery Options</paper-tab>
+                        <paper-tab disabled="true">Payment Options</paper-tab>
                     </paper-tabs>
                     <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">                   
                         <iron-page id="cartPage">                       
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
+                        </iron-page>
+                        <iron-page id="addressPage">
+                            <p4m-address-list id="addressList" address-list-data="{{consumerData.Addresses}}" cart-data="{{cartData}}" on-select="onSelectAddress" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
                         <iron-page id="deliveryPage">
                             <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
@@ -58,9 +61,6 @@
                         <iron-page id="cardPage">
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
                         </iron-page>
-                        <iron-page id="addressPage">
-                            <p4m-address-list id="addressList" address-list-data="{{consumerData.Addresses}}" cart-data="{{cartData}}" on-select="onSelectAddress" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
-                        </iron-page>
                     </iron-pages>                 
                 </div>
                 <div id="summaryPanel" class="p4m-panel smallSummary">
@@ -69,7 +69,10 @@
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>  
                     <p4m-discount-input on-discount="onDiscount"></p4m-discount-input>    
                  </div>
-            </div>           
+            </div>
+            <div id="bottomPanel" class="bottomPanel">
+                <button id="p4mNextBtn" on-tap="nextTab">Next...</button>
+            </div>
         </div>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
@@ -110,6 +113,19 @@
             float: right;
             margin-top: -8px;
         }   
+        .bottomPanel {
+            width: 100%;
+            background-color: #E0E0E0;
+            border: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            padding: 10px;
+            height: 48px;
+        }
+        .bottomPanel button {
+            float: right;
+            display: inline-block;
+        }
         .panelContainer {
             border-bottom-right-radius: 8px;
             border-bottom-left-radius: 8px;
@@ -245,6 +261,15 @@
                     self.preselectAddress();
                     self.preselectDeliveryMethod();
                 });
+            },
+
+            nextTab: function () {
+                var selTab = this.$.p4mPages.selected + 1;
+                if (selTab == 4)
+                    selTab = 0;
+                var tab = this.$.p4mTabs.items[selTab];
+                if (!tab.disabled)
+                    this.$.p4mPages.selected = selTab;
             },
 
             debug: function(e) {

@@ -1,5 +1,6 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-collapse/iron-collapse.html" />
+<link rel="import" href="../../iron-input/iron-input.html" />
 <link rel="import" href="../../paper-spinner/paper-spinner.html" />
 <link rel="import" href="../p4m-address/p4m-address.html" />
 
@@ -7,6 +8,15 @@
 
     <template>
         <div id="container">
+            <div class="card-body card-edit">
+                <div class="consumer-form">
+                    <input is="iron-input" type="text" id="consumer-email" bind-value="{{consumerData.Email}}" placeholder="Email address" />
+                    <a class="p4m-button p4m-primary-button" href="#" on-tap="checkEmail">Go</a>
+                    <input is="iron-input" type="text" id="consumer-given-name" bind-value="{{consumerData.GivenName}}" placeholder="First name" disabled />
+                    <input is="iron-input" type="text" id="consumer-family-name" bind-value="{{consumerData.FamilyName}}" placeholder="Last name" disabled />
+                </div>
+            </div>
+
             <p><a id="addNewAddress" href="#" on-tap="addNewAddress">Add a new address</a></p>
 
             <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
@@ -42,6 +52,17 @@
             display: none;
         }
 
+        .consumer-form {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .consumer-form input {
+            margin: 4px;
+            width: 100px;
+            max-width: 100%;
+        }
     </style>
 
     <script>
@@ -77,6 +98,27 @@
             ready: function()
             {
                 
+            },
+
+            checkEmail: function () {
+                // load a popup to ask the P4M server to check the email address
+                // if the email is known the we can ask the user to login if they have completed their registration
+                // or if not, let them know that if they validate their email address we can use their stored info
+                var email = this.$["consumer-email"].value;
+                this.popup = this.popupCenter("/p4m/checkEmail?email=" + email, "Checking...", 300, 200);
+                var self = this;
+                this.popup.onunload = function () {
+                    alert('unload: '+self.popup.closed);
+                }
+                this.popup.onpagehide = function () {
+                    alert('hide: ' + self.popup.closed);
+                }
+            },
+
+            popupCenter: function (url, title, w, h) {
+                var left = (screen.width / 2) - (w / 2);
+                var top = (screen.height / 2) - (h / 2);
+                return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
             },
 
             addNewAddress: function () {

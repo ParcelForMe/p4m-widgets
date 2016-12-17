@@ -73,6 +73,9 @@
             is: "p4m-login",
 
             properties: {
+                immediateLoad: {
+                    type: Boolean
+                },
                 hostType: {
                     type: String,
                 },
@@ -114,36 +117,41 @@
             },
 
             ready: function () {
-                window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
-                this._getTokenCookie();
-                if (this.p4mToken) 
-                {
-                    // if the P4M Consumer is logged in, then check if they are logged in locally
-                    var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
-                    if (!localLogin || localLogin === "") {
-                        // state is unknown so check first
-                        this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
-                    }
-                    else if (localLogin === "false") {
-                        //alert("AuthComp: "+localLogin);
-                        // definitely not logged in so do it now
-                        this._onAuthCompletion();
-                    }
-                    else {
-                        var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
-                        if (offerRestore === "true")
-                        {
-                            this.$.p4mOfferCartRestoreCookie.eraseCookie();
-                            this.$.lastCartDlg.open();
-                            //alert("Do you want to restore your last cart?");
-                            // state is unknown so check first
-                            
-                        }
-                    }
+                if (this.immediateLoad) {
+                    // this widget has been loaded inside the popup that should be used for the login
+                    // in this case a guest user is P4M registered and has chosen to login
+                    this.loadLoginPage();
                 }
                 else {
-                    // not logged in so we get the closest P4M server
-                    this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                    window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+                    this._getTokenCookie();
+                    if (this.p4mToken) {
+                        // if the P4M Consumer is logged in, then check if they are logged in locally
+                        var localLogin = this.$.p4mLocalLoginCookie.readCookie();
+                        if (!localLogin || localLogin === "") {
+                            // state is unknown so check first
+                            this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
+                        }
+                        else if (localLogin === "false") {
+                            //alert("AuthComp: "+localLogin);
+                            // definitely not logged in so do it now
+                            this._onAuthCompletion();
+                        }
+                        else {
+                            var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
+                            if (offerRestore === "true") {
+                                this.$.p4mOfferCartRestoreCookie.eraseCookie();
+                                this.$.lastCartDlg.open();
+                                //alert("Do you want to restore your last cart?");
+                                // state is unknown so check first
+
+                            }
+                        }
+                    }
+                    else {
+                        // not logged in so we get the closest P4M server
+                        this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                    }
                 }
             },
 
@@ -154,8 +162,17 @@
                 }
             },
 
-            launchPopup: function()
+            loadLoginPage: function()
             {
+                //Make AuthUrl
+                this._makeState();
+                this._makeAuthUrl();
+                window.resizeTo(450, 500);
+                window.title = "Login";
+                window.location = this._authUrl;
+            },
+
+            launchPopup: function () {
                 if (!this.p4mToken || this.p4mToken === '') {
                     //Make AuthUrl
                     this._makeState();
