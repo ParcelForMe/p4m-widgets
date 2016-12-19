@@ -188,7 +188,7 @@
                 },
                 hostType: {
                     type: String,
-                    //value: "dev" //local, dev, test, live
+                    value: "dev" //local, dev, test, live
                 },
                 port: {
                     type: Number,
@@ -316,8 +316,9 @@
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
                                     loginWidget.logout();
                                 }
-                                else
+                                else {
                                     intermediateCallback(JSON.parse(httpRequest.responseText));
+                                }
                             }
                             catch (e) {
                                 console.error(e.stack);
@@ -365,16 +366,16 @@
                     if (responseData.status == 401 || err.indexOf("expired") > -1 || err.indexOf("denied") > -1) {
                         var loginWidget = document.getElementsByTagName("p4m-login")[0];
                         loginWidget.logout();
-                        finalCallback(responseData);
                     }
                     else {
                         console.error(responseData);
-                        finalCallback(responseData);                     
+                        
                     }
+                    finalCallback(err, responseData);
                 }
                 else {
                     this.fire("p4m_" + apiRequest.endPoint.stub, responseData, true);
-                    finalCallback(responseData);
+                    finalCallback(null, responseData);
                 }                           
             }
 
