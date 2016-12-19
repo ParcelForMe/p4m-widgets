@@ -653,6 +653,11 @@
                     type: String
                 },
 
+                autoLoad: {
+                    type: Object,
+                    value: true
+                },
+
                 useDropPoints: {
                     type: Object,
                     value: true
@@ -977,7 +982,10 @@
                 this.countryCode = this.defaultCountryCode;
                 this.postCode = this.defaultPostCode;              
                 this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                this.postGfsData(function () { });
+                if (this.autoLoad) {
+                    this.postGfsData(function () { });
+                }
+                
             },
 
             postGfsData: function (callback) {
@@ -1011,7 +1019,7 @@
                                 callback(null, httpRequest.responseText);
                             }
                             else {                               
-                                callback(httpRequest.status);
+                                callback(httpRequest.status, httpRequest.responseText);
                             }                                 
                         }
                         catch (e) {
@@ -1071,12 +1079,19 @@
                         callback(err);
                     }
                     else {
-                        this.set('_data', JSON.parse(data));
-                        this.set('_dropPoints', this._data.droppoints);
-                        this._requestDroppointList(this._preferredDroppoints, (function (err) {
-                            this._delayedInit.bind(self)();
-                            callback(err);
-                        }).bind(this));
+                        var result = JSON.parse(data);
+                        if (result.message) {
+                            callback(result.message);
+                        }
+                        else {
+                            this.set('_data', JSON.parse(data));
+                            this.set('_dropPoints', this._data.droppoints);
+                            this._requestDroppointList(this._preferredDroppoints, (function (err) {
+                                this._delayedInit.bind(self)();
+                                callback(err);
+                            }).bind(this));
+                        }
+
                     }
                 }).bind(this));
                 request.send("");
@@ -1086,22 +1101,34 @@
                 var self = this;
                 var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
                 var request = this._makeRequest('GET', url, (function (err, data) {
-                    this._data = JSON.parse(data);
-                    if (data.length) {
-                        this._dropPoints = this._dropPoints.concat(this._data.droppoints).sort(this.sortByDistance);
-                        this._processAllDroppoints();
-                        this._findAllDeliveryDroppoints();
-                        this._loadDroppointMarkers(this._data.droppoints);
+                    var result = JSON.parse(data);
+                    if (err || result.message) {
+                        callback(err || result.message)
                     }
-                    callback(err);
+                    else {
+                        if (result.droppoints && result.droppoints.length) {
+                            this._dropPoints = this._dropPoints.concat(result.droppoints).sort(this.sortByDistance);
+                            this._processAllDroppoints();
+                            this._findAllDeliveryDroppoints();
+                            this._loadDroppointMarkers(this._dropPoints);
+                        }
+                        callback(null);                     
+                    }
+
                 }).bind(this));
                 request.send("");
             },
 
-            setGfsOrderValue: function (value, callback) {
+            setGfsOrderValue: function (value) {
                 console.log('setGfsOrderValue(' + value + ')');
                 this._postData.Request.Order.Value.Value = value;
-                this.postGfsData(callback);
+                //this.postGfsData(callback);
+            },
+
+            setGfsAddress: function (address) {
+                console.log('setGfsAddress(' + JSON.stringify(address) + ')');
+                this._postData.Request.Order.Transit.Recipient.Location = address;
+                //this.postGfsData(callback);
             },
 
             _handleError: function (e) {
@@ -2088,9 +2115,14 @@
             _preselectForStandard: function () {
                 //debugger;
                 if (this.standardRates) {
-                    this.set('_selectedDropPoint', null);
-                    this.standardRates[0].selected = true;                
-                    this.updateDeliveryOptions(this.standardRates[0].id, this.standardRates[0].deliveryDate);
+                    //this.set('_selectedDropPoint', null);
+                    this._unselectDropPoint();
+                    var preselectedService = this.standardRates[0];
+                    if (!preselectedService.selected) {
+                        preselectedService.selected = true;
+                    }                   
+                    
+                    this.updateDeliveryOptions(preselectedService.id, preselectedService.deliveryDate);
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
@@ -2203,7 +2235,8 @@
                     this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
                     this.selectedServiceDetails.provider = this._selectedDropPoint.providerName;
                     this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
-                } else {
+                }
+                else {
                     this.selectedServiceDetails.collectionPoint = null;
                     this.selectedServiceDetails.deliveryAddress = null;
                 }
@@ -2245,7 +2278,8 @@
             onShowPage_Calendar: function() {
                 this.showingDroppoints = false;
                 //TODO: Choose soonest option by default
-                this.set('_selectedDropPoint', null);
+                
+                this._unselectDropPoint();
                 this.$.calendar.autoSelect();
                 this.fire('show-calendar');
             },
