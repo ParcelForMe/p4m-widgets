@@ -346,7 +346,6 @@
                                         //If we have already selected a droppoint, let GFS Checkout know.
                                         var address = self.getAddressById(self.cartData.AddressId);
                                         if (address) {
-                                            debugger;
                                             if (address.AddressType === "Collect") {
                                                 self.$.gfsCheckoutWidget.chooseDropPointId(address.DropPointId || address.droppointId);
                                             }
@@ -364,7 +363,6 @@
 
                         ],
                         function (err) {
-                            debugger;
                             self.initialising = false;               
                         })
                     }
@@ -425,7 +423,7 @@
 
                     //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
 
-                        self.$.localApi.call('itemQtyChanged', {}, changes, function (newCartTotals) {
+                        self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                             //console.log("Called local api itemQtyChanged");
                             console.log("sendCartItemChanges(): itemQtyChanged: new cart totals", newCartTotals);
                             self.$.cart.clearChanges();
@@ -455,12 +453,8 @@
                     //console.log(cartValue, this.$.gfsCheckoutWidget._postData.Request.Order.Value.Value);
                     if (cartValue != this.$.gfsCheckoutWidget._postData.Request.Order.Value.Value) {
                         console.log("Updating GFS Checkout");
-                        this.$.gfsCheckoutWidget.setGfsOrderValue(cartValue, callback);
                     }
-                    else {
-                        callback(null);
-                    }
-
+                    callback(null);                   
                 }
                 else {
                     callback(null);
@@ -610,7 +604,6 @@
                         callback(err);
                     }
                     else {
-                        debugger;
                         this.currentService = data;
                         /*this.currentService.shipping = data.shipping;
                         this.currentService.collectionPoint = data.collectionPoint;
@@ -785,7 +778,6 @@
                 console.log("^^^ ADDRESS SELECTED");
                 var self = this;
                 if (e.detail) {
-                    debugger;
                     //If changed billing address, tell P4M
                     if (e.detail.isBilling && self.cartData.BillingAddressId != e.detail.id) {
                         self.set('cartData.BillingAddressId', e.detail.id);
@@ -829,7 +821,6 @@
             onUpdateAddress: function (addressElement) {
                 // here we're adding or updating an address only, not setting a default value on the consumer at this stage
                 this.$.addressList.showAsLoading();
-                //debugger;
                 var postData =        
                 {
                     "Address": addressElement.detail.addressData,
@@ -856,7 +847,6 @@
 
             preselectDeliveryMethod: function () {
                 //Select delivery details based on selected address and user's preferences
-                debugger;
                 if (!this.consumerData) throw "No consumer data"
                 else if (!this.cartData) throw "No cart data";
 
@@ -871,7 +861,6 @@
             preselectAddress: function () {
                 //Select address based on preferences
                 console.log('preselectAddress()');
-                debugger;
                 if (!this.consumerData) throw "No consumer data"
                 else if (!this.cartData) throw "No cart data";
 
@@ -1025,7 +1014,6 @@
 
             getAddressById: function(id) {
                 if (!this.consumerData) {
-                    debugger;
                     return null;
                 }
                 var foundItem = this.consumerData.Addresses.find(function(item) { return item.Id == id });
