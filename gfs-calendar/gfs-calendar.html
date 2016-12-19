@@ -204,7 +204,7 @@
                 var bucketTemplate;
                 var i = 0;
 
-                if (!this.dayDefiniteData.length) return;
+                if (!this.dayDefiniteData || !this.dayDefiniteData.length) return;
                 this.dayDefiniteData.forEach(function (dayData) {
                     dayData._rates = dayData.rates.filter(function (item) { return item.serviceType.type !== "dmStandardDropPoint" });
 
