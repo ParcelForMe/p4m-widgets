@@ -658,6 +658,11 @@
                     value: true
                 },
 
+                preselect: {
+                    type: Object,
+                    value: true
+                },
+
                 useDropPoints: {
                     type: Object,
                     value: true
@@ -1131,6 +1136,10 @@
                 //this.postGfsData(callback);
             },
 
+            setGfsService: function(serviceId) {
+                updateDeliveryOptions()//eeeeeeeee
+            },
+
             _handleError: function (e) {
                 console.error("GFS Checkout Error", e);
                 //console.warn("Using default shipping");
@@ -1228,17 +1237,14 @@
             */
 
             _delayedInit: function () {
-
                 this._processInputData();
 
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
-                    //this._findAllDeliveryDroppoints();
-                   // this._processAllDroppoints();
                 }
 
-                this.showPage_Standard();
+                this.showPage_Standard(this.preselect);
 
 
             },
@@ -2041,7 +2047,7 @@
             },
 
             _formatNonDayDefiniteDate: function(startDate, endDate) {
-                return '(Est. arrival: ' + moment(startDate).format("ddd, Do MMM") + ' - ' + moment(endDate).format("d, Do MMM") + ')';
+                return '(Est. arrival: ' + moment(startDate).format("ddd, Do MMM") + ' - ' + moment(endDate).format("ddd, Do MMM") + ')';
             },
 
             _findDropPointDeliveries: function(providerId) {
@@ -2112,8 +2118,29 @@
                 this._processDeliveryArray(this._data.nonDayDefinite);
             },
 
+            _selectService: function (id) {
+                var serviceSelected = null;
+                if (this.standardRates && this.standardRates.length) {
+                    this.standardRates.map(function (item) {
+                        item.selected = (item.id == id);
+                        if (item.selected) serviceSelected = item;
+                        return item;
+                    });
+                    if (serviceSelected) return serviceSelected;
+                }
+
+                else if (this.dayDefinite && this.dayDefinite.length) {
+                    this.dayDefinite.map(function (item) {
+                        item.selected = (item.id == id);
+                        if (item.selected) serviceSelected = item;
+                        return item;
+                    });
+                    return serviceSelected;
+                }
+                else return null;
+            },
+
             _preselectForStandard: function () {
-                //debugger;
                 if (this.standardRates) {
                     //this.set('_selectedDropPoint', null);
                     this._unselectDropPoint();
@@ -2212,35 +2239,50 @@
 				return JSON.stringify(this.selectedServiceDetails);
             },
 
-
+            //Select a delivery service
             updateDeliveryOptions: function (methodId, dateOverride) {
                 var method = this._getDeliveryRateById(methodId);
-                this.selectedServiceDetails.serviceId = methodId;
-                this.selectedServiceDetails.service = method.methodTitle;
-                this.selectedServiceDetails.serviceCode = method.carrierCode;
-                this.selectedServiceDetails.carrier = method.carrierName;
-                this.selectedServiceDetails.shipping = method.price;
-                if (dateOverride) {
-                    this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
+                if (!method) {
+                    console.error("Method not available");
+                    this.fire('noservice');
                 }
                 else {
-                    this.selectedServiceDetails.expDeliveryDate = moment.utc(method.deliveryTimeTo).add(method.maxDD - method.minDD, 'days').toISOString();
-                }           
+                    this.selectedServiceDetails.serviceId = methodId;
+                    this.selectedServiceDetails.service = method.methodTitle;
+                    this.selectedServiceDetails.serviceCode = method.carrierCode;
+                    this.selectedServiceDetails.carrier = method.carrierName;
+                    this.selectedServiceDetails.shipping = method.price;
+                    this.selectedServiceDetails.selected = true;
+                    this.selectedServiceDetails.checked = true;
+                    this.selectedServiceDetails.currencySymbol = this.currencySymbol;
 
-                this.selectedServiceDetails.checked = true;
-                this.selectedServiceDetails.currencySymbol = this.currencySymbol;
+                    if (dateOverride) {
+                        this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
+                    }
+                    else {
+                        this.selectedServiceDetails.expDeliveryDate = moment.utc(method.deliveryTimeTo).add(method.maxDD - method.minDD, 'days').toISOString();
+                    }
 
-                if (this._selectedDropPoint) {
-                    this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
-                    this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
-                    this.selectedServiceDetails.provider = this._selectedDropPoint.providerName;
-                    this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
+                    if (this._selectedDropPoint) {
+                        this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
+                        this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
+                        this.selectedServiceDetails.provider = this._selectedDropPoint.providerName;
+                        this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
+                    }
+                    else {
+                        this.selectedServiceDetails.collectionPoint = null;
+                        this.selectedServiceDetails.deliveryAddress = null;
+                    }
+
+                    debugger;
+                    this._selectService(methodId);
+
+                    this.$.standardRatesTemplate.render();
+                    this.fire('selectedservicechanged', this.selectedServiceDetails);
                 }
-                else {
-                    this.selectedServiceDetails.collectionPoint = null;
-                    this.selectedServiceDetails.deliveryAddress = null;
-                }
-                this.fire('selectedservicechanged', this.selectedServiceDetails);
+
+
+
 
             },
 
@@ -2275,23 +2317,36 @@
                 this.onShowPage_Calendar();              
             },
 
-            onShowPage_Calendar: function() {
+            onShowPage_Calendar: function(preselect) {
                 this.showingDroppoints = false;
                 //TODO: Choose soonest option by default
                 
                 this._unselectDropPoint();
-                this.$.calendar.autoSelect();
+                if (preselect) {
+                    this.$.calendar.autoSelect();
+                }
+               
                 this.fire('show-calendar');
             },
 
-            showPage_Standard: function () {
+            showPage_Standard: function (preselect) {
                 this.$.pages.select(2)           
-                this.onShowPage_Standard();
+                this.onShowPage_Standard(preselect);
 			},
 
-			onShowPage_Standard: function() {
+			onShowPage_Standard: function(preselect) {
 			    this.showingDroppoints = false;
-			    this._preselectForStandard();
+                //If preselect override,
+			    if (typeof (preselect) !== "undefined") {
+			        if (preselect) {
+			            this._preselectForStandard();
+			        }                   
+			    }
+			    else {
+			        if (this.preselect) {
+			            this._preselectForStandard();
+			        }
+			    }		    
 			    this.fire('show-standard');
 			},
 
