@@ -1089,8 +1089,10 @@
                             callback(result.message);
                         }
                         else {
+                            //debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
+                            this._processAllDroppoints();
                             this._requestDroppointList(this._preferredDroppoints, (function (err) {
                                 this._delayedInit.bind(self)();
                                 callback(err);
@@ -1114,7 +1116,7 @@
                         if (result.droppoints && result.droppoints.length) {
                             this._dropPoints = this._dropPoints.concat(result.droppoints).sort(this.sortByDistance);
                             this._processAllDroppoints();
-                            this._findAllDeliveryDroppoints();
+                            
                             this._loadDroppointMarkers(this._dropPoints);
                         }
                         callback(null);                     
@@ -1239,9 +1241,11 @@
             _delayedInit: function () {
                 this._processInputData();
 
+
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
+                    this._processAllDroppoints();
                 }
 
                 this.showPage_Standard(this.preselect);
@@ -1365,9 +1369,11 @@
 
 
             _processAllDroppoints: function () {
+                //debugger;
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
                 this._processPreferredDroppoints();
+                this._findAllDeliveryDroppoints();
             },
 
             _removeDupDropPoints: function () {
@@ -1400,7 +1406,7 @@
             _addDropPointDeliveries: function()
             {
                 var self = this;
-                this._dropPoints.forEach(
+                this._dropPoints.map(
                     function (item) {
                         item.collectionPoint = true;
 
@@ -1409,6 +1415,7 @@
                         return item;
                     }
                 );
+                console.log(this._dropPoints);
             },
             
             // find the earliest of each service
@@ -1616,6 +1623,7 @@
 					    //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
 					    marker = new google.maps.Marker(markerConfig);
 					    marker.addListener('click', function (clickedMarker) {
+					        //debugger;
 					        self._selectDropPointMarker(this);
 					    });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
@@ -2274,7 +2282,6 @@
                         this.selectedServiceDetails.deliveryAddress = null;
                     }
 
-                    debugger;
                     this._selectService(methodId);
 
                     this.$.standardRatesTemplate.render();
