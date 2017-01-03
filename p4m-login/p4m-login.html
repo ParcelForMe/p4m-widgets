@@ -151,16 +151,17 @@
                             var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
                             if (offerRestore === "true") {
                                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
-                                this.$.lastCartDlg.open();
-                                //alert("Do you want to restore your last cart?");
-                                // state is unknown so check first
-
+                                //if (!~window.location.href.indexOf('p4m/checkout'))
+                                    this.$.lastCartDlg.open();
                             }
                         }
                     }
                     else {
-                        // not logged in so we get the closest P4M server
-                        this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                        var locale = this.$.p4mLocaleCookie.readCookie();
+                        if (!locale || locale === "") {
+                            // not logged in so we get the closest P4M server
+                            this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                        }
                     }
                 }
             },
