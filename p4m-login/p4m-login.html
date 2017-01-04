@@ -166,9 +166,15 @@
                 }
             },
 
-            _onGotLocale: function (data) {
-                console.log(JSON.stringify(data));
-                if (data.Success) {
+            _onGotLocale: function (err, data) {
+                //console.log(JSON.stringify(data));
+                if (data && !data.Success) {
+                    err = data.message;
+                }
+                if (err) {
+                    throw err;
+                }
+                else {
                     document.cookie = "p4mLocale=" + data.Token + "; path=/";
                 }
             },
@@ -305,22 +311,22 @@
                 this.$.localApi.call('localLogin', currentPage, null, this._onLocalLogin.bind(this));
             },
 
-            _onLocalLogin: function (data) {
+            _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
                 this.$.p4mProfile.hideSpinner();
                 if (data.RedirectUrl) {
                     window.location.href = data.RedirectUrl;
                 }
                 else {
-                    if (data.Error) {
-                        console.error("A login error occurred:", data.Error);
+                    if (err || data.Error) {
+                        console.error("A login error occurred:", err || data.Error);
                     }
                     window.location.reload(true);
                 }
             },
 
-            _onCheckLocalLogin: function (data) {
-                console.log(JSON.stringify(data));
+            _onCheckLocalLogin: function (err, data) {
+                //console.log(JSON.stringify(data));
                 if (!data.Success)
                     this._onAuthCompletion();
             },
