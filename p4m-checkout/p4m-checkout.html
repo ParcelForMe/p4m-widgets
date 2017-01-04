@@ -39,7 +39,7 @@
                     
                     <paper-tabs id="p4mTabs" selected="{{selectedTab}}">
                         <paper-tab>My Order</paper-tab>
-                        <paper-tab>My Details</paper-tab>
+                        <paper-tab disabled="true">My Details</paper-tab>
                         <paper-tab disabled="true">Delivery Options</paper-tab>
                         <paper-tab disabled="true">Payment Options</paper-tab>
                     </paper-tabs>
@@ -71,7 +71,8 @@
                  </div>
             </div>
             <div id="bottomPanel" class="bottomPanel">
-                <button id="p4mNextBtn" on-tap="nextTab">Next...</button>
+                <button id="p4mLoginBtn" on-tap="signIn">Sign into P4M</button>
+                <button id="p4mContinueBtn" on-tap="continueAsGuest">Continue as Guest</button>
             </div>
         </div>
 
@@ -125,6 +126,7 @@
         .bottomPanel button {
             float: right;
             display: inline-block;
+            margin: 0 10px;
         }
         .panelContainer {
             border-bottom-right-radius: 8px;
@@ -263,16 +265,19 @@
                 });
             },
 
-            nextTab: function () {
-                var selTab = this.$.p4mPages.selected + 1;
-                if (selTab == 4)
-                    selTab = 0;
-                var tab = this.$.p4mTabs.items[selTab];
-                if (!tab.disabled)
-                    this.$.p4mPages.selected = selTab;
+            signIn: function () {
+                var loginWidget = document.getElementsByTagName("p4m-login")[0];
+                loginWidget.launchPopup();
             },
 
-            debug: function(e) {
+            continueAsGuest: function () {
+                var tab = this.$.p4mTabs.items[1];
+                if (tab.disabled)
+                    tab.disabled = false;
+                this.$.p4mPages.selected = 1;
+            },
+
+            debug: function (e) {
                 console.log("p4m-checkout debug", this.cartData);
             },
 
