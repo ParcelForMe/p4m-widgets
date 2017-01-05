@@ -150,7 +150,7 @@
 
             },
 
-            onCardHash: function (hashResponse) {
+            onCardHash: function (err, hashResponse) {
                 //We have received the hash data, now fill in the form and post  
                 console.log("Received card hash. Posting form...", hashResponse);
                 this.set('cardMerchantId', hashResponse.MerchantId);

@@ -8,15 +8,6 @@
 
     <template>
         <div id="container">
-            <div class="card-body card-edit">
-                <div class="consumer-form">
-                    <input is="iron-input" type="text" id="consumer-email" bind-value="{{consumerData.Email}}" placeholder="Email address" />
-                    <a class="p4m-button p4m-primary-button" href="#" on-tap="checkEmail">Go</a>
-                    <input is="iron-input" type="text" id="consumer-given-name" bind-value="{{consumerData.GivenName}}" placeholder="First name" disabled />
-                    <input is="iron-input" type="text" id="consumer-family-name" bind-value="{{consumerData.FamilyName}}" placeholder="Last name" disabled />
-                </div>
-            </div>
-
             <p><a id="addNewAddress" href="#" on-tap="addNewAddress">Add a new address</a></p>
 
             <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">

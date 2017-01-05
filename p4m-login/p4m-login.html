@@ -48,7 +48,6 @@
         <polymer-cookie id="p4mDefaultCountryCodeCookie" name="p4mDefaultCountryCode"></polymer-cookie>
         <polymer-cookie id="p4mDefaultPostCodeCookie" name="p4mDefaultPostCode"></polymer-cookie>
         <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
-        <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
         <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
     </template>
 
@@ -191,15 +190,24 @@
 
             launchPopup: function () {
                 if (!this.p4mToken || this.p4mToken === '') {
-                    //Make AuthUrl
-                    this._makeState();
-                    this._makeAuthUrl();
-                    this.popupCenter(this._authUrl, "Login", 450, 500);
-                    this._waitForAuthCompletion();
+                    this.showPopup();
                 }
                 else {
                     this.showMenu();
                 }
+            },
+
+            switchFromGuest: function(){
+                this.clearCookies();
+                this.showPopup();
+            },
+
+            showPopup: function(){
+                //Make AuthUrl
+                this._makeState();
+                this._makeAuthUrl();
+                this.popupCenter(this._authUrl, "Login", 450, 500);
+                this._waitForAuthCompletion();
             },
 
             logoutThisSite: function () {
@@ -251,13 +259,11 @@
                 this.$.p4mStateCookie.eraseCookie();
                 this.$.p4mNonceCookie.eraseCookie();
                 this.$.p4mLocalLoginCookie.eraseCookie();
-                this.$.p4mLocaleCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
                 this.$.p4mDefaultCountryCodeCookie.eraseCookie();
                 this.$.p4mDefaultPostCodeCookie.eraseCookie();
                 this.$.p4mGivenNameCookie.eraseCookie();
-                this.$.p4mLocaleCookie.eraseCookie();
                 this.$.gfsCheckoutTokenCookie.eraseCookie();
             },
 

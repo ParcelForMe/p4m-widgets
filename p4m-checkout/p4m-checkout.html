@@ -39,9 +39,9 @@
                     
                     <paper-tabs id="p4mTabs" selected="{{selectedTab}}">
                         <paper-tab>My Order</paper-tab>
-                        <paper-tab disabled="true">My Details</paper-tab>
-                        <paper-tab disabled="true">Delivery Options</paper-tab>
-                        <paper-tab disabled="true">Payment Options</paper-tab>
+                        <paper-tab xdisabled>My Details</paper-tab>
+                        <paper-tab xdisabled>Delivery Options</paper-tab>
+                        <paper-tab xdisabled>Payment Options</paper-tab>
                     </paper-tabs>
                     <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">                   
                         <iron-page id="cartPage">                       
@@ -72,7 +72,15 @@
             </div>
             <div id="bottomPanel" class="bottomPanel">
                 <button id="p4mLoginBtn" on-tap="signIn">Sign into P4M</button>
+                <span style="float:right;margin-top:5px;">OR</span>
                 <button id="p4mContinueBtn" on-tap="continueAsGuest">Continue as Guest</button>
+                <div class="card-body card-edit" style="float:right">
+                    <div class="consumer-form">
+                        <input is="iron-input" type="text" id="consumer-email" bind-value="{{consumerData.Email}}" placeholder="Email address" />
+                        <input is="iron-input" type="text" id="consumer-given-name" bind-value="{{consumerData.GivenName}}" placeholder="First name" />
+                        <input is="iron-input" type="text" id="consumer-family-name" bind-value="{{consumerData.FamilyName}}" placeholder="Last name" />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -396,7 +404,7 @@
 
             signIn: function () {
                 var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                loginWidget.launchPopup();
+                loginWidget.switchFromGuest();
             },
 
             continueAsGuest: function () {
@@ -404,6 +412,7 @@
                 if (tab.disabled)
                     tab.disabled = false;
                 this.$.p4mPages.selected = 1;
+                this.updateGuest();
             },
 
             debug: function (e) {
@@ -1064,7 +1073,28 @@
             goToAddresses: function () {
                 this.selectedTab = this.Tabs.ADDRESS;
                 this.$.addressList.addNewAddress();
-            }
+            },
+
+            updateGuest: function () {
+                // send the guest name and email address to P4M
+                var postData =
+                {
+                    "Email": this.consumerData.Email,
+                    "FirstName": this.consumerData.GivenName,
+                    "LastName": this.consumerData.FamilyName,
+                };
+                var self = this;
+                this.$.p4mCheckoutApi.call("guestConsumer", null, postData, function (err, result) {
+                    console.log("Got guest update result: ", result);
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        self.consumerData = result.Consumer;
+                    }
+
+                });
+            },
         });
 
         function p4mDroppointToGfsDroppoint(item) {
