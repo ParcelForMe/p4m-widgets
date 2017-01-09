@@ -34,9 +34,7 @@
 
             <div id="topPanel" class="topPanel"><h2>Review My Order</h2><p4m-profile mode="basic"></p4m-profile></div>
             <div id="panelContainer">
-                <div id="detailPanel" class="p4m-panel">
-                   
-                    
+                <div id="detailPanel" class="p4m-panel">                   
                     <paper-tabs selected="{{selectedTab}}">
                         <paper-tab>My Order</paper-tab>
                         <paper-tab>Delivery Options</paper-tab>
@@ -48,7 +46,7 @@
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="    onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="    onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -961,7 +959,7 @@
                     //Ask GFS Checkout for the supported droppoint closest to the preferred address
                     if (this.consumerData.PrefDeliveryAddressId) {
                         var preferredAddress = this.getAddressById(this.consumerData.PrefDeliveryAddressId);
-                        this.$.gfsCheckoutWidget.requestDropPointsByAddress(preferredAddress.Street1, preferredAddress.PostCode, function (dropPoints) {
+                        this.$.gfsCheckoutWidget.requestDropPointsByAddress(preferredAddress.Street1, preferredAddress.PostCode, null, function (dropPoints) {
                             if (dropPoints && dropPoints.length) {
                                 var dropPoint = dropPoints[0];
                                 self.selectCollectPoint(dropPoint.providerName, dropPoint.providerId, dropPoint.droppointId, dropPoint.geoLocation, function (err) {
