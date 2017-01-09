@@ -2161,6 +2161,7 @@
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
+                    this.fire('preselectedservice', this.selectedServiceDetails);
                 }
 
             },

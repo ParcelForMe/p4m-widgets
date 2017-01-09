@@ -48,7 +48,7 @@
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="    onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="    onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -262,9 +262,11 @@
             init: function (finalCallback) {
                 var self = this;
                 self.initialising = true;
+                console.log('Initialising...');
                 async.parallel(
                     [
                         function _getConsumer(callback) { //TODO: Move this to a parallel thread?
+                            console.log('_getConsumer');
                             self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
                                 if (!data.Success) {
                                     callback(data.Error);
@@ -278,6 +280,7 @@
 
                         //Get local cart
                         function _localCart(callback) {
+                            console.log('_localCart()');
                             if (self.sessionId) {
                                 self.getLocalCart(function (err) {
                                     if (err) {
@@ -297,6 +300,9 @@
                     function (err) {
 
                         if (err) {
+                            self.initialising = false;
+                            console.error(err);
+                            console.log('...Initialisation aborted.');
                             throw err;
                         }
 
@@ -304,6 +310,7 @@
                         [
                             //Send info from cart and consumer to GFS
                             function _gfs(callback) {
+                                console.log('_gfs()');
                                 if (self.$.gfsCheckoutWidget) {
                                     self._updateGfs(callback);
                                 }
@@ -313,6 +320,7 @@
                             },
 
                             function _newCart(callback) {
+                                console.log('_newCart()');
                                 //If this is a new cart, preselect as much as possible.
                                 //Otherwise, the user has already selected their options.
 
@@ -320,7 +328,8 @@
                                 if (self.isNew) {
                                     console.log('*** New cart - preselect everything');
                                     self.preselectAddress(callback);
-                                    self.preselectDeliveryMethod();                                                                     
+                                    self.preselectDeliveryMethod();
+                                    callback(null);
                                 }
                                 else {
                                     callback(null);
@@ -328,11 +337,16 @@
                             },
 
                             function _p4mCart(callback) {
+                                console.log('_p4mCart()');
                                 self.updateP4mCart(callback); //This will set IsNew to false
                             }
                         ],
                         function (err) {
-                            self.initialising = false;               
+                            if (err) {
+                                console.error(err);
+                            }
+                            self.initialising = false;
+                            console.log('...Initialisation complete.');
                         })
                     }
                 )
@@ -1002,6 +1016,10 @@
                     console.log("p4m widget: onGfsServiceChanged():", e);
                     this.updateShippingService(e.detail, function () { console.log("onGfsServiceChanged: updateShippingService complete")});
                 }
+            },
+
+            onGfsServicePreselect: function (e) {
+                this.updateShippingService(e.detail, function () { console.log("onGfsServicePreselect: updateShippingService complete") });
             },
 
             //The selected service wasn't available, so choose a default
