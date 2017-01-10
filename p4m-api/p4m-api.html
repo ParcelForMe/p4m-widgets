@@ -20,6 +20,10 @@
                 "stub": "consumerExtras",
                 "method": "POST",
             },
+            "guestConsumer": {
+                "stub": "guestConsumer",
+                "method": "POST",
+            },
             "cart": {
                 "stub": "cart/{cartId}",
                 "method": "GET",
@@ -314,7 +318,7 @@
                             try {
                                 if (httpRequest.status === 401) {
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                                    loginWidget.logout();
+                                    loginWidget.logoutThisSite();
                                 }
                                 else {
                                     intermediateCallback(JSON.parse(httpRequest.responseText));
@@ -365,7 +369,7 @@
                     var err = responseData.Error || responseData.Message;
                     if (responseData.status == 401 || err.indexOf("expired") > -1 || err.indexOf("denied") > -1) {
                         var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                        loginWidget.logout();
+                        loginWidget.logoutThisSite();
                     }
                     else {
                         console.error(responseData);
