@@ -156,6 +156,7 @@
                         }
                     }
                     else {
+                        this.clearCookies();
                         var locale = this.$.p4mLocaleCookie.readCookie();
                         if (!locale || locale === "") {
                             // not logged in so we get the closest P4M server
