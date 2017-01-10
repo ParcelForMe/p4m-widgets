@@ -2019,16 +2019,37 @@
                 }
             },
 
+            setMapHome: function(location) {
+                var homeMarkerConfig = {
+                    position: location,
+                    map: this._map,
+                    //animation: google.maps.Animation.DROP,
+                    title: 'Home',
+                    html: 'Home',
+                    icon: this._getHomeIcon()
+                };
+                marker = new google.maps.Marker(homeMarkerConfig);
+                //this._map.setCenter(homeMarkerConfig.position);
+            },
+
             panToDefaultLocation: function () {
                 var self = this;
                 if (this._postData.Request.Order.Transit.Recipient.Location) {
                     var location = this._postData.Request.Order.Transit.Recipient.Location;
                     this._geoCodeAddress(location.addressLineCollection[0], location.Postcode, location.CountryCode.Code, function (err, data) {
-                        var geoLocation = {
-                            lat: data.lat(),
-                            lng: data.lng()
-                        };
-                        self._panToGeoLocation(geoLocation);
+                        if (err) {
+                            console.error('panToDefaultLocation():', err);
+                        }
+                        else {
+                            var geoLocation = {
+                                lat: data.lat(),
+                                lng: data.lng()
+                            };
+
+                            self._panToGeoLocation(geoLocation);
+                            self.setMapHome(geoLocation);
+                        }
+
                     });
 
                 }
