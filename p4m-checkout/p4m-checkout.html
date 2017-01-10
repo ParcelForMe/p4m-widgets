@@ -261,7 +261,7 @@
                 var self = this;
                 self.initialising = true;
                 console.log('Initialising...');
-                async.parallel(
+                async.series(
                     [
                         function _getConsumer(callback) { //TODO: Move this to a parallel thread?
                             console.log('_getConsumer');
@@ -294,6 +294,13 @@
                                 self.getP4mCart(callback);
                             }
                         },
+
+                        function _setAddress(callback) {
+                            if (!self.cartData.AddressId) {
+                                self.preselectAddress();
+                            }
+                            callback(null);
+                        }
                     ],
                     function (err) {
 
@@ -342,6 +349,7 @@
                         function (err) {
                             if (err) {
                                 console.error(err);
+                                console.error("Cancelled initialisation.");
                             }
                             self.initialising = false;
                             console.log('...Initialisation complete.');
@@ -396,6 +404,7 @@
                 var self = this;
                 this.$.localApi.call('getP4MCart', null, null, function (err, data) {
                     if (err) {
+                        console.log("getLocalCart() error:", err);
                         callback(err);
                     }
                     else {
@@ -604,21 +613,12 @@
                 // got new shipping details so we need to get updated tax from the host
                 this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
                     if (err) {
+                        console.error("localApi updShippingService error: ", err);
                         callback(err);
                     }
                     else {
                         this.currentService = data;
-                        /*this.currentService.shipping = data.shipping;
-                        this.currentService.collectionPoint = data.collectionPoint;
-                        this.currentService.service = data.service;
-                        this.currentService.serviceId = data.serviceId;
-                        this.currentService.expDeliveryDate = data.expDeliveryDate;
-                        */
-                        /*this.cartData.ShippingAmt = data.shipping;
-                        this.cartData.ServiceName = data.service;
-                        this.cartData.ServiceId = data.serviceId;
-                        this.cartData.ExpDeliveryDate = data.expDeliveryDate;
-                        */
+
                         self.set('cartData.Carrier', data.carrier);
                         self.set('cartData.ShippingAmt', data.shipping);
                         self.set('cartData.ServiceName', data.service);
@@ -641,13 +641,10 @@
                                     address = self.getAddressById(self.consumerData.PrefDeliveryAddressId);
                                 if (address)
                                     self.set('cartData.AddressId', address.Id);
-                            }
-
-                           
+                            }                          
                         }
                         self.updateP4mCart();
                     }
-
                 });
             },
 
