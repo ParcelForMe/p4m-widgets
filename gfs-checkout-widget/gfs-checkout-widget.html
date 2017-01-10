@@ -1089,8 +1089,10 @@
                             callback(result.message);
                         }
                         else {
+                            //debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
+                            this._processAllDroppoints();
                             this._requestDroppointList(this._preferredDroppoints, (function (err) {
                                 this._delayedInit.bind(self)();
                                 callback(err);
@@ -1114,7 +1116,7 @@
                         if (result.droppoints && result.droppoints.length) {
                             this._dropPoints = this._dropPoints.concat(result.droppoints).sort(this.sortByDistance);
                             this._processAllDroppoints();
-                            this._findAllDeliveryDroppoints();
+                            
                             this._loadDroppointMarkers(this._dropPoints);
                         }
                         callback(null);                     
@@ -1137,7 +1139,7 @@
             },
 
             setGfsService: function(serviceId) {
-                updateDeliveryOptions()//eeeeeeeee
+                updateDeliveryOptions();
             },
 
             _handleError: function (e) {
@@ -1210,10 +1212,10 @@
                 //this.$$("#gfsMapCanvas-loading").classList.add('hidden'); // map search spinner
             },*/
 
-            requestDropPointsByAddress: function (addressLine, postCode, callback) {
+            requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
   
                 var self = this;
-                this._geoCodeAddress(addressLine, postCode, function (err, data) {
+                this._geoCodeAddress(addressLine, postCode, countryCode, function (err, data) {
                     if (!err && data) {
                         var box = [[data.lng() - 0.1, data.lat() - 0.1], [data.lng() + 0.1, data.lat() + 0.1]];
                         self._requestDroppointsByGeoBoxes([box], callback);
@@ -1239,9 +1241,11 @@
             _delayedInit: function () {
                 this._processInputData();
 
+
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
+                    this._processAllDroppoints();
                 }
 
                 this.showPage_Standard(this.preselect);
@@ -1365,9 +1369,11 @@
 
 
             _processAllDroppoints: function () {
+                //debugger;
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
                 this._processPreferredDroppoints();
+                this._findAllDeliveryDroppoints();
             },
 
             _removeDupDropPoints: function () {
@@ -1400,7 +1406,7 @@
             _addDropPointDeliveries: function()
             {
                 var self = this;
-                this._dropPoints.forEach(
+                this._dropPoints.map(
                     function (item) {
                         item.collectionPoint = true;
 
@@ -1409,6 +1415,7 @@
                         return item;
                     }
                 );
+                console.log(this._dropPoints);
             },
             
             // find the earliest of each service
@@ -1616,6 +1623,7 @@
 					    //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
 					    marker = new google.maps.Marker(markerConfig);
 					    marker.addListener('click', function (clickedMarker) {
+					        //debugger;
 					        self._selectDropPointMarker(this);
 					    });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
@@ -1699,12 +1707,12 @@
             },
 
 
-            _geoCodeAddress: function (streetAddress, postCode, callback) {
+            _geoCodeAddress: function (streetAddress, postCode, countryCode, callback) {
                 var addressStr = streetAddress + "," + postCode;
                 geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
-                        country: this.countryCode
+                        country: countryCode || this.countryCode
                     },
                     address: addressStr
                 },
@@ -2011,8 +2019,20 @@
                 }
             },
 
-            panToDefaultLocation: function() {
-                if (this._consumerAddresses.length) {
+            panToDefaultLocation: function () {
+                var self = this;
+                if (this._postData.Request.Order.Transit.Recipient.Location) {
+                    var location = this._postData.Request.Order.Transit.Recipient.Location;
+                    this._geoCodeAddress(location.addressLineCollection[0], location.Postcode, location.CountryCode.Code, function (err, data) {
+                        var geoLocation = {
+                            lat: data.lat(),
+                            lng: data.lng()
+                        };
+                        self._panToGeoLocation(geoLocation);
+                    });
+
+                }
+                else if (this._consumerAddresses.length) {
                     if (this._consumerAddresses[0].geoLocation.coordinates.latitude && this._consumerAddresses[0].geoLocation.coordinates.longitude) {
                         var geoLocation = {
                             lat: this._consumerAddresses[0].geoLocation.coordinates.latitude,
@@ -2153,6 +2173,7 @@
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
+                    this.fire('preselectedservice', this.selectedServiceDetails);
                 }
 
             },
@@ -2274,7 +2295,6 @@
                         this.selectedServiceDetails.deliveryAddress = null;
                     }
 
-                    //debugger;
                     this._selectService(methodId);
 
                     this.$.standardRatesTemplate.render();
