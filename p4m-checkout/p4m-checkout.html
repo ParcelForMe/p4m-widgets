@@ -430,11 +430,42 @@
             },
 
             continueAsGuest: function () {
-                var tab = this.$.p4mTabs.items[1];
-                if (tab.disabled)
-                    tab.disabled = false;
-                this.$.p4mPages.selected = 1;
-                this.updateGuest();
+                // the consumer is either not a P4M user or has elected not to login on this site
+                // next we open a popup and load a Url to check the status of the consumer email
+                // if the email is a confirmed P4M user, or if they're not known at all, then we
+                // continue as guest and they will enter all their info. However, if the email is
+                // for a previous guest then we can offer to load their info if they confirm their
+                // email address and enter a password. They will then be a confirmed P4M user.
+                var self = this;
+                this.checkEmail(function () {
+                    // here we continue as guest
+                    var tab = self.$.p4mTabs.items[1];
+                    if (tab.disabled)
+                        tab.disabled = false;
+                    self.$.p4mPages.selected = 1;
+                    self.updateGuest();
+                });
+            },
+
+            checkEmail: function (doNext) {
+                // load a popup to ask the P4M server to check the email address
+                // if the email is known the we can ask the user to login if they have completed their registration
+                // or if not, let them know that if they validate their email address we can use their stored info
+                var email = this.$["consumer-email"].value;
+                var name = this.$["consumer-given-name"].value ? this.$["consumer-given-name"].value : this.$["consumer-family-name"].value;
+                this.popup = this.popupCenter("/p4m/checkEmail?email=" + email + "&name=" + name, "Checking...", 300, 200);
+                var self = this;
+                this.popup.onunload = function () {
+                    alert('unload: ' + self.popup.closed);
+                    if (self.popup.closed)
+                        doNext();
+                }
+            },
+
+            popupCenter: function (url, title, w, h) {
+                var left = (screen.width / 2) - (w / 2);
+                var top = (screen.height / 2) - (h / 2);
+                return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
             },
 
             debug: function (e) {
