@@ -91,27 +91,6 @@
                 
             },
 
-            checkEmail: function () {
-                // load a popup to ask the P4M server to check the email address
-                // if the email is known the we can ask the user to login if they have completed their registration
-                // or if not, let them know that if they validate their email address we can use their stored info
-                var email = this.$["consumer-email"].value;
-                this.popup = this.popupCenter("/p4m/checkEmail?email=" + email, "Checking...", 300, 200);
-                var self = this;
-                this.popup.onunload = function () {
-                    alert('unload: '+self.popup.closed);
-                }
-                this.popup.onpagehide = function () {
-                    alert('hide: ' + self.popup.closed);
-                }
-            },
-
-            popupCenter: function (url, title, w, h) {
-                var left = (screen.width / 2) - (w / 2);
-                var top = (screen.height / 2) - (h / 2);
-                return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-            },
-
             addNewAddress: function () {
                
                 if (this.addressListData && !this._addedNewAddress) {
