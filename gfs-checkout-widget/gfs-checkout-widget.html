@@ -984,13 +984,70 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
-                this.countryCode = this.defaultCountryCode;
-                this.postCode = this.defaultPostCode;              
-                this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                if (this.autoLoad) {
-                    this.postGfsData(function () { });
+                //this.countryCode = this.defaultCountryCode;
+                //this.postCode = this.defaultPostCode;
+                if (this.gfsData) {
+                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
+                    if (this.autoLoad) {
+                        this.postGfsData(function () { });
+                    }
+                }               
+            },
+
+            createPostData: function (config) {
+                var requiredFields = ['countryCode', 'Postcode', 'town', 'addressLines', 'contactEmail', 'recipientFirstName', 'recipientLastName', 'recipientTitle', 'cartValue'];
+                var missingFields = requiredFields.filter(function (f) {
+                    return (typeof (requiredFields[f]) !== "undefined");
+                });
+                if (missingFields.length) {
+                    throw ("Missing fields: " + missingFields.toString());
                 }
-                
+                else {
+                    var now = new Date();
+                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
+ 
+                    this._postData = {
+                        "Request": {
+                            "DateRange": {
+                                "DateFrom": this._makeDateStr(now),
+                                "DateTo": this._makeDateStr(maxDate)
+                            },
+                            "Order": {
+                                "Transit": {
+                                    "Recipient": {
+                                        "Location": {
+                                            "CountryCode": {
+                                                "Code": config.countryCode,
+                                                "Encoding": "ccISO_3166_1_Alpha2"
+                                            },
+                                            "Postcode": config.Postcode,
+                                            "town": config.town,
+                                            "addressLineCollection": config.addressLines
+                                        },
+                                        "contactDetails": {
+                                            "Email": config.contactEmail
+                                        },
+                                        "Person": {
+                                            "firstName": config.recipientFirstName,
+                                            "lastName": config.recipientLastName,
+                                            "title": config.recipientTitle
+                                        }
+                                    }
+                                },
+                                "Value": {
+                                    "CurrencyCode": "GBP",
+                                    "Value": config.cartValue
+                                }
+                            },
+                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
+                            "Session": {
+                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
+                                "sessionID": ""
+                            }
+                        }
+                    }
+                }
+              
             },
 
             postGfsData: function (callback) {
@@ -1001,6 +1058,7 @@
                     callback(error);
                 }
                 else {
+                    console.log(this._postData);
                     this._postReq(this._postData, callback);
                 }
             },
