@@ -85,8 +85,10 @@
         </div>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
+        <!--             
         <polymer-cookie id="p4mDefaultPostCode" name="p4mDefaultPostCode"></polymer-cookie>
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
+        -->
 
 
     </template>
@@ -341,6 +343,24 @@
 
                         async.series(
                         [
+
+                            function _newCart(callback) {
+                                console.log('_newCart()');
+                                //If this is a new cart, preselect as much as possible.
+                                //Otherwise, the user has already selected their options.
+
+                                //self.isNew = true;
+                                if (self.isNew) {
+                                    console.log('*** New cart - preselect everything');
+                                    self.preselectAddress(callback);
+                                    
+                                    callback(null);
+                                }
+                                else {
+                                    callback(null);
+                                }
+                            },
+
                             //Send info from cart and consumer to GFS
                             function _gfs(callback) {
                                 console.log('_gfs()');
@@ -352,25 +372,9 @@
                                 }
                             },
 
-                            function _newCart(callback) {
-                                console.log('_newCart()');
-                                //If this is a new cart, preselect as much as possible.
-                                //Otherwise, the user has already selected their options.
-
-                                //self.isNew = true;
-                                if (self.isNew) {
-                                    console.log('*** New cart - preselect everything');
-                                    self.preselectAddress(callback);
-                                    self.preselectDeliveryMethod();
-                                    callback(null);
-                                }
-                                else {
-                                    callback(null);
-                                }
-                            },
-
                             function _p4mCart(callback) {
                                 console.log('_p4mCart()');
+                                //self.preselectDeliveryMethod();
                                 self.updateP4mCart(callback); //This will set IsNew to false
                             }
                         ],
@@ -388,7 +392,23 @@
 
             //Send all cart information to GFS
             _updateGfs: function (callback) {
+
                 var self = this;
+
+                var gfsPostConfig = {
+                    countryCode: "",
+                    town: "",
+                    Postcode: "",
+                    addressLines: [],
+                    contactEmail: "",
+                    recipientFirstName: this.consumerData.FamilyName,
+                    recipientLastName: this.consumerData.GivenName,
+                    recipientTitle: this.consumerData.Title | "",
+                    cartValue: 0.0
+                };
+     
+                self.$.gfsCheckoutWidget.createPostData(gfsPostConfig);
+
                 var orderValue = 0.0;
                 self.cartData.Items.forEach(function (item) {
                     orderValue += item.Qty * item.Price;
@@ -405,8 +425,8 @@
 
                 //Set service ID and name
                 var deliveryAddress = self.getAddressById(self.cartData.AddressId);
-                if (self.sessionId && self.cartData.ServiceId && deliveryAddress.AddressType === "Address") {                   
-                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress, self.initialCountryCode));
+                if (self.sessionId && /*self.cartData.ServiceId &&*/ deliveryAddress.AddressType === "Address") {                   
+                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress, "AL")); //Setting strange default country code to detect problems
                 }
 
                 self.$.gfsCheckoutWidget.postGfsData(function (err, data) {
@@ -415,10 +435,13 @@
                     if (deliveryAddress.AddressType === "Collect") {
                         self.$.gfsCheckoutWidget.chooseDropPointId(address.DropPointId || address.droppointId);
                     }
-
-                    if (self.sessionId && self.cartData.ServiceId ) {
+                    //Re-select chosen service
+                    if (self.cartData.ServiceId ) {
                         self.$.gfsCheckoutWidget.updateDeliveryOptions(self.cartData.ServiceId);
-                    }                  
+                    }
+                    else {
+                        self.preselectDeliveryMethod();
+                    }
 
                     callback(err);
                 });
