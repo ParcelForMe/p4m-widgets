@@ -1147,7 +1147,6 @@
                             callback(result.message);
                         }
                         else {
-                            //debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
@@ -1427,7 +1426,6 @@
 
 
             _processAllDroppoints: function () {
-                //debugger;
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
                 this._processPreferredDroppoints();
@@ -1681,7 +1679,6 @@
 					    //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
 					    marker = new google.maps.Marker(markerConfig);
 					    marker.addListener('click', function (clickedMarker) {
-					        //debugger;
 					        self._selectDropPointMarker(this);
 					    });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view

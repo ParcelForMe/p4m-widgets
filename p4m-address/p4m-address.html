@@ -277,7 +277,6 @@
             },
 
             countryChanged: function(e) {
-                //debugger;
                 if (e.detail.value) {
                     this.set('addressData.Country', e.detail.value.label);
                     this.set('addressData.CountryCode', e.detail.value.value);
@@ -292,7 +291,6 @@
             },
 
             markAsDelivery: function () {
-                //debugger;
                 if (this.cartData.AddressId !== this.addressData.Id) {
                     this.isDelivery = true;
                     this.fire('select', { 'isDelivery': true, 'id': this.addressData.Id });
