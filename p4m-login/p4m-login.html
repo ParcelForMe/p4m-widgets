@@ -39,8 +39,8 @@
         </paper-dialog>
 
         <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
-        <polymer-cookie id="p4mStateCookie" name="p4mState" value="{{_state}}"></polymer-cookie>
-        <polymer-cookie id="p4mNonceCookie" name="p4mNonce" value="{{_nonce}}"></polymer-cookie>
+        <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
+        <polymer-cookie id="p4mNonceCookie" name="p4mNonce" path="/" value="{{_nonce}}"></polymer-cookie>
         <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
         <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
         <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
@@ -82,9 +82,6 @@
             is: "p4m-login",
 
             properties: {
-                immediateLoad: {
-                    type: Boolean
-                },
                 hostType: {
                     type: String,
                 },
@@ -126,42 +123,35 @@
             },
 
             ready: function () {
-                if (this.immediateLoad) {
-                    // this widget has been loaded inside the popup that should be used for the login
-                    // in this case a guest user is P4M registered and has chosen to login
-                    this.loadLoginPage();
-                }
-                else {
-                    window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
-                    this._getTokenCookie();
-                    if (this.p4mToken) {
-                        // if the P4M Consumer is logged in, then check if they are logged in locally
-                        var localLogin = this.$.p4mLocalLoginCookie.readCookie();
-                        if (!localLogin || localLogin === "") {
-                            // state is unknown so check first
-                            this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
-                        }
-                        else if (localLogin === "false") {
-                            //alert("AuthComp: "+localLogin);
-                            // definitely not logged in so do it now
-                            this._onAuthCompletion();
-                        }
-                        else {
-                            var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
-                            if (offerRestore === "true") {
-                                this.$.p4mOfferCartRestoreCookie.eraseCookie();
-                                //if (!~window.location.href.indexOf('p4m/checkout'))
-                                    this.$.lastCartDlg.open();
-                            }
-                        }
+                window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+                this._getTokenCookie();
+                if (this.p4mToken) {
+                    // if the P4M Consumer is logged in, then check if they are logged in locally
+                    var localLogin = this.$.p4mLocalLoginCookie.readCookie();
+                    if (!localLogin || localLogin === "") {
+                        // state is unknown so check first
+                        this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
+                    }
+                    else if (localLogin === "false") {
+                        //alert("AuthComp: "+localLogin);
+                        // definitely not logged in so do it now
+                        this._onAuthCompletion();
                     }
                     else {
-                        this.clearCookies();
-                        var locale = this.$.p4mLocaleCookie.readCookie();
-                        if (!locale || locale === "") {
-                            // not logged in so we get the closest P4M server
-                            this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
+                        var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
+                        if (offerRestore === "true") {
+                            this.$.p4mOfferCartRestoreCookie.eraseCookie();
+                            //if (!~window.location.href.indexOf('p4m/checkout'))
+                                this.$.lastCartDlg.open();
                         }
+                    }
+                }
+                else {
+                    this.clearCookies();
+                    var locale = this.$.p4mLocaleCookie.readCookie();
+                    if (!locale || locale === "") {
+                        // not logged in so we get the closest P4M server
+                        this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
             },
@@ -177,16 +167,6 @@
                 else {
                     document.cookie = "p4mLocale=" + data.Token + "; path=/";
                 }
-            },
-
-            loadLoginPage: function()
-            {
-                //Make AuthUrl
-                this._makeState();
-                this._makeAuthUrl();
-                window.resizeTo(450, 500);
-                window.title = "Login";
-                window.location = this._authUrl;
             },
 
             launchPopup: function () {
