@@ -21,7 +21,10 @@ function addApiHeaders(req, res, next) {
 	next();
 };
 
-
+function simulateDelay(req, res, next) {
+	console.log('Waiting for 3 seconds..');
+	setTimeout(next, 3000);
+}
 
 //--- Set up site and API servers
 var site = Express();
@@ -45,7 +48,10 @@ that the widgets will actually work
 
 */
 api.use('/p4m/getP4MAccessToken', P4mEndpoint.getP4MAccessToken); 
+api.use('/p4m/localLogin', P4mEndpoint.localLogin); 
+api.use('/p4m/checkout', P4mEndpoint.checkout); 
 
+api.use('/p3m/applyDiscountCode', simulateDelay); // and then continue on to static file
 
 /*
 
