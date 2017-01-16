@@ -39,8 +39,8 @@
         </paper-dialog>
 
         <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
-        <polymer-cookie id="p4mStateCookie" name="p4mState" value="{{_state}}"></polymer-cookie>
-        <polymer-cookie id="p4mNonceCookie" name="p4mNonce" value="{{_nonce}}"></polymer-cookie>
+        <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
+        <polymer-cookie id="p4mNonceCookie" name="p4mNonce" path="/" value="{{_nonce}}"></polymer-cookie>
         <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
         <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
         <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
@@ -151,6 +151,7 @@
                     }
                 }
                 else {
+                    this.clearCookies();
                 	var locale = this.$.p4mLocaleCookie.readCookie();
                     if (!locale || locale === "") {
                     	// not logged in so we get the closest P4M server
