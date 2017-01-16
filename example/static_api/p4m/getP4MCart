@@ -1,0 +1,68 @@
+{
+    Success: true,
+    Error: null,
+    Cart : {
+        ConsumerId	    : "123",
+        Id	            : "00000001",
+        SessionId	    : "SessionA1",
+        RetailerId      : "AAA",
+        RetailerName	: "Adrians Antique Antonyms",
+        Reference	    : "ORD01",
+        AddressId       : "1",
+        BillingAddressId    : "1",	
+        Date	        : "2017-01-16T14:55:43.511Z",
+        Currency	    : "AUD",    
+        ShippingAmt     : 20.00,
+        Tax             : 10.00,
+        Total           : 100.00,
+        ServiceId	    : "Shipping service Id",
+        ServiceName     : "next day",
+        ExpDeliveryDate	: "2017-01-16T14:55:43.511Z",
+        DateDelivered	: "2017-01-16T14:55:43.511Z",
+        Carrier	        : "pigeon", 
+        ConsignmentId	: "thiscrate",	 
+        CarrierToken	: "3knocks",
+        Status          : "Ordered",
+        RetailerRating	: 2,
+        CarrierRating	: 2,
+        PaymentType	    : "DB",
+        PayMethodId	    : "1",
+        PaymentId	    : "P4M transaction Id",
+        AuthCode	    : "secID",
+        PurchaseConfirmedTS	: "2017-01-16T14:55:43.511Z",
+        Items	        : [
+            {
+                CartId          : "00000001",
+                LineId          : 1,
+                Make            : "Classic",
+                Sku             : "0123",
+                Desc            : "Short (Opposite of Tall)",
+                Qty             : 1.0,
+                Price           : 40.0,
+                LinkToImage     : 
+            }
+CartId	String (read only)	 
+LineId	String	 see notes
+Make	String	 
+Sku	String 	 
+Desc	String 	 
+Qty	Decimal 	 
+Price	Decimal 	 
+LinkToImage	String 	 A link to an image of the product
+LinkToItem	String 	 A link to page with information about the product
+Tags	String 	 Product categories (comma separated)
+Rating	Integer	 The consumer's product rating
+SiteReference	String	 see notes
+Options	List (key=value)	 see notes
+
+        ],
+        Discounts	    : [
+            {
+                CartId          : "00000001",
+                Code            : "AAA",
+                Description     : "Valid Discount Code",
+                Amount          : 5.00
+            }
+        ]
+    }
+}

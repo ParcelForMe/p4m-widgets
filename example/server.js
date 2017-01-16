@@ -2,7 +2,7 @@ var Express 		= require('express');
 var Http			= require('http');
 var BodyParser		= require('body-parser');
 
-var P4mEndpoint 	= require('./p4m_endpoints.js');
+var p4mEndpoint 	= require('./p4m_endpoints.js');
 
 
 var SITE_PORT = 8080;
@@ -47,10 +47,11 @@ These are the minimum parcel 4 me endpoints we need to implement so
 that the widgets will actually work
 
 */
-api.use('/p4m/getP4MAccessToken', P4mEndpoint.getP4MAccessToken); 
-api.use('/p4m/localLogin', P4mEndpoint.localLogin); 
-api.use('/p4m/checkout', P4mEndpoint.checkout); 
+api.use('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
+api.use('/p4m/localLogin', p4mEndpoint.localLogin); 
+api.use('/p4m/checkout', p4mEndpoint.checkout); 
 
+// TODO : check if discount code is valid or not ("AAA" is valid !)
 api.use('/p3m/applyDiscountCode', simulateDelay); // and then continue on to static file
 
 /*

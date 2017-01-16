@@ -7,6 +7,7 @@
 
         <link rel="import" href="/lib/p4m-widgets/p4m-login/p4m-login.html" />
         <link rel="import" href="/lib/p4m-widgets/p4m-register/p4m-register.html">
+        <link rel="import" href="/lib/p4m-widgets/p4m-checkout/p4m-checkout.html">
 
     </head>
 
@@ -14,14 +15,25 @@
         
         <h1>Adrian's Antique Antonyms (Simple Shop) P4M Widget Demo</h1>
 
+        <small>Use "AAA" discount code for a $5 discount (any other code is invalid)</small>
+
+        <br/><h2>p4m-register</h2>
         <p4m-register></p4m-register>
+
         <br/><h2>p4m-login</h2>
         <p4m-login id-srv-url="https://dev.parcelfor.me:44333" 
-                    client-id="10004" 
+                    client-id="10006" 
                     redirect-url="http://localhost:8081/p4m/getP4MAccessToken" 
                     logout-form="logoutForm">
         </p4m-login>
-        <br/>
+
+        <br/><h2>p4m-checkout</h2>
+        <remove-p4m-checkout 
+            use-paypal="true" 
+            use-gfs-checkout="true" >
+        </remove-p4m-checkout>
+
+
     </body>
 
 </html>

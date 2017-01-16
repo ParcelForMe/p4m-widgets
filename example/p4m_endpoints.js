@@ -6,52 +6,46 @@ the widgets to function - this is NOT a full P4M implementation
 */
 
 var Cookies     = require('cookies');
-var OidcClient  = require('oidc-client-node');
-
-
+var request 	= require('request');
 
 exports.getP4MAccessToken = function(req, res) {
 	
 	var cookies = new Cookies( req, res );
-	
-	if (cookies.get('p4mState') != req.param.state) {
+
+	if (cookies.get('p4mState') != req.query.state) {
 	    res.status(500).send('Authentication error (p4mState)');
 	}
-	
-	var oidcConfig = {
-	  scope: 'p4mApi p4mRetail', 
-	  client_id: '10004',
-	  client_secret: 'secret',
-	  callbackURL: '/auth/oidc/callback',
-	  post_logout_redirect_uri: 'http://'+req.headers.host+':8080/p4m/getP4MAccessToken',
-	  authority: 'https://dev.parcelfor.me:44333/connect/token',
-	  response_type: "code", 
-	  response_mode: "form_post",
-	  scopeSeparator: ' ',
-	  verbose_logging: true,
 
-	  jwks_uri: 'https://dev.parcelfor.me:44333/.well-known/openid-configuration/jwks'
-	  
-	};
 
-	var oidcClient = new OidcClient(req, res, oidcConfig);
-	
-	var tokenRequest = oidcClient.createTokenRequestAsync();
-	
-    tokenRequest.then(function (results) {
-        console.log('success from oidc token request', results);
-        
-        var now = new Date();
-        cookies.set('p4mToken', results.accessToken,
-                    { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) });
-                    
-        
-        res.status(200).send('<script>window.close();</script>');
-        
-    }).catch(function(error){
-        console.log('ERROR :', error);
-        res.status(500).send('OIDC error: ' + error);
-    });
+	var url = "https://dev.parcelfor.me:44333/connect/token";
+
+	var data = {
+		grant_type		: "authorization_code",
+		code			: req.query.code,
+		redirect_uri	: "http://localhost:8081/p4m/getP4MAccessToken",
+		client_id		: "10006"
+	}
+
+	var options = {
+		url: url,
+		headers: {
+			"Authorization": "Basic " + new Buffer("10006:secret").toString('base64'),
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		form : data
+	}
+
+console.log(url);
+
+	request.post(options, function(error, response, body) {
+
+
+		res.status(200).send(body);
+	});
+
+console.log('wait for request cllback!');
+
+
 
 
 };
