@@ -5,7 +5,6 @@
 <dom-module id="p4m-wish">
 
     <template>
-        <p4m-api id="api" ssl="true" host-base-domain="parcelfor.me" host-type="dev" version="v2"></p4m-api>
         <div id="content">
             <template is="dom-if" if="{{isWish}}">
                 <div id="p4mWishBtn" class="">Moving to wish list...</div>
@@ -49,7 +48,6 @@
             },
             ready: function()
             {
-
             },
             toggleWish: function () {
                 this.isWish = !this.isWish;
@@ -60,7 +58,8 @@
                 if (this.isWish) {
                     this.itemData.Currency = this.currency;
                     this.fire("movingtowish", this.itemData);
-                    this.$.api.call('postWish', {}, this.itemData, () => this.broadcastState());
+                    this.api = document.getElementById("p4mCheckoutApi");
+                    this.api.call('postWish', {}, this.itemData, () => this.broadcastState());
                 }
                 else {
                     //this.$.api.call('deleteWish', { "sku": this.itemData.sku }, null, () => this.broadcastState());

@@ -4,6 +4,7 @@
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
+
 <link rel="import" href="../p4m-profile/p4m-profile.html" />
 <link rel="import" href="../p4m-api/p4m-api.html" />
 <link rel="import" href="../p4m-cart/p4m-cart.html" /> 
@@ -18,24 +19,22 @@
 <link rel="import" href="../p4m-discount-list/p4m-discount-list.html" />
 
 <link rel="import" href="../gfs-checkout-widget/gfs-checkout-widget.html" />
+<link rel="import" href="../address-lookup-field/address-lookup-field.html" />  
 
-<link rel="import" href="../address-lookup-field/address-lookup-field.html" />   
-
-
-
+<link rel="import" href="../p4m-imports/p4m-imports.html" />  
+ 
 <link rel="stylesheet" href="../p4m-shared/p4m.css" />
 
 <dom-module id="p4m-checkout">
 
     <template>
-        <p4m-api id="api" ssl="true" host-base-domain="parcelfor.me" host-type="dev" version="v2"></p4m-api>
+        <p4m-api id="p4mCheckoutApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
         <div id="container">
+
             <div id="topPanel" class="topPanel"><h2>Review My Order</h2><p4m-profile mode="basic"></p4m-profile></div>
             <div id="panelContainer">
-                <div id="detailPanel" class="p4m-panel">
-                    
-                    
+                <div id="detailPanel" class="p4m-panel">                   
                     <paper-tabs selected="{{selectedTab}}">
                         <paper-tab>My Order</paper-tab>
                         <paper-tab>Delivery Options</paper-tab>
@@ -47,7 +46,7 @@
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -64,16 +63,18 @@
                 </div>
                 <div id="summaryPanel" class="p4m-panel smallSummary">
                     <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
-                    <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" new-drop-point="{{_queuedNewAddress}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
+                    <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>  
                     <p4m-discount-input on-discount="onDiscount"></p4m-discount-input>    
-                 </div>
+                </div>
             </div>           
         </div>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
+        <!--             
         <polymer-cookie id="p4mDefaultPostCode" name="p4mDefaultPostCode"></polymer-cookie>
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
+        -->
 
 
     </template>
@@ -161,12 +162,16 @@
                 },
                 consumerData: {
                     type: Object,
-                    notify: true,
-                    observer: "onConsumerDataChange"
+                    notify: true
+                    //observer: "onConsumerDataChange"
                 },              
                 cartData: {
                     type: Object,
                     notify: true,
+                },
+                isNew: {
+                    type: Object,
+                    value: false
                 },
                 deliveryData: {
                     type: Object,
@@ -182,6 +187,10 @@
                 },
                 selectedCard: {
                     type: Object
+                },
+                hostType:{
+                    type: String,
+                    value: "dev" //default value
                 },
                 useGfsCheckout: {
                     type: Object,
@@ -223,6 +232,8 @@
 
             ready: function()
             {
+                console.log("P4M Checkout ready", new Date().getTime());
+                //console.log('Async:',async);
                 var self = this;
                 this.Tabs = { "ORDER": 0, "DELIVERY": 1, "PAYMENT": 2, "ADDRESS": 3 };
                 this._notUseGfsCheckout = !this.useGfsCheckout;
@@ -230,14 +241,182 @@
                 if (!this.sessionId) {
                     this.sessionId = this.$.sessionCookie.readCookie();
                 }
+
+                this.init();
+
+
+
+
+                /*
                 if (this.sessionId) {
                     this.getLocalCart();
                 }
 
-                this.$.api.call('consumer', null, null, function (data) {
+                this.$.p4mCheckoutApi.call('consumer', null, null, function (data) {
                     self.onConsumerData(data);
                     self.preselectAddress();
                     self.preselectDeliveryMethod();
+                });*/
+            },
+
+            init: function (finalCallback) {
+                var self = this;
+                self.initialising = true;
+                console.log('Initialising...');
+                self.sessionAddressId = hashThis(this.sessionId);
+                async.series(
+                    [
+                        function _getConsumer(callback) { //TODO: Move this to a parallel thread?
+                            console.log('_getConsumer');
+                            self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
+                                if (!data.Success) {
+                                    callback(data.Error);
+                                }
+                                else {
+                                    self.consumerData = data.Consumer;
+                                    callback(err);
+                                }
+                            });
+                        },
+
+                        //Get local cart
+                        function _localCart(callback) {
+                            console.log('_localCart()');
+                            if (self.sessionId) {
+                                self.getLocalCart(function (err) {
+                                    if (err) {
+                                        callback(err)
+                                    }
+                                    else {
+                                        self.updateP4mCart(callback);
+                                    }
+                                });
+                            }
+                            else {
+                                callback("No cart");
+                                self.getP4mCart(callback);
+                            }
+                        },
+
+                        function _setAddress(callback) {
+                            if (!self.cartData.AddressId) {
+                                self.preselectAddress();
+                            }
+                            callback(null);
+                        }
+                    ],
+                    function (err) {
+
+                        if (err) {
+                            self.initialising = false;
+                            console.error(err);
+                            console.log('...Initialisation aborted.');
+                            throw err;
+                        }
+
+                        async.series(
+                        [
+
+                            function _newCart(callback) {
+                                console.log('_newCart()');
+                                //If this is a new cart, preselect as much as possible.
+                                //Otherwise, the user has already selected their options.
+
+                                //self.isNew = true;
+                                if (!self.cartData.AddressId) {
+                                    self.preselectAddress(callback);
+                                    
+                                    callback(null);
+                                }
+                                else {
+                                    callback(null);
+                                }
+                            },
+
+                            //Send info from cart and consumer to GFS
+                            function _gfs(callback) {
+                                console.log('_gfs()');
+                                if (self.$.gfsCheckoutWidget) {
+                                    self._updateGfs(callback);
+                                }
+                                else {
+                                    callback(null);
+                                }
+                            },
+
+                            function _p4mCart(callback) {
+                                console.log('_p4mCart()');
+                                //self.preselectDeliveryMethod();
+                                self.updateP4mCart(callback); //This will set IsNew to false
+                            }
+                        ],
+                        function (err) {
+                            if (err) {
+                                console.error(err);
+                                console.error("Cancelled initialisation.");
+                            }
+                            self.initialising = false;
+                            console.log('...Initialisation complete.');
+                        })
+                    }
+                )
+            },
+
+            //Send all cart information to GFS
+            _updateGfs: function (callback) {
+
+                var self = this;
+
+                var gfsPostConfig = {
+                    countryCode: "",
+                    town: "",
+                    Postcode: "",
+                    addressLines: [],
+                    contactEmail: "",
+                    recipientFirstName: this.consumerData.FamilyName,
+                    recipientLastName: this.consumerData.GivenName,
+                    recipientTitle: this.consumerData.Title | "",
+                    cartValue: 0.0
+                };
+     
+                self.$.gfsCheckoutWidget.createPostData(gfsPostConfig);
+
+                var orderValue = 0.0;
+                self.cartData.Items.forEach(function (item) {
+                    orderValue += item.Qty * item.Price;
+                });
+                self.$.gfsCheckoutWidget.setGfsOrderValue(orderValue);
+               
+                //Set preferred droppoints
+                var p4mDropPoints = self._getPreferredDropPoints();
+                self.$.gfsCheckoutWidget.setPreferredDroppoints(p4mDropPoints);
+
+                //Tell Gfs Checkout widget about our preferred addresses
+                var p4mConsumerAddresses = self._getPreferredAddresses(3);
+                self.$.gfsCheckoutWidget.setConsumerAddresses(p4mConsumerAddresses);
+
+                //Set service ID and name
+                var deliveryAddress = self.getAddressById(self.cartData.AddressId);
+                if (self.sessionId && /*self.cartData.ServiceId &&*/ deliveryAddress.AddressType === "Address") {                   
+                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress, "AL")); //Setting strange default country code to detect problems
+                }
+
+                self.$.gfsCheckoutWidget.postGfsData(function (err, data) {
+
+                    //Re-select droppoint
+                    debugger;
+                    if (deliveryAddress.AddressType === "Collect") {
+                        self.$.gfsCheckoutWidget.chooseDropPointId(address.DropPointId || address.droppointId);
+                    }
+                    //Re-select chosen service
+                    if (self.cartData.ServiceId ) {
+                        self.$.gfsCheckoutWidget.updateDeliveryOptions(self.cartData.ServiceId);
+                    }
+                    else {
+                        self.preselectDeliveryMethod();
+                    }
+
+                    callback(err);
                 });
             },
 
@@ -245,12 +424,22 @@
                 console.log("p4m-checkout debug", this.cartData);
             },
 
-            getLocalCart: function () {
-                this.$.localApi.call('getP4MCart', null, null, this.onCartData.bind(this) );
+            getLocalCart: function (callback) {
+                var self = this;
+                this.$.localApi.call('getP4MCart', null, null, function (err, data) {
+                    if (err) {
+                        console.log("getLocalCart() error:", err);
+                        callback(err);
+                    }
+                    else {
+                        self.cartData = data.Cart;
+                        callback(err, data.Cart);
+                    }
+                });
             },
 
-            getP4mCart: function () {
-                this.$.api.call('currentCart', { sessionId: this.sessionId }, null, this.onRemoteCartData.bind(this));
+            getP4mCart: function (callback) {
+                this.$.p4mCheckoutApi.call('currentCart', { sessionId: this.sessionId }, null, this.onRemoteCartData.bind(this, callback));
             },
 
             sendCartItemChanges: function () {          
@@ -262,183 +451,281 @@
                     changes.push({ItemCode: sku, Qty: this.$.cart.changes[sku]});
                 }
                 if (changes.length > 0) {
-                    this.$.localApi.call('itemQtyChanged', {}, changes, function (newCartTotals) {
+                    
+                    var orderValue = 0.0;
+                    for (var item in this.$.cart.Items) {
+                        orderValue += item.Qty * item.Price; 
+                    }
+
+                    //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
+
+                    self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                         //console.log("Called local api itemQtyChanged");
+                        console.log("sendCartItemChanges(): itemQtyChanged: new cart totals", newCartTotals);
                         self.$.cart.clearChanges();
-                        self.updCartTotals(newCartTotals);
-                        self.cartData.Discounts = newCartTotals.Discounts;
-                        self.updateP4mCart();
+                        self.updCartTotals(newCartTotals, function (err) {
+                            self.cartData.Discounts = newCartTotals.Discounts;
+                            self.updateP4mCart();
+                        });
+
                     });
+                    //})
+
                 }
                 else {
                     //console.log("No changes to send");
                 }
-
-
             },
 
-            updCartTotals: function(newCartTotals) {
+            //Send new total to shipping module and ask for new shipping price etc
+            updCartTotals: function (newCartTotals, callback) {
                 this.cartData.Tax = newCartTotals.Tax;
                 this.cartData.ShippingAmt = newCartTotals.Shipping;
                 this.cartData.Total = newCartTotals.Total;
+
+                if (this.$.gfsCheckoutWidget) {
+                    var cartValue = Number(this.cartData.Total - (this.cartData.ShippingAmt || 0) - (this.cartData.Tax || 0));
+                    //console.log(cartValue, this.$.gfsCheckoutWidget._postData.Request.Order.Value.Value);
+                    if (cartValue != this.$.gfsCheckoutWidget._postData.Request.Order.Value.Value) {
+                        console.log("Updating GFS Checkout");
+                    }
+                    callback(null);                   
+                }
+                else {
+                    callback(null);
+                }
             },
 
+            /*
             onConsumerData: function(data) {
                 this.consumerData = data.Consumer;
+                this.lastSelectedAddrId = data.Consumer.PrefDeliveryAddressId;
                 if (this.$.gfsCheckoutWidget) {
                     var p4mDropPoints = this._getPreferredDropPoints();
                     this.$.gfsCheckoutWidget.setPreferredDroppoints(p4mDropPoints);
 
                     //If we have selected a droppoint, let GFS Checkout know.
-                    var selectedDropPoint = this.getAddressById(this.cartData.AddressId);
-                    if (selectedDropPoint) {
-                        this.$.gfsCheckoutWidget.chooseDropPointId(selectedDropPoint.DropPointId || selectedDropPoint.droppointId);
+                    var address = this.getAddressById(this.cartData.AddressId);
+                    if (address && address.AddressType === "Collect") {
+                        this.$.gfsCheckoutWidget.chooseDropPointId(address.DropPointId || address.droppointId);
                     }
 
                     var p4mConsumerAddresses = this._getPreferredAddresses(3);                        
                     this.$.gfsCheckoutWidget.setConsumerAddresses(p4mConsumerAddresses);
+                }             
+            },*/
+
+
+            toggleLoading: function (loading) {
+                if (loading) {
+                    this.$.orderSummary.showAsLoading();
+                    this.$.p4mPurchase.setLoadingState(true);
                 }
+                else {
+                    this.$.orderSummary.showAsLoaded();
+                    this.$.p4mPurchase.setLoadingState(false);
+                }
+
+            },
+
+            updateP4mCart: function (callback) {
+               
+                //Send changes to P4M
+                if (!callback) callback = function () { };
+                /*if (this.updating) {
+                    callback(null);
+                    return;
+                }*/
+                console.log('updateP4mCart()');
+                this.updating = true;
+                try {
+                   
+                    var self = this;
+                    var cartMessage =
+                    {
+                        "SessionId": this.sessionId,
+                        "ClearItems": true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
+                        "Cart": this.cartData,
+                        "DeliverToNewDropPoint": (this._queuedNewAddress) ? true : false
+                    }
+
+                    this.toggleLoading(true);
+                    this.$.p4mCheckoutApi.call('postCart', null, cartMessage, function (err, data) {
+                        if (err) {
+                            callback(err);
+                        }
+                        else {
+                            self.updating = false;
+                            self.onRemoteCartData.bind(self)(data, callback);
+                        }
+                    });
+                }
+                catch (e) {
+                    this.updating = false;
+                }
+
 
                 
-
             },
+            //lastSelectedAddrId: '', // record the last selected address for switching between drop points and delivery addrs
 
-
-
-            onConsumerDataChange: function(newVal, oldVal) {
-            },
-
-            updateP4mCart: function () {
-                this.$.orderSummary.showAsLoading();
-                this.$.p4mPurchase.setLoadingState(true);
-                //if (this.cartData.Id == null) return;
-                //Send changes to P4M
-                var cartMessage =
-                {
-                    "SessionId": this.sessionId,
-                    "ClearItems": true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
-                    "Cart": this.cartData,
-                    "DeliverToNewDropPoint": this._queuedNewAddress ? true : false
-                }
-                //console.log('Posting', cartMessage);
-                this.$.api.call('postCart', null, cartMessage, this.onRemoteCartData.bind(this));
-            },
-
-            onRemoteCartData: function(data) {
+            onRemoteCartData: function (data, callback) {
+                console.log('onRemoteCartData()');
+                this.toggleLoading(false);
                 if (!data.Success) {
                     console.error(data.Error);
-                    this.onCartData(data);
-                } 
-                   
-                else if (!data.Cart || !data.Cart.Items || data.Cart.Items.length === 0) {
-                    window.location.reload(true);
-                }                  
-                else {
-                    this.onCartData(data);
+                    callback(data.Error)
                 }
+                else {
                     
+                    if (!data.Cart || !data.Cart.Items || data.Cart.Items.length === 0) {
+                        window.location.reload(true);
+                    }                  
+                    else {
+                        this.cartData = data.Cart;
+                        this.isNew = data.IsNew;
+                        /*var address = this.getAddressById(this.cartData.AddressId);
+                        if (address && address.AddressType == "Address") {
+                            this.lastSelectedAddrId = data.Cart.AddressId;
+                        } */                                                     
+                    }
+                    callback(null);
+                }                                     
             },
 
-            onCartData: function (data) {
-                this.$.orderSummary.showAsLoaded();
-                this.$.p4mPurchase.setLoadingState(false);
-                this.$.p4mPurchase.updateUi();
+            /*
+            onCartData: function (data, callback) {
+                this.toggleLoading(false);
+              
                 if (data.Success) {
                     this.cartData = data.Cart;
-                    if (this.cartData && this.cartData.Id === null) {
-                        //console.log("Updating P4M");
-                        //In this case we have retrieved the cart from the local server so we need to update P4M
-                        this.updateP4mCart();
-                    }
+                    callback(null, this.cartData);
                 }
                 else {
                     console.error(data.Error);
-                }                
-            },
+                    callback(data.Error);
+                }
+                
+                //this.$.p4mPurchase.updateUi();
+            },*/
 
             onCartItemsChange: function (e) {
-                //console.log('p4m-checkout: onCartItemsChange()', JSON.stringify(e));
+                console.log('p4m-checkout: onCartItemsChange()');//, JSON.stringify(e));
                 //If this is a valid change record,
-                if (e.path) {
+                var beforeHash = JSON.stringify(e.base);
+                var afterHash = JSON.stringify(e.value);
+                if (e.path && beforeHash !== afterHash ) {
                     //Start timer, then send changes.
                     //If more changes are detected while the timer is active, reset the timer.
+                    console.log("onCartItemsChange: Preparing to send cart changes");
                     if (this._changeTimer) window.clearTimeout(this._changeTimer);
                     this._changeTimer = window.setTimeout(this.sendCartItemChanges.bind(this), 2000);
+                }
+                else
+                {
+                    console.log("onCartItemsChange: No cart changes");
                 }
             },
 
             //Take data from shipping selector representing selected shipping options
             //For example output, see gfs-checkout event selectedservicechanged
-            updateShipping: function (data) { //service, shipping, expDeliveryDate, collectPoint) {
-                if (this._updatingShipping) return;
-                this._updatingShipping = true;
-                var self = this;
-
-                this.cartData.ShippingAmt = data.shipping;
-                this.cartData.ServiceName = data.service;
-                this.cartData.ServiceId = data.serviceId;
-                this.cartData.ExpDeliveryDate = data.expDeliveryDate;
-
-                var shippingDetails = { 'Service': data.service, 'Amount': data.shipping, 'DueDate': data.expDeliveryDate };
-                // got new shipping details so we need to get updated tax from the host
-                this.$.localApi.call('updShippingService', null, shippingDetails, function (cartTotals) {
-                    self.updCartTotals(cartTotals); // this updates tax
-                    self.cartData.Carrier = data.carrier;
-                    self.cartData.ShippingAmt = data.shipping;
-                    self.cartData.ServiceName = data.service;
-                    self.cartData.ExpDeliveryDate = data.expDeliveryDate;
-                    if (data.collectionPoint) {
-                        self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function () {
-                            self.updateP4mCart();
-                            self._updatingShipping = false;
-                        });
+            currentService: {},
+            updateShippingService: function (data, callback) { //service, shipping, expDeliveryDate, collectPoint) {
+                if (!callback) {
+                    throw "updateShippingService(): No callback";
+                }
+                if (this.updatingShipping) {
+                    callback(null);
+                }
+                else {
+                    this.updatingShipping = true;
+                    if (this.currentService.shipping === data.shipping &&
+                        this.currentService.collectionPoint === data.collectionPoint &&
+                        this.currentService.service === data.service &&
+                        this.currentService.serviceId === data.serviceId &&
+                        this.currentService.expDeliveryDate === data.expDeliveryDate) {
+                        console.log("Skipping upd service", this.currentService);
+                        return;
                     }
-                    else {
-                        //If no non-collection address specified, pick the preferred one
-                        var address = self.getAddressById(self.cartData.AddressId);
-                        if (!address || address !== 'Address') {
-                            if (self.consumerData.PrefDeliveryAddressId) {
-                                address = self.getAddressById(self.consumerData.PrefDeliveryAddressId);
-                                if (address) {
-                                    self.cartData.AddressId = address.Id;
+                    else
+                        console.log("Upd service: ", this.currentService, data);
+
+
+                    var self = this;
+
+                    var shippingDetails = { 'Service': data.service, 'Amount': data.shipping, 'DueDate': data.expDeliveryDate };
+                    // got new shipping details so we need to get updated tax from the host
+                    this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
+                        if (err) {
+                            console.error("localApi updShippingService error: ", err);
+                            callback(err);
+                        }
+                        else {
+                            debugger;
+                            this.currentService = data;
+
+                            self.set('cartData.Carrier', data.carrier);
+                            self.set('cartData.ShippingAmt', data.shipping);
+                            self.set('cartData.ServiceName', data.service);
+                            self.set('cartData.ServiceId', data.serviceId);
+                            self.set('cartData.DropPointId', data.collectionPoint);
+                            self.set('cartData.ExpDeliveryDate', data.expDeliveryDate);
+                            self.set('cartData.Tax', cartTotals.Tax);
+                            self.set('cartData.Total', cartTotals.Total);
+
+                            if (data.collectionPoint) {
+                                self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress);
+                            }
+                            else {
+                                //If no non-collection address specified, pick the preferred one
+                                var address = self.getAddressById(self.cartData.AddressId);
+                                if (!address || address !== 'Address') {
+                                    //if (self.lastSelectedAddrId)
+                                    //    address = self.getAddressById(self.lastSelectedAddrId);
+                                    if (!address && self.consumerData.PrefDeliveryAddressId)
+                                        address = self.getAddressById(self.consumerData.PrefDeliveryAddressId);
+                                    if (address)
+                                        self.set('cartData.AddressId', address.Id);
                                 }
                             }
-                        }                    
+                            self.updateP4mCart(function (err) {
+                                self.updatingShipping = false;
+                            });
+                        }
+                    });
+                }
 
-                        self.updateP4mCart();
-                        self._updatingShipping = false;
-                    }
-                });
             },
 
 
             selectCollectPoint: function (providerName, providerId, collectPointId, collectPointAddress, callback) {
-                //Make API call to add invisible address
-                //Don't post until payment time
+                if (!callback) callback = function () { };
                 var self = this;
+                var result;
                 if (!collectPointId) {
                     console.error("No collectPointId");
-                    callback();
+                    if (callback)
+                        callback();
                     return;
                 }
                
                 var existingDropPoint = this.$.addressList.getDropPointById(collectPointId);
-                if (!existingDropPoint) {
-                  
-                 
+                if (!existingDropPoint || existingDropPoint.Unsaved) {
+                
+                    //eeeeee             
                     var directions = collectPointAddress.directions ? collectPointAddress.directions.split("]").pop() : "";
                     var prefOrder = this.consumerData.Addresses.length || 1;
                     var postData =
                     {
                         "Address": {
-                            "Id": collectPointId,
+                            "Id": this.sessionAddressId,
                             "AddressType": "Collect",
                             "Label": providerName,
                             "CompanyName": directions,
                             "Street1": collectPointAddress.addressLines[0] || "",
                             "Street2": collectPointAddress.addressLines[1] || "",
                             "City": collectPointAddress.town,
-                            "PostCode": collectPointAddress.postCode,
+                            "PostCode": collectPointAddress.postCodoe,
                             "State": collectPointAddress.county,
                             "Country": collectPointAddress.country,
                             "CountryCode": collectPointAddress.countryCode,
@@ -447,35 +734,28 @@
                             "Longitude": collectPointAddress.coordinates.longitude,
                             "DropPointProviderId": providerId,              
                             "DropPointId": collectPointId,
-                            "CollectPrefOrder": prefOrder
+                            "CollectPrefOrder": prefOrder,
+                            "Unsaved": true
                         },
                         "isPrefDeliveryAddr": false,
                         "isBillingAddr": false
+
                     };
-                    //debugger;
-                    self.push('consumerData.Addresses', postData.Address);
-                    self.set('cartData.AddressId', collectPointId);
-
-                    self._queuedNewAddress = postData.Address;
-                    callback(self._queuedNewAddress);
-
-                   /*
-                    self.$.api.call("postAddress", null, postData, function (result) {
-                       cartData.AddressId = result.Address.Id;
-                        self.consumerData.Addresses.push(result.Address);
-                        //self.cartData.ServiceName = "Collection point";
-                        self.$.api.call('consumer', null, null, function (data) {
-                            self.onConsumerData.bind(self)(data);
-                            callback(result);
-                        });                    
-                    });*/
-                    
+                    self.saveAddress(postData, function (err, result) {
+                        self.set('cartData.AddressId', self.sessionAddressId);
+                        self.push('consumerData.Addresses', postData.Address);
+                        callback(err);
+                    });
+                            
                 }
                 else {
                     self._queuedNewAddress = null;
                     self.set('cartData.AddressId', existingDropPoint.Id); //collectPointAddress.Id;
-                    callback(existingDropPoint);
+                    result = existingDropPoint;
+                    callback(null);
                 }
+                //self.updateP4mCart(callback);
+                // if (callback)               
             },
 
             onPaymentComplete: function () {
@@ -540,39 +820,92 @@
             },
 
             onGotNewCard: function(){
-                this.$.api.call('consumer', null, null, this.onConsumerData.bind(this));
+                this.$.p4mCheckoutApi.call('consumer', null, null, this.onConsumerData.bind(this));
             },
 
             onSelectAddress: function (e) {
+                //TODO: Trigger POST to GFS
+                console.log("^^^ ADDRESS SELECTED");
+                debugger;
+                var self = this;
                 if (e.detail) {
-                    if (e.detail.isBilling) {
-                        this.set('cartData.BillingAddressId', e.detail.id);
-                    }                       
-                    else if (e.detail.isDelivery) {
-                        this.set('cartData.AddressId', e.detail.id);
-                    }                    
-                    this.updateP4mCart();
+                    //If changed billing address, tell P4M
+                    if (e.detail.isBilling && self.cartData.BillingAddressId != e.detail.id) {
+                        self.set('cartData.BillingAddressId', e.detail.id);
+                        self.updateP4mCart();
+                    }
+                        //If changed delivery address, tell GFS and P4M
+                    else if (e.detail.isDelivery && self.cartData.AddressId != e.detail.id) {
+                        self.set('cartData.AddressId', e.detail.id);
+                        async.series([
+                            function _gfs(callback) {
+                                if (self.$.gfsCheckoutWidget) {
+                                    self.$.gfsCheckoutWidget._unselectDropPoint();
+                                    self._updateGfs(callback);
+                                }
+                                else {
+                                    callback(null);
+                                }
+                            },
+                            function _p4m(callback) {
+                                self.updateP4mCart();
+                            },
+                        ],
+                        function (err) {
+                            if (err) console.error(err);
+                        });
+
+                        
+                    }
                 }
             },
 
-            onAddAddress: function (addressElement) {
-                this.onUpdateAddress(addressElement);
+            onAddAddress: function (e) {
+                this.onUpdateAddress(e);
+                /*, function (result) {
+                    if (result) {
+                        e.detail.markAsBilling();
+                    }
+                });*/
+            },
+
+            //eeeeee
+            saveAddress: function (addressData, callback) {
+                var postData =
+                {
+                    "Address": addressData,
+                    "isPrefDeliveryAddr": true
+                };
+                if (!postData.Address.AddressType) {
+                    postData.Address.AddressType = 'Address';
+                }
+                var self = this;
+                this.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, result) {
+                    //console.log("Got address result: ", result);
+                    if (err) {
+                        callback(err);
+                    }
+                    else {
+                        callback(null, result)
+                    }
+                });
             },
 
             onUpdateAddress: function (addressElement) {
                 // here we're adding or updating an address only, not setting a default value on the consumer at this stage
                 this.$.addressList.showAsLoading();
-                var postData =
-                {
-                    "Address": addressElement.detail.addressData
-                };
                 var self = this;
-                this.$.api.call("postAddress", null, postData, function (result) {
-                    //console.log("Got address result: ", result);
-                    addressElement.detail.addressData.Id = result.Address.Id;
-                    //addressElement.detail.mode = "view";
-                    self.$.addressList.showAsLoaded();
+                this.saveAddress(postData, function (err, result) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        addressElement.detail.addressData.Id = result.Address.Id;
+                        //addressElement.detail.mode = "view";
+                        self.$.addressList.showAsLoaded();
+                    }
                 });
+
             },
 
             preselectDeliveryMethod: function () {
@@ -581,20 +914,30 @@
                 else if (!this.cartData) throw "No cart data";
 
                 //this.consumerData.PreferSoonestDelivery = true; //TODO: Remove. This is just here for testing.
+
                 if (this.consumerData.PreferSoonestDelivery) {
                     if (this.$.gfsCheckoutWidget) {
-                        this.$.gfsCheckoutWidget.showPage_Calendar();
+                        this.$.gfsCheckoutWidget.showPage_Calendar(true);
                     }
                 }
+                else {
+                    if (this.$.gfsCheckoutWidget) {
+                        this.$.gfsCheckoutWidget.showPage_Standard(true);
+                    }
+
+                }
+               
+
             },
 
             preselectAddress: function () {
                 //Select address based on preferences
+                console.log('preselectAddress()');
                 if (!this.consumerData) throw "No consumer data"
                 else if (!this.cartData) throw "No cart data";
 
                 var preferences = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
-                if (this.consumerData.DeliveryPreferences) {
+                if (this.consumerData.DeliveryPreferences & this.consumerData.DeliveryPreferences !== "") {
                     preferences = this.consumerData.DeliveryPreferences.split(',');
                 }
 
@@ -635,7 +978,7 @@
                 //If there is a preferred delivery address, select that.
                 //PRECONDITION: Consumer data and Cart data exists
                 //Returns: addressId/null depending on success/failure
-  
+                console.log('selectPreferredAddress');
                 if (this.consumerData.PrefDeliveryAddressId) {
                     this.set('cartData.AddressId', this.consumerData.PrefDeliveryAddressId);
                     callback(null, this.consumerData.PrefDeliveryAddressId);
@@ -649,18 +992,17 @@
                 //If there are preferred droppoint addresses, select the nearest.
                 //PRECONDITION: Consumer data and Cart data exists
                 //Returns: addressId/null depending on success/failure
-
+                console.log('selectPreferredDroppoint');
                 var self = this;
                 var preferredDroppoints = this._getPreferredDropPoints();
 
                 if (preferredDroppoints.length) {
                     var nearestDroppoint = preferredDroppoints[0];
                     //this.set('cartData.AddressId', nearestDroppoint.droppointId);
-                    this.selectCollectPoint(nearestDroppoint.providerName, nearestDroppoint.providerId, nearestDroppoint.droppointId, nearestDroppoint.geoLocation, function () {
-                        self.updateP4mCart();
-                        callback(false);
+                    this.selectCollectPoint(nearestDroppoint.providerName, nearestDroppoint.providerId, nearestDroppoint.droppointId, nearestDroppoint.geoLocation, function (err) {
+                        //self.updateP4mCart();
+                        callback(err, nearestDroppoint);
                     });
-                    callback(null, nearestDroppoint);
                 }
                 else {
                     callback("No preferred droppoints");
@@ -671,18 +1013,18 @@
                 //If there is a suitable shipping selector that can return droppoints, select the nearest to the preferred address
                 //PRECONDITION: Consumer data and Cart data exists, preferred address 
                 //Returns: addressId/null depending on success/failure
-
+                console.log('selectSupportedDroppoint');
                 var self = this;
                 if (this.$.gfsCheckoutWidget) {
                     //Ask GFS Checkout for the supported droppoint closest to the preferred address
                     if (this.consumerData.PrefDeliveryAddressId) {
                         var preferredAddress = this.getAddressById(this.consumerData.PrefDeliveryAddressId);
-                        this.$.gfsCheckoutWidget.requestDropPointsByAddress(preferredAddress.Street1, preferredAddress.PostCode, function (dropPoints) {
+                        this.$.gfsCheckoutWidget.requestDropPointsByAddress(preferredAddress.Street1, preferredAddress.PostCode, null, function (dropPoints) {
                             if (dropPoints && dropPoints.length) {
                                 var dropPoint = dropPoints[0];
-                                self.selectCollectPoint(dropPoint.providerName, dropPoint.providerId, dropPoint.droppointId, dropPoint.geoLocation, function () {
-                                    self.updateP4mCart();
-                                    callback(false);
+                                self.selectCollectPoint(dropPoint.providerName, dropPoint.providerId, dropPoint.droppointId, dropPoint.geoLocation, function (err) {
+                                    //self.updateP4mCart();
+                                    callback(err);
                                 });
                             }
                             else {
@@ -703,10 +1045,12 @@
                     .map(p4mDroppointToGfsDroppoint);
             },
 
-            _getPreferredAddresses: function(maxItems) {
+            _getPreferredAddresses: function (maxItems) {
+                var preferredAddressId = this.consumerData.PrefDeliveryAddressId;
                 return this.consumerData.Addresses
                     .filter(function (item, i) { return (item.AddressType == "Address") }) //Only addresses, not droppoints
-                    .filter(function (item, i) { return (i < maxItems||10) }) //Up to 3 addresses
+                    .sort(function (a, b) { if (a.Id == preferredAddressId) { return -1; } else { return 1 } })
+                    .filter(function (item, i) { return (i < maxItems || 10) }) //Up to 3 addresses                   
                     .map(p4mAddressToGfsDroppoint);
             },
 
@@ -722,8 +1066,23 @@
             },
 
             onGfsServiceChanged: function (e) {
-                //console.log("p4m widget: onGfsServiceChanged():", e);
-                this.updateShipping(e.detail);
+                if (this.initialising) {
+                    console.warn('onGfsServiceChanged(): not updating while initialising');
+                    return;
+                }
+                else {
+                    console.log("p4m widget: onGfsServiceChanged():", e);
+                    this.updateShippingService(e.detail, function () { console.log("onGfsServiceChanged: updateShippingService complete")});
+                }
+            },
+
+            onGfsServicePreselect: function (e) {
+                this.updateShippingService(e.detail, function () { console.log("onGfsServicePreselect: updateShippingService complete") });
+            },
+
+            //The selected service wasn't available, so choose a default
+            onGfsNoService: function (e) {
+                this.preselectDeliveryMethod();
             },
 
             onGfsShowDroppoints: function (e) {
@@ -734,7 +1093,10 @@
                 this.toggleDetailExpansion(false);
             },
 
-            getAddressById(id) {
+            getAddressById: function(id) {
+                if (!this.consumerData) {
+                    return null;
+                }
                 var foundItem = this.consumerData.Addresses.find(function(item) { return item.Id == id });
                 return foundItem;
             },
@@ -775,7 +1137,7 @@
 
         }
 
-        function p4mAddressToGfsDroppoint(item) {
+        function p4mAddressToGfsDroppoint(item, defaultCountryCode) {
             var gfsAddress = {
                 geoLocation: {
                     postCode: item.PostCode,
@@ -785,7 +1147,7 @@
                         latitude: item.Latitude,
                         longitude: item.Longitude
                     },
-                    countryCode: item.CountryCode,
+                    countryCode: item.CountryCode || defaultCountryCode || 'GB',
                     county: "",
                     directions: ""
                 },
@@ -793,6 +1155,24 @@
             };
             return gfsAddress;
 
+        }
+
+        function p4mAddressToGfsAddress(item) {
+            var gfsAddress = {
+                CountryCode: {
+                    Code: item.CountryCode || "GB",
+                    Encoding: "ccISO_3166_1_Alpha2"
+                },
+                Postcode: item.PostCode,// "SO40 7JF", //ViewBag.InitialPostCode,
+                town: item.City,
+                addressLineCollection: [item.Street1]
+            };
+            return gfsAddress;
+
+        }
+
+        function hashThis(value) {
+            return value.split("").reverse().join("")
         }
     </script>
 </dom-module>

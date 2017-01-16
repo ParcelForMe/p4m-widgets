@@ -225,21 +225,21 @@
                 this._state = States.CVV_NEEDED;                    
             },
 
-            onPurchase: function (e) {
-                console.log('onPurchase', e);
-                if (e.Success == false) {
+            onPurchase: function (err, data) {
+                console.log('onPurchase', data);
+                if (data.Success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
                 }
                 else {
                     // check we need to launch the 3D Secure popup
-                    if (e.ACSUrl && e.ACSUrl !== '') {
-                        this.launch3DSecure(e.ACSUrl, e.PaReq, e.ACSResponseUrl, e.P4MData);
+                    if (data.ACSUrl && data.ACSUrl !== '') {
+                        this.launch3DSecure(data.ACSUrl, data.PaReq, data.ACSResponseUrl, data.P4MData);
                     }
                     else {
                         this._state = States.PURCHASED;
-                        if (e.RedirectUrl) {
-                            window.location.href = e.RedirectUrl;
+                        if (data.RedirectUrl) {
+                            window.location.href = data.RedirectUrl;
                         }
                         else if (this.redirectUrl) {
                             window.location.href = this.redirectUrl;
