@@ -266,17 +266,8 @@
                 self.sessionAddressId = hashThis(this.sessionId);
                 async.series(
                     [
-                        function _getConsumer(callback) { //TODO: Move this to a parallel thread?
-                            console.log('_getConsumer');
-                            self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
-                                if (!data.Success) {
-                                    callback(data.Error);
-                                }
-                                else {
-                                    self.consumerData = data.Consumer;
-                                    callback(err);
-                                }
-                            });
+                        function _consumer(callback) {
+                            self._getConsumer(callback)
                         },
 
                         //Get local cart
@@ -362,6 +353,19 @@
                 )
             },
 
+            _getConsumer: function (callback) {
+                var self = this;
+                self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
+                    if (!data.Success) {
+                        callback(data.Error);
+                    }
+                    else {
+                        self.consumerData = data.Consumer;
+                        callback(err, data);
+                    }
+                });
+            },
+
             //Send all cart information to GFS
             _updateGfs: function (callback) {
 
@@ -397,16 +401,15 @@
 
                 //Set service ID and name
                 var deliveryAddress = self.getAddressById(self.cartData.AddressId);
-                if (self.sessionId && /*self.cartData.ServiceId &&*/ deliveryAddress.AddressType === "Address") {                   
-                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress, "AL")); //Setting strange default country code to detect problems
+                if (self.sessionId) {// && /*self.cartData.ServiceId &&*/ deliveryAddress.AddressType === "Address") {                   
+                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress)); 
                 }
 
                 self.$.gfsCheckoutWidget.postGfsData(function (err, data) {
 
                     //Re-select droppoint
-                    debugger;
                     if (deliveryAddress.AddressType === "Collect") {
-                        self.$.gfsCheckoutWidget.chooseDropPointId(address.DropPointId || address.droppointId);
+                        self.$.gfsCheckoutWidget.chooseDropPointId(deliveryAddress.DropPointId || deliveryAddress.droppointId);
                     }
                     //Re-select chosen service
                     if (self.cartData.ServiceId ) {
@@ -545,8 +548,7 @@
                     {
                         "SessionId": this.sessionId,
                         "ClearItems": true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
-                        "Cart": this.cartData,
-                        "DeliverToNewDropPoint": (this._queuedNewAddress) ? true : false
+                        "Cart": this.cartData
                     }
 
                     this.toggleLoading(true);
@@ -645,11 +647,12 @@
                         this.currentService.serviceId === data.serviceId &&
                         this.currentService.expDeliveryDate === data.expDeliveryDate) {
                         console.log("Skipping upd service", this.currentService);
+                        callback(null);
                         return;
                     }
-                    else
+                    else {
                         console.log("Upd service: ", this.currentService, data);
-
+                    }
 
                     var self = this;
 
@@ -661,7 +664,6 @@
                             callback(err);
                         }
                         else {
-                            debugger;
                             this.currentService = data;
 
                             self.set('cartData.Carrier', data.carrier);
@@ -674,7 +676,12 @@
                             self.set('cartData.Total', cartTotals.Total);
 
                             if (data.collectionPoint) {
-                                self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress);
+                                self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function (err) {
+                                    self.updateP4mCart(function (err) {
+                                        self.updatingShipping = false;
+                                        callback(err);
+                                    });
+                                });
                             }
                             else {
                                 //If no non-collection address specified, pick the preferred one
@@ -687,10 +694,12 @@
                                     if (address)
                                         self.set('cartData.AddressId', address.Id);
                                 }
+                                self.updateP4mCart(function (err) {
+                                    self.updatingShipping = false;
+                                    callback(err);
+                                });
                             }
-                            self.updateP4mCart(function (err) {
-                                self.updatingShipping = false;
-                            });
+
                         }
                     });
                 }
@@ -711,13 +720,11 @@
                
                 var existingDropPoint = this.$.addressList.getDropPointById(collectPointId);
                 if (!existingDropPoint || existingDropPoint.Unsaved) {
-                
-                    //eeeeee             
+                         
                     var directions = collectPointAddress.directions ? collectPointAddress.directions.split("]").pop() : "";
                     var prefOrder = this.consumerData.Addresses.length || 1;
-                    var postData =
+                    var address =
                     {
-                        "Address": {
                             "Id": this.sessionAddressId,
                             "AddressType": "Collect",
                             "Label": providerName,
@@ -725,7 +732,7 @@
                             "Street1": collectPointAddress.addressLines[0] || "",
                             "Street2": collectPointAddress.addressLines[1] || "",
                             "City": collectPointAddress.town,
-                            "PostCode": collectPointAddress.postCodoe,
+                            "PostCode": collectPointAddress.postCode,
                             "State": collectPointAddress.county,
                             "Country": collectPointAddress.country,
                             "CountryCode": collectPointAddress.countryCode,
@@ -736,14 +743,11 @@
                             "DropPointId": collectPointId,
                             "CollectPrefOrder": prefOrder,
                             "Unsaved": true
-                        },
-                        "isPrefDeliveryAddr": false,
-                        "isBillingAddr": false
 
                     };
-                    self.saveAddress(postData, function (err, result) {
-                        self.set('cartData.AddressId', self.sessionAddressId);
-                        self.push('consumerData.Addresses', postData.Address);
+                    self.saveAddress(address, function (err, result) {
+                        // self.set('cartData.AddressId', self.sessionAddressId); - savedAddress now does this
+                        self.push('consumerData.Addresses', address);
                         callback(err);
                     });
                             
@@ -773,11 +777,11 @@
                 }
             },
 
-            onCardHashData: function (data) {
-                this.set('cardTimestamp', data.Timestamp);
-                this.set('cardMerchantId', data.MerchantId);
-                this.set('cardHash', data.Hash);               
-            },
+            //onCardHashData: function (data) {
+            //    this.set('cardTimestamp', data.Timestamp);
+            //    this.set('cardMerchantId', data.MerchantId);
+            //    this.set('cardHash', data.Hash);               
+            //},
 
             onDiscount: function (e) {
                 this.set('cartData.Tax', Number(e.detail.Tax));
@@ -826,7 +830,6 @@
             onSelectAddress: function (e) {
                 //TODO: Trigger POST to GFS
                 console.log("^^^ ADDRESS SELECTED");
-                debugger;
                 var self = this;
                 if (e.detail) {
                     //If changed billing address, tell P4M
@@ -869,16 +872,19 @@
                 });*/
             },
 
-            //eeeeee
-            saveAddress: function (addressData, callback) {
+            saveAddress: function (address, callback) {
+                if (!address.AddressType) {
+                    address.AddressType = 'Address';
+                }
+                if (!address.Id) {
+                    addressId = Math.floor(Math.random() * 9999999) + "-" + Math.floor(Math.random() * 9999999);
+                }
                 var postData =
                 {
-                    "Address": addressData,
-                    "isPrefDeliveryAddr": true
+                    "Address": address,
+                    "isPrefDeliveryAddr": false,
+                    "isBillingAddr": false
                 };
-                if (!postData.Address.AddressType) {
-                    postData.Address.AddressType = 'Address';
-                }
                 var self = this;
                 this.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, result) {
                     //console.log("Got address result: ", result);
@@ -886,6 +892,8 @@
                         callback(err);
                     }
                     else {
+                        self.cartData.AddressId = address.Id;
+                        address.Unsaved = false;
                         callback(null, result)
                     }
                 });
@@ -895,7 +903,7 @@
                 // here we're adding or updating an address only, not setting a default value on the consumer at this stage
                 this.$.addressList.showAsLoading();
                 var self = this;
-                this.saveAddress(postData, function (err, result) {
+                this.saveAddress(addressElement.detail.addressData, function (err, result) {
                     if (err) {
                         throw err;
                     }
