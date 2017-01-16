@@ -39,22 +39,28 @@
                 Desc            : "Short (Opposite of Tall)",
                 Qty             : 1.0,
                 Price           : 40.0,
-                LinkToImage     : 
+                LinkToImage     : 'http://previews.123rf.com/images/pushinka/pushinka1309/pushinka130900027/22299342-Vector-illustration-of-denim-shorts-Front-and-back-views-Stock-Vector.jpg',
+                LinkToItem      : 'http://www.123rf.com/photo_22299342_vector-illustration-of-denim-shorts-front-and-back-views.html',
+                Tags            : 'short,shorts',
+                Rating          : 5,
+                SiteReference   : 'la la',
+                Options         : [ ]
+            },
+            {
+                CartId          : "00000001",
+                LineId          : 2,
+                Make            : "Sunny",
+                Sku             : "0123",
+                Desc            : "Light (Opposite of Dark)",
+                Qty             : 1.0,
+                Price           : 30.0,
+                LinkToImage     : 'http://weknowyourdreams.com/images/light/light-02.jpg',
+                LinkToItem      : 'http://weknowyourdreams.com/light.html',
+                Tags            : 'sun,shadow',
+                Rating          : 2,
+                SiteReference   : 'la de dah',
+                Options         : [ ]
             }
-CartId	String (read only)	 
-LineId	String	 see notes
-Make	String	 
-Sku	String 	 
-Desc	String 	 
-Qty	Decimal 	 
-Price	Decimal 	 
-LinkToImage	String 	 A link to an image of the product
-LinkToItem	String 	 A link to page with information about the product
-Tags	String 	 Product categories (comma separated)
-Rating	Integer	 The consumer's product rating
-SiteReference	String	 see notes
-Options	List (key=value)	 see notes
-
         ],
         Discounts	    : [
             {

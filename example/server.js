@@ -26,6 +26,14 @@ function simulateDelay(req, res, next) {
 	setTimeout(next, 3000);
 }
 
+function logRoute(req, res, next) {
+	var fullUrl = /*'req.protocol + '://'*/ ' ' + req.get('host') + req.originalUrl;
+	console.log(fullUrl);
+	next();
+}
+
+
+
 //--- Set up site and API servers
 var site = Express();
 var api = Express();
@@ -39,7 +47,9 @@ api.set('port', API_PORT);
 
 
 
-////////////// API Routing //////////////
+//--- API Routing
+
+api.use(logRoute);
 
 /* 
 
@@ -72,7 +82,7 @@ api.get('/', function(req, res)
 });
 
 
-////////////// Routing for index.html and widgets //////////////
+//--- Routing for index.html and widgets 
 site.use('/lib/p4m-widgets', Express.static('..'));
 site.use('/lib', Express.static('../bower_components'));
 site.use(Express.static('.'));
