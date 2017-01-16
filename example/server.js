@@ -13,13 +13,11 @@ function allowCrossDomain(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH,FILE');
 	res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
-
 	next();
 };
 
 function addApiHeaders(req, res, next) {
 	res.header('Content-Type', 'application/json');
-
 	next();
 };
 
@@ -36,6 +34,9 @@ api.use(BodyParser.json());
 api.use(allowCrossDomain);
 api.set('port', API_PORT);
 
+
+
+////////////// API Routing //////////////
 
 /* 
 
@@ -56,14 +57,18 @@ api.use(Express.static('static_api'));
 
 
 
-
 api.use(addApiHeaders);
-
 
 api.get('/', function(req, res)
 {
 	res.status(200).send("Local API");
 });
+
+
+////////////// Routing for index.html and widgets //////////////
+site.use('/lib/p4m-widgets', Express.static('..'));
+site.use('/lib', Express.static('../bower_components'));
+site.use(Express.static('.'));
 
 
 //--- Start servers
