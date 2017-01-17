@@ -2239,6 +2239,10 @@
                 else return null;
             },
 
+            _preselectForCalendar: function() {
+                this.$.calendar.autoSelect();
+            },
+
             _preselectForStandard: function () {
                 if (this.standardRates) {
                     //this.set('_selectedDropPoint', null);
@@ -2422,7 +2426,7 @@
                 
                 this._unselectDropPoint();
                 if (preselect) {
-                    this.$.calendar.autoSelect();
+                    this._preselectForCalendar();                  
                 }
                
                 this.fire('show-calendar');
