@@ -178,8 +178,10 @@
             },
 
             onCvv: function (e) {
+
+                
                 var card = this.$$('#card');
-                if (!card || !card.cvv || card.cvv === "") {
+                if (!card || !card.cvv || card.cvv === "" || e.detail === false) {
                     this._state = States.CVV_NEEDED;
                 }
                 else {

@@ -10,11 +10,11 @@
             <div class="card-panel">
                  <div class="card-body">
                     <div class$="card-content {{cardData.Issuer}}">
-                        
+                        <custom-validator id="validator" validator-name="cvv"></custom-validator>
                         <div class="card-details">
                             <div class="card-name">{{cardData.Name}}</div>
                             <div class="card-description">{{cardData.Description}}</div>
-                            <input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" placeholder="Verification code" />
+                            <input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="Verification code" />
                             <div class="card-logo"></div>
                            
                         </div>                        
@@ -229,6 +229,7 @@
                 "onCvv(cvv)"
             ],
 
+
             ready: function()
             {
                 if (!this.showToggleBtn) {
@@ -258,13 +259,39 @@
             },
 
             onDataChange: function (e) {
+                if (this.cardData) {
+                    if (this.cardData.Issuer == "Visa") {
+                        this._cvvLength = 3;
+                    }
+                    else {
+                        this._cvvLength = 4;
+                    }
+                   
+                }
+                
+
+
                 this.updateUi();
             },
 
             onCvv: function (e) {
                 if (this.cardData) {
+                    if (this.cvv.length < this._cvvLength) {
+                        this._lastCvv = this.cvv;
+                        this.validCvv = false;                      
+                    }
+                    else if (this.cvv.length == this._cvvLength) {
+                        this._lastCvv = this.cvv;
+                        this.validCvv = true;
+                        
+                    }
+                    else {
+
+                        this.set('cvv', this._lastCvv || "");
+                    }
+
                     this.cardData.cvv = this.cvv;
-                    this.fire('cvv', this.cardData);
+                    this.fire('cvv', this.validCvv);
                 }
             },
 
@@ -285,6 +312,15 @@
                 }
 
             },
+
+            validate: function (value) {
+                if (value.length == 3) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
 
         });
     </script>
