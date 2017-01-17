@@ -16,7 +16,7 @@ function allowCrossDomain(req, res, next) {
 	next();
 };
 
-function addJsoniHeaders(req, res, next) {
+function addJsonHeaders(req, res, next) {
 	res.header('Content-Type', 'application/json');
 	next();
 };
@@ -67,6 +67,7 @@ At this stage all other endpoints are handled by a static file (per endpoint)
 Hard-coded sample data
 
 */
+site.use('/p4m', addJsonHeaders);
 site.use('/p4m', Express.static('static_api/p4m')); 
 
 
