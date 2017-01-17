@@ -52,13 +52,12 @@ exports.getP4MAccessToken = function(req, res) {
 
 exports.localLogin = function(req, res) {
 
-console.log('**** LOCAL LOGIN CALLED !!!');
-
+	var cookies = new Cookies( req, res );
 
 	// see these cookies that are used by the other p4m widgets
 	var now = new Date();
 	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.jpg', cookieConf);
+	cookies.set('p4mAvatarUrl', 		'http://localhost:8081/profile.jpg', cookieConf);
 	cookies.set('p4mGivenName', 		'Adrian Aadvark', cookieConf);
 	cookies.set('p4mDefaultPostCode', 	'4000', cookieConf);
 	cookies.set('p4mDefaultCountryCode', 'AU', cookieConf);
