@@ -5,8 +5,12 @@ the widgets to function - this is NOT a full P4M implementation
 
 */
 
-var Cookies     = require('cookies');
-var request 	= require('request');
+var Express 		= require('express');
+
+var Cookies     	= require('cookies');
+var request 		= require('request');
+var fs				= require('fs');
+
 
 exports.getP4MAccessToken = function(req, res) {
 	
@@ -50,6 +54,7 @@ exports.getP4MAccessToken = function(req, res) {
 
 };
 
+
 exports.localLogin = function(req, res) {
 
 	var cookies = new Cookies( req, res );
@@ -68,7 +73,64 @@ exports.localLogin = function(req, res) {
 	res.end(); // needed for cookies to save !
 };
 
+
 exports.checkout = function(req, res) {
+
+	var cookies = new Cookies( req, res );
+
+	if ( (cookies.get('gfsCheckoutToken')==null) || (cookies.get('gfsCheckoutToken')=='') ) 
+	{
+	    
+	}
+
+	returnTemplateFile('checkout.html', res);
+
+
+/*
+	var url = "https://dev.parcelfor.me:44333/connect/token";
+
+	var data = {
+		grant_type		: "authorization_code",
+		code			: req.query.code,
+		redirect_uri	: "http://localhost:8081/p4m/getP4MAccessToken",
+		client_id		: "10006"
+	}
+
+	var options = {
+		url: url,
+		headers: {
+			"Authorization": "Basic " + new Buffer("10006:secret").toString('base64'),
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		form : data
+	}
+
+
+	request.post(options, function(error, response, body) {
+
+		var now = new Date();
+		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
+
+		cookies.set('p4mToken', JSON.parse(body).access_token, cookieConf);
+
+		res.status(200).send('<script>window.close();</script>');
+		res.end(); // needed for cookies to save !
+	});
+*/
 
 }
 
+function returnTemplateFile(file, res) {
+
+	fs.readFile('static_api/templates/'+file, function read(err, file_contents) {
+		if (err) {
+			res.status(500).send(err);
+		}
+
+		res.set('Content-Type', 'text/html');
+		res.status(200).send(file_contents);
+
+	});
+
+
+}
