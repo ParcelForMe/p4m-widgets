@@ -148,9 +148,6 @@
                 redirectUrl: {
                     type: String
                 },
-                newDropPoint: {
-                    type: Object
-                },
                 _topClass: {
                     type: String,
                     value: "active"
@@ -205,10 +202,10 @@
                         this.beforePurchase()
                     }
                     var postData = { cartId: this.cartData.Id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.Total };
-                    postData.newDropPoint = null;
+                    /*postData.newDropPoint = null;
                     if (this.newDropPoint) {
                         postData.newDropPoint = this.newDropPoint;
-                    }
+                    }*/
                     this.$.localApi.call('purchase', null, postData, this.onPurchase.bind(this));
                 }
             },
@@ -229,6 +226,7 @@
 
             onPurchase: function (err, data) {
                 console.log('onPurchase', data);
+                debugger;
                 if (data.Success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
@@ -240,12 +238,14 @@
                     }
                     else {
                         this._state = States.PURCHASED;
-                        if (data.RedirectUrl) {
+                        this.fire("payment-complete", {redirectUrl: data.RedirectUrl || this.redirectUrl || null});
+                        /*if (data.RedirectUrl) {
+
                             window.location.href = data.RedirectUrl;
                         }
                         else if (this.redirectUrl) {
                             window.location.href = this.redirectUrl;
-                        }
+                        }*/
                     }
                 }
             },
@@ -342,7 +342,7 @@
                 }
                 else if (this._state == States.PURCHASED) {
                     this.showAsCompleted();
-                    this.fire("payment-complete");
+                   
                 }
                 else if (this._state == States.FAILED_PURCHASE) {
                     this.showAsFailed();

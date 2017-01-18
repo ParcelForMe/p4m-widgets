@@ -987,8 +987,10 @@
                 //this.countryCode = this.defaultCountryCode;
                 //this.postCode = this.defaultPostCode;
                 if (this.gfsData) {
-                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                    if (this.autoLoad) {
+                    if (this.gfsData) {
+                        this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
+                    }
+                    else if (this.autoLoad) {
                         this.postGfsData(function () { });
                     }
                 }               
@@ -1160,6 +1162,36 @@
                     }
                 }).bind(this));
                 request.send("");
+            },
+
+            _closeReq: function (callback) {
+                var data = {
+                    closeSession: true,
+                    selectedService: this.selectedServiceDetails.serviceId,
+                    selectedDroppoint: this.selectedServiceDetails.collectionPoint
+                };
+                callback(null);
+
+                //Commenting out the below until we know the correct API call
+                /*
+                var request = this._makeRequest('POST', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession', (function (err, data) {
+
+                    console.log("GFS Checkout Patch response", new Date().getTime());
+
+                    if (err) {
+                        callback(err);
+                    }
+                    else {
+                        var result = JSON.parse(data);
+                        if (result.message) {
+                            callback(result.message);
+                        }
+                        else {
+                            callback(null);
+                        }
+                    }
+                }).bind(this));
+                request.send(JSON.stringify(data));*/
             },
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
@@ -2287,57 +2319,6 @@
 				this.fire("getStandardSelectedService", this.selectedServiceDetails);*/
 			},
 
-            //TODO: Review this code
-            /*
-            closeCheckoutRequest: function() {
-				var patchJson = this._getPatchJson();
-
-				if (patchJson != "") {
-                    this.$$('#list-spinner').active = true;
-                    this.$$('#list-loading').classList.remove('hidden');
-                    this.$$('#standard-loading').classList.remove('hidden');
-                    this.$.ajaxPatch.url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId;
-                    this.$.ajaxPatch.body = patchJson;
-                    this.$.ajaxPatch.headers = this._computeHeader();
-                    this.$.ajaxPatch.generateRequest();
-                } else {
-                    // nothing selected, display an error
-                    this.$.errorNotification.text = "No service selected. Please select a service."
-                    this.$.errorNotification.show();
-                }
-            },
-
-            //TODO: Review this code
-			_getPatchJson: function() {
-                var actualPatch = "";
-                var selectedId = -1;
-                var shippingMethods = document.getElementsByName("shipping_method");
-                for (var i = 0; i < shippingMethods.length; i++)
-                    if (shippingMethods[i].checked)
-                        selectedId = shippingMethods[i].id;
-
-                if (selectedId != -1) {
-                    if (document.getElementById("standardDeliveriesOption").checked || document.getElementById("calendarDeliveriesOption").checked) {
-                        // build selectedService
-                        actualPatch = JSON.stringify({
-                            closeSession: true,
-                            selectedService: {
-                                id: selectedId
-                            }
-                        });
-                    } else {
-                        // build selectedDroppoint
-                        actualPatch = JSON.stringify({
-                            closeSession: true,
-                            selectedDroppoint: {
-                                id: selectedId
-                            }
-                        });
-                    }
-                }
-
-                return actualPatch;
-			},*/
 
             getChosenServiceDetails: function() {
 				return JSON.stringify(this.selectedServiceDetails);

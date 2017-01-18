@@ -157,12 +157,22 @@
                 }
             },
 
+            observers: [
+                'onQtyChange(cartItemData.Qty)'
+            ],
+
             ready: function()
             {
             },
 
             remove: function() {
                 this.set('cartItemData.Qty', 0);
+            },
+
+            onQtyChange: function() {
+                if (this.cartItemData.Qty === "") {
+                    this.set('cartItemData.Qty', 0);
+                }
             },
 
             onDataChange: function (e) {
