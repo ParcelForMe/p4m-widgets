@@ -9,21 +9,19 @@
         <template is="dom-if" if="{{_notLoggedIn}}">
             <div id="p4mRegisterContainer" class$="{{_topClass}}">
 
-                <div style="background: white;" class="corners-5px">
-                    <div class="corners-top-5px p4m-register-top" style="">
+                <div class="corners-5px">
+                    <!-- <div class="corners-top-5px p4m-register-top" style="">
                         <div class="p4m-register-title">Checkout with Parcel For Me</div>
-                    </div>
-                    <div class="p4m-register-middle corners-bottom-5px">
+                    </div> -->
+                    <div class="p4m-register-middle">
                         <div class="p4m-register-explain">
-                            <img class="p4m-register-logo" src="./logo-icon.png" id="peli-icon-header" />
-                            <div class="p4m-register-text">Purchase faster than ever before and get your parcel first time, every time.</div>
+                            <img class="p4m-register-logo" src="./logo-stacked-white.png" id="peli-icon-header" />
+                            <p>Your parcel delivered. First time, every time.</p>
                         </div>
                         <div class="gotham_bookregular mobPaddingPosition">
-                            <button type="submit" on-tap="onSignUp" class="p4m-button p4m-button-active p4m-register-button">Sign Up to Parcel For Me</button>
+                            <button type="submit" on-tap="onSignUp" class="p4m-button p4m-button-active p4m-register-button">Sign In and continue to cart</button>
                         </div>
-                        <div class="p4m-register-text-link">
-                            <a on-click="requestLogin">Sign in</a>
-                        </div>
+                        <p class="p4m-register-text-link">Don't have an account? <a on-click="requestLogin">Sign up</a></p>
                     </div>
                 </div>
             </div>
@@ -46,18 +44,25 @@
         }
 
         .p4m-register-logo {
-            height: 50px;
+            height: 72px;
+            align-self: center;
+            margin: 1em 0;
         }
 
         .p4m-register-title {
             margin:auto;
         }
 
+       #p4mRegisterContainer p {
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
         .p4m-register-explain {
             display: flex;
-            flex-direction: row;
-            padding: 8px;
-            margin: auto;
+            flex-direction: column;
         }
 
         .p4m-register-top {
@@ -77,8 +82,10 @@
         }
 
         .p4m-register-text {
-            padding-left: 10px;
-            padding-right: 5px;
+            text-align:center;
+            font-weight: 400;
+            font-style: italic;
+            font-size: 12px;
         }
 
         .p4m-register-text-link {
@@ -86,6 +93,7 @@
             flex-direction: row;
             margin: auto;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         .p4m-register-text-link a {
@@ -94,8 +102,9 @@
 
         .p4m-button.p4m-register-button {
             background-color: white;
-            color: black;
+            color: #2aa54f;
             width: 245px;
+            font-weight: 600;
         }
 
 

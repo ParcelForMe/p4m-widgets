@@ -80,11 +80,8 @@
   font-weight: 100;
   font-style: normal; }
 
-[class*="p4m-"] * {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Lato", sans-serif;
-  font-size: 16px; }
-
-[class="p4m-"] h1, [class="p4m-"] h2, [class="p4m-"] h3, [class="p4m-"] h4, [class="p4m-"] h5, [class="p4m-"] h6 {
   font-weight: 600 !important;
   text-rendering: optimizeLegibility;
   letter-spacing: -.02em; }
@@ -112,74 +109,3 @@ h5 {
 h6 {
   font-size: 12px;
   margin: .5em 0; }
-
-.p4m-button {
-  margin: 10px;
-  padding: 10px;
-  background: transparent;
-  color: #fff;
-  border-radius: 24px;
-  text-align: center;
-  border: solid 1px #fff;
-  cursor: pointer;
-  min-width: 100px;
-  font-weight: bold; }
-  .p4m-button .p4m-button-active {
-    background-color: #fff;
-    color: #2aa54f; }
-    .p4m-button .p4m-button-active:hover {
-      background-color: #fff;
-      color: #2aa54f;
-      transition-duration: 0.5s; }
-    .p4m-button .p4m-button-active:active {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #2aa54f; }
-    .p4m-button .p4m-button-active.no {
-      background-color: #904444; }
-    .p4m-button .p4m-button-active.neutral {
-      background-color: #909090; }
-  .p4m-button.disabled {
-    background-color: #646464; }
-
-.p4m-label {
-  color: darkgreen; }
-
-.corners-5px {
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -khtml-border-radius: 6px;
-  border-radius: 6px; }
-
-.corners-24px {
-  -moz-border-radius: 24px;
-  -webkit-border-radius: 24px;
-  -khtml-border-radius: 24px;
-  border-radius: 24px; }
-
-.corners-top-5px {
-  -moz-border-top-left-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -khtml-border-top-left-radius: 6px;
-  border-top-left-radius: 6px;
-  -moz-border-top-right-radius: 6px;
-  -webkit-border-top-right-radius: 6px;
-  -khtml-border-top-right-radius: 6px;
-  border-top-right-radius: 6px;
-  color: #2aa54f;
-  background-color: #fff;
-  padding-left: 25px;
-  padding-top: 20px;
-  line-height: 20px; }
-
-.corners-bottom-5px {
-  -moz-border-bottom-left-radius: 6px;
-  -webkit-border-bottom-left-radius: 6px;
-  -khtml-border-bottom-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  -moz-border-bottom-right-radius: 6px;
-  -webkit-border-bottom-right-radius: 6px;
-  -khtml-border-bottom-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background-color: #fff;
-  padding-left: 25px;
-  padding-top: 20px; }
