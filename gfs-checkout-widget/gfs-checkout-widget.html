@@ -860,7 +860,8 @@
                         standardRates: [],
                         links: [],
                         nonDayDefinite: []
-                    }
+                    },
+                    notify: true
                 },
 
                 _dropPoints: {
@@ -1070,6 +1071,8 @@
                     throw "No callback";
                 }
                 var httpRequest = new XMLHttpRequest();
+                this._showAsLoading(true);
+
                 httpRequest.open(method, url, true);
                 this._attachHeaders(httpRequest, method);
 
@@ -1234,73 +1237,11 @@
 
             _handleError: function (e) {
                 console.error("GFS Checkout Error", e);
-                //console.warn("Using default shipping");
-                //zzz
-                // hide all services except standard
-                /*
-                this.$$("#calendarDeliveriesOption").parentNode.classList.add("hidden");
-                this.$$("#dropPointDeliveriesOption").parentNode.classList.add("hidden");
-                this.$$('#standard-loading').classList.add('hidden');
-                this.$.standardDeliveriesOption.checked = "checked";*/
-
-                // create an array for polymer
-                /*
-                this.standardRates = [];
-                var today = new Date();
-                var startDate = new Date(today);
-                startDate.setDate(startDate.getDate() + parseInt(this.defaultMinDeliveryTime));
-                var endDate = new Date(startDate);
-                endDate.setDate(endDate.getDate() + (this.defaultMaxDeliveryTime - 1));
-
-                this.standardRates = [{
-                    id: -3,
-                    methodTitle: this.defaultService,
-                    price: this.defaultPrice,
-                    deliveryDateRange: this._formatNonDayDefiniteDate(startDate, endDate),
-                    selected: true,
-                    carrier: this.defaultCarrier
-                }];
-
-                var method = this.standardRates.shift()
-                this.selectedServiceDetails.serviceId = method.id;
-                this.selectedServiceDetails.service = this.defaultService;
-                this.selectedServiceDetails.serviceCode = this.defaultCarrierCode;
-                this.selectedServiceDetails.carrier = this.defaultCarrier;
-                this.selectedServiceDetails.shipping = this.defaultPrice;
-                this.selectedServiceDetails.expDeliveryDate = moment.utc(endDate).toISOString();
-
-                this.selectedServiceDetails.deliveryAddress = actualPost.Request.Order.Transit.Recipient.Location;
-
-                this.fire('selectedservicechanged', this.selectedServiceDetails);
-                this._resetMap();
-                */
-
-            },
+              },
 
             _handlePatchResponse: function (e) {
                 this.fire("close-checkout-complete", e.detail.response);
             },
-
-            /*
-            _handleGetDroppointsResponse: function (e) {
-                //New droppoint data
-                this._data = e.detail.response;
-                //this._data.droppoints = this._processDroppointList(this._data.droppoints);
-                this._dropPoints = this._dropPoints.concat(this._data.droppoints).sort(this.sortByDistance);
-                this._processAllDroppoints();
-                this._findAllDeliveryDroppoints();
-                this._loadDroppointMarkers(this._data.droppoints);
-
-                if (this._dropPoints.length) {
-                    if (this.dropPointObserver) {
-                        this.dropPointObserver(this._dropPoints);
-                        this.dropPointObserver = null;
-                    }
-                }
-               
-                //TODO: Replace this with a method or event; we want to avoid referencing the View from logic code
-                //this.$$("#gfsMapCanvas-loading").classList.add('hidden'); // map search spinner
-            },*/
 
             requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
   
@@ -1321,13 +1262,6 @@
                 console.log(e);
             },
 
-            /*
-            _handleGetDroppointsError: function (e) {
-                this._resetMap()
-                this._loadDroppointMarkers(this._data.droppoints);
-            },
-            */
-
             _delayedInit: function () {
                 this._processInputData();
 
@@ -1339,8 +1273,6 @@
                 }
 
                 this.showPage_Standard(this.preselect);
-
-
             },
 
             _apiKeyChanged: function(newValue, oldValue) {
@@ -2254,13 +2186,16 @@
                 if (this.standardRates && this.standardRates.length) {
                     this.standardRates.map(function (item) {
                         item.selected = (item.id == id);
-                        if (item.selected) serviceSelected = item;
+                        if (item.selected) {
+                            serviceSelected = item;
+                        }
                         return item;
                     });
-                    if (serviceSelected) return serviceSelected;
+                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+                    //if (serviceSelected) return serviceSelected;
                 }
 
-                else if (this.dayDefinite && this.dayDefinite.length) {
+                if (this.dayDefinite && this.dayDefinite.length) {
                     this.dayDefinite.map(function (item) {
                         item.selected = (item.id == id);
                         if (item.selected) serviceSelected = item;
@@ -2324,19 +2259,44 @@
 				return JSON.stringify(this.selectedServiceDetails);
             },
 
+            _unselectMethod: function() {
+                var methods = this.standardRates;
+                methods.forEach(function (item) {
+                    item.selected = false;
+                });
+            },
+
             //Select a delivery service
             updateDeliveryOptions: function (methodId, dateOverride) {
-                var method = this._getDeliveryRateById(methodId);
-                if (!method) {
+                //debugger;
+                /*this._unselectMethod();
+                if (this.selectedServiceDetails) {
+                    var currentMethod = this._getDeliveryRateById(this.selectedServiceDetails.serviceId);
+                    if (currentMethod) {
+                        currentMethod.selected = false;
+                        // this.notifyPath('_data.standardRates');
+
+
+                        var _data = JSON.parse(JSON.stringify(this.standardRates));
+                        this.set('standardRates', _data);
+                        
+                    }
+                }
+                this.$.standardRatesTemplate.render();
+                //zzzzzzzzz
+                */
+                var newMethod = this._getDeliveryRateById(methodId);
+                if (!newMethod) {
                     console.error("Method not available");
                     this.fire('noservice');
+                    return;
                 }
                 else {
                     this.selectedServiceDetails.serviceId = methodId;
-                    this.selectedServiceDetails.service = method.methodTitle;
-                    this.selectedServiceDetails.serviceCode = method.carrierCode;
-                    this.selectedServiceDetails.carrier = method.carrierName;
-                    this.selectedServiceDetails.shipping = method.price;
+                    this.selectedServiceDetails.service = newMethod.methodTitle;
+                    this.selectedServiceDetails.serviceCode = newMethod.carrierCode;
+                    this.selectedServiceDetails.carrier = newMethod.carrierName;
+                    this.selectedServiceDetails.shipping = newMethod.price;
                     this.selectedServiceDetails.selected = true;
                     this.selectedServiceDetails.checked = true;
                     this.selectedServiceDetails.currencySymbol = this.currencySymbol;
@@ -2345,7 +2305,7 @@
                         this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
                     }
                     else {
-                        this.selectedServiceDetails.expDeliveryDate = moment.utc(method.deliveryTimeTo).add(method.maxDD - method.minDD, 'days').toISOString();
+                        this.selectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
                     if (this._selectedDropPoint) {
@@ -2356,18 +2316,17 @@
                     }
                     else {
                         this.selectedServiceDetails.collectionPoint = null;
+                        this.selectedServiceDetails.providerId = null;
+                        this.selectedServiceDetails.provider = null;
                         this.selectedServiceDetails.deliveryAddress = null;
                     }
 
                     this._selectService(methodId);
-
+                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+                    //debugger;
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
                 }
-
-
-
-
             },
 
 
@@ -2430,7 +2389,9 @@
 			        if (this.preselect) {
 			            this._preselectForStandard();
 			        }
-			    }		    
+			    }
+			    //zzzzz
+			    this.$.standardRatesTemplate.render();
 			    this.fire('show-standard');
 			},
 
