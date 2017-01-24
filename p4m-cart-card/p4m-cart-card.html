@@ -148,10 +148,6 @@
                     notify: true,
                     observer: "onDataChange"
                 },
-                currency: {
-                    type: String,
-                    value: "GBP"
-                },
                 currencySymbol: {
                     type: String,
                     value: "£"
@@ -161,22 +157,12 @@
                 }
             },
 
-            observers: [
-                'onQtyChange(cartItemData.Qty)'
-            ],
-
             ready: function()
             {
             },
 
             remove: function() {
                 this.set('cartItemData.Qty', 0);
-            },
-
-            onQtyChange: function() {
-                if (this.cartItemData.Qty === "") {
-                    this.set('cartItemData.Qty', 0);
-                }
             },
 
             onDataChange: function (e) {
@@ -192,8 +178,7 @@
             makeWish: function() {          
                 this.showAsWishing();
                 this.api = document.getElementById("p4mCheckoutApi");
-                this.cartItemData.Currency = this.currency;
-                this.api.call('postWish', {}, this.cartItemData, () => this.onWishComplete());
+                this.api.call('postWish', {}, this.itemData, () => this.onWishComplete());
                 this.remove();
             },
 
