@@ -7,7 +7,7 @@
     <template>
         <div id="container">
             <template is="dom-repeat" items="{{cartData.Items}}">
-                <p4m-cart-card cart-item-data="{{item}}"></p4m-cart-card>
+                <p4m-cart-card currency="{{cartData.Currency}}" cart-item-data="{{item}}"></p4m-cart-card>
                 <hr />
             </template>
         </div>
