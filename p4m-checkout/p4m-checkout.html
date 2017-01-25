@@ -46,7 +46,7 @@
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}" on-show-droppoints="onGfsShowDroppoints" on-show-standard="onGfsShowStandard" on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -414,7 +414,7 @@
                     }
                     //Re-select chosen service
                     if (self.cartData.ServiceId ) {
-                        self.$.gfsCheckoutWidget.updateDeliveryOptions(self.cartData.ServiceId);
+                        self.$.gfsCheckoutWidget.updateDeliveryMethod(self.cartData.ServiceId);
                     }
                     else {
                         self.preselectDeliveryMethod();
@@ -777,10 +777,6 @@
                     });
                 }
             },
-
-            toggleDetailExpansion: function (expand) {
-            },
-
             
 
             onSelectPaymentMethod: function (e) {
@@ -1120,14 +1116,7 @@
             },
 
             _onSelectTab: function (e) {
-                /*
-               if (e.detail.item && e.detail.item.tagName.toLowerCase() == "iron-page" && e.detail.item.id !== "deliveryPage" && e.detail.item.id !== "pageDroppoints") {
-                    this.toggleDetailExpansion(false);
-                }
-                else {
-                    this.$.gfsCheckoutWidget.broadcastState();
-                }
-                */
+
             },
 
             onGfsServiceChanged: function (e) {
@@ -1148,14 +1137,6 @@
             //The selected service wasn't available, so choose a default
             onGfsNoService: function (e) {
                 this.preselectDeliveryMethod();
-            },
-
-            onGfsShowDroppoints: function (e) {
-                this.toggleDetailExpansion(true);
-            },
-
-            onGfsShowStandard: function (e) {
-                this.toggleDetailExpansion(false);
             },
 
             getAddressById: function(id) {

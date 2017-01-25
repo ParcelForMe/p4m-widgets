@@ -158,19 +158,19 @@
 				opacity: .85;
 			}
 
-			.choose-droppoint.chosen {
+			.choose-droppoint.selected {
 				background-color: #4CAF50; /* Green */
 			}
 
-				.choose-droppoint.chosen:hover {
-					opacity: 1;
-				}
+			.choose-droppoint.unselected:hover {
+				opacity: 1;
+			}
 
-			.choose-droppoint.unchoose {
+			.choose-droppoint.unselect {
 				background-color: #d60000; /* Green */
 			}
 
-			.choose-droppoint.unchoose:hover {
+			.choose-droppoint.unselect:hover {
 				opacity: 1;
 			}
 
@@ -192,14 +192,14 @@
                 float: right;
 			}
 
-			.b-tick.unchosen {
+			.b-tick.not-selected {
                 display: none;
 				background-image: url('./images/tick.png');
 				background-position: -6px 0;
 				background-repeat: no-repeat;
 			}
 
-			.b-tick.chosen {
+			.b-tick.selected {
 				background-image: url('./images/tick_on.png');
 				background-position: -6px 0;
 				background-repeat: no-repeat;
@@ -272,21 +272,6 @@
                 padding-top: 2px;
                 padding-left: 4px;
             }
-            /*
-			.dp-card:nth-child(2n+1) {
-				margin-right: 0;
-			}
-            
-			.dp-card .content .dp-details  {
-				width: 43%;
-				margin: 0 10px 0 0;
-			}
-
-            .dp-large-card .content .dp-details  {
-				width: 43%;
-				margin: 0 10px 0 0;
-			}
-            */
 
 
 			/* opening hours table style */
@@ -297,14 +282,6 @@
 			.dp-day-name, .dp-day-time-slot {
 				font-size: 13px;
 			}
-
-            /*
-			.dp-day-time-slot:nth-child(2n) {
-				margin: 5px 0;
-				position: relative
-			}
-            */
-
 
 			.multi-times {
 				line-height: 20px
@@ -370,7 +347,7 @@
                                 <b class="dpProviderName">{{droppointData.providerName}}</b>
                             </template>
                         </div>
-                        <template is="dom-if" if="{{isTickButton}}">
+                        <template is="dom-if" if="{{_isTickButton}}">
                             <div class$="b-tick {{buttonClass}}"></div>
                         </template>
                         <div id="dp-address">
@@ -431,7 +408,7 @@
                 </div>
             </div>
             <template is="dom-if" if="{{showShippingOptions}}">
-                <template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.chosen}}">
+                <template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
                     <div class="shippingOptions">
                         <div class="dp-small-heading">Collection options</div>
                         <ul>
@@ -459,8 +436,8 @@
             </template>
 
 			<div class="actions">
-				<template is="dom-if" if="{{isStandardButton}}">
-					<div on-click="toggleChooseDropPoint" on-mouseover="onHovered" on-mouseout="onUnHovered" class$="button choose-droppoint {{buttonClass}}">{{buttonText}}</div>
+				<template is="dom-if" if="{{_isStandardButton}}">
+					<div on-click="select" class$="button choose-droppoint {{buttonClass}}">{{buttonText}}</div>
 				</template>
 			</div>
 		</div>
@@ -481,10 +458,12 @@
                     type: Object,
                     value: {}
                 },
-                buttonType: {
+
+                containerClass: {
                     type: String,
-                    value: "standard"
+                    value: "content-container"
                 },
+
                 showOpeningHours: {
                     type: Object,
                     value: false
@@ -501,46 +480,30 @@
                     type: Object,
                     value: false
                 },
-                containerClass: {
-                    type: String,
-                    value: "content-container"
-                },
                 currencySymbol: {
                     type: String,
                     value: "£"
                 },
-                scrollIntoViewOnChoose: {
-                    type: Boolean,
-                    value: false
+
+                //== Button
+                buttonType: {
+                    type: String,
+                    value: "standard"
                 },
-                clickToChoose: {
-                    type: Boolean,
-                    value: false
+                buttonNotSelectedClass: {
+                    type: String,
+                    value: "not-selected"
                 },
-                /*chosen: {
-                    type: Boolean,
-                    value: false,
-                    notify: true
-                },*/
-                droppointId: {
-                    type: String
+                buttonSelectedClass: {
+                    type: String,
+                    value: "selected"
                 },
                 buttonClass: {
                     type: String,
-                    value: "unchosen"
+                    value: "droppoint-button"
                 },
-                buttonText: {
-                    type: String,
-                    value: "Choose"
-                },
-                disableUnchoose: {
-                    type: Boolean,
-                    value: false
-                },
-                streetAddress: {
-                    type: String,
-                    notify: true
-                },
+
+                //== Private properties
                 _weekCollection: {
                     type: Object,
                     notify: true
@@ -552,8 +515,8 @@
             },
 
             observers: [
-                "chosenChanged(droppointData.chosen)"
-                //"_onShippingOptionSelected(droppointData.deliveries.*.selected)"
+                //"selectedChanged(data.selected)"
+                //"_onShippingOptionSelected(data.deliveries.*.selected)"
             ],
             listeners: {
                // "select-delivery-option": "_onShippingOptionsChanged"
@@ -563,39 +526,43 @@
 
 				var self = this;
 				this.initData();
-				if (!this.droppointData) {
-				    debugger;
-				}
+
+                //Set the button type, if any
 				if (this.buttonType === "none")
 				{
-					this.isTickButton = false;
-					this.isStandardButton = false;					
-				} else {
-					this.isTickButton = (this.buttonType === "tick");
-					this.isStandardButton = !this.isTickButton;
+					this._isTickButton = false;
+					this._isStandardButton = false;					
+				} 
+				else {
+					this._isTickButton = (this.buttonType === "tick");
+					this._isStandardButton = !this._isTickButton;
 				}
 
-                //Window-level listener, to ensure that we get our peers
-				window.addEventListener('droppoint-changed', this.onDroppointChanged.bind(this), false);
-
+			    //Listen for a droppoint being selected somewhere on the page
+			    //Window-level listener, to ensure that we get our peers
+				window.addEventListener('droppoint-selected', this.onOtherDroppointSelected.bind(this), false);
 			},
 
+
 			initData: function () {
-			    //this.chosen = this.droppointData.chosen;
+                //Set a unique ID
 			    this._id = Math.floor(Math.random() * 99999) + (new Date().getDate()).toString()
-				this.droppointId = this.droppointData.droppointId || "";
-				if (typeof (this.droppointData.chosen) === "undefined") {
-					this.droppointChosen = false;
+
+                //Ensure 'selected' has a value
+			    if (typeof (this.droppointData.selected) === "undefined") {
+				    this.droppointData.selected = false;
 				}
-				if (this.droppointData.collectionSlots) { // && this.droppointData.collectionSlots) {
-					this.droppointData.distanceInKm = (Math.round(this.droppointData.distanceInMeters / 100)) / 10;
+
+                //Build a nice week view of delivery methods
+			    if (this.droppointData.collectionSlots) { // && this.droppointData.collectionSlots) {
+			        this.droppointData.distanceInKm = (Math.round(this.droppointData.distanceInMeters / 100)) / 10;
 
 					var dayCount = 0;
 					var self = this;
 					var buildWeekCollection = [];
 					this.droppointData.weekCollectionSlots = [];
 					if (!this.droppointData.collectionSlots) this.droppointData.collectionSlots = [];
-					//console.log("Collection slots:", this.droppointData.collectionSlots.length);
+
 					this.droppointData.collectionSlots.forEach(function (collectionSlot) {
 						dayCount++;
 						if (dayCount <= 7) {
@@ -608,157 +575,87 @@
 							    timeSlot.toTime = timeSlot.to; //self._getTimeStr(timeSlot.toDateTime);
 							});
 								
-							if (collectionSlot.timeSlots.length > 0) {
-							    //self.droppointData.weekCollectionSlots.push(collectionSlot);
+							if (collectionSlot.timeSlots.length > 0) {;
 							    buildWeekCollection.push(collectionSlot);
 							}
 
 						}
 					});
-					if (buildWeekCollection.length == 0) {
-					    debugger;
-					}
+
 					this.set('_weekCollection', buildWeekCollection);
-					this.streetAddress = this.droppointData.geoLocation.addressLines[0] + ", " + this.droppointData.geoLocation.town + ", " + this.droppointData.geoLocation.postCode
 				}
 			},
 
+			select: function() {
+			    this.set('droppointData.selected', true);
+			    this.autoSelectMethod();
+			    this.fire('droppoint-selected', this.droppointData);
+			},
 
-			//Global event handler
-			onDroppointChanged: function (e) {
+			unselect: function () {
+			    this.set('droppointData.selected', false);
+			    this.render();
+			},
+
+            //== Global event handler
+            //Another droppoint widget has been selected. React to this, by:
+            // * selecting myself (if the other widget represents the same droppoint), or;
+			// * unselecting myself (otherwise).
+			onOtherDroppointSelected: function (e) {
 			    
 			    var dp = e.detail;
-			    if (!dp.droppointId) {
-			        debugger;
-			    }
-                //If the droppoint chosen was this one, make sure this "chosen" value reflects the other one
+
+                //If the droppoint selected was this one, make sure this "selected" value reflects the other one
 			    if (dp.droppointId == this.droppointData.droppointId) {
-			        if (this.droppointData.chosen !== dp.chosen) {
-			            this.set('droppointData.chosen', dp.chosen);
+			        if (this.droppointData.selected !== dp.selected) {
+			            this.set('droppointData', dp);
 			        }
-			        this.initData();
 			        this.render();
-
-			        if (this.droppointData.chosen) {
-			            //console.log("ABOUT TO SELECT AN OPTION");
-			            //this.autoSelectOption();
-			        }
 
 			        return;
 			    }
-                //If it's another one and it's been chosen, unchoose me
-			    else if (dp.chosen) {
-			        this.set("droppointData.chosen", false);
-			    }
-                				
-			},
-
-			//Local observer
-			chosenChanged: function () {
-			    //if (typeof (this.droppointData.chosen) === "null") return;
-			    if (!this.droppointData) {
-			        return;
-			    }
-			    if (this.droppointData.chosen) {
-			        this.autoSelectOption();
-			        //window.setTimeout((function () { this.autoSelectOption(); }).bind(this), 10000);
-			        this.render();
-			        //this.fire("droppoint-chosen", this.droppointData);
-			        if (this.scrollIntoViewOnChoose) {
-			            this.scrollIntoView(false);
-			        }
-			       
-     
-			    }
-			    else {
-			        this.render();
+                //If it's another one and it's been selected, unselect me
+			    else if (dp.selected) {
+			        this.unselect();
 			    }
 			},
 
+            //Update the button appearance based on whether this droppoint is selected or not
 			render: function () {
-			    //this.initData();
+
 			    if (!this.droppointData) {;
-                    console.error("No droppointData")
+                    console.error("No droppoint data")
 			        return;
 			    }
-				else if (this.droppointData.chosen) {
-					this.buttonClass = "chosen";
-					this.buttonText = "Chosen";
+			    else if (this.droppointData.selected) {
+				    this.set('buttonClass', this.buttonSelectedClass);
+					this.buttonText = "Selected";
 				}
 				else {
-					this.buttonClass = "unchosen";
-					this.buttonText = "Choose";
+				    this.set('buttonClass', this.buttonNotSelectedClass);
+					this.buttonText = "Select";
 				}
-			},
-
-			onHovered: function () {
-				if (typeof (this.droppointData.chosen) === "undefined") {
-					this.droppointChosen = false;
-					this.buttonClass = "unchosen";
-					this.buttonText = "Choose";
-				}
-				else if (this.droppointData.chosen === false) {
-					this.buttonClass = "unchosen";
-					this.buttonText = "Choose";
-				}
-				else {
-					this.buttonClass = "unchoose";
-					this.buttonText = "Unchoose";
-				}
-			},
-
-			onUnHovered: function() {
-				if (typeof (this.droppointData.chosen) === "undefined") {
-					this.droppointChosen = false;
-					this.buttonClass = "unchosen";
-					this.buttonText = "Choose";
-				}
-				else if (this.droppointData.chosen === true) {
-					this.buttonClass = "chosen";
-					this.buttonText = "Chosen";
-				}
-				else if (this.droppointData.chosen === false) {
-					this.buttonClass = "unchosen";
-					this.buttonText = "Choose";
-				}
-			},
-
-			selectThis: function () {
-			    //console.log('selected');
-			    //this.fire("droppoint-changed", this.droppointData);
-			},
-
-			toggleChooseDropPoint: function () {
-			    if (this.disableUnchoose && this.droppointData.chosen) {
-			        return;
-			    }
-			    this.set("droppointData.chosen", !this.droppointData.chosen);
-			    //this.fire("droppoint-changed", this.droppointData);
-			    if (this.droppointData.chosen) {
-			        this.autoSelectOption();
-			    }
-			    this.fire("droppoint-changed", this.droppointData);
 			},
 
 			onClickOption: function (e) {
-			    this.selectOption(e.target.value);		   
+			    this.selectMethod(e.target.value);		   
 			},
 
             //Select a shipping option by ID
             //Fire on-select-delivery-option to be received by parent
-            //Set deliveries[n].selected, which will trigger an observer here (and possibly higher up too?)
-			selectOption: function (shippingOptionId) {            
+            //Set deliveries[n].selected to true on selected method, false on all others
+			selectMethod: function (shippingOptionId) {            
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
 
 			        this.set("droppointData.deliveries." + i + ".selected", item.id === shippingOptionId);
-			        this.fire('select-delivery-option', shippingOptionId);
+			        this.fire('select-delivery-method', shippingOptionId);
 			    }
 			},
 
-			autoSelectOption: function() {
+			autoSelectMethod: function() {
 			    if (this.droppointData.deliveries) {		        
-			        this.selectOption(this.droppointData.deliveries[0].id);
+			        this.selectMethod(this.droppointData.deliveries[0].id);
 			    }
 			    else {
 			        console.error("No delivery options available");
@@ -786,20 +683,8 @@
 			    this.fire('opening-hours-link-click', e);
 			},
 
-			_isSelected: function (shippingOption) {
-			    //console.log(shippingOption);
-			    return shippingOption.selected;
-			},
-
 			_onClick: function () {
-			    if (this.clickToChoose) {
-			        this.toggleChooseDropPoint();
-			        this.fire('droppoint-click', this.droppointData.droppointId);
-			        if (this.droppointData.chosen) {
-			            this.fire('select');
-			        }
-			    }
-
+			    this.select();   
 			}
 
 

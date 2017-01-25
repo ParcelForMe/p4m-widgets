@@ -522,7 +522,7 @@
                             </template>
 
                         </div>
-
+                        <h2>View as...</h2>
                         <div class="toggleDropPointsViewControls">
                             <template is="dom-if" if="{{_showingDroppointsList}}">
                                 <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a map</a>
@@ -543,12 +543,12 @@
                                     <div id="droppoint_overlay_close" on-click="_hideDropPointDetails">
                                         <img src="./images/x.png" alt="close" />
                                     </div>
-                                    <gfs-droppoint id="overlay-droppoint" click-to-choose="true" droppoint-data="{{_selectedDropPoint}}" disable-unchoose="true" on-click="_hideDropPointDetails" container-class="overlay" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                                    <gfs-droppoint id="overlay-droppoint" droppoint-data="{{_selectedDropPoint}}" on-click="_hideDropPointDetails" container-class="overlay" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                                 </div>
                             </div>
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" click-to-choose="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-option="onUpdateDroppointDeliveryOptions" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-option="onUpdateDroppointDeliveryOptions" show-shipping-options="true" button-type="tick"></gfs-droppoint>
                                 </div>
                             </div>
                             <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
@@ -574,7 +574,7 @@
                             </div>
                         </div>
 
-                        <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{chosen}}" multi="false"></array-selector>
+                        <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
 
                             <div class="cardList">
@@ -605,7 +605,7 @@
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
                             <li class="gfsStd">
-                                <input name="shipping_method" on-click="updateDeliveryOptionsEvent" type="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
+                                <input name="shipping_method" on-click="updateDeliveryMethodEvent" type="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
                                 <label for$="{{item.id}}">
                                     <span class="methodname">{{item.methodTitle}}</span>
                                     <span class="price">{{currencySymbol}}{{item.price}}</span>
@@ -977,7 +977,7 @@
                 "datetoggleon": "_deliveryDateSelected",
                 "prevmonth": "_calendarMonthChanged",
                 "nextmonth": "_calendarMonthChanged",
-                "droppoint-changed": "_droppointChanged"
+                "droppoint-selected": "_droppointSelected"
             },
 
             // METHODS
@@ -1152,7 +1152,6 @@
                             callback(result.message);
                         }
                         else {
-                            //debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
@@ -1232,7 +1231,7 @@
             },
 
             setGfsService: function(serviceId) {
-                updateDeliveryOptions();
+                updateDeliveryMethod(serviceId);
             },
 
             _handleError: function (e) {
@@ -1309,8 +1308,8 @@
 
 
             sortByDistance: function (a, b) {
-                if (a.chosen) return -1
-                else if (b.chosen) return 1
+                if (a.selected) return -1
+                else if (b.selected) return 1
                 else if (a === b) return 0;
                 else return a.distanceInMeters < b.distanceInMeters ? -1 : 1;
             },
@@ -1391,7 +1390,6 @@
 
 
             _processAllDroppoints: function () {
-                //debugger;
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
                 this._processPreferredDroppoints();
@@ -1419,7 +1417,7 @@
                 this._preferredDroppoints = this._preferredDroppoints.map(function (item) {
                     var existingItem = self._droppointById(null, item.droppointId);
                     if (existingItem) {
-                        existingItem.chosen = item.chosen;
+                        existingItem.selected = item.selected;
                     }
                     return existingItem || item;
                 });
@@ -1570,41 +1568,6 @@
                 self._map = new google.maps.Map(self.$.gfsMapCanvas, mapOptions);
                 window.map = self._map;            
 
-                //=== Home marker
-                //TODO: Replace with call to geoCodeAddress
-                /*
-                geocoder = new google.maps.Geocoder();
-                geocoder.geocode({
-                    componentRestrictions: {
-                        country: this.countryCode,
-                        postalCode: this.postCode
-                    }
-                }, function(results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        //self._map.setCenter(results[0].geometry.location);
-                        var homeMarkerConfig = {
-                            position: results[0].geometry.location,
-                            map: self._map,
-                            //animation: google.maps.Animation.DROP,
-                            title: 'Home',
-                            html: 'Home',
-                            icon: self._getHomeIcon()
-                        };
-                        marker = new google.maps.Marker(homeMarkerConfig);
-                        self._map.setCenter(homeMarkerConfig.position);
-                        self._loadDroppointMarkers();
-                        //self._showDropPointsView();
-                        self._resetMap(self._map);
-                    } else {
-
-                        console.log('Google Maps API ERROR - Geocode was not successful for the following reason: ' + status);
-                        //TODO: Include this in the template, instead of in code
-                        $("#gfsMapCanvas").append("<div style='color: #d60000; margin: 20px auto; text-align: center;'> Postcode <strong>" + self.initialAddress + "</strong> return zero restults </div>");
-                    }
-                });
-                */
-
-
                 // 'idle' event is triggered when the user stopped zooming/dragging;
                 google.maps.event.addListener(self._map, 'idle', function (event) {
                     //console.log(JSON.stringify(event));
@@ -1614,7 +1577,7 @@
 
                 google.maps.event.addListener(self._map, 'click', function (event) {
                     //console.log('MAP EVENT click');
-                    self._unselectDropPoint();
+                    //self._unselectDropPoint();
                 });
 
                 google.maps.event.addListener(self._map, 'center_changed', function (event) {
@@ -1645,7 +1608,6 @@
 					    //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
 					    marker = new google.maps.Marker(markerConfig);
 					    marker.addListener('click', function (clickedMarker) {
-					        //debugger;
 					        self._selectDropPointMarker(this);
 					    });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
@@ -1923,21 +1885,25 @@
 
             //Select a drop point marker
             _selectDropPointMarker: function (marker) {
+                debugger;
                 this.selectDropPoint(marker.customData.droppointId);
-                //marker.customData.chosen = true;
-                //this.fire("droppoint-changed", marker.customData);
             },
 
-            selectDropPoint: function(dropPointId) {
+            //Select a droppoint
+            selectDropPoint: function (dropPointId) {
                 //Select the drop point, if it is known.
                 var dp = this._droppointById(null, dropPointId);
-                if (dp) {
-                    this.set("_selectedDropPoint", dp);
-                    this.set('_selectedDropPoint.chosen', true);
-                    this.fire("droppoint-changed", dp);
+                if (!dp) {
+                    return "No such droppoint";
                 }
                 else {
-                    console.log("Couldn't find droppoint", dropPointId);
+                    //Unselect the old droppoint (if any)
+                    this._unselectDropPoint();
+
+                    //Select this by setting it to selected and assigning _selectedDropPoint
+                    //dp.selected = true;
+                    this.set("_selectedDropPoint", dp);
+                    this.set("_selectedDropPoint.selected", true); //This tells the droppoint widgets to react
                 }
             },
 
@@ -1947,30 +1913,12 @@
                         this._infoWindow.close();
                     }
                     this._hideDropPointDetails();
-                    this._selectedDropPoint.chosen = false;
                     this._selectedDropPoint = null;
-                    //this._preselectForStandard();
-                }
-            },
-
-            _chooseDroppointEvent: function (e) {
-                this.chooseDroppoint(e.detail);
-            },
-
-            chooseDroppoint: function(droppoint) {
-                this.chooseDropPointId(droppoint.droppointId);
-            },
-
-            chooseDropPointId: function(droppointId) {
-                var dp = this._droppointById(null, droppointId);
-                if (dp) {
-                    this.selectDropPoint(droppointId);
-                    this.set('_selectedDropPoint.chosen', true);
-                    //this.fire("droppoint-changed", this._selectedDropPoint);
                 }
             },
 
             _fixMapMarker: function () {
+
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
                     var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
                     if (dp) {
@@ -1992,15 +1940,18 @@
                 }
             },
 
-            _droppointChanged: function(e) {
+            _droppointSelected: function(e) {
                 //console.log('_droppointChanged', e.detail);
                 var changedDroppoint = e.detail;
 
+                //If we have selected one at the moment,
                 if (this._selectedDropPoint)
+                    //And the new one is not this one, unselect this one
                     if (changedDroppoint.droppointId !== this._selectedDropPoint.droppointId)
                         this._unselectDropPoint();
-
-                this.set("_selectedDropPoint", changedDroppoint);
+                //eeee
+                this.selectDropPoint(changedDroppoint.droppointId);
+                //this.set("_selectedDropPoint", changedDroppoint);
                 this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
                 //this.$.listPreferredDropPointList.render(); //Re-sort the preferred list
                 this._fixMapMarker();            
@@ -2102,7 +2053,7 @@
 
             _selectCalendarShippingOption: function (e) {
                 //console.log('Updating delivery options with', e.detail.shippingMethodId, e.detail.deliveryDate);
-                this.updateDeliveryOptions(e.detail.shippingMethodId, e.detail.deliveryDate);
+                this.updateDeliveryMethod(e.detail.shippingMethodId, e.detail.deliveryDate);
             },
 
             _formatDayDefiniteDate: function(deliveryDate) {
@@ -2219,7 +2170,7 @@
                         preselectedService.selected = true;
                     }                   
                     
-                    this.updateDeliveryOptions(preselectedService.id, preselectedService.deliveryDate);
+                    this.updateDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
@@ -2267,24 +2218,8 @@
             },
 
             //Select a delivery service
-            updateDeliveryOptions: function (methodId, dateOverride) {
-                //debugger;
-                /*this._unselectMethod();
-                if (this.selectedServiceDetails) {
-                    var currentMethod = this._getDeliveryRateById(this.selectedServiceDetails.serviceId);
-                    if (currentMethod) {
-                        currentMethod.selected = false;
-                        // this.notifyPath('_data.standardRates');
+            updateDeliveryMethod: function (methodId, dateOverride) {
 
-
-                        var _data = JSON.parse(JSON.stringify(this.standardRates));
-                        this.set('standardRates', _data);
-                        
-                    }
-                }
-                this.$.standardRatesTemplate.render();
-                //zzzzzzzzz
-                */
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
                     console.error("Method not available");
@@ -2300,6 +2235,7 @@
                     this.selectedServiceDetails.selected = true;
                     this.selectedServiceDetails.checked = true;
                     this.selectedServiceDetails.currencySymbol = this.currencySymbol;
+                    this.selectedServiceDetails.collection = this.currencySymbol;
 
                     if (dateOverride) {
                         this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
@@ -2308,6 +2244,8 @@
                         this.selectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
+                    //TODO: FIX. At this point, _selectedDropPoint is still assigned to the old selection
+                    //if (newMethod.serviceType.type == "dmStandardDropPoint") {
                     if (this._selectedDropPoint) {
                         this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
                         this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
@@ -2319,6 +2257,8 @@
                         this.selectedServiceDetails.providerId = null;
                         this.selectedServiceDetails.provider = null;
                         this.selectedServiceDetails.deliveryAddress = null;
+                        //zzzzz
+                        this._unselectDropPoint();
                     }
 
                     this._selectService(methodId);
@@ -2330,15 +2270,17 @@
             },
 
 
-            updateDeliveryOptionsEvent: function (e) {
+            updateDeliveryMethodEvent: function (e) {
                 if (e.target.checked) {                    
-                    this.updateDeliveryOptions(e.target.id);
+                    this.updateDeliveryMethod(e.target.id);
                 }
             },
 
-            onUpdateDroppointDeliveryOptions: function(e) {
-                this.updateDeliveryOptions(e.detail);
+            
+            onUpdateDroppointDeliveryMethod: function (e) {
+                this.updateDeliveryMethod(e.detail);
             },
+            
 
             onSelectTab: function (e) {
                 if (e.detail.item.id === "pageCalendar") {
@@ -2364,7 +2306,7 @@
                 this.showingDroppoints = false;
                 //TODO: Choose soonest option by default
                 
-                this._unselectDropPoint();
+                //this._unselectDropPoint();
                 if (preselect) {
                     this._preselectForCalendar();                  
                 }
@@ -2390,7 +2332,6 @@
 			            this._preselectForStandard();
 			        }
 			    }
-			    //zzzzz
 			    this.$.standardRatesTemplate.render();
 			    this.fire('show-standard');
 			},
@@ -2411,18 +2352,8 @@
 
 			},
 
-			_onClickDroppoint: function(e) {
-			    this.selectDropPoint(e.detail);
-			},
+			_onClickDroppoint: function (e) {
 
-			broadcastState: function () {
-			    //fire events relating to UI state
-			    if (this.showingDroppoints) {
-			        this.showPage_Droppoints();
-			    }
-			    else {
-			        //this.showPage_Standard();
-			    }
 			},
 
 			_onClickConsumerAddress: function (e) {
