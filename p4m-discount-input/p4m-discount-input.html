@@ -96,15 +96,18 @@
             sendCode: function() {
                 this.$.localApi.call('applyDiscountCode', null, { discountCode: this.discountCode }, this.onResponse.bind(this));
             },
-            onResponse: function (e) {
-                if (e.Success == false) {
-                    this.showError("This isn't a valid discount code");
-                    //this.showError(e.Error);
+            onResponse: function (e, data) {
+                if (e) {
+                    if (e.Error) {
+                        this.showError(e.Error);
+                    } else {
+                        this.showError("This isn't a valid discount code");
+                    }
                 }
                 else {
                     this.showError("Discount applied", true);
                     this.hide();
-                    this.fire('discount', e);
+                    this.fire('discount', data);
                     this.discountCode = null;
                 }
             },
