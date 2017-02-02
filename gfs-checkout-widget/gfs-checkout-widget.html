@@ -605,7 +605,7 @@
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
                             <li class="gfsStd">
-                                <input name="shipping_method" on-click="updateDeliveryMethodEvent" type="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
+                                <input name="shipping_method" on-click="updateDeliveryMethodEvent" type="radio" checked="{{item._originalMethodObject.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
                                 <label for$="{{item.id}}">
                                     <span class="methodname">{{item.methodTitle}}</span>
                                     <span class="price">{{currencySymbol}}{{item.price}}</span>
@@ -709,11 +709,6 @@
                     type: String
                 },
 
-                /*
-                selectedTab: {
-                    type: String,
-                    value: "2"
-                },*/
 
                 // ATTRIBUTES
                 //
@@ -819,6 +814,11 @@
                         expDeliveryDateEnd: null,
                         collectPoint: null
                     }
+                },
+
+                standardRates: {
+                    type: Array,
+                    value: []
                 },
 
                 // PRIVATE PROPERTIES
@@ -938,39 +938,6 @@
                 _infoBoxDroppoint: {
                     type: Object
                 },
-
-                // set default service parameters when API is not available
-                /*
-                defaultService: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultCarrier: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultPrice: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultMinDeliveryTime: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultMaxDeliveryTime: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultCarrierCode: {
-                    type: String,
-                    value: ""
-                }*/
-
             },
 
             listeners: {
@@ -985,13 +952,9 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
-                //this.countryCode = this.defaultCountryCode;
-                //this.postCode = this.defaultPostCode;
                 if (this.gfsData) {
-                    if (this.gfsData) {
-                        this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                    }
-                    else if (this.autoLoad) {
+                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
+                    if (this.autoLoad) {
                         this.postGfsData(function () { });
                     }
                 }               
@@ -1000,7 +963,7 @@
             createPostData: function (config) {
                 var requiredFields = ['countryCode', 'Postcode', 'town', 'addressLines', 'contactEmail', 'recipientFirstName', 'recipientLastName', 'recipientTitle', 'cartValue'];
                 var missingFields = requiredFields.filter(function (f) {
-                    return (typeof (requiredFields[f]) !== "undefined");
+                    return (typeof (config[f]) == "undefined");
                 });
                 if (missingFields.length) {
                     throw ("Missing fields: " + missingFields.toString());
@@ -1054,6 +1017,14 @@
             },
 
             postGfsData: function (callback) {
+                this._postReq(this._postData, callback);             
+            },
+
+            _makeRequest: function (method, url, callback) {
+                if (!callback || typeof (callback) !== "function") {
+                    throw "No callback";
+                }
+
                 if (this.accessToken === "") {
                     var error =  "No access token";
                     this.$.errorNotification = error;
@@ -1061,42 +1032,35 @@
                     callback(error);
                 }
                 else {
-                    console.log(this._postData);
-                    this._postReq(this._postData, callback);
-                }
-            },
+                    var httpRequest = new XMLHttpRequest();
+                    this._showAsLoading(true);
 
-            _makeRequest: function (method, url, callback) {
-                if (!callback || typeof (callback) !== "function") {
-                    throw "No callback";
-                }
-                var httpRequest = new XMLHttpRequest();
-                this._showAsLoading(true);
+                    httpRequest.open(method, url, true);
+                    this._attachHeaders(httpRequest, method);
 
-                httpRequest.open(method, url, true);
-                this._attachHeaders(httpRequest, method);
-
-                httpRequest.onreadystatechange = (function () {
-                    if (httpRequest.readyState !== XMLHttpRequest.DONE) {
-                        this._showAsLoading(true);
-                    }
-                    else {
-                        this._showAsLoading(false);
-                        try {
-                            if (httpRequest.status == 200 || httpRequest.status == 201) {
-                                callback(null, httpRequest.responseText);
+                    httpRequest.onreadystatechange = (function () {
+                        if (httpRequest.readyState !== XMLHttpRequest.DONE) {
+                            this._showAsLoading(true);
+                        }
+                        else {
+                            this._showAsLoading(false);
+                            try {
+                                if (httpRequest.status == 200 || httpRequest.status == 201) {
+                                    callback(null, httpRequest.responseText);
+                                }
+                                else {                               
+                                    callback(httpRequest.status, httpRequest.responseText);
+                                }                                 
                             }
-                            else {                               
-                                callback(httpRequest.status, httpRequest.responseText);
-                            }                                 
+                            catch (e) {
+                                console.error(e.stack);
+                                callback(e);
+                            }
                         }
-                        catch (e) {
-                            console.error(e.stack);
-                            callback(e);
-                        }
-                    }
-                }).bind(this);
+                    }).bind(this);                   
+                }
                 return httpRequest;
+
             },
 
             _attachHeaders: function(httpReq, method) {
@@ -1234,12 +1198,19 @@
                 updateDeliveryMethod(serviceId);
             },
 
-            _handleError: function (e) {
-                console.error("GFS Checkout Error", e);
-              },
+            setPreferredDroppoints: function (droppointList) {
+                this._preferredDroppoints = droppointList;//.filter(function (item) { return true });
+                this._processPreferredDroppoints();
 
-            _handlePatchResponse: function (e) {
-                this.fire("close-checkout-complete", e.detail.response);
+                if (this._preferredDroppoints.length > 0) {
+                    this._showPreferredDroppoints();
+                }
+
+            },
+
+            setConsumerAddresses: function (addressList) {
+                //console.log("Setting consumer addresses", addressList);
+                this.set('_consumerAddresses', addressList);
             },
 
             requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
@@ -1257,13 +1228,8 @@
                 })
             },
 
-            _handleGetLocationResponse: function(e) {
-                console.log(e);
-            },
-
             _delayedInit: function () {
                 this._processInputData();
-
 
                 if (this.useDropPoints) {
                     this._makeMap();
@@ -1274,21 +1240,13 @@
                 this.showPage_Standard(this.preselect);
             },
 
-            _apiKeyChanged: function(newValue, oldValue) {
-                console.log('API Key changed to', newValue);
-            },
-
-            isNonGfs: function(item) {
-                return item.carrierCode !== 'gfs';
-            },
-
-            isGfs: function(item) {
-                return item.carrierCode === 'gfs';
-            },
-
             _processInputData: function () {
-                this._processDayDefiniteData();
-                this._processNonDayDefiniteData();
+                if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
+                    this._data.standardRates = this._getStandardServices();
+                    this.set('standardRates', this._data.standardRates);
+                    //console.log(this.standardRates);
+                }
+                this.notifyPath('_data.dayDefinite'); //??? Needed?
             },
 
             _showAsLoading: function (loading) {
@@ -1358,42 +1316,12 @@
                 }
             },
 
-            sortDayDefiniteServices: function (a, b) {
-                if (a == b) return 0;
-
-                switch (this.serviceSortOrder) {
-                    case "expensiveFirst":
-                        return a.price > b.price ? -1 : 1;
-                    case "cheapestFirst":
-                    case "fastestFirst":
-                    case "slowestFirst":
-                    default:
-                        return a.price < b.price ? -1 : 1;
-                }
-            },
-
-
-            setPreferredDroppoints: function (droppointList) {
-                this._preferredDroppoints = droppointList;//.filter(function (item) { return true });
-                this._processPreferredDroppoints();
-
-                if (this._preferredDroppoints.length > 0) {             
-                    this._showPreferredDroppoints();
-                }
-               
-            },
-
-            setConsumerAddresses: function (addressList) {
-                //console.log("Setting consumer addresses", addressList);
-                this.set('_consumerAddresses', addressList);
-            },
-
-
             _processAllDroppoints: function () {
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
                 this._processPreferredDroppoints();
-                this._findAllDeliveryDroppoints();
+                this._indexDropPointProviders(this._data.dayDefinite);
+                this._indexDropPointProviders(this._data.nonDayDefinite);
             },
 
             _removeDupDropPoints: function () {
@@ -1410,6 +1338,18 @@
                 this.set('_dropPoints', uniques);
             },
 
+            _addDropPointDeliveries: function () {
+                var self = this;
+                this._dropPoints.map(
+                    function (item) {
+                        item.collectionPoint = true;
+                        item.deliveries = self._findDropPointDeliveries(item.providerId);
+                        return item;
+                    }
+                );
+                console.log(this._dropPoints);
+            },
+
             _processPreferredDroppoints: function()
             {
                 //Now replace preferred items with real data
@@ -1422,97 +1362,7 @@
                     return existingItem || item;
                 });
             },
-
-            _addDropPointDeliveries: function()
-            {
-                var self = this;
-                this._dropPoints.map(
-                    function (item) {
-                        item.collectionPoint = true;
-
-                        //TODO: This often seems to return delivery method IDs associated with the wrong provider?
-                        item.deliveries = self._findDropPointDeliveries(item.providerId);
-                        return item;
-                    }
-                );
-                console.log(this._dropPoints);
-            },
             
-            // find the earliest of each service
-            _getGroupedByService: function() {
-                var self = this;
-                var results = [];
-                var services = [];
-
-                // find the earliest of each non day definite service
-                this._data.nonDayDefinite.forEach(function(day) {
-                    day.rates.forEach(function(service) {
-                        if (service.serviceType.type === "dmStandard") {
-                            if (typeof(services[service.methodTitle]) === "undefined") {
-                                services[service.methodTitle] = {
-                                    deliveryDate: day.deliveryDate,
-                                    service: service
-                                };
-                            } else {
-                                var servicesDay = new Date(services[service.methodTitle].deliveryDate)
-                                var nonDayDefiniteDay = new Date(day.deliveryDate);
-                                if (servicesDay.getTime() > nonDayDefiniteDay.getTime())
-                                    services[service.methodTitle] = {
-                                        deliveryDate: day.deliveryDate,
-                                        service: service
-                                    };
-                            }
-                        }
-                    });
-                });
-
-                // create array for display in polymer
-                for (var service in services) {
-                    var item = services[service];
-                    var obj = {
-                        id: item.service.id,
-                        methodTitle: item.service.methodTitle,
-                        price: item.service.price,
-                    };
-                    // non day definite
-                    var startDate = new Date(item.deliveryDate);
-                    var endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + (item.service.maxDD - 1));
-                    obj.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
-                    obj.deliveryTimeFrom = endDate.getTime();
-                    results.push(obj);
-                }
-                return results;
-            },
-
-            _getDeliveryRateById: function(id) {
-                var combinedRateGroups = this._data.dayDefinite.concat(this._data.nonDayDefinite);
-                var rates = [];
-                combinedRateGroups.forEach(function(group) {
-                    rates = rates.concat(group.rates);
-                });
-                var resultList = rates.filter(function(rate) {
-                    return rate.id == id
-                });
-                if (resultList.length) {
-                    if (resultList.length > 1) {
-                        console.warn("getDeliveryRateById(): Multiple matches");
-                    }
-                    return resultList[0];
-                } else return null;
-            },
-
-            _processNonDayDefiniteData: function() {
-                if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
-                    this._data.standardRates = this._getGroupedByService();
-                    this.standardRates = this._data.standardRates;
-                }
-            },
-
-            _processDayDefiniteData: function() {
-                this.notifyPath('_data.dayDefinite');
-            },
-
             _makeMap: function () {
                 var self = this;
 
@@ -2095,27 +1945,35 @@
                 }
             },
 
-            //Make a lookup for droppoint provider, allowing all shipping methods for that provider to be returned
-            _processDeliveryArray: function (obj) {
+            //Make a lookup for droppoint providers, allowing all shipping methods for that provider to be returned
+            _indexDropPointProviders: function (deliveryDayArray) {
                 var self = this;
-                obj.forEach(function(day) {
-                    day.rates.forEach(function(service) {
+                //For each item in the array of delivery days,
+                deliveryDayArray.forEach(function (day) {
+                    //For each rate on the day,
+                    day.rates.forEach(function (service) {
+                        //If this is a droppoint,
                         if (service.serviceType.type === "dmStandardDropPoint") {
-                            service.serviceType.droppointProviders.forEach(function (provider) {
-                                //console.log('PROVIDER:', provider.id, provider.name);
-                                if (typeof(self._deliveryDroppoints[provider.id]) === "undefined")
-                                    self._deliveryDroppoints[provider.id] = [];
-                                if (typeof(self._deliveryDroppoints[provider.id][service.methodTitle]) === "undefined") {
-                                    self._deliveryDroppoints[provider.id][service.methodTitle] = {
+                            //For each droppoint provider that covers this droppoint,
+                            service.serviceType.droppointProviders.forEach(function (provider) {                              
+                                //If this is a provider not yet seen, instantiate with a blank object
+                                if (typeof (self._deliveryDroppoints[provider.id]) === "undefined") {
+                                    self._deliveryDroppoints[provider.id] = {};
+                                }
+                                //If this is a service not known for this provider, add it    
+                                if (typeof(self._deliveryDroppoints[provider.id][service.id]) === "undefined") {
+                                    self._deliveryDroppoints[provider.id][service.id] = {
                                         deliveryDate: day.deliveryDate,
                                         service: service
                                     };
-                                } else {
-                                	var objsDay = new Date(self._deliveryDroppoints[provider.id][service.methodTitle].deliveryDate);
-                                	var droppointDay = new Date(day.deliveryDate);
-                                	if (objsDay.getTime() > droppointDay.getTime())
-                                    if (self._deliveryDroppoints[provider.id][service.methodTitle].deliveryDate < day.deliveryDate) {
-                                        self._deliveryDroppoints[provider.id][service.methodTitle] = {
+                                }
+                                //Else if this is a known service for this provider,
+                                else {
+                                    //If this new one has an earlier delivery date, use that one
+                                	var oldDay = new Date(self._deliveryDroppoints[provider.id][service.id].deliveryDate);
+                                	var thisDay = new Date(day.deliveryDate);
+                                	if (oldDay.getTime() > thisDay.getTime()) {
+                                        self._deliveryDroppoints[provider.id][service.id] = {
                                             deliveryDate: day.deliveryDate,
                                             service: service
                                         };
@@ -2127,35 +1985,85 @@
                 });
             },
 
-            _findAllDeliveryDroppoints: function() {
-                this._processDeliveryArray(this._data.dayDefinite);
-                this._processDeliveryArray(this._data.nonDayDefinite);
+            // find the earliest of each non-day-definite service
+            _getStandardServices: function () {
+                var self = this;
+                var results = [];
+                var services = {};
+
+                //For each non day definite item,
+                this._data.nonDayDefinite.forEach(function (day) {
+                    //For each rate on the day,
+                    day.rates.forEach(function (serviceItem) {
+                        //If this is a standard rate,
+                        if (serviceItem.serviceType.type === "dmStandard") {
+                            //If this is a provider not yet seen, instantiate 
+                            if (typeof (services[serviceItem.id]) === "undefined") {
+                                services[serviceItem.id] = {
+                                    deliveryDate: day.deliveryDate,
+                                    service: serviceItem
+                                };
+                            }                         
+                            //If this new one has an earlier delivery date, use that one
+                            var oldDay = new Date(services[serviceItem.id].deliveryDate);
+                            var thisDay = new Date(day.deliveryDate);
+                            if (oldDay > thisDay) {
+                                services[serviceItem.id].deliveryDate = day.deliveryDate;
+                            }
+                            services[serviceItem.id].selected = services[serviceItem.id].selected || serviceItem.selected;//eeee Copy selection
+                        }
+                    });
+                });
+
+                //Now convert the index into an array
+                for (var service in services) {
+                    var item = services[service];
+                    var obj = {
+                        id: item.service.id,
+                        methodTitle: item.service.methodTitle,
+                        price: item.service.price,
+                        _originalMethodObject: item.service
+                    };
+                    // non day definite
+                    var startDate = new Date(item.deliveryDate);
+                    var endDate = new Date(startDate);
+                    endDate.setDate(endDate.getDate() + (item.service.maxDD - 1));
+                    obj.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
+                    obj.deliveryTimeFrom = endDate.getTime();
+                    results.push(obj);
+                }
+                return results;
             },
 
-            _selectService: function (id) {
-                var serviceSelected = null;
-                if (this.standardRates && this.standardRates.length) {
-                    this.standardRates.map(function (item) {
-                        item.selected = (item.id == id);
-                        if (item.selected) {
-                            serviceSelected = item;
-                        }
-                        return item;
-                    });
-                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    //if (serviceSelected) return serviceSelected;
-                }
-
-                if (this.dayDefinite && this.dayDefinite.length) {
-                    this.dayDefinite.map(function (item) {
-                        item.selected = (item.id == id);
-                        if (item.selected) serviceSelected = item;
-                        return item;
-                    });
-                    return serviceSelected;
+            
+            _getDeliveryRateById: function (id) {
+                var combinedRateGroups = this._data.dayDefinite.concat(this._data.nonDayDefinite);
+                var rates = [];
+                combinedRateGroups.forEach(function (group) {
+                    rates = rates.concat(group.rates);
+                });
+                var resultList = rates.filter(function (rate) {
+                    return rate.id == id
+                });
+                if (resultList.length) {
+                    return resultList[0];
                 }
                 else return null;
             },
+
+            //TODO: This and _selectService needs to be fixed
+           /* _getDeliveryRateById: function (id) {
+                var all = this.standardRates.concat(this.dayDefinite);
+                if (this.all && this.all.length) {
+                    for (var i = 0; i < this.all.length; i++) {
+                        var item = this.all[i];
+                        if (item.id == id) {
+                            return item;
+                        }
+                    }
+                }
+                else return null;
+            },*/
 
             _preselectForCalendar: function() {
                 this.$.calendar.autoSelect();
@@ -2218,6 +2126,7 @@
             },
 
             //Select a delivery service
+            //TODO: Refactor?
             updateDeliveryMethod: function (methodId, dateOverride) {
 
                 var newMethod = this._getDeliveryRateById(methodId);
@@ -2227,41 +2136,63 @@
                     return;
                 }
                 else {
-                    this.selectedServiceDetails.serviceId = methodId;
-                    this.selectedServiceDetails.service = newMethod.methodTitle;
-                    this.selectedServiceDetails.serviceCode = newMethod.carrierCode;
-                    this.selectedServiceDetails.carrier = newMethod.carrierName;
-                    this.selectedServiceDetails.shipping = newMethod.price;
-                    this.selectedServiceDetails.selected = true;
-                    this.selectedServiceDetails.checked = true;
-                    this.selectedServiceDetails.currencySymbol = this.currencySymbol;
-                    this.selectedServiceDetails.collection = this.currencySymbol;
+                    //TODO: Maybe attach the original service object to selectedServiceDetails so that we can deselect it directly, and simplify this 
+                    if (this.selectedServiceDetails && this.selectedServiceDetails._originalMethodObject) {
+                        this.selectedServiceDetails._originalMethodObject.selected = false;
+                    }
 
+                    newMethod.selected = true;
+
+                    var newSelectedServiceDetails = {
+                        _originalMethodObject: newMethod,
+                        serviceId: methodId,
+                        service: newMethod.methodTitle,
+                        serviceCode: newMethod.carrierCode,
+                        carrier: newMethod.carrierName,
+                        shipping: newMethod.price,
+                        currencySymbol: this.currencySymbol
+                    }
+                    
                     if (dateOverride) {
-                        this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
+                        newSelectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
                     }
                     else {
-                        this.selectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
+                        newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
                     //TODO: FIX. At this point, _selectedDropPoint is still assigned to the old selection
                     //if (newMethod.serviceType.type == "dmStandardDropPoint") {
                     if (this._selectedDropPoint) {
-                        this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
-                        this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
-                        this.selectedServiceDetails.provider = this._selectedDropPoint.providerName;
-                        this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
+                        newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
+                        newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
+                        newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
+                        newSelectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
                     }
                     else {
-                        this.selectedServiceDetails.collectionPoint = null;
-                        this.selectedServiceDetails.providerId = null;
-                        this.selectedServiceDetails.provider = null;
-                        this.selectedServiceDetails.deliveryAddress = null;
-                        //zzzzz
                         this._unselectDropPoint();
                     }
+                    this.set('selectedServiceDetails', newSelectedServiceDetails);
 
-                    this._selectService(methodId);
+                    //this._selectService(methodId);
+                    //---- _selectService
+                    /*var serviceSelected = null;
+
+                    var all = this.standardRates.concat(this.dayDefinite).concat([]);
+
+                    for (var i = 0; i < this.all.length; i++) {
+                        var item = this.all[i];
+                        item.selected = (item.id == id);
+                    }
+                    //-----------------------
+                    */
+                    //eeee
+    
+                    this.set('standardRates', this._getStandardServices());
+                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+                    //this.set('dayDefinite', JSON.parse(JSON.stringify(this.dayDefinite)));
+
+
+
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     //debugger;
                     this.$.standardRatesTemplate.render();
