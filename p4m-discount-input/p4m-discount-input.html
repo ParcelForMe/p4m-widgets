@@ -94,7 +94,7 @@
             },
 
             sendCode: function() {
-                this.$.localApi.call('applyDiscountCode', { discountCode: this.discountCode }, null, this.onResponse.bind(this));
+                this.$.localApi.call('applyDiscountCode', null, { discountCode: this.discountCode }, this.onResponse.bind(this));
             },
             onResponse: function (e) {
                 if (e.Success == false) {
