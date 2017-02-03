@@ -548,7 +548,7 @@
                             </div>
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-option="onUpdateDroppointDeliveryOptions" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-method="onUpdateDroppointDeliveryMethod" show-shipping-options="true" button-type="tick"></gfs-droppoint>
                                 </div>
                             </div>
                             <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
@@ -584,7 +584,7 @@
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-select-delivery-option="onUpdateDroppointDeliveryOptions" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-select-delivery-method="onUpdateDroppointDeliveryMethod" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
 
@@ -944,7 +944,7 @@
                 "datetoggleon": "_deliveryDateSelected",
                 "prevmonth": "_calendarMonthChanged",
                 "nextmonth": "_calendarMonthChanged",
-                "droppoint-selected": "_droppointSelected"
+                "droppoint-selected": "_onDroppointSelected"
             },
 
             // METHODS
@@ -1683,7 +1683,7 @@
 
             _showDropPointsView: function () {
                 var self = this;
-                this.fire('show-droppoints');
+                //this.fire('show-droppoints');
                 if (this._showingDroppointsMap) {
                     //Show droppoints
                     this.$.dropPointListContainer.classList.add('hidden');
@@ -1691,15 +1691,15 @@
                     //this._makeMap();
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map);
-                    this._fixMapMarker();
+                    this._openSelectedDropPointInfoWindow();
                     this.panToDefaultLocation();
 
                 }
                 else {
                     this.$.dropPointListContainer.classList.remove('hidden');
                     this.$.mapContainer.classList.add('hidden');
-                    this._resetMap(this._map);
-                    this._fixMapMarker();
+                    //this._resetMap(this._map);
+                    //this._openSelectedDropPointInfoWindow();
                 }
 
             },
@@ -1733,13 +1733,8 @@
                 }
             },
 
-            //Select a drop point marker
-            _selectDropPointMarker: function (marker) {
-                debugger;
-                this.selectDropPoint(marker.customData.droppointId);
-            },
-
             //Select a droppoint
+            /*
             selectDropPoint: function (dropPointId) {
                 //Select the drop point, if it is known.
                 var dp = this._droppointById(null, dropPointId);
@@ -1749,11 +1744,12 @@
                 else {
                     //Unselect the old droppoint (if any)
                     this._unselectDropPoint();
+                    
 
                     //Select this by setting it to selected and assigning _selectedDropPoint
                     //dp.selected = true;
                     this.set("_selectedDropPoint", dp);
-                    this.set("_selectedDropPoint.selected", true); //This tells the droppoint widgets to react
+                    this.set("_selectedDropPoint.selected", true);
                 }
             },
 
@@ -1766,19 +1762,22 @@
                     this._selectedDropPoint = null;
                 }
             },
+            */
 
-            _fixMapMarker: function () {
+            _openSelectedDropPointInfoWindow: function () {
 
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
                     var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
                     if (dp) {
                         this._currentMarker = dp.marker;
                     }
+                    /*
                     else {
-                        //Make a marker
+                        console.error("Droppoint not found", this._selectedDropPoint.droppointId);
+                         //Make a marker
                         this._loadDroppointMarkers([this._selectedDropPoint]);
                         this._currentMarker = this._selectedDropPoint.marker; //this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId).marker;
-                    }
+                    }*/
                     //console.log("### Opening info box");
                    
                     this.$.dropPointRadio.setAttribute('checked', 'true');
@@ -1786,27 +1785,50 @@
                     var self = this;
                     window.setTimeout(function () {
                         self._infoWindow.open(self._map, self._currentMarker);
+                        //self.$['infobox-droppoint'].select();
                     }, 200);
                 }
             },
 
-            _droppointSelected: function(e) {
-                //console.log('_droppointChanged', e.detail);
-                var changedDroppoint = e.detail;
 
-                //If we have selected one at the moment,
-                if (this._selectedDropPoint)
-                    //And the new one is not this one, unselect this one
-                    if (changedDroppoint.droppointId !== this._selectedDropPoint.droppointId)
-                        this._unselectDropPoint();
-                //eeee
-                this.selectDropPoint(changedDroppoint.droppointId);
-                //this.set("_selectedDropPoint", changedDroppoint);
-                this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
-                //this.$.listPreferredDropPointList.render(); //Re-sort the preferred list
-                this._fixMapMarker();            
+            //=== Received event from droppoint widget
+            //Make this droppoint the 'selected' one, and open the info window
+            _onDroppointSelected: function (e) {
+                //if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppoint.droppointId) return; //Already selected
+
+                this._completeDropPointSelection(e.detail.droppoint.droppointId, e.detail.methodId);
+
+                //Show on the map, pop up the info window
+                this._openSelectedDropPointInfoWindow();
             },
 
+            //==== Make this droppoint the 'selected' one
+            _completeDropPointSelection(droppointId, methodId) {
+                var dp = this._droppointById(null, droppointId)            
+                this.set("_selectedDropPoint", dp);
+                this.set("_selectedDropPoint.selected", true);
+                this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
+            },
+
+            //=== Select a drop point marker
+            //Make it the 'selected' one
+            //Select the infobox's gfs-droppoint widget.
+            _selectDropPointMarker: function (marker) {
+                var dp = this._droppointById(null, marker.customData.droppointId);
+                this._completeDropPointSelection(dp.droppointId, null)
+                this.$['infobox-droppoint'].select();     //Next stop _onDroppointSelected()          
+            },
+
+            _unselectDropPoint: function () {
+                if (this._selectedDropPoint) {
+                    if (this._infoWindow) {
+                        this._infoWindow.close();
+                    }
+                    this._hideDropPointDetails();
+                    this._selectedDropPoint = null;
+                }
+            },
+           
             _droppointById: function (providerId, droppointId) {
                 if (!this._dropPoints) {
                     return;
@@ -2069,7 +2091,9 @@
                 this.$.calendar.autoSelect();
             },
 
+            //TODO: Change to use _originalShippingService.selected
             _preselectForStandard: function () {
+                debugger; //This function needs to change
                 if (this.standardRates) {
                     //this.set('_selectedDropPoint', null);
                     this._unselectDropPoint();
@@ -2162,6 +2186,7 @@
 
                     //TODO: FIX. At this point, _selectedDropPoint is still assigned to the old selection
                     //if (newMethod.serviceType.type == "dmStandardDropPoint") {
+                    debugger;
                     if (this._selectedDropPoint) {
                         newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
                         newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
@@ -2200,18 +2225,19 @@
                 }
             },
 
-
+            
             updateDeliveryMethodEvent: function (e) {
                 if (e.target.checked) {                    
                     this.updateDeliveryMethod(e.target.id);
                 }
             },
 
-            
+           /* 
             onUpdateDroppointDeliveryMethod: function (e) {
+                debugger;
                 this.updateDeliveryMethod(e.detail);
             },
-            
+            */
 
             onSelectTab: function (e) {
                 if (e.detail.item.id === "pageCalendar") {

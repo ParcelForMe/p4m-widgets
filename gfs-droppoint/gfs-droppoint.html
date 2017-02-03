@@ -589,7 +589,8 @@
 			select: function() {
 			    this.set('droppointData.selected', true);
 			    this.autoSelectMethod();
-			    this.fire('droppoint-selected', this.droppointData);
+                
+			    //this.fire('droppoint-selected', this.droppointData);
 			},
 
 			unselect: function () {
@@ -649,8 +650,10 @@
 			        var item = this.droppointData.deliveries[i];
 
 			        this.set("droppointData.deliveries." + i + ".selected", item.id === shippingOptionId);
-			        this.fire('select-delivery-method', shippingOptionId);
+
 			    }
+			    //this.fire('select-delivery-method', shippingOptionId);
+			    this.fire('droppoint-selected', { droppoint: this.droppointData, methodId: shippingOptionId });
 			},
 
 			autoSelectMethod: function() {
