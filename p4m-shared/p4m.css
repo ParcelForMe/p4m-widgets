@@ -10,73 +10,210 @@
 .translucent-p4m-green-light {
   background-color: rgba(63, 144, 87, 0.1) !important; }
 
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+  Mixins available:
+    -   css3-prefix             - arguments: Property, Value
+    -   background-gradient     - arguments: Start Color: #3C3C3C, End Color: #999999
+    -   background-horizontal   - arguments: Start Color: #3C3C3C, End Color: #999999
+    -   background-radial       - arguments: Start Color: #FFFFFF, Start position: 0%, End Color: #000000, End position: 100%
+    -   background-size         - arguments: Width: 100%, Height: 100%
+    -   background-opacity      - arguments: Color: #000, Opacity: .85
+    -   border-radius           - arguments: Radius: 5px
+    -   border-radius-separate  - arguments: Top Left: 5px, Top Right: 5px, Bottom Left: 5px, Bottom Right: 5px
+    -   box                     - arguments: Orientation: horizontal, Pack: center, Align: center
+    -   box-rgba                - arguments: R: 60, G: 3, B: 12, Opacity: 0.23, Color: #3C3C3C
+    -   box-shadow              - arguments: X: 2px, Y: 2px, Blur: 5px, Color: rgba(0,0,0,.4)
+    -   box-sizing              - arguments: Type: border-box
+    -   columns                 - arguments: Count: 3, Gap: 10
+    -   double-borders          - arguments: Color One: #3C3C3C, Color Two: #999999, Radius: 0
+    -   flex                    - arguments: Value: 1
+    -   flip                    - arguments: ScaleX: -1
+    -   font-face               - arguments: Font Family: myFont, Eot File Src: myFont.eot, Woff File Src: myFont.woff, Ttf File Src: myFont.ttf
+    -   opacity                 - arguments: Opacity: 0.5
+    -   outline radius          - arguments: Radius: 5px
+    -   resize                  - arguments: Direction: both
+    -   rotate                  - arguments: Degree: 0, M11: 0, M12: 0, M21: 0, M22: 0
+    CSS Matrix Rotation Calculator http://www.boogdesign.com/examples/transforms/matrix-calculator.html
+    -   text-shadow             - arguments: X: 2px, Y: 2px, Blur: 5px, Color: rgba(0,0,0,.4)
+    -   transform               - arguments: Parameters: null
+    -   transform-style         - arguments: Style: preserve-3d
+    -   transition              - Default arguments: What: all, Length: 1s, Easing: ease-in-out
+    -                            - Examples: @include transition (all 2s ease-in-out);
+    -                                        @include transition (opacity 1s ease-in 2s, width 2s ease-out);
+    -   triple-borders          - arguments: Color One: #3C3C3C, Color Two: #999999, Color Three: #000000, Radius: 0
+    -   keyframes               - arguments: Animation name
+                                - content:   Animation css
+    -   animation               - arguments: name duration timing-function delay iteration-count direction fill-mode play-state
+                                             (http://www.w3schools.com/cssref/css3_pr_animation.asp)
+
+------------------------------------------------------------- */
+@font-face {
+  font-family: 'p4m';
+  src: url("fonts/p4m.eot?it9ffc");
+  src: url("fonts/p4m.eot?it9ffc#iefix") format("embedded-opentype"), url("fonts/p4m.ttf?it9ffc") format("truetype"), url("fonts/p4m.woff?it9ffc") format("woff"), url("fonts/p4m.svg?it9ffc#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="p4micon-"], [class*=" p4micon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'p4m' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.p4micon-pengo:before {
+  content: "\e900"; }
+
+.p4micon-schedule:before {
+  content: "\e901"; }
+
+.p4micon-profile:before {
+  content: "\e902"; }
+
+.p4micon-settings:before {
+  content: "\e903"; }
+
+.p4micon-settings2:before {
+  content: "\e904"; }
+
+.p4micon-logout:before {
+  content: "\e905"; }
+
+.p4micon-like:before {
+  content: "\e906"; }
+
+.p4micon-search:before {
+  content: "\e907"; }
+
+.p4micon-chevron-down:before {
+  content: "\e908"; }
+
+.p4micon-chevron-up:before {
+  content: "\e909"; }
+
+.p4micon-chevron-left:before {
+  content: "\e90a"; }
+
+.p4micon-chevron-right:before {
+  content: "\e90b"; }
+
+.p4micon-subtract-circle:before {
+  content: "\e90c"; }
+
+.p4micon-add-circle:before {
+  content: "\e90d"; }
+
+.p4micon-delete-circle:before {
+  content: "\e90e"; }
+
+.p4micon-check-circle:before {
+  content: "\e90f"; }
+
+.p4micon-check-square:before {
+  content: "\e910"; }
+
+.p4micon-cart-empty:before {
+  content: "\e911"; }
+
+.p4micon-refresh:before {
+  content: "\e912"; }
+
+.p4micon-compass:before {
+  content: "\e913"; }
+
+.p4micon-paperclip:before {
+  content: "\e914"; }
+
+.p4micon-map-marker:before {
+  content: "\e915"; }
+
+.p4micon-map-with-marker:before {
+  content: "\e916"; }
+
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-BlaIta-webfont.eot");
-  src: url("lato-font/Lato-BlaIta-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-BlaIta-webfont.woff") format("woff"), url("lato-font/Lato-BlaIta-webfont.ttf") format("truetype"), url("lato-font/Lato-BlaIta-webfont.svg#LatoBlackItalic") format("svg");
+  src: url("fonts/Lato-BlaIta-webfont.eot");
+  src: url("fonts/Lato-BlaIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BlaIta-webfont.woff") format("woff"), url("fonts/Lato-BlaIta-webfont.ttf") format("truetype"), url("fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic") format("svg");
   font-weight: 800;
   font-style: italic; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-Bla-webfont.eot");
-  src: url("lato-font/Lato-Bla-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-Bla-webfont.woff") format("woff"), url("lato-font/Lato-Bla-webfont.ttf") format("truetype"), url("lato-font/Lato-Bla-webfont.svg#LatoBlack") format("svg");
+  src: url("fonts/Lato-Bla-webfont.eot");
+  src: url("fonts/Lato-Bla-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bla-webfont.woff") format("woff"), url("fonts/Lato-Bla-webfont.ttf") format("truetype"), url("fonts/Lato-Bla-webfont.svg#LatoBlack") format("svg");
   font-weight: 800;
   font-style: normal; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-BolIta-webfont.eot");
-  src: url("lato-font/Lato-BolIta-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-BolIta-webfont.woff") format("woff"), url("lato-font/Lato-BolIta-webfont.ttf") format("truetype"), url("lato-font/Lato-BolIta-webfont.svg#LatoBoldItalic") format("svg");
+  src: url("fonts/Lato-BolIta-webfont.eot");
+  src: url("fonts/Lato-BolIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BolIta-webfont.woff") format("woff"), url("fonts/Lato-BolIta-webfont.ttf") format("truetype"), url("fonts/Lato-BolIta-webfont.svg#LatoBoldItalic") format("svg");
   font-weight: 600;
   font-style: italic; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-Bol-webfont.eot");
-  src: url("lato-font/Lato-Bol-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-Bol-webfont.woff") format("woff"), url("lato-font/Lato-Bol-webfont.ttf") format("truetype"), url("lato-font/Lato-Bol-webfont.svg#LatoBold") format("svg");
+  src: url("fonts/Lato-Bol-webfont.eot");
+  src: url("fonts/Lato-Bol-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bol-webfont.woff") format("woff"), url("fonts/Lato-Bol-webfont.ttf") format("truetype"), url("fonts/Lato-Bol-webfont.svg#LatoBold") format("svg");
   font-weight: 600;
   font-style: normal; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-RegIta-webfont.eot");
-  src: url("lato-font/Lato-RegIta-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-RegIta-webfont.woff") format("woff"), url("lato-font/Lato-RegIta-webfont.ttf") format("truetype"), url("lato-font/Lato-RegIta-webfont.svg#LatoItalic") format("svg");
+  src: url("fonts/Lato-RegIta-webfont.eot");
+  src: url("fonts/Lato-RegIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-RegIta-webfont.woff") format("woff"), url("fonts/Lato-RegIta-webfont.ttf") format("truetype"), url("fonts/Lato-RegIta-webfont.svg#LatoItalic") format("svg");
   font-weight: 400;
   font-style: italic; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-Reg-webfont.eot");
-  src: url("lato-font/Lato-Reg-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-Reg-webfont.woff") format("woff"), url("lato-font/Lato-Reg-webfont.ttf") format("truetype"), url("lato-font/Lato-Reg-webfont.svg#LatoRegular") format("svg");
+  src: url("fonts/Lato-Reg-webfont.eot");
+  src: url("fonts/Lato-Reg-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Reg-webfont.woff") format("woff"), url("fonts/Lato-Reg-webfont.ttf") format("truetype"), url("fonts/Lato-Reg-webfont.svg#LatoRegular") format("svg");
   font-weight: 400;
   font-style: normal; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-LigIta-webfont.eot");
-  src: url("lato-font/Lato-LigIta-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-LigIta-webfont.woff") format("woff"), url("lato-font/Lato-LigIta-webfont.ttf") format("truetype"), url("lato-font/Lato-LigIta-webfont.svg#LatoLightItalic") format("svg");
+  src: url("fonts/Lato-LigIta-webfont.eot");
+  src: url("fonts/Lato-LigIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-LigIta-webfont.woff") format("woff"), url("fonts/Lato-LigIta-webfont.ttf") format("truetype"), url("fonts/Lato-LigIta-webfont.svg#LatoLightItalic") format("svg");
   font-weight: 200;
   font-style: italic; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-Lig-webfont.eot");
-  src: url("lato-font/Lato-Lig-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-Lig-webfont.woff") format("woff"), url("lato-font/Lato-Lig-webfont.ttf") format("truetype"), url("lato-font/Lato-Lig-webfont.svg#LatoLight") format("svg");
+  src: url("fonts/Lato-Lig-webfont.eot");
+  src: url("fonts/Lato-Lig-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Lig-webfont.woff") format("woff"), url("fonts/Lato-Lig-webfont.ttf") format("truetype"), url("fonts/Lato-Lig-webfont.svg#LatoLight") format("svg");
   font-weight: 200;
   font-style: normal; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-HaiIta-webfont.eot");
-  src: url("lato-font/Lato-HaiIta-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-HaiIta-webfont.woff") format("woff"), url("lato-font/Lato-HaiIta-webfont.ttf") format("truetype"), url("lato-font/Lato-HaiIta-webfont.svg#LatoHairlineItalic") format("svg");
+  src: url("fonts/Lato-HaiIta-webfont.eot");
+  src: url("fonts/Lato-HaiIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-HaiIta-webfont.woff") format("woff"), url("fonts/Lato-HaiIta-webfont.ttf") format("truetype"), url("fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic") format("svg");
   font-weight: 100;
   font-style: italic; }
 
 @font-face {
   font-family: 'Lato';
-  src: url("lato-font/Lato-Hai-webfont.eot");
-  src: url("lato-font/Lato-Hai-webfont.eot?#iefix") format("embedded-opentype"), url("lato-font/Lato-Hai-webfont.woff") format("woff"), url("lato-font/Lato-Hai-webfont.ttf") format("truetype"), url("lato-font/Lato-Hai-webfont.svg#LatoHairline") format("svg");
+  src: url("fonts/Lato-Hai-webfont.eot");
+  src: url("fonts/Lato-Hai-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Hai-webfont.woff") format("woff"), url("fonts/Lato-Hai-webfont.ttf") format("truetype"), url("fonts/Lato-Hai-webfont.svg#LatoHairline") format("svg");
   font-weight: 100;
   font-style: normal; }
 
@@ -84,32 +221,36 @@
   font-family: "Lato", sans-serif;
   font-size: 16px; }
 
-[class="p4m-"] h1, [class="p4m-"] h2, [class="p4m-"] h3, [class="p4m-"] h4, [class="p4m-"] h5, [class="p4m-"] h6 {
+[class*="p4m-"] h1, [class*="p4m-"] h2, [class*="p4m-"] h3, [class*="p4m-"] h4, [class*="p4m-"] h5, [class*="p4m-"] h6 {
   font-weight: 600 !important;
   text-rendering: optimizeLegibility;
   letter-spacing: -.02em; }
 
-h1 {
+[class*="p4m-"] h1 {
   font-size: 24px;
   margin: .5em 0; }
 
-h2 {
+[class*="p4m-"] h2 {
   font-size: 21px;
   margin: .5em 0; }
 
-h3 {
+[class*="p4m-"] h3 {
   font-size: 18px;
   margin: .5em 0; }
 
-h4 {
+[class*="p4m-"] h4 {
   font-size: 16px;
   margin: .5em 0; }
 
-h5 {
+[class*="p4m-"] h5 {
   font-size: 14px;
   margin: .5em 0; }
 
-h6 {
+[class*="p4m-"] h6 {
+  font-size: 12px;
+  margin: .5em 0; }
+
+[class*="p4m-"] p {
   font-size: 12px;
   margin: .5em 0; }
 
@@ -145,41 +286,45 @@ h6 {
   color: darkgreen; }
 
 .corners-5px {
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -khtml-border-radius: 6px;
-  border-radius: 6px; }
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px; }
 
 .corners-24px {
-  -moz-border-radius: 24px;
   -webkit-border-radius: 24px;
   -khtml-border-radius: 24px;
+  -moz-border-radius: 24px;
+  -ms-border-radius: 24px;
+  -o-border-radius: 24px;
   border-radius: 24px; }
 
 .corners-top-5px {
-  -moz-border-top-left-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -khtml-border-top-left-radius: 6px;
-  border-top-left-radius: 6px;
-  -moz-border-top-right-radius: 6px;
-  -webkit-border-top-right-radius: 6px;
-  -khtml-border-top-right-radius: 6px;
-  border-top-right-radius: 6px;
-  color: #2aa54f;
-  background-color: #fff;
-  padding-left: 25px;
-  padding-top: 20px;
-  line-height: 20px; }
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0; }
 
 .corners-bottom-5px {
-  -moz-border-bottom-left-radius: 6px;
-  -webkit-border-bottom-left-radius: 6px;
-  -khtml-border-bottom-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  -moz-border-bottom-right-radius: 6px;
-  -webkit-border-bottom-right-radius: 6px;
-  -khtml-border-bottom-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background-color: #fff;
-  padding-left: 25px;
-  padding-top: 20px; }
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-topleft: 0;
+  -moz-border-radius-topright: 0;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px; }
