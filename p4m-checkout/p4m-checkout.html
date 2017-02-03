@@ -831,7 +831,7 @@
                     item.Description = "Deleted";
                     this.cartData.Tax = e.detail.Tax;
                     this.updateP4mCart();
-                    this.$.localApi.call('removeDiscountCode', {"discountCode": code}, null, null);
+                    this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
                 }
             },
 
