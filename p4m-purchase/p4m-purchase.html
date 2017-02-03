@@ -226,7 +226,6 @@
 
             onPurchase: function (err, data) {
                 console.log('onPurchase', data);
-                debugger;
                 if (data.Success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
