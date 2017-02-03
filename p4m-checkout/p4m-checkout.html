@@ -366,6 +366,7 @@
                 });
             },
 
+
             //Send all cart information to GFS
             _updateGfs: function (callback) {
 
@@ -780,6 +781,8 @@
             toggleDetailExpansion: function (expand) {
             },
 
+            
+
             onSelectPaymentMethod: function (e) {
                 var updCart = this.selectedCard !== undefined && this.selectedCard !== null;
                 this.set('cartData.PayMethodId', e.detail.Id);
@@ -903,6 +906,8 @@
                         callback(null);
                     }
                 }
+
+
             },
 
             onAddAddress: function (e) {
@@ -967,6 +972,7 @@
                 if (!this.consumerData) throw "No consumer data"
                 else if (!this.cartData) throw "No cart data";
 
+               
                 //this.consumerData.PreferSoonestDelivery = true; //TODO: Remove. This is just here for testing.
                 //Rather than opening a page, let's handle this directly.
 

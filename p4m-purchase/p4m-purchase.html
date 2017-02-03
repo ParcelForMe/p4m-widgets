@@ -23,7 +23,7 @@
             <div class="button-container">
                 <div id="p4mBuyNowButton" on-tap="buyNow" class="p4m-button p4m-button-active">{{buttonText}}</div>
                 <div id="p4mPaypalButton" on-tap="buyViaPaypal" class="p4m-button p4m-button-active hidden paypal">&nbsp;{{paypalText}}</div>
-            </div>
+            </div>        
 
             <p class="p4m-error">{{errorMsg}}</p>   
       
@@ -31,7 +31,7 @@
         <p4m-overlay id="overlay" with-backdrop></p4m-overlay>
     </template>
 
-    <style>
+    <style> 
 
         #p4mPurchaseContainer {
             _display: flex;
@@ -148,9 +148,6 @@
                 redirectUrl: {
                     type: String
                 },
-                newDropPoint: {
-                    type: Object
-                },
                 _topClass: {
                     type: String,
                     value: "active"
@@ -178,8 +175,10 @@
             },
 
             onCvv: function (e) {
+
+                
                 var card = this.$$('#card');
-                if (!card || !card.cvv || card.cvv === "") {
+                if (!card || !card.cvv || card.cvv === "" || e.detail === false) {
                     this._state = States.CVV_NEEDED;
                 }
                 else {
@@ -203,10 +202,10 @@
                         this.beforePurchase()
                     }
                     var postData = { cartId: this.cartData.Id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.Total };
-                    postData.newDropPoint = null;
+                    /*postData.newDropPoint = null;
                     if (this.newDropPoint) {
                         postData.newDropPoint = this.newDropPoint;
-                    }
+                    }*/
                     this.$.localApi.call('purchase', null, postData, this.onPurchase.bind(this));
                 }
             },
@@ -225,25 +224,28 @@
                 this._state = States.CVV_NEEDED;                    
             },
 
-            onPurchase: function (e) {
-                console.log('onPurchase', e);
-                if (e.Success == false) {
+            onPurchase: function (err, data) {
+                console.log('onPurchase', data);
+                debugger;
+                if (data.Success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
                 }
                 else {
                     // check we need to launch the 3D Secure popup
-                    if (e.ACSUrl && e.ACSUrl !== '') {
-                        this.launch3DSecure(e.ACSUrl, e.PaReq, e.ACSResponseUrl, e.P4MData);
+                    if (data.ACSUrl && data.ACSUrl !== '') {
+                        this.launch3DSecure(data.ACSUrl, data.PaReq, data.ACSResponseUrl, data.P4MData);
                     }
                     else {
                         this._state = States.PURCHASED;
-                        if (e.RedirectUrl) {
-                            window.location.href = e.RedirectUrl;
+                        this.fire("payment-complete", {redirectUrl: data.RedirectUrl || this.redirectUrl || null});
+                        /*if (data.RedirectUrl) {
+
+                            window.location.href = data.RedirectUrl;
                         }
                         else if (this.redirectUrl) {
                             window.location.href = this.redirectUrl;
-                        }
+                        }*/
                     }
                 }
             },
@@ -340,7 +342,7 @@
                 }
                 else if (this._state == States.PURCHASED) {
                     this.showAsCompleted();
-                    this.fire("payment-complete");
+                   
                 }
                 else if (this._state == States.FAILED_PURCHASE) {
                     this.showAsFailed();

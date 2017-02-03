@@ -10,6 +10,7 @@
             <div class="card-panel">
                  <div class="card-body">
                     <div class$="card-content {{cardData.Issuer}}">
+                        <custom-validator id="validator" validator-name="cvv"></custom-validator>
                         <div class="card-details">
                             <div class="card-name">{{cardData.Name}}</div>
                             <div class="card-description">{{cardData.Description}}</div>
@@ -227,6 +228,7 @@
                 "onDataChange(cardData)",  //If the selected card changes
                 "onCvv(cvv)"
             ],
+
 
             ready: function()
             {

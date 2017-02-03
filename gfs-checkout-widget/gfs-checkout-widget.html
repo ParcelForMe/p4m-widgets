@@ -487,7 +487,7 @@
 
         <map-region-manager id="regionManager"></map-region-manager>
 
-        <div id="widgetContainer">          
+		<div id="widgetContainer">          
             <paper-tabs selected="{{selectedTab}}">             
                 <paper-tab>{{calendarDeliveryTitle}}</paper-tab>
                 <paper-tab>Click and Collect</paper-tab>
@@ -1949,6 +1949,7 @@
                     this._hideDropPointDetails();
                     this._selectedDropPoint.chosen = false;
                     this._selectedDropPoint = null;
+                    //this._preselectForStandard();
                 }
             },
 
