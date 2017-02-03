@@ -252,8 +252,8 @@
 
             paypalUrl: "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&useraction=commit&token=",
 
-            onPaypalSetup: function (e) {
-                if (e.Success == false) {
+            onPaypalSetup: function (err, result) {
+                if (err) {
                     this.errorMsg = this.msgFailedPayment;
                     var card = this.$$('#card');
                     if (!card || !card.cvv || card.cvv === "") {
@@ -265,7 +265,7 @@
                 }
                 else {
                     // we have a token from PP so now we can launch PP in a popup
-                    this.openPopup(this.paypalUrl + e.Token, "paypalWindow", 650, 750);
+                    this.openPopup(this.paypalUrl + result.Token, "paypalWindow", 650, 750);
                 }
             },
 
