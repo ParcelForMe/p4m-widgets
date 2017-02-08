@@ -548,7 +548,7 @@
                             </div>
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-method="onUpdateDroppointDeliveryMethod" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select="_onDroppointSelected" show-shipping-options="true" button-type="tick"></gfs-droppoint>
                                 </div>
                             </div>
                             <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
@@ -565,7 +565,7 @@
                                     <div class="preferredDroppoints">
                                         <h3>My Collection Points</h3>
                                         <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint click-to-choose="true" on-select="_onSelectPreferredDroppoint" container-class="dp-mini-card" xon-droppoint-click="_onClickDroppoint" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-select="_onDroppointSelected" container-class="dp-mini-card" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </template>
@@ -584,14 +584,14 @@
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-select-delivery-method="onUpdateDroppointDeliveryMethod" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-select="_onDroppointSelected" disable-unchoose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
 
                                     <div class="preferredDroppoints">
                                         <h3>My Collection Points</h3>
                                         <template id="listPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint  click-to-choose="true" on-select="_onSelectPreferredDroppoint" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-select="_onDroppointSelected" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
@@ -605,7 +605,7 @@
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
                             <li class="gfsStd">
-                                <input name="shipping_method" on-click="updateDeliveryMethodEvent" type="radio" checked="{{item._originalMethodObject.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
+                                <input name="shipping_method" on-click="setDeliveryMethodEvent" type="radio" checked="{{item._originalMethodObject.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
                                 <label for$="{{item.id}}">
                                     <span class="methodname">{{item.methodTitle}}</span>
                                     <span class="price">{{currencySymbol}}{{item.price}}</span>
@@ -1195,7 +1195,7 @@
             },
 
             setGfsService: function(serviceId) {
-                updateDeliveryMethod(serviceId);
+                setDeliveryMethod(serviceId);
             },
 
             setPreferredDroppoints: function (droppointList) {
@@ -1807,6 +1807,7 @@
                 var dp = this._droppointById(null, droppointId)            
                 this.set("_selectedDropPoint", dp);
                 this.set("_selectedDropPoint.selected", true);
+                this.setDeliveryMethod(methodId);
                 this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
             },
 
@@ -1925,7 +1926,7 @@
 
             _selectCalendarShippingOption: function (e) {
                 //console.log('Updating delivery options with', e.detail.shippingMethodId, e.detail.deliveryDate);
-                this.updateDeliveryMethod(e.detail.shippingMethodId, e.detail.deliveryDate);
+                this.setDeliveryMethod(e.detail.shippingMethodId, e.detail.deliveryDate);
             },
 
             _formatDayDefiniteDate: function(deliveryDate) {
@@ -2102,11 +2103,11 @@
                         preselectedService.selected = true;
                     }                   
                     
-                    this.updateDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
+                    this.setDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
                     this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     this.$.standardRatesTemplate.render();
-                    this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
-                    this.fire('preselectedservice', this.selectedServiceDetails);
+                    //this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
+                    //this.fire('preselectedservice', this.selectedServiceDetails);
                 }
 
             },
@@ -2138,9 +2139,9 @@
 			},
 
 
-            getChosenServiceDetails: function() {
+            /*getChosenServiceDetails: function() {
 				return JSON.stringify(this.selectedServiceDetails);
-            },
+            },*/
 
             _unselectMethod: function() {
                 var methods = this.standardRates;
@@ -2151,10 +2152,10 @@
 
             //Select a delivery service
             //TODO: Refactor?
-            updateDeliveryMethod: function (methodId, dateOverride) {
+           setDeliveryMethod: function (methodId, dateOverride) {
 
                 var newMethod = this._getDeliveryRateById(methodId);
-                if (!newMethod) {
+                    if (!newMethod) {
                     console.error("Method not available");
                     this.fire('noservice');
                     return;
@@ -2185,15 +2186,15 @@
                     }
 
                     //TODO: FIX. At this point, _selectedDropPoint is still assigned to the old selection
-                    //if (newMethod.serviceType.type == "dmStandardDropPoint") {
-                    debugger;
-                    if (this._selectedDropPoint) {
+                    if (newMethod.serviceType.type == "dmStandardDropPoint") {                   
+                        //if (this._selectedDropPoint) {
+                        //console.log(this._selectedDropPoint); //What sets this?
                         newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
                         newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
                         newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
                         newSelectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
                     }
-                    else {
+                    else if (this._selectedDropPoint) {
                         this._unselectDropPoint();
                     }
                     this.set('selectedServiceDetails', newSelectedServiceDetails);
@@ -2226,9 +2227,9 @@
             },
 
             
-            updateDeliveryMethodEvent: function (e) {
+            setDeliveryMethodEvent: function (e) {
                 if (e.target.checked) {                    
-                    this.updateDeliveryMethod(e.target.id);
+                    this.setDeliveryMethod(e.target.id);
                 }
             },
 
@@ -2268,7 +2269,7 @@
                     this._preselectForCalendar();                  
                 }
                
-                this.fire('show-calendar');
+                //this.fire('show-calendar');
             },
 
             showPage_Standard: function (preselect) {
@@ -2290,7 +2291,7 @@
 			        }
 			    }
 			    this.$.standardRatesTemplate.render();
-			    this.fire('show-standard');
+			    //this.fire('show-standard');
 			},
 
             showPage_Droppoints: function () {
