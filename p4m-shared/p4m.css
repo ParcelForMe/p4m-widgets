@@ -256,40 +256,40 @@
   font-weight: 100;
   font-style: normal; }
 
-[class*="p4m-"] * {
+[p4m-register] > *, [p4m-login] > *, [p4m-checkout] > * {
   font-family: "Lato", sans-serif;
   font-size: 16px; }
 
-[class*="p4m-"] h1, [class*="p4m-"] h2, [class*="p4m-"] h3, [class*="p4m-"] h4, [class*="p4m-"] h5, [class*="p4m-"] h6 {
+p4m-register h1, p4m-register h2, p4m-register h3, p4m-register h4, p4m-register h5, p4m-register h6, p4m-login h1, p4m-login h2, p4m-login h3, p4m-login h4, p4m-login h5, p4m-login h6, p4m-checkout h1, p4m-checkout h2, p4m-checkout h3, p4m-checkout h4, p4m-checkout h5, p4m-checkout h6 {
   font-weight: 600 !important;
   text-rendering: optimizeLegibility;
   letter-spacing: -.02em; }
 
-[class*="p4m-"] h1 {
+p4m-register h1, p4m-login h1, p4m-checkout h1 {
   font-size: 24px;
   margin: .5em 0; }
 
-[class*="p4m-"] h2 {
+p4m-register h2, p4m-login h2, p4m-checkout h2 {
   font-size: 21px;
   margin: .5em 0; }
 
-[class*="p4m-"] h3 {
+p4m-register h3, p4m-login h3, p4m-checkout h3 {
   font-size: 18px;
   margin: .5em 0; }
 
-[class*="p4m-"] h4 {
+p4m-register h4, p4m-login h4, p4m-checkout h4 {
   font-size: 16px;
   margin: .5em 0; }
 
-[class*="p4m-"] h5 {
+p4m-register h5, p4m-login h5, p4m-checkout h5 {
   font-size: 14px;
   margin: .5em 0; }
 
-[class*="p4m-"] h6 {
+p4m-register h6, p4m-login h6, p4m-checkout h6 {
   font-size: 12px;
   margin: .5em 0; }
 
-[class*="p4m-"] p {
+p4m-register p, p4m-login p, p4m-checkout p {
   font-size: 12px;
   margin: .5em 0; }
 
@@ -303,23 +303,48 @@
   border: solid 1px #fff;
   cursor: pointer;
   min-width: 100px;
-  font-weight: bold; }
-  .p4m-button .p4m-button-active {
+  font-weight: bold;
+  -webkit-transition: all 0.1s ease-in-out 0s;
+  -khtml-transition: all 0.1s ease-in-out 0s;
+  -moz-transition: all 0.1s ease-in-out 0s;
+  -ms-transition: all 0.1s ease-in-out 0s;
+  -o-transition: all 0.1s ease-in-out 0s;
+  transition: all 0.1s ease-in-out 0s; }
+  .p4m-button.p4m-button-active {
     background-color: #fff;
     color: #2aa54f; }
-    .p4m-button .p4m-button-active:hover {
+    .p4m-button.p4m-button-active:hover {
       background-color: #fff;
-      color: #2aa54f;
-      transition-duration: 0.5s; }
-    .p4m-button .p4m-button-active:active {
+      color: #2aa54f; }
+    .p4m-button.p4m-button-active:active {
       background-color: rgba(255, 255, 255, 0.8);
       color: #2aa54f; }
-    .p4m-button .p4m-button-active.no {
+    .p4m-button.p4m-button-active.no {
       background-color: #904444; }
-    .p4m-button .p4m-button-active.neutral {
+    .p4m-button.p4m-button-active.neutral {
       background-color: #909090; }
   .p4m-button.disabled {
     background-color: #646464; }
+  .p4m-button.white {
+    background-color: #2aa54f;
+    color: #fff;
+    border: solid 2px #fff; }
+    .p4m-button.white i {
+      color: #fff; }
+      .p4m-button.white i span {
+        border-color: #2aa54f;
+        color: #2aa54f;
+        background-color: #fff; }
+    .p4m-button.white:hover {
+      background-color: #fff;
+      border-color: #bae1c6;
+      color: #2aa54f; }
+      .p4m-button.white:hover i {
+        color: #2aa54f; }
+        .p4m-button.white:hover i span {
+          border-color: #fff;
+          color: #fff;
+          background-color: #2aa54f; }
 
 .p4m-label {
   color: darkgreen; }
@@ -367,3 +392,103 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px; }
+
+i.p4micon-cart-empty {
+  font-size: 24px;
+  margin-right: 6px;
+  line-height: 16px;
+  position: relative; }
+  i.p4micon-cart-empty span {
+    width: 14px;
+    height: 14px;
+    padding: 0 1px 1px 1px;
+    box-sizing: border-box;
+    letter-spacing: -.02em;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    background: #2aa54f;
+    border: 1px solid #fff;
+    position: absolute;
+    right: -2px;
+    top: -6px;
+    -webkit-border-radius: 50%;
+    -khtml-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%; }
+
+#p4mRegisterContainer {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 8px; }
+  #p4mRegisterContainer .button-container {
+    display: flex;
+    flex-direction: row; }
+  #p4mRegisterContainer .p4m-register-logo {
+    height: 80px;
+    align-self: center;
+    margin: 1em 0; }
+  #p4mRegisterContainer .p4m-register-title {
+    margin: auto; }
+  #p4mRegisterContainer div {
+    justify-content: center;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center; }
+  #p4mRegisterContainer p {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    justify-content: center;
+    font-size: 13px;
+    margin: 0 0 .7em 0; }
+  #p4mRegisterContainer .p4m-register-explain {
+    display: flex;
+    flex-direction: column; }
+  #p4mRegisterContainer .p4m-register-top {
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    text-transform: uppercase; }
+  #p4mRegisterContainer .p4m-register-middle {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #2aa54f;
+    color: #fff;
+    padding: 10px; }
+  #p4mRegisterContainer .p4m-register-text {
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px; }
+  #p4mRegisterContainer .p4m-register-text-link {
+    display: flex;
+    flex-direction: row;
+    margin: .6em auto 1.5em auto;
+    cursor: pointer; }
+    #p4mRegisterContainer .p4m-register-text-link a {
+      color: white;
+      margin-left: 4px;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+      -webkit-transition: all 0.1s ease-in-out 0s;
+      -khtml-transition: all 0.1s ease-in-out 0s;
+      -moz-transition: all 0.1s ease-in-out 0s;
+      -ms-transition: all 0.1s ease-in-out 0s;
+      -o-transition: all 0.1s ease-in-out 0s;
+      transition: all 0.1s ease-in-out 0s; }
+      #p4mRegisterContainer .p4m-register-text-link a:hover {
+        border-bottom: 2px solid #fff; }
+  #p4mRegisterContainer .p4m-button.p4m-register-button {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 10px 15px;
+    display: flex; }

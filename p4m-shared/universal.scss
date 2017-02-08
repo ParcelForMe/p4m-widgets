@@ -268,11 +268,23 @@
     font-style: normal;
 
 }
-[class*="p4m-"] * {
+
+// OLD p4m Reset
+// [class*="p4m-"] > * {
+//   font-family: $p4m-font;
+//     font-size: 16px;
+// }
+
+// NEW p4m Reset
+[p4m-register] > *, [p4m-login] > *, [p4m-checkout] > * {
 	font-family: $p4m-font;
     font-size: 16px;
 }
-[class*="p4m-"] {
+
+// OLD p4m Reset
+// [class*="p4m-"] {
+// New
+p4m-register, p4m-login, p4m-checkout {
     h1, h2, h3, h4, h5, h6 {
     	font-weight: 600 !important;
     	text-rendering: optimizeLegibility;
@@ -334,13 +346,13 @@
     cursor: pointer; 
     min-width: 100px;
     font-weight: bold;
-	.p4m-button-active {
+    @include transition;
+	&.p4m-button-active {
 	    background-color: #fff;
 	    color: #2aa54f;
 	    &:hover {
 		    background-color: #fff;
 		    color: #2aa54f;
-		    transition-duration: 0.5s;
 		}
 		&:active {
 		    background-color: rgba(255, 255, 255, 0.8);
@@ -356,7 +368,36 @@
 	&.disabled {
 	    background-color: rgba(100, 100, 100, 1.0);
 	}
+  &.white {
+    background-color: $p4m-green;
+    color: $white;
+    border: solid 2px $white;
+    i {
+        color: $white;
+        span {
+          border-color: $p4m-green;
+          color: $p4m-green;
+          background-color: $white;
+        }
+      }
+    &:hover {
+      background-color: $white;
+      border-color: $xpale-p4m-green;
+      color: $p4m-green;
+      i {
+        color: $p4m-green;
+        span {
+          border-color: $white;
+          color: $white;
+          background-color: $p4m-green;
+        }
+      }
+    }
+  }
 }
+
+
+
 
 
 .p4m-label { color: darkgreen }
@@ -373,4 +414,130 @@
 .corners-bottom-5px{
     @include border-radius-separate( 0, 0, 5px, 5px );
 }
+
+
+
+
+
+// Cart Instances
+
+i.p4micon-cart-empty {
+  font-size: 24px;
+  margin-right: 6px;
+  line-height: 16px;
+  position: relative;
+  span {
+    width: 14px;
+    height: 14px;
+    padding: 0 1px 1px 1px;
+    box-sizing: border-box;
+    letter-spacing: -.02em;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: $white;
+    background: $p4m-green;
+    border: 1px solid $white;
+    position: absolute;
+    right: -2px;
+    top: -6px;
+    @include border-radius(50%);
+  }
+}
+
+
+
+
+
+
+// Registration Widget
+
+
+#p4mRegisterContainer {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 8px;
+  .button-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .p4m-register-logo {
+    height: 80px;
+    align-self: center;
+    margin: 1em 0;
+  }
+  .p4m-register-title {
+    margin:auto;
+  }
+  div {
+    justify-content: center;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+  }
+  p {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    justify-content: center;
+    font-size: 13px;
+    margin: 0 0 .7em 0;
+  }
+  .p4m-register-explain {
+    display: flex;
+    flex-direction: column;
+  }
+  .p4m-register-top {
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    text-transform: uppercase;
+  }
+  .p4m-register-middle {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: $p4m-green;
+    color:#fff;
+    padding:10px;
+  }
+  .p4m-register-text {
+    text-align:center;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+  }
+  .p4m-register-text-link {
+    display: flex;
+    flex-direction: row;
+    margin: .6em auto 1.5em auto;
+    cursor: pointer;
+    a {
+      color: white;
+      margin-left: 4px;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+      @include transition;
+      &:hover {
+        border-bottom: 2px solid $white;
+      }
+    }
+  }
+  .p4m-button.p4m-register-button {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 10px 15px;
+    display: flex;
+  }
+}            
+      
+
+
+
+
+
 

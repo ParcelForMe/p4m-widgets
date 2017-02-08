@@ -19745,6 +19745,18 @@
 		"oAP": "\/p4m-address\/p4m-address-text.html",
 		"oF": 0
 		},
+	"\/p4m-address\/p4m-address.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-address\/p4m-address.html",
+		"oF": 0
+		},
+	"\/p4m-api\/p4m-api.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-api\/p4m-api.html",
+		"oF": 0
+		},
 	"\/p4m-card-list\/p4m-card-list.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19823,10 +19835,22 @@
 		"oAP": "\/p4m-cart\/p4m-cart.html",
 		"oF": 0
 		},
+	"\/p4m-checkout\/p4m-checkout.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-checkout\/p4m-checkout.html",
+		"oF": 0
+		},
 	"\/p4m-delivery\/p4m-delivery.html": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-delivery\/p4m-delivery.html",
+		"oF": 0
+		},
+	"\/p4m-discount-input\/p4m-discount-input.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-discount-input\/p4m-discount-input.html",
 		"oF": 0
 		},
 	"\/p4m-discount-list\/p4m-discount-list.html": {
@@ -19898,6 +19922,12 @@
 		"oAP": "\/p4m-profile\/peli-logo-grey.png",
 		"oF": 0,
 		"opt": 0
+		},
+	"\/p4m-purchase\/p4m-purchase.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-purchase\/p4m-purchase.html",
+		"oF": 0
 		},
 	"\/p4m-register\/logo-icon.png": {
 		"ft": 32768,
@@ -20228,6 +20258,34 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-shared\/fonts\/Lato-RegIta-webfont.woff",
+		"oF": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.eot": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.eot",
+		"oF": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.ttf": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.ttf",
+		"oF": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.woff": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.woff",
 		"oF": 0
 		},
 	"\/p4m-shared\/fonts\/SIL Open Font License 1.1.txt": {

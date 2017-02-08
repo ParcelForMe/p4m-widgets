@@ -10,16 +10,13 @@
             <div id="p4mRegisterContainer" class$="{{_topClass}}">
 
                 <div>
-                    <!-- <div class="corners-top-5px p4m-register-top" style="">
-                        <div class="p4m-register-title">Checkout with Parcel For Me</div>
-                    </div> -->
                     <div class="p4m-register-middle">
                         <div class="p4m-register-explain">
                             <img class="p4m-register-logo" src="./logo-stacked-white.png" id="peli-icon-header" />
                             <p><em>Your parcel delivered. First time, every time.</em></p>
                         </div>
-                        <div class="gotham_bookregular mobPaddingPosition">
-                            <button type="submit" on-tap="onSignUp" class="p4m-button p4m-button-active p4m-register-button">Sign In and continue to cart</button>
+                        <div class="mobPaddingPosition">
+                            <button type="submit" on-tap="onSignUp" class="p4m-button white p4m-button-active p4m-register-button"><i class="p4micon-cart-empty"><span class="cart-items-number noitems">2</span></i>Sign In and continue to cart</button>
                         </div>
                         <p class="p4m-register-text-link">Don't have an account? <a on-click="requestLogin">Sign up</a></p>
                     </div>
@@ -29,89 +26,6 @@
     </template>
 
 
-    <style> 
-
-        #p4mRegisterContainer {
-           display: flex;
-           flex-direction: column;
-           width: 300px;
-           padding: 8px;
-        }            
-      
-        .button-container {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .p4m-register-logo {
-            height: 72px;
-            align-self: center;
-            margin: 1em 0;
-        }
-
-        .p4m-register-title {
-            margin:auto;
-        }
-
-       #p4mRegisterContainer p {
-            color: rgba(255, 255, 255, 0.6);
-            text-align: center;
-            justify-content: center;
-            font-size: 13px;
-        }
-
-        .p4m-register-explain {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .p4m-register-top {
-            display: flex;
-            flex-direction: row;
-            padding: 8px;
-            text-transform: uppercase;
-            
-        }
-
-        .p4m-register-middle {
-            display: flex;
-            flex-direction: column;
-            background-color:#2aa54f;
-            color:#fff;
-            padding:10px;
-        }
-
-        .p4m-register-text {
-            text-align:center;
-            font-weight: 400;
-            font-style: italic;
-            font-size: 12px;
-        }
-
-        .p4m-register-text-link {
-            display: flex;
-            flex-direction: row;
-            margin: auto;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .p4m-register-text-link a {
-            color: white;
-        }
-
-        .p4m-button.p4m-register-button {
-            background-color: white;
-            color: #2aa54f;
-            width: 245px;
-            font-weight: 600;
-        }
-
-
-
-
-
-    </style>
 
     <script>
         // All this widget does is provide a btn that allows a consumer to register with P4M

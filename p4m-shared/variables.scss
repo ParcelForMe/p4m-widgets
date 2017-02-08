@@ -7,6 +7,7 @@
 // P4M green
 $p4m-green: #2aa54f;
 $pale-p4m-green: lighten(desaturate($p4m-green, 20%),8%);
+$xpale-p4m-green: lighten(desaturate($p4m-green, 20%),40%);
 $translucent-p4m-green: desaturate(rgba($p4m-green, .25), 20%);
 $translucent-p4m-green-light: desaturate(rgba($p4m-green, .1), 20%);
 
