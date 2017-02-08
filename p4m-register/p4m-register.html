@@ -12,6 +12,16 @@
                 <div>
                     <div class="p4m-register-middle">
                         <div class="p4m-register-explain">
+                            <div id="p4m-profile-container" class$="{{_topClass}}">
+                                <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
+                                <polymer-cookie id="p4mAvatarCookie" name="p4mAvatarUrl"></polymer-cookie>
+                                <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
+                                <!-- <img id="profileImage" src$="{{_profilePicUrl}}" />   -->
+                                <img id="profileImage" src="/lib/p4m-widgets/p4m-profile/peli-logo-grey.png" />
+                                <paper-spinner id="spinner"></paper-spinner>         
+                                <!-- <div id="profileName">{{_profileName}}</div> -->
+                                <div id="profileName">Mac DeMarco</div>
+                            </div>
                             <img class="p4m-register-logo" src="./logo-stacked-white.png" id="peli-icon-header" />
                             <p><em>Your parcel delivered. First time, every time.</em></p>
                         </div>

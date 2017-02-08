@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .p4m-green {
   background-color: #2aa54f !important; }
 
@@ -293,6 +294,9 @@ p4m-register p, p4m-login p, p4m-checkout p {
   font-size: 12px;
   margin: .5em 0; }
 
+.hidden {
+  display: none; }
+
 .p4m-button {
   margin: 10px;
   padding: 10px;
@@ -423,14 +427,72 @@ i.p4micon-cart-empty {
     -o-border-radius: 50%;
     border-radius: 50%; }
 
+#p4m-profile-container {
+  display: flex;
+  flex-direction: row; }
+  #p4m-profile-container #profileImage {
+    height: 44px;
+    border-radius: 44px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px; }
+  #p4m-profile-container #profileName {
+    font-size: 18px;
+    margin-top: 12px;
+    margin-right: 6px; }
+  #p4m-profile-container #profileImage.hide-image {
+    display: none; }
+  #p4m-profile-container #profileName.hide-name {
+    display: none; }
+  #p4m-profile-container #spinner {
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    top: 0;
+    left: 4px; }
+
 #p4mRegisterContainer {
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 300px;
   padding: 8px; }
   #p4mRegisterContainer .button-container {
     display: flex;
     flex-direction: row; }
+  #p4mRegisterContainer #p4m-profile-container {
+    position: absolute;
+    right: 15px;
+    top: 15px; }
+    #p4mRegisterContainer #p4m-profile-container #profileName {
+      display: block;
+      visibility: hidden;
+      opacity: 0;
+      margin-top: -24px;
+      margin-right: 0;
+      position: absolute;
+      background: rgba(51, 51, 51, 0.85);
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      white-space: nowrap;
+      -webkit-transition: 0.5s;
+      -khtml-transition: 0.5s;
+      -moz-transition: 0.5s;
+      -ms-transition: 0.5s;
+      -o-transition: 0.5s;
+      transition: 0.5s; }
+      #p4mRegisterContainer #p4m-profile-container #profileName:after {
+        content: "▼";
+        color: rgba(51, 51, 51, 0.85);
+        position: absolute;
+        bottom: -10px;
+        right: 50%;
+        margin-right: -6px;
+        font-size: 10px; }
+    #p4mRegisterContainer #p4m-profile-container:hover #profileName {
+      visibility: visible;
+      opacity: 1;
+      margin-top: -30px; }
   #p4mRegisterContainer .p4m-register-logo {
     height: 80px;
     align-self: center;
