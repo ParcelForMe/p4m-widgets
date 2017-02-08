@@ -355,6 +355,8 @@
 
             _getConsumer: function (callback) {
                 var self = this;
+                if (!callback)
+                    callback = function () { };
                 self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
                     if (!data.Success) {
                         callback(data.Error);
@@ -838,8 +840,9 @@
                 }
             },
 
-            onGotNewCard: function(){
-                this.$.p4mCheckoutApi.call('consumer', null, null, this.onConsumerData.bind(this));
+            onGotNewCard: function () {
+                this._getConsumer();
+                //this.$.p4mCheckoutApi.call('consumer', null, null, this.onConsumerData.bind(this));
             },
 
             onSelectAddress: function (e) {
