@@ -19929,22 +19929,6 @@
 		"oAP": "\/p4m-purchase\/p4m-purchase.html",
 		"oF": 0
 		},
-	"\/p4m-register\/logo-icon.png": {
-		"ft": 32768,
-		"iS": 3349,
-		"oA": 0,
-		"oAP": "\/p4m-register\/logo-icon.png",
-		"oF": 0,
-		"opt": 0
-		},
-	"\/p4m-register\/logo-stacked-white.png": {
-		"ft": 32768,
-		"iS": 3088,
-		"oA": 0,
-		"oAP": "\/p4m-register\/logo-stacked-white.png",
-		"oF": 0,
-		"opt": 0
-		},
 	"\/p4m-register\/p4m-register.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20314,6 +20298,22 @@
 		"oF": 0,
 		"oS": 0
 		},
+	"\/p4m-shared\/img\/logo-icon.png": {
+		"ft": 32768,
+		"iS": 3349,
+		"oA": 0,
+		"oAP": "\/p4m-shared\/img\/logo-icon.png",
+		"oF": 0,
+		"opt": 0
+		},
+	"\/p4m-shared\/img\/logo-stacked-white.png": {
+		"ft": 32768,
+		"iS": 3088,
+		"oA": 0,
+		"oAP": "\/p4m-shared\/img\/logo-stacked-white.png",
+		"oF": 0,
+		"opt": 0
+		},
 	"\/p4m-shared\/p4m.css": {
 		"aP": 1,
 		"bl": 0,
@@ -20415,7 +20415,7 @@
 "projectAttributes": {
 	"creationDate": 506490835,
 	"displayValue": "p4m-widgets",
-	"displayValueWasSetByUser": 0,
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-girlfriend"
 	},
 "projectSettings": {

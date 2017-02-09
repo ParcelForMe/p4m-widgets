@@ -341,7 +341,7 @@ p4m-register p, p4m-login p, p4m-checkout p {
         background-color: #fff; }
     .p4m-button.white:hover {
       background-color: #fff;
-      border-color: #bae1c6;
+      border-color: #a1d6b1;
       color: #2aa54f; }
       .p4m-button.white:hover i {
         color: #2aa54f; }
