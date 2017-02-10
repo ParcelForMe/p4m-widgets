@@ -554,3 +554,59 @@ i.p4micon-cart-empty {
     font-size: 14px;
     padding: 10px 15px;
     display: flex; }
+
+p4m-checkout #container {
+  width: 100%;
+  margin: auto;
+  padding-bottom: 8px; }
+
+p4m-checkout #panelContainer {
+  display: flex;
+  border-radius: 5px;
+  background-color: white; }
+
+p4m-checkout .topPanel {
+  width: 100%;
+  background-color: #2aa54f;
+  border: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 10px; }
+
+p4m-checkout .topPanel h4, p4m-checkout .topPanel h2 {
+  margin: 0px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: inline-block; }
+
+p4m-checkout .topPanel p4m-profile {
+  float: right;
+  margin-top: -8px; }
+
+p4m-checkout .panelContainer {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  display: flex;
+  flex-direction: row; }
+
+p4m-checkout .p4m-panel {
+  width: 50%;
+  min-height: 200px;
+  border: none; }
+
+p4m-checkout #detailPanel.p4m-panel {
+  width: 67%;
+  padding-right: 8px; }
+
+p4m-checkout #summaryPanel.p4m-panel {
+  width: 33%;
+  border-left: solid 1px #E0E0E0; }
+
+p4m-checkout:root {
+  --paper-tabs-selection-bar-color: red; }
+
+p4m-checkout #panelContainer > div {
+  transition: all 0.25s ease-in-out; }
+
+p4m-checkout .price {
+  color: darkgreen; }
