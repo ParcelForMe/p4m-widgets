@@ -5,11 +5,16 @@
 // Colour palette
 
 // P4M green
-$p4m-green: #2aa54f;
-$pale-p4m-green: lighten(desaturate($p4m-green, 20%),8%);
+$p4m-green: #37a553;
+$pale-p4m-green: lighten(desaturate($p4m-green, 10%),20%);
 $xpale-p4m-green: lighten(desaturate($p4m-green, 20%),33%);
 $translucent-p4m-green: desaturate(rgba($p4m-green, .25), 20%);
 $translucent-p4m-green-light: desaturate(rgba($p4m-green, .1), 20%);
+
+$p4m-green-100: #7bc78f;
+$p4m-green-300: #5fba76;
+$p4m-green-500: #37a553;
+$p4m-green-700: #2f8e47;
 
 .p4m-green {background-color: $p4m-green !important;}
 .pale-p4m-green {background-color: $pale-p4m-green !important;}
@@ -40,5 +45,5 @@ $black: #222;
 
 
 // Typography
-
+$p4m-heading-font: 'Lato', sans-serif;
 $p4m-font: 'Lato', sans-serif;

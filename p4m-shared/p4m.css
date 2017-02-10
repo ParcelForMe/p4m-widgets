@@ -1,15 +1,15 @@
 @charset "UTF-8";
 .p4m-green {
-  background-color: #2aa54f !important; }
+  background-color: #37a553 !important; }
 
 .pale-p4m-green {
-  background-color: #4bad68 !important; }
+  background-color: #7bc78f !important; }
 
 .translucent-p4m-green {
-  background-color: rgba(63, 144, 87, 0.25) !important; }
+  background-color: rgba(77, 143, 94, 0.25) !important; }
 
 .translucent-p4m-green-light {
-  background-color: rgba(63, 144, 87, 0.1) !important; }
+  background-color: rgba(77, 143, 94, 0.1) !important; }
 
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
@@ -257,7 +257,7 @@
   font-weight: 100;
   font-style: normal; }
 
-[p4m-register] > *, [p4m-login] > *, [p4m-checkout] > * {
+p4m-register, p4m-login, p4m-checkout {
   font-family: "Lato", sans-serif;
   font-size: 16px; }
 
@@ -297,6 +297,25 @@ p4m-register p, p4m-login p, p4m-checkout p {
 .hidden {
   display: none; }
 
+.flex-spacer {
+  display: flex;
+  flex: 1; }
+
+.font-weight-hairline {
+  font-weight: 100; }
+
+.font-weight-light {
+  font-weight: 200; }
+
+.font-weight-regular {
+  font-weight: 400; }
+
+.font-weight-bold {
+  font-weight: 600; }
+
+.font-weight-black {
+  font-weight: 700; }
+
 .p4m-button {
   margin: 10px;
   padding: 10px;
@@ -330,25 +349,25 @@ p4m-register p, p4m-login p, p4m-checkout p {
   .p4m-button.disabled {
     background-color: #646464; }
   .p4m-button.white {
-    background-color: #2aa54f;
+    background-color: #37a553;
     color: #fff;
     border: solid 2px #fff; }
     .p4m-button.white i {
       color: #fff; }
       .p4m-button.white i span {
-        border-color: #2aa54f;
-        color: #2aa54f;
+        border-color: #37a553;
+        color: #37a553;
         background-color: #fff; }
     .p4m-button.white:hover {
       background-color: #fff;
-      border-color: #a1d6b1;
-      color: #2aa54f; }
+      border-color: #b0d4b9;
+      color: #37a553; }
       .p4m-button.white:hover i {
-        color: #2aa54f; }
+        color: #37a553; }
         .p4m-button.white:hover i span {
           border-color: #fff;
           color: #fff;
-          background-color: #2aa54f; }
+          background-color: #37a553; }
 
 .p4m-label {
   color: darkgreen; }
@@ -415,7 +434,7 @@ i.p4micon-cart-empty {
     font-size: 10px;
     font-weight: 600;
     color: #fff;
-    background: #2aa54f;
+    background: #37a553;
     border: 1px solid #fff;
     position: absolute;
     right: -2px;
@@ -523,7 +542,7 @@ i.p4micon-cart-empty {
     display: flex;
     flex: 1;
     flex-direction: column;
-    background-color: #2aa54f;
+    background-color: #37a553;
     color: #fff;
     padding: 10px; }
   #p4mRegisterContainer .p4m-register-text {
@@ -555,58 +574,67 @@ i.p4micon-cart-empty {
     padding: 10px 15px;
     display: flex; }
 
-p4m-checkout #container {
-  width: 100%;
-  margin: auto;
-  padding-bottom: 8px; }
-
-p4m-checkout #panelContainer {
-  display: flex;
-  border-radius: 5px;
-  background-color: white; }
-
-p4m-checkout .topPanel {
-  width: 100%;
-  background-color: #2aa54f;
-  border: none;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  padding: 10px; }
-
-p4m-checkout .topPanel h4, p4m-checkout .topPanel h2 {
-  margin: 0px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  display: inline-block; }
-
-p4m-checkout .topPanel p4m-profile {
-  float: right;
-  margin-top: -8px; }
-
-p4m-checkout .panelContainer {
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-  display: flex;
-  flex-direction: row; }
-
-p4m-checkout .p4m-panel {
-  width: 50%;
-  min-height: 200px;
-  border: none; }
-
-p4m-checkout #detailPanel.p4m-panel {
-  width: 67%;
-  padding-right: 8px; }
-
-p4m-checkout #summaryPanel.p4m-panel {
-  width: 33%;
-  border-left: solid 1px #E0E0E0; }
-
-p4m-checkout:root {
-  --paper-tabs-selection-bar-color: red; }
-
-p4m-checkout #panelContainer > div {
-  transition: all 0.25s ease-in-out; }
-
-p4m-checkout .price {
-  color: darkgreen; }
+p4m-checkout {
+  /* Material Design color palette for P4M products */ }
+  p4m-checkout:root {
+    --paper-p4m-green-100: #7bc78f;
+    --paper-p4m-green-300: #5fba76;
+    --paper-p4m-green-500: #37a553;
+    --paper-p4m-green-700: #2f8e47; }
+  p4m-checkout .price {
+    color: darkgreen; }
+  p4m-checkout #container {
+    width: 100%;
+    margin: auto;
+    padding-bottom: 8px; }
+  p4m-checkout .topPanel {
+    display: flex;
+    flex: 1;
+    height: 64px;
+    background-color: #37a553;
+    color: #fff;
+    padding: 0 24px;
+    align-items: center;
+    align-content: center; }
+    p4m-checkout .topPanel img.p4m-register-logo {
+      width: 480px;
+      height: auto; }
+    p4m-checkout .topPanel h4, p4m-checkout .topPanel h2 {
+      margin: 0px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      display: inline-block;
+      font-family: "Lato", sans-serif;
+      font-weight: 200 !important;
+      font-size: 18px; }
+    p4m-checkout .topPanel p4m-profile > * {
+      display: flex; }
+    p4m-checkout .topPanel p4m-profile #profileName {
+      order: 1; }
+    p4m-checkout .topPanel p4m-profile #profileImage {
+      order: 2;
+      margin-left: 5px; }
+  p4m-checkout #panelContainer {
+    display: flex;
+    border-radius: 5px;
+    background-color: white; }
+    p4m-checkout #panelContainer > div {
+      -webkit-transition: all 0.1s ease-in-out 0s;
+      -khtml-transition: all 0.1s ease-in-out 0s;
+      -moz-transition: all 0.1s ease-in-out 0s;
+      -ms-transition: all 0.1s ease-in-out 0s;
+      -o-transition: all 0.1s ease-in-out 0s;
+      transition: all 0.1s ease-in-out 0s; }
+    p4m-checkout #panelContainer .p4m-panel {
+      width: 50%;
+      min-height: 200px;
+      border: none; }
+      p4m-checkout #panelContainer .p4m-panel paper-tabs {
+        background: #7bc78f;
+        color: #fff; }
+    p4m-checkout #panelContainer #detailPanel .p4m-panel {
+      width: 67%;
+      padding-right: 8px; }
+    p4m-checkout #panelContainer #summaryPanel .p4m-panel {
+      width: 33%;
+      border-left: solid 1px #E0E0E0; }

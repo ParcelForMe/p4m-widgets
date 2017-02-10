@@ -10,138 +10,138 @@
 // Icon Font
 
 @font-face {
-  font-family: 'p4m';
-  src:  url('fonts/p4m.eot?it9ffc');
-  src:  url('fonts/p4m.eot?it9ffc#iefix') format('embedded-opentype'),
-    url('fonts/p4m.ttf?it9ffc') format('truetype'),
-    url('fonts/p4m.woff?it9ffc') format('woff'),
-    url('fonts/p4m.svg?it9ffc#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'p4m';
+    src:  url('fonts/p4m.eot?it9ffc');
+    src:  url('fonts/p4m.eot?it9ffc#iefix') format('embedded-opentype'),
+      url('fonts/p4m.ttf?it9ffc') format('truetype'),
+      url('fonts/p4m.woff?it9ffc') format('woff'),
+      url('fonts/p4m.svg?it9ffc#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 [class^="p4micon-"], [class*=" p4micon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'p4m' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'p4m' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .p4micon-peli:before {
-  content: "\e900";
+    content: "\e900";
 }
 .p4micon-calendar:before {
-  content: "\e901";
+    content: "\e901";
 }
 .p4micon-schedule:before {
-  content: "\e902";
+    content: "\e902";
 }
 .p4micon-profile:before {
-  content: "\e903";
+    content: "\e903";
 }
 .p4micon-settings:before {
-  content: "\e904";
+    content: "\e904";
 }
 .p4micon-settings2:before {
-  content: "\e905";
+    content: "\e905";
 }
 .p4micon-logout:before {
-  content: "\e906";
+    content: "\e906";
 }
 .p4micon-like:before {
-  content: "\e907";
+    content: "\e907";
 }
 .p4micon-like-fill:before {
-  content: "\e908";
+    content: "\e908";
 }
 .p4micon-search:before {
-  content: "\e909";
+    content: "\e909";
 }
 .p4micon-chevron-down:before {
-  content: "\e90a";
+    content: "\e90a";
 }
 .p4micon-chevron-up:before {
-  content: "\e90b";
+    content: "\e90b";
 }
 .p4micon-chevron-left:before {
-  content: "\e90c";
+    content: "\e90c";
 }
 .p4micon-chevron-right:before {
-  content: "\e90d";
+    content: "\e90d";
 }
 .p4micon-subtract-circle:before {
-  content: "\e90e";
+    content: "\e90e";
 }
 .p4micon-add:before {
-  content: "\e90f";
+    content: "\e90f";
 }
 .p4micon-add-sml:before {
-  content: "\e910";
+    content: "\e910";
 }
 .p4micon-add-circle:before {
-  content: "\e911";
+    content: "\e911";
 }
 .p4micon-check:before {
-  content: "\e912";
+    content: "\e912";
 }
 .p4micon-check-circle:before {
-  content: "\e913";
+    content: "\e913";
 }
 .p4micon-check-square:before {
-  content: "\e914";
+    content: "\e914";
 }
 .p4micon-check-circle-fill:before {
-  content: "\e915";
+    content: "\e915";
 }
 .p4micon-delete:before {
-  content: "\e916";
+    content: "\e916";
 }
 .p4micon-delete-sml:before {
-  content: "\e917";
+    content: "\e917";
 }
 .p4micon-delete-circle:before {
-  content: "\e918";
+    content: "\e918";
 }
 .p4micon-refresh:before {
-  content: "\e919";
+    content: "\e919";
 }
 .p4micon-map-marker:before {
-  content: "\e91a";
+    content: "\e91a";
 }
 .p4micon-map-with-marker:before {
-  content: "\e91b";
+    content: "\e91b";
 }
 .p4micon-compass:before {
-  content: "\e91c";
+    content: "\e91c";
 }
 .p4micon-heart:before {
-  content: "\e91d";
+    content: "\e91d";
 }
 .p4micon-heart-fill:before {
-  content: "\e91e";
+    content: "\e91e";
 }
 .p4micon-cart-empty:before {
-  content: "\e91f";
+    content: "\e91f";
 }
 .p4micon-credit-card:before {
-  content: "\e920";
+    content: "\e920";
 }
 .p4micon-coupon:before {
-  content: "\e921";
+    content: "\e921";
 }
 .p4micon-coupon2:before {
-  content: "\e922";
+    content: "\e922";
 }
 .p4micon-paperclip:before {
-  content: "\e923";
+    content: "\e923";
 }
 
 
@@ -153,9 +153,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-BlaIta-webfont.eot');
     src: url('fonts/Lato-BlaIta-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-BlaIta-webfont.woff') format('woff'),
-         url('fonts/Lato-BlaIta-webfont.ttf') format('truetype'),
-         url('fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic') format('svg');
+    url('fonts/Lato-BlaIta-webfont.woff') format('woff'),
+    url('fonts/Lato-BlaIta-webfont.ttf') format('truetype'),
+    url('fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic') format('svg');
     font-weight: 800;
     font-style: italic;
 
@@ -165,9 +165,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-Bla-webfont.eot');
     src: url('fonts/Lato-Bla-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-Bla-webfont.woff') format('woff'),
-         url('fonts/Lato-Bla-webfont.ttf') format('truetype'),
-         url('fonts/Lato-Bla-webfont.svg#LatoBlack') format('svg');
+    url('fonts/Lato-Bla-webfont.woff') format('woff'),
+    url('fonts/Lato-Bla-webfont.ttf') format('truetype'),
+    url('fonts/Lato-Bla-webfont.svg#LatoBlack') format('svg');
     font-weight: 800;
     font-style: normal;
 
@@ -177,9 +177,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-BolIta-webfont.eot');
     src: url('fonts/Lato-BolIta-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-BolIta-webfont.woff') format('woff'),
-         url('fonts/Lato-BolIta-webfont.ttf') format('truetype'),
-         url('fonts/Lato-BolIta-webfont.svg#LatoBoldItalic') format('svg');
+        url('fonts/Lato-BolIta-webfont.woff') format('woff'),
+        url('fonts/Lato-BolIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-BolIta-webfont.svg#LatoBoldItalic') format('svg');
     font-weight: 600;
     font-style: italic;
 
@@ -189,9 +189,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-Bol-webfont.eot');
     src: url('fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-Bol-webfont.woff') format('woff'),
-         url('fonts/Lato-Bol-webfont.ttf') format('truetype'),
-         url('fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
+        url('fonts/Lato-Bol-webfont.woff') format('woff'),
+        url('fonts/Lato-Bol-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
     font-weight: 600;
     font-style: normal;
 
@@ -201,9 +201,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-RegIta-webfont.eot');
     src: url('fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-RegIta-webfont.woff') format('woff'),
-         url('fonts/Lato-RegIta-webfont.ttf') format('truetype'),
-         url('fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
+        url('fonts/Lato-RegIta-webfont.woff') format('woff'),
+        url('fonts/Lato-RegIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
     font-weight: 400;
     font-style: italic;
 
@@ -213,9 +213,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-Reg-webfont.eot');
     src: url('fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-Reg-webfont.woff') format('woff'),
-         url('fonts/Lato-Reg-webfont.ttf') format('truetype'),
-         url('fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
+        url('fonts/Lato-Reg-webfont.woff') format('woff'),
+        url('fonts/Lato-Reg-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
     font-weight: 400;
     font-style: normal;
 
@@ -225,9 +225,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-LigIta-webfont.eot');
     src: url('fonts/Lato-LigIta-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-LigIta-webfont.woff') format('woff'),
-         url('fonts/Lato-LigIta-webfont.ttf') format('truetype'),
-         url('fonts/Lato-LigIta-webfont.svg#LatoLightItalic') format('svg');
+        url('fonts/Lato-LigIta-webfont.woff') format('woff'),
+        url('fonts/Lato-LigIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-LigIta-webfont.svg#LatoLightItalic') format('svg');
     font-weight: 200;
     font-style: italic;
 
@@ -237,9 +237,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-Lig-webfont.eot');
     src: url('fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-Lig-webfont.woff') format('woff'),
-         url('fonts/Lato-Lig-webfont.ttf') format('truetype'),
-         url('fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
+        url('fonts/Lato-Lig-webfont.woff') format('woff'),
+        url('fonts/Lato-Lig-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
     font-weight: 200;
     font-style: normal;
 
@@ -249,9 +249,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-HaiIta-webfont.eot');
     src: url('fonts/Lato-HaiIta-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-HaiIta-webfont.woff') format('woff'),
-         url('fonts/Lato-HaiIta-webfont.ttf') format('truetype'),
-         url('fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic') format('svg');
+        url('fonts/Lato-HaiIta-webfont.woff') format('woff'),
+        url('fonts/Lato-HaiIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic') format('svg');
     font-weight: 100;
     font-style: italic;
 
@@ -261,9 +261,9 @@
     font-family: 'Lato';
     src: url('fonts/Lato-Hai-webfont.eot');
     src: url('fonts/Lato-Hai-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Lato-Hai-webfont.woff') format('woff'),
-         url('fonts/Lato-Hai-webfont.ttf') format('truetype'),
-         url('fonts/Lato-Hai-webfont.svg#LatoHairline') format('svg');
+        url('fonts/Lato-Hai-webfont.woff') format('woff'),
+        url('fonts/Lato-Hai-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Hai-webfont.svg#LatoHairline') format('svg');
     font-weight: 100;
     font-style: normal;
 
@@ -276,9 +276,9 @@
 // }
 
 // NEW p4m Reset
-[p4m-register] > *, [p4m-login] > *, [p4m-checkout] > * {
+p4m-register, p4m-login, p4m-checkout {
 	font-family: $p4m-font;
-    font-size: 16px;
+      font-size: 16px;
 }
 
 // OLD p4m Reset
@@ -334,9 +334,15 @@ p4m-register, p4m-login, p4m-checkout {
 
 // P4M Universal Styles
 
-.hidden {
-  display: none;
-}
+.hidden {display: none;}
+.flex-spacer {display: flex; flex: 1;}
+
+.font-weight-hairline {font-weight: 100;}
+.font-weight-light {font-weight: 200;}
+.font-weight-regular {font-weight: 400;}
+.font-weight-bold {font-weight: 600;}
+.font-weight-black {font-weight: 700;}
+
 
 // Buttons
 .p4m-button {
@@ -370,34 +376,34 @@ p4m-register, p4m-login, p4m-checkout {
 		}
 	}
 	&.disabled {
-	    background-color: rgba(100, 100, 100, 1.0);
+        background-color: rgba(100, 100, 100, 1.0);
 	}
-  &.white {
-    background-color: $p4m-green;
-    color: $white;
-    border: solid 2px $white;
-    i {
+    &.white {
+        background-color: $p4m-green;
         color: $white;
-        span {
-          border-color: $p4m-green;
-          color: $p4m-green;
-          background-color: $white;
+        border: solid 2px $white;
+        i {
+            color: $white;
+            span {
+                border-color: $p4m-green;
+                color: $p4m-green;
+                background-color: $white;
+            }
         }
-      }
-    &:hover {
-      background-color: $white;
-      border-color: $xpale-p4m-green;
-      color: $p4m-green;
-      i {
-        color: $p4m-green;
-        span {
-          border-color: $white;
-          color: $white;
-          background-color: $p4m-green;
+        &:hover {
+            background-color: $white;
+            border-color: $xpale-p4m-green;
+            color: $p4m-green;
+            i {
+                color: $p4m-green;
+                span {
+                    border-color: $white;
+                    color: $white;
+                    background-color: $p4m-green;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 
@@ -426,30 +432,30 @@ p4m-register, p4m-login, p4m-checkout {
 // Cart Instances
 
 i.p4micon-cart-empty {
-  font-size: 24px;
-  margin-right: 6px;
-  line-height: 16px;
-  position: relative;
-  span {
-    width: 14px;
-    height: 14px;
-    padding: 0 1px 1px 1px;
-    box-sizing: border-box;
-    letter-spacing: -.02em;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-    color: $white;
-    background: $p4m-green;
-    border: 1px solid $white;
-    position: absolute;
-    right: -2px;
-    top: -6px;
-    @include border-radius(50%);
-  }
+    font-size: 24px;
+    margin-right: 6px;
+    line-height: 16px;
+    position: relative;
+    span {
+        width: 14px;
+        height: 14px;
+        padding: 0 1px 1px 1px;
+        box-sizing: border-box;
+        letter-spacing: -.02em;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        color: $white;
+        background: $p4m-green;
+        border: 1px solid $white;
+        position: absolute;
+        right: -2px;
+        top: -6px;
+        @include border-radius(50%);
+    }
 }
 
 
@@ -458,32 +464,32 @@ i.p4micon-cart-empty {
 
 // Profile
 #p4m-profile-container {
-  display: flex;
-  flex-direction: row;
-  #profileImage {
-      height: 44px;
-      border-radius: 44px;
-      -webkit-border-radius: 22px;
-      -moz-border-radius: 22px;
-  }
-  #profileName {
-      font-size: 18px;
-      margin-top: 12px;
-      margin-right: 6px;
-  }
-  #profileImage.hide-image {
-      display: none;
-  }
-  #profileName.hide-name {
-      display: none;
-  }
-  #spinner {
-      width: 44px;
-      height: 44px;
-      position: absolute;
-      top: 0;
-      left: 4px;
-  }
+    display: flex;
+    flex-direction: row;
+    #profileImage {
+        height: 44px;
+        border-radius: 44px;
+        -webkit-border-radius: 22px;
+        -moz-border-radius: 22px;
+    }
+    #profileName {
+        font-size: 18px;
+        margin-top: 12px;
+        margin-right: 6px;
+    }
+    #profileImage.hide-image {
+        display: none;
+    }
+    #profileName.hide-name {
+        display: none;
+    }
+    #spinner {
+        width: 44px;
+        height: 44px;
+        position: absolute;
+        top: 0;
+        left: 4px;
+    }
 }
 
 
@@ -495,197 +501,221 @@ i.p4micon-cart-empty {
 
 
 #p4mRegisterContainer {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  width: 300px;
-  padding: 8px;
-  .button-container {
     display: flex;
-    flex-direction: row;
-  }
-  #p4m-profile-container {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    #profileName {
-      display: block;
-      visibility: hidden;
-      opacity: 0;
-      margin-top: -24px;
-      margin-right: 0;
-      position: absolute;
-      background: rgba(51, 51, 51, 0.85);
-      padding: 4px 8px;
-      border-radius: 10px;
-      font-size: 11px;
-      white-space: nowrap;
-      @include transition(.5s);
-      &:after {
-        content: "▼";
-        color: rgba(51, 51, 51, 0.85);
-        position: absolute;
-        bottom: -10px;
-        right: 50%;
-        margin-right: -6px;
-        font-size: 10px;
-      }
-    }
-    &:hover {
-      #profileName {
-        visibility: visible;
-        opacity: 1;
-        margin-top: -30px;
-      }
-    }
-  }
-  
-  .p4m-register-logo {
-    height: 80px;
-    align-self: center;
-    margin: 1em 0;
-  }
-  .p4m-register-title {
-    margin:auto;
-  }
-  div {
-    justify-content: center;
-    display: flex;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-  }
-  p {
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
-    justify-content: center;
-    font-size: 13px;
-    margin: 0 0 .7em 0;
-  }
-  .p4m-register-explain {
-    display: flex;
+    position: relative;
     flex-direction: column;
-  }
-  .p4m-register-top {
-    display: flex;
-    flex-direction: row;
+    width: 300px;
     padding: 8px;
-    text-transform: uppercase;
-  }
-  .p4m-register-middle {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    background-color: $p4m-green;
-    color:#fff;
-    padding:10px;
-  }
-  .p4m-register-text {
-    text-align:center;
-    font-weight: 400;
-    font-style: italic;
-    font-size: 12px;
-  }
-  .p4m-register-text-link {
-    display: flex;
-    flex-direction: row;
-    margin: .6em auto 1.5em auto;
-    cursor: pointer;
-    a {
-      color: white;
-      margin-left: 4px;
-      border-bottom: 2px solid transparent;
-      padding-bottom: 2px;
-      @include transition;
-      &:hover {
-        border-bottom: 2px solid $white;
-      }
+    .button-container {
+        display: flex;
+        flex-direction: row;
     }
-  }
-  .p4m-button.p4m-register-button {
-    font-weight: 400;
-    font-size: 14px;
-    padding: 10px 15px;
-    display: flex;
-  }
+    #p4m-profile-container {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        #profileName {
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            margin-top: -24px;
+            margin-right: 0;
+            position: absolute;
+            background: rgba(51, 51, 51, 0.85);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            white-space: nowrap;
+            @include transition(.5s);
+            &:after {
+                content: "▼";
+                color: rgba(51, 51, 51, 0.85);
+                position: absolute;
+                bottom: -10px;
+                right: 50%;
+                margin-right: -6px;
+                font-size: 10px;
+            }
+        }
+        &:hover {
+            #profileName {
+                visibility: visible;
+                opacity: 1;
+                margin-top: -30px;
+            }
+        }
+    }
+    
+    .p4m-register-logo {
+        height: 80px;
+        align-self: center;
+        margin: 1em 0;
+    }
+    .p4m-register-title {
+        margin:auto;
+    }
+    div {
+        justify-content: center;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+    }
+    p {
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        justify-content: center;
+        font-size: 13px;
+        margin: 0 0 .7em 0;
+    }
+    .p4m-register-explain {
+        display: flex;
+        flex-direction: column;
+    }
+    .p4m-register-top {
+        display: flex;
+        flex-direction: row;
+        padding: 8px;
+        text-transform: uppercase;
+    }
+    .p4m-register-middle {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: $p4m-green;
+        color:#fff;
+        padding:10px;
+    }
+    .p4m-register-text {
+        text-align:center;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 12px;
+    }
+    .p4m-register-text-link {
+        display: flex;
+        flex-direction: row;
+        margin: .6em auto 1.5em auto;
+        cursor: pointer;
+        a {
+            color: white;
+            margin-left: 4px;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            @include transition;
+            &:hover {
+                border-bottom: 2px solid $white;
+            }
+        }
+    }
+    .p4m-button.p4m-register-button {
+        font-weight: 400;
+        font-size: 14px;
+        padding: 10px 15px;
+        display: flex;
+    }
 }            
-     
-
+       
 
 
 
 // Checkout Widget
 
 p4m-checkout {
-  #container {
-    width: 100%;
-    margin: auto;
-    padding-bottom: 8px;
-  }
-  #panelContainer {
-      display: flex;
-      border-radius: 5px;
-      background-color: white;
-  }
-  .topPanel {
-      width: 100%;
-      background-color: $p4m-green;
-      border: none;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      padding: 10px;
-  }
-  .topPanel h4, .topPanel h2 {
-      margin: 0px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      display: inline-block;
-  }
 
-  .topPanel p4m-profile {
-      float: right;
-      margin-top: -8px;
-  }   
-  .panelContainer {
-      border-bottom-right-radius: 8px;
-      border-bottom-left-radius: 8px;
-      display: flex;
-      flex-direction: row;
-  }
+    /* Material Design color palette for P4M products */
 
-  .p4m-panel {
-      width: 50%; 
-      min-height: 200px;
-      border: none;
-  }
+    &:root {
+        --paper-p4m-green-100: #7bc78f;
+        --paper-p4m-green-300: #5fba76;
+        --paper-p4m-green-500: #37a553;
+        --paper-p4m-green-700: #2f8e47;
+    }
 
-  .p4m-panel#summaryPanel {
-     
-  }
+    .price {
+        color: darkgreen;
+    } 
 
-  #detailPanel.p4m-panel {
-      width: 67%;
-      padding-right: 8px;
-  }
-  #summaryPanel.p4m-panel {
-      width: 33%;
-      border-left: solid 1px #E0E0E0;
-  }
 
-  &:root {
-      --paper-tabs-selection-bar-color: red;
-  }
-  #panelContainer > div {
-      transition: all 0.25s ease-in-out;
-  }
+    #container {
+        width: 100%;
+        margin: auto;
+        padding-bottom: 8px;
+    }
+    
+    .topPanel {
+        display: flex;
+        flex: 1;
+        height: 64px;
+        background-color: $p4m-green;
+        color: $white;
+        padding: 0 24px;
+        align-items: center;
+        align-content: center;
+        img.p4m-register-logo {
+            width: 480px;
+            height: auto;
+        }
+        h4, h2 {
+            margin: 0px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: inline-block;
+            font-family: $p4m-heading-font;
+            font-weight: 200 !important;
+            font-size: 18px;
+        }
+        p4m-profile {
+            > * {
+                display: flex;
+            }
+            #profileName {
+                order: 1;
+            }
+            #profileImage {
+                order: 2;
+                margin-left: 5px;
+            }
+        }
+    }
 
-  .price {
-      color: darkgreen;
-  }    
- 
+    #panelContainer {
+        display: flex;
+        border-radius: 5px;
+        background-color: white;
+        > div {
+            @include transition();
+        }
+
+        .p4m-panel {
+            width: 50%; 
+            min-height: 200px;
+            border: none;
+            paper-tabs {
+                background: $pale-p4m-green;
+                color: $white;
+                .iron-selected {
+                    // background: darken($pale-p4m-green, 8%);
+                }
+            }
+        }
+
+        #detailPanel {
+            .p4m-panel {
+                width: 67%;
+                padding-right: 8px;
+            }
+        }
+
+        #summaryPanel {
+            .p4m-panel {
+                width: 33%;
+                border-left: solid 1px #E0E0E0;
+            } 
+        }
+    }  
+       
 }
-
-
 
 
 
