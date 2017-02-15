@@ -20,8 +20,7 @@
 <link href="../gfs-shared/gfs.css" rel="stylesheet" />
 
 <dom-module id="gfs-checkout">
-    <!--<link rel="import" type="css" href="custom.css">-->
-
+   
     <template>     
         <style>
 
@@ -89,13 +88,13 @@
                 width: 100%;
             }
 
-            #mainMapArea.showPreferredDroppoints #gfsMapCanvas {
+            #mainMapArea.showFavDroppoints #gfsMapCanvas {
                 width: 60%;
                 float: left;
             }
 
 
-            #mainMapArea.showPreferredDroppoints .preferredDroppoints {
+            #mainMapArea.showFavDroppoints .favDroppoints {
                 width: 37%;
                 float: right;
 
@@ -106,7 +105,7 @@
             }
 
             /* By default, show two columns of cards and no preferred droppoints zone*/
-            #mainDropPointListArea .preferredDroppoints {
+            #mainDropPointListArea .favDroppoints {
                display: none;          
             }
 
@@ -121,27 +120,27 @@
                 flex-wrap: wrap;        
             }
 
-            /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
-            #mainDropPointListArea.showPreferredDroppoints #dropPointList {
+            /* If .showFavDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
+            #mainDropPointListArea.showFavDroppoints #dropPointList {
                 width: 60%;
                 float: left;    
                 display: flex;
                 flex-direction: column;         
             }
 
-            #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
+            #mainDropPointListArea.showFavDroppoints .favDroppoints {
                 width: 37%;
                 float: right;   
                 overflow-x: hidden;    
                 display: block;        
             }
 
-            #mainDropPointListArea.showPreferredDroppoints gfs-droppoint {
+            #mainDropPointListArea.showFavDroppoints gfs-droppoint {
                 width: auto;  
                 min-height: 258px;      
             }
 
-            .preferredDroppoints h3 {
+            .favDroppoints h3 {
                 margin-top: -4px 10px;
                 font-size: 20px;
             }
@@ -150,7 +149,7 @@
                 xoverflow: hidden;
             }
 
-            #mainDropPointListArea .preferredDroppoints h3 {
+            #mainDropPointListArea .favDroppoints h3 {
                 margin-top: 4px 10px;
                 font-size: 20px;
             }
@@ -517,8 +516,8 @@
                         </div>
 
                         <div class="consumer-addresses">
-                            <template is="dom-repeat" items="{{_consumerAddresses}}">
-                                <gfs-location-button on-click="_onClickConsumerAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
+                            <template is="dom-repeat" items="{{_favAddresses}}">
+                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
                             </template>
 
                         </div>
@@ -548,7 +547,7 @@
                             </div>
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select="_onDroppointSelected" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDroppointSelected" show-shipping-options="true" button-type="tick"></gfs-droppoint>
                                 </div>
                             </div>
                             <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
@@ -561,16 +560,14 @@
                                         <paper-spinner active id="map-spinner"></paper-spinner>
                                     </div>
                                 </div>
-                                <template is="dom-if" if="{{_preferredDroppoints.length}}">
-                                    <div class="preferredDroppoints">
+                                <template is="dom-if" if="{{_favDropPoints.length}}">
+                                    <div class="favDroppoints">
                                         <h3>My Collection Points</h3>
-                                        <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint on-select="_onDroppointSelected" container-class="dp-mini-card" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                        <template id="mapFavDropPointList" is="dom-repeat" items="{{favDroppoints}}" sort="sortByDistance">
+                                            <gfs-droppoint on-droppoint-selected = "_onDroppointSelected" container-class="dp-mini-card" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </template>
-
-
                             </div>
                         </div>
 
@@ -584,14 +581,14 @@
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-select="_onDroppointSelected" disable-unchoose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-droppoint-selected="_onDroppointSelected" disable-unchoose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
 
-                                    <div class="preferredDroppoints">
+                                    <div class="favDroppoints">
                                         <h3>My Collection Points</h3>
-                                        <template id="listPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint on-select="_onDroppointSelected" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                        <template id="listFavDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
+                                            <gfs-droppoint on-droppoint-selected="_onDroppointSelected" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
@@ -630,7 +627,7 @@
 
         // set them here so you can access the home marker
         var geocoder = null;
-        var marker = null;
+        //var marker = null;
 
         // element registration
         Polymer({
@@ -651,11 +648,6 @@
 
                 gfsData: {
                     type: String
-                },
-
-                autoLoad: {
-                    type: Object,
-                    value: true
                 },
 
                 preselect: {
@@ -697,17 +689,17 @@
                     type: String //If 'calendar', shows calendar on startup
                 },
 
-                initialAddress: {
+                defaultAddress: { //initialAddress
                     type: String
                 },
-               
+               /*
                 defaultPostCode: {
                     type: String
                 },
 
                 defaultCountryCode: {
                     type: String
-                },
+                },*/
 
 
                 // ATTRIBUTES
@@ -742,7 +734,7 @@
                     type: String,
                     value: 'Standard Delivery'
                 },
-
+                
                 //If set, preselect this shipping method (if possible)
                 overrideShippingMethodId: {
                     type: String
@@ -780,18 +772,6 @@
                     type: String
                 },
 
-                //TODO: Investigate removing these
-                /*startingLatitude: {
-                	type: Number,
-                	value: 37.4220279
-                },
-
-                //TODO: Investigate removing these
-                startingLongitude: {
-                	type: Number,
-                	value: -122.0840677
-                },*/
-
                 startingZoomLevel: {
                     type: Number,
                     value: 14
@@ -801,6 +781,11 @@
                     type: String, //cheapestFirst, fastestFirst, expensiveFirst, slowestFirst
                     value: "cheapestFirst"
                 },
+
+
+                // PRIVATE PROPERTIES
+                //
+                // Do not modify these properties.
 
                 selectedServiceDetails: {
                     type: Object,
@@ -820,10 +805,6 @@
                     type: Array,
                     value: []
                 },
-
-                // PRIVATE PROPERTIES
-                //
-                // Do not modify these properties.
 
                 _postData: {
                     type: Object,
@@ -870,12 +851,12 @@
                     notify: true
                 },
 
-                _preferredDroppoints: {
+                _favDropPoints: {
                     type: Array,
                     value: []
                 },
 
-                _consumerAddresses: {
+                _favAddresses: {
                     type: Array,
                     value: [],
                     notify: true
@@ -943,8 +924,8 @@
             listeners: {
                 "datetoggleon": "_deliveryDateSelected",
                 "prevmonth": "_calendarMonthChanged",
-                "nextmonth": "_calendarMonthChanged",
-                "droppoint-selected": "_onDroppointSelected"
+                "nextmonth": "_calendarMonthChanged"
+                //"droppoint-selected": "_onDroppointSelected"
             },
 
             // METHODS
@@ -952,70 +933,17 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
+                /*
                 if (this.gfsData) {
                     this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
                     if (this.autoLoad) {
                         this.postGfsData(function () { });
                     }
-                }               
+                }  */             
             },
 
-            createPostData: function (config) {
-                var requiredFields = ['countryCode', 'Postcode', 'town', 'addressLines', 'contactEmail', 'recipientFirstName', 'recipientLastName', 'recipientTitle', 'cartValue'];
-                var missingFields = requiredFields.filter(function (f) {
-                    return (typeof (config[f]) == "undefined");
-                });
-                if (missingFields.length) {
-                    throw ("Missing fields: " + missingFields.toString());
-                }
-                else {
-                    var now = new Date();
-                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
- 
-                    this._postData = {
-                        "Request": {
-                            "DateRange": {
-                                "DateFrom": this._makeDateStr(now),
-                                "DateTo": this._makeDateStr(maxDate)
-                            },
-                            "Order": {
-                                "Transit": {
-                                    "Recipient": {
-                                        "Location": {
-                                            "CountryCode": {
-                                                "Code": config.countryCode,
-                                                "Encoding": "ccISO_3166_1_Alpha2"
-                                            },
-                                            "Postcode": config.Postcode,
-                                            "town": config.town,
-                                            "addressLineCollection": config.addressLines
-                                        },
-                                        "contactDetails": {
-                                            "Email": config.contactEmail
-                                        },
-                                        "Person": {
-                                            "firstName": config.recipientFirstName,
-                                            "lastName": config.recipientLastName,
-                                            "title": config.recipientTitle
-                                        }
-                                    }
-                                },
-                                "Value": {
-                                    "CurrencyCode": "GBP",
-                                    "Value": config.cartValue
-                                }
-                            },
-                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
-                            "Session": {
-                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
-                                "sessionID": ""
-                            }
-                        }
-                    }
-                }
-              
-            },
 
+            //eeeeeee
             postGfsData: function (callback) {
                 this._postReq(this._postData, callback);             
             },
@@ -1119,7 +1047,7 @@
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
-                            this._requestDroppointList(this._preferredDroppoints, (function (err) {
+                            this._requestDroppointList(this._favDropPoints, (function (err) {
                                 this._delayedInit.bind(self)();
                                 callback(err);
                             }).bind(this));
@@ -1188,30 +1116,35 @@
                 //this.postGfsData(callback);
             },
 
-            setGfsAddress: function (address) {
+            setGfsAddress: function (address, callback) {
                 console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                 this._postData.Request.Order.Transit.Recipient.Location = address;
+                if (callback && typeof (callback) == "function") {
+                    callback(null);
+                }
                 //this.postGfsData(callback);
             },
 
+            /*
             setGfsService: function(serviceId) {
                 setDeliveryMethod(serviceId);
-            },
+            },*/
 
-            setPreferredDroppoints: function (droppointList) {
-                this._preferredDroppoints = droppointList;//.filter(function (item) { return true });
-                this._processPreferredDroppoints();
+            setFavDropPoints: function (droppointList) {
+                this._favDropPoints = droppointList;
+                this._processFavDroppoints();
 
-                if (this._preferredDroppoints.length > 0) {
-                    this._showPreferredDroppoints();
+                if (this._favDropPoints.length > 0) {
+                    this._showFavDroppoints();
                 }
 
             },
 
-            setConsumerAddresses: function (addressList) {
+            setFavAddresses: function (addressList) {
                 //console.log("Setting consumer addresses", addressList);
-                this.set('_consumerAddresses', addressList);
+                this.set('_favAddresses', addressList);
             },
+
 
             requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
   
@@ -1228,6 +1161,204 @@
                 })
             },
 
+ 
+            init: function(config, selection, finalCallback) {
+                var requiredFields = [
+                    'countryCode',
+                    'postCode',
+                    'town',
+                    'addressLines',
+                    'contactEmail',
+                    'recipientFirstName',
+                    'recipientLastName',
+                    'recipientTitle',
+                    'cartValue',
+                    'deliveryPreferences',
+                    'favDropPoints',
+                    'favAddresses',
+                    'defaultAddress'
+                ];
+                var missingFields = requiredFields.filter(function (f) {
+                    return (typeof (config[f]) == "undefined");
+                });
+                if (missingFields.length) {
+                    throw ("Missing fields: " + missingFields.toString());
+                }
+                else {
+
+                    //==== Create post data
+                    var now = new Date();
+                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
+ 
+                    this._postData = {
+                        "Request": {
+                            "DateRange": {
+                                "DateFrom": this._makeDateStr(now),
+                                "DateTo": this._makeDateStr(maxDate)
+                            },
+                            "Order": {
+                                "Transit": {
+                                    "Recipient": {
+                                        "Location": {
+                                            "CountryCode": {
+                                                "Code": config.countryCode,
+                                                "Encoding": "ccISO_3166_1_Alpha2"
+                                            },
+                                            "Postcode": config.Postcode,
+                                            "town": config.town,
+                                            "addressLineCollection": config.addressLines
+                                        },
+                                        "contactDetails": {
+                                            "Email": config.contactEmail
+                                        },
+                                        "Person": {
+                                            "firstName": config.recipientFirstName,
+                                            "lastName": config.recipientLastName,
+                                            "title": config.recipientTitle || "Mr"
+                                        }
+                                    }
+                                },
+                                "Value": {
+                                    "CurrencyCode": "GBP",
+                                    "Value": config.cartValue
+                                }
+                            },
+                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
+                            "Session": {
+                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
+                                "sessionID": ""
+                            }
+                        }
+                    }
+
+                    //==== Set address data
+                    this.setFavDropPoints(config.favDropPoints); 
+                    this.setFavAddresses(config.favAddresses);
+                    this.defaultAddress = config.defaultAddress;
+
+                    //if everything has been preselected, preselect,
+                    if (false) {
+                        //TODO
+                        this.applySelection(selection);
+                        this.postGfsData(finalCallback);
+                    }
+                        //Otherwise auto-select address according to delivery preferences (if any)
+                    else {
+                        var self = this;
+                        this.runDeliveryAddressPreferences(config.deliveryPreferences, self.defaultAddress, function (err) {
+                            self.postGfsData(finalCallback);
+                        });
+                    }
+        
+                }
+            },
+
+            applySelection(selection) {
+
+                /*
+                    dropPointId
+                    deliveryMethodId
+                    addressId
+                    deliveryDate
+                */
+                if (selection.dropPointId) {
+                    this._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
+                }
+                else {
+                    this.setDeliveryMethod(deliveryMethodId, deliveryDate);
+                }
+                
+                /*
+                    //Re-select droppoint
+                    if (deliveryAddress.AddressType === "Collect") {
+                        self.$.gfsCheckoutWidget.chooseDropPointId(deliveryAddress.DropPointId || deliveryAddress.droppointId);
+                    }
+                    //Re-select chosen service
+                    if (self.cartData.ServiceId ) {
+                        self.$.gfsCheckoutWidget.updateDeliveryMethod(self.cartData.ServiceId);
+                    }
+                    else {
+                        self.preselectDeliveryMethod();
+                    }                                
+                */
+
+
+
+
+            },
+
+
+            //Select a delivery address based on the users preferences
+            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
+
+                //Select address based on preferences
+   
+                var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
+                if (!prefs || prefs.constructor !== Array) {
+                    console.log("runDeliveryAddressPreferences: using default", defaultPrefs);
+                    prefs = defaultPrefs;
+                }
+
+                //Preferred address
+                //Process a priority list of address preferences
+                var self = this;
+                var handlers = {
+                    "useMyDeliveryAddress": function (callback) { self.setGfsAddress(defaultAddress, callback); },
+                    "useMyDropPoints": function (callback) { self.selectNearestFavDroppoint(callback); },
+                    "useRetailerDropPoint": function (callback) { self.selectNearestDropPoint(callback); }
+                };
+                var handlerArray = [];
+                prefs.forEach(function (pref) {
+                    handlerArray.push(handlers[pref]);
+                });
+
+                function runHandler(index) {
+                    handler = handlerArray[index || 0];
+                    if (handler) {
+                        //console.log("Running handler", index);
+                        handler(function (err, data) {
+                            //console.log("Handler returned", err);
+                            if (err) {
+                                runHandler(index + 1);
+                            }
+                            else {
+                                finalCallback();
+                            }
+                        });
+                    }
+                    else {
+                        finalCallback();
+                        //console.log("Finished running handlers");
+                    }
+                }
+
+                runHandler(0);
+
+            },
+
+
+            selectNearestFavDropPoint: function(callback) {
+                if (this._favDropPoints.length) {
+                    callback(null, this._favDropPoints[0]);
+                }
+                else {
+                    callback("No favourite drop-points");
+                }
+            },
+
+            selectNearestDropPoint: function(callback) {
+                this.requestDropPointsByAddress(this.defaultAddress.Street1, this.defaultAddress.PostCode, null, function (dropPoints) {
+                    if (dropPoints && dropPoints.length) {
+                        var dropPoint = dropPoints[0];
+                        this._selectDropPoint(dropPointId, callback);
+                    }
+                    else {
+                        callback("No supported drop-points found");
+                    }
+                });
+            },
+
+            //This runs after the GFS requests have returned data
             _delayedInit: function () {
                 this._processInputData();
 
@@ -1237,7 +1368,7 @@
                     this._processAllDroppoints();
                 }
 
-                this.showPage_Standard(this.preselect);
+                this.showPage_Standard();
             },
 
             _processInputData: function () {
@@ -1319,7 +1450,7 @@
             _processAllDroppoints: function () {
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
-                this._processPreferredDroppoints();
+                this._processFavDroppoints();
                 this._indexDropPointProviders(this._data.dayDefinite);
                 this._indexDropPointProviders(this._data.nonDayDefinite);
             },
@@ -1350,17 +1481,17 @@
                 console.log(this._dropPoints);
             },
 
-            _processPreferredDroppoints: function()
+            _processFavDroppoints: function()
             {
                 //Now replace preferred items with real data
                 var self = this;
-                this._preferredDroppoints = this._preferredDroppoints.map(function (item) {
+                this._favDropPoints = this._favDropPoints.map(function (item) {
                     var existingItem = self._droppointById(null, item.droppointId);
                     if (existingItem) {
                         existingItem.selected = item.selected;
                     }
                     return existingItem || item;
-                });
+                }).sort(this.sortByDistance);
             },
             
             _makeMap: function () {
@@ -1718,9 +1849,9 @@
                 this._dropPointDetailsClass = "fade-out";
             },
 
-            _showPreferredDroppoints: function () {
-                this.$.mainMapArea.classList.add("showPreferredDroppoints");
-                this.$.mainDropPointListArea.classList.add("showPreferredDroppoints");
+            _showFavDroppoints: function () {
+                this.$.mainMapArea.classList.add("showFavDroppoints");
+                this.$.mainDropPointListArea.classList.add("showFavDroppoints");
                 var self = this;
                 this._resetMap(this._map);
             },
@@ -1765,11 +1896,13 @@
             */
 
             _openSelectedDropPointInfoWindow: function () {
-
+                console.warn("_openSelectedDropPointInfoWindow()");
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
                     var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
+                    
                     if (dp) {
-                        this._currentMarker = dp.marker;
+                        if (this._currentMarker == dp.marker) return;
+                        else this._currentMarker = dp.marker;
                     }
                     /*
                     else {
@@ -1783,10 +1916,8 @@
                     this.$.dropPointRadio.setAttribute('checked', 'true');
                     this._map.panTo(this._currentMarker.getPosition());
                     var self = this;
-                    window.setTimeout(function () {
-                        self._infoWindow.open(self._map, self._currentMarker);
-                        //self.$['infobox-droppoint'].select();
-                    }, 200);
+                    this._infoWindow.open(self._map, self._currentMarker);
+
                 }
             },
 
@@ -1794,6 +1925,7 @@
             //=== Received event from droppoint widget
             //Make this droppoint the 'selected' one, and open the info window
             _onDroppointSelected: function (e) {
+                console.warn("_onDroppointSelected()");
                 //if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppoint.droppointId) return; //Already selected
 
                 this._completeDropPointSelection(e.detail.droppoint.droppointId, e.detail.methodId);
@@ -1804,6 +1936,7 @@
 
             //==== Make this droppoint the 'selected' one
             _completeDropPointSelection(droppointId, methodId) {
+                console.warn("_completeDropPointSelection()");
                 var dp = this._droppointById(null, droppointId)            
                 this.set("_selectedDropPoint", dp);
                 this.set("_selectedDropPoint.selected", true);
@@ -1811,16 +1944,24 @@
                 this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
             },
 
+            _selectDropPoint(dropPointId) {
+                console.warn("_selectDropPoint()");
+                this._completeDropPointSelection(dropPointId, null)
+                this.$['infobox-droppoint'].select(); //This will trigger auto-selection of a shipping method
+                 //Next stop _onDroppointSelected() 
+            },
+
             //=== Select a drop point marker
             //Make it the 'selected' one
             //Select the infobox's gfs-droppoint widget.
             _selectDropPointMarker: function (marker) {
+                console.warn("_selectDropPointMarker()");
                 var dp = this._droppointById(null, marker.customData.droppointId);
-                this._completeDropPointSelection(dp.droppointId, null)
-                this.$['infobox-droppoint'].select();     //Next stop _onDroppointSelected()          
+                this._selectDropPoint(marker.customData.droppointId);
             },
 
             _unselectDropPoint: function () {
+                console.warn("_unselectDropPoint()");
                 if (this._selectedDropPoint) {
                     if (this._infoWindow) {
                         this._infoWindow.close();
@@ -1865,7 +2006,8 @@
                 }
             },
 
-            setMapHome: function(location) {
+            setMapHome: function (location) {
+                /*
                 var homeMarkerConfig = {
                     position: location,
                     map: this._map,
@@ -1874,7 +2016,7 @@
                     html: 'Home',
                     icon: this._getHomeIcon()
                 };
-                marker = new google.maps.Marker(homeMarkerConfig);
+                marker = new google.maps.Marker(homeMarkerConfig);*/
                 //this._map.setCenter(homeMarkerConfig.position);
             },
 
@@ -1899,11 +2041,11 @@
                     });
 
                 }
-                else if (this._consumerAddresses.length) {
-                    if (this._consumerAddresses[0].geoLocation.coordinates.latitude && this._consumerAddresses[0].geoLocation.coordinates.longitude) {
+                else if (this._favAddresses.length) {
+                    if (this._favAddresses[0].geoLocation.coordinates.latitude && this._favAddresses[0].geoLocation.coordinates.longitude) {
                         var geoLocation = {
-                            lat: this._consumerAddresses[0].geoLocation.coordinates.latitude,
-                            lng: this._consumerAddresses[0].geoLocation.coordinates.longitude
+                            lat: this._favAddresses[0].geoLocation.coordinates.latitude,
+                            lng: this._favAddresses[0].geoLocation.coordinates.longitude
                         };
                         this._panToGeoLocation(geoLocation);
                     }
@@ -2033,7 +2175,7 @@
                             if (oldDay > thisDay) {
                                 services[serviceItem.id].deliveryDate = day.deliveryDate;
                             }
-                            services[serviceItem.id].selected = services[serviceItem.id].selected || serviceItem.selected;//eeee Copy selection
+                            services[serviceItem.id].selected = services[serviceItem.id].selected || serviceItem.selected;
                         }
                     });
                 });
@@ -2094,7 +2236,7 @@
 
             //TODO: Change to use _originalShippingService.selected
             _preselectForStandard: function () {
-                debugger; //This function needs to change
+                //TODO This function needs to change
                 if (this.standardRates) {
                     //this.set('_selectedDropPoint', null);
                     this._unselectDropPoint();
@@ -2153,7 +2295,7 @@
             //Select a delivery service
             //TODO: Refactor?
            setDeliveryMethod: function (methodId, dateOverride) {
-
+                if (!methodId) return;
                 var newMethod = this._getDeliveryRateById(methodId);
                     if (!newMethod) {
                     console.error("Method not available");
@@ -2211,7 +2353,7 @@
                     }
                     //-----------------------
                     */
-                    //eeee
+ 
     
                     this.set('standardRates', this._getStandardServices());
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
@@ -2279,18 +2421,7 @@
 
 			onShowPage_Standard: function(preselect) {
 			    this.showingDroppoints = false;
-                //If preselect override,
-			    if (typeof (preselect) !== "undefined") {
-			        if (preselect) {
-			            this._preselectForStandard();
-			        }                   
-			    }
-			    else {
-			        if (this.preselect) {
-			            this._preselectForStandard();
-			        }
-			    }
-			    this.$.standardRatesTemplate.render();
+  			    this.$.standardRatesTemplate.render();
 			    //this.fire('show-standard');
 			},
 
@@ -2314,11 +2445,11 @@
 
 			},
 
-			_onClickConsumerAddress: function (e) {
+			_onClickFavAddress: function (e) {
 			    this._panToGeoLocation(e.currentTarget.geoLocation);
 			},
 
-			_onSelectPreferredDroppoint: function (dp) {
+			_onSelectFavDroppoint: function (dp) {
 			    var geoLocation = {
 			        lat: dp.currentTarget.droppointData.geoLocation.coordinates.latitude,
 			        lng: dp.currentTarget.droppointData.geoLocation.coordinates.longitude

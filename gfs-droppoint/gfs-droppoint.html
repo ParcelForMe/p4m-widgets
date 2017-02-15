@@ -649,16 +649,33 @@
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
 
-			        this.set("droppointData.deliveries." + i + ".selected", item.id === shippingOptionId);
+			        this.set("droppointData.deliveries." + i + ".selected", item.id == shippingOptionId); //IMPORTANT: Don't use === here
 
 			    }
 			    //this.fire('select-delivery-method', shippingOptionId);
 			    this.fire('droppoint-selected', { droppoint: this.droppointData, methodId: shippingOptionId });
 			},
 
+			getSelectedMethod: function () {
+			    var result = null;
+			    for (var i = 0; i < this.droppointData.deliveries.length; i++) {
+			        var item = this.droppointData.deliveries[i];
+			        if (item.selected) {
+			            result = item;
+			            break
+			        }
+			    }
+			    return result;
+
+			},
+
+            //Autoselect a method if no method has been chosen yet
 			autoSelectMethod: function() {
-			    if (this.droppointData.deliveries) {		        
-			        this.selectMethod(this.droppointData.deliveries[0].id);
+			    if (this.droppointData.deliveries) {
+			        if (!this.getSelectedMethod()) {
+			            this.selectMethod(this.droppointData.deliveries[0].id);
+			        }
+			        
 			    }
 			    else {
 			        console.error("No delivery options available");
