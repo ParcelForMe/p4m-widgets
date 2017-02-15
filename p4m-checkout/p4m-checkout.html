@@ -46,7 +46,7 @@
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" gfs-data="{{gfsData}}" preselect="false" auto-load="false" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-preselectedservice="onGfsServicePreselect" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" override-shipping-method-id="{{cartData.ServiceId}}" override-delivery-date="{{cartData.ExpDeliveryDate}}" default-post-code="{{initialPostCode}}" default-country-code="{{initialCountryCode}}"></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -57,7 +57,7 @@
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
                         </iron-page>
                         <iron-page id="addressPage">
-                            <p4m-address-list id="addressList" address-list-data="{{consumerData.Addresses}}" cart-data="{{cartData}}" on-select="onSelectAddress" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
+                            <p4m-address-list id="addressList" address-list-data="{{consumerData.Addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
                     </iron-pages>                 
                 </div>
@@ -367,60 +367,46 @@
             },
 
 
-            //Send all cart information to GFS
+            //Send all cart information to shipping plugin
             _updateGfs: function (callback) {
 
                 var self = this;
-                var gfsPostConfig = {
-                    countryCode: "",
-                    town: "",
-                    Postcode: "",
-                    addressLines: [],
-                    contactEmail: "",
-                    recipientFirstName: this.consumerData.FamilyName,
-                    recipientLastName: this.consumerData.GivenName,
-                    recipientTitle: this.consumerData.Title | "",
-                    cartValue: 0.0
-                };
-     
-                self.$.gfsCheckoutWidget.createPostData(gfsPostConfig);
 
                 var orderValue = 0.0;
                 self.cartData.Items.forEach(function (item) {
                     orderValue += item.Qty * item.Price;
                 });
-                self.$.gfsCheckoutWidget.setGfsOrderValue(orderValue);
-               
-                //Set preferred droppoints
-                var p4mDropPoints = self._getPreferredDropPoints();
-                self.$.gfsCheckoutWidget.setPreferredDroppoints(p4mDropPoints);
 
-                //Tell Gfs Checkout widget about our preferred addresses
-                var p4mConsumerAddresses = self._getPreferredAddresses(3);
-                self.$.gfsCheckoutWidget.setConsumerAddresses(p4mConsumerAddresses);
+                var gfsPostConfig = {
+                    countryCode: "",
+                    town: "",
+                    postCode: "",
+                    addressLines: [],
+                    contactEmail: "nocontact@nocontact.com",
+                    recipientFirstName: this.consumerData.FamilyName,
+                    recipientLastName: this.consumerData.GivenName,
+                    recipientTitle: this.consumerData.Title || "",
+                    favDropPoints: self._getPreferredDropPoints() || [],
+                    favAddresses: self._getPreferredAddresses(3) || [],
+                    defaultAddress: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)),
+                    cartValue: orderValue,
+                    deliveryPreferences: null
 
-                //Set service ID and name
-                var deliveryAddress = self.getAddressById(self.cartData.AddressId);
-                if (self.sessionId) {// && /*self.cartData.ServiceId &&*/ deliveryAddress.AddressType === "Address") {                   
-                    self.$.gfsCheckoutWidget.setGfsAddress(p4mAddressToGfsAddress(deliveryAddress)); 
+                };
+
+                //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
+                var selection = null;
+                if (!self.isNew) {
+                    selection = {
+                        dropPointId: self.getAddressById(self.cartData.AddressId).droppointId,
+                        deliveryMethodId: self.cartData.ServiceId,
+                        addressId: self.cartData.AddressId,
+                        //deliveryDate:
+                    }
                 }
+  
+                self.$.gfsCheckoutWidget.init(gfsPostConfig, selection, callback);
 
-                self.$.gfsCheckoutWidget.postGfsData(function (err, data) {
-
-                    //Re-select droppoint
-                    if (deliveryAddress.AddressType === "Collect") {
-                        self.$.gfsCheckoutWidget.chooseDropPointId(deliveryAddress.DropPointId || deliveryAddress.droppointId);
-                    }
-                    //Re-select chosen service
-                    if (self.cartData.ServiceId ) {
-                        self.$.gfsCheckoutWidget.updateDeliveryMethod(self.cartData.ServiceId);
-                    }
-                    else {
-                        self.preselectDeliveryMethod();
-                    }
-
-                    callback(err);
-                });
             },
 
             debug: function(e) {
@@ -435,6 +421,7 @@
                         callback(err);
                     }
                     else {
+                        self.isNew = data.isNew;
                         self.cartData = data.Cart;
                         callback(err, data.Cart);
                     }
@@ -583,7 +570,7 @@
                     }                  
                     else {
                         this.cartData = data.Cart;
-                        this.isNew = data.IsNew;
+                        this.isNew = data.isNew;
                         /*var address = this.getAddressById(this.cartData.AddressId);
                         if (address && address.AddressType == "Address") {
                             this.lastSelectedAddrId = data.Cart.AddressId;
@@ -634,7 +621,8 @@
                 if (!callback) {
                     throw "updateShippingService(): No callback";
                 }
-                if (this.updatingShipping) {
+                //if (this.updatingShipping) {
+                if (false) {
                     callback(null);
                 }
                 else {
@@ -646,6 +634,7 @@
                         this.currentService.expDeliveryDate === data.expDeliveryDate) {
                         console.log("Skipping upd service", this.currentService);
                         callback(null);
+                        this.updatingShipping = false;
                         return;
                     }
                     else {
@@ -837,27 +826,22 @@
                 this.$.p4mCheckoutApi.call('consumer', null, null, this.onConsumerData.bind(this));
             },
 
-            onSelectAddress: function (e) {
-                //TODO: Trigger POST to GFS
-                console.log("^^^ ADDRESS SELECTED");
+            onSelectAddressFromList: function (e) {
                 var self = this;
                 if (e.detail) {
-                    self.preselectDeliveryMethod();//eeeee
+                    //self.preselectDeliveryMethod();//eeeee
                     //If changed billing address, tell P4M
                     if (e.detail.isBilling && self.cartData.BillingAddressId != e.detail.id) {
                         self.set('cartData.BillingAddressId', e.detail.id);
                         self.updateP4mCart();
                     }
-                        //If changed delivery address, tell GFS and P4M
+                    //If changed delivery address, tell GFS and P4M
                     else if (e.detail.isDelivery && self.cartData.AddressId != e.detail.id) {
                         self.selectDeliveryAddress(e.detail.id, true, function (err) {
                             if (err) {
                                 console.error(err);
                             }
-                        });
-
-
-                        
+                        });                     
                     }
                 }
             },
@@ -890,7 +874,7 @@
                                 }
                             },
                             function _p4m(callback) {
-                                self.updateP4mCart();
+                                self.updateP4mCart(callback);
                             },
                         ],
                         function (err) {
@@ -961,7 +945,7 @@
                 });
 
             },
-
+            /*
             preselectDeliveryMethod: function () {
                 //Select delivery details based on selected address and user's preferences
                 if (!this.consumerData) throw "No consumer data"
@@ -987,54 +971,8 @@
                
 
             },
-
-            preselectAddress: function (finalCallback) {
-                //Select address based on preferences
-                console.log('preselectAddress()');
-                if (!this.consumerData) throw "No consumer data"
-                else if (!this.cartData) throw "No cart data";
-
-                var preferences = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
-                if (this.consumerData.DeliveryPreferences & this.consumerData.DeliveryPreferences !== "") {
-                    preferences = this.consumerData.DeliveryPreferences.split(',');
-                }
-
-                //Preferred address
-                //Process a priority list of address preferences
-                var self = this;
-                var handlers = {
-                    "useMyDeliveryAddress": function (callback) { self.selectPreferredAddress(callback); },
-                    "useMyDropPoints": function (callback) { self.selectPreferredDroppoint(callback); },
-                    "useRetailerDropPoint": function (callback) { self.selectSupportedDropPoint(callback); }
-                };
-                var handlerArray = [];
-                preferences.forEach(function (pref) {
-                    handlerArray.push(handlers[pref]);
-                });
-
-                function runHandler(index) {
-                    handler = handlerArray[index || 0];
-                    if (handler) {
-                        //console.log("Running handler", index);
-                        handler(function (err, data) {
-                            //console.log("Handler returned", err);
-                            if (err) {
-                                runHandler(index+1);
-                            }
-                            else {
-                                finalCallback();                            
-                            }
-                        });
-                    }
-                    else {
-                        finalCallback();
-                        //console.log("Finished running handlers");
-                    }
-                }
-
-                runHandler(0);
-                 
-            },
+*/
+  
 
             selectPreferredAddress: function (callback) {
                 //If there is a preferred delivery address, select that.
@@ -1045,57 +983,6 @@
                 }
                 else {
                     callback("No preferred address");
-                }
-            },
-
-            selectPreferredDroppoint: function(callback) {
-                //If there are preferred droppoint addresses, select the nearest.
-                //PRECONDITION: Consumer data and Cart data exists
-                //Returns: addressId/null depending on success/failure
-                console.log('selectPreferredDroppoint');
-                var self = this;
-                var preferredDroppoints = this._getPreferredDropPoints();
-
-                if (preferredDroppoints.length) {
-                    var nearestDroppoint = preferredDroppoints[0];
-                    //this.set('cartData.AddressId', nearestDroppoint.droppointId);
-                    this.selectCollectPoint(nearestDroppoint.providerName, nearestDroppoint.providerId, nearestDroppoint.droppointId, nearestDroppoint.geoLocation, function (err) {
-                        //self.updateP4mCart();
-                        callback(err, nearestDroppoint);
-                    });
-                }
-                else {
-                    callback("No preferred droppoints");
-                }
-            },
-
-            selectSupportedDropPoint: function (callback) {
-                //If there is a suitable shipping selector that can return droppoints, select the nearest to the preferred address
-                //PRECONDITION: Consumer data and Cart data exists, preferred address 
-                //Returns: addressId/null depending on success/failure
-                console.log('selectSupportedDroppoint');
-                var self = this;
-                if (this.$.gfsCheckoutWidget) {
-                    //Ask GFS Checkout for the supported droppoint closest to the preferred address
-                    if (this.consumerData.PrefDeliveryAddressId) {
-                        var preferredAddress = this.getAddressById(this.consumerData.PrefDeliveryAddressId);
-                        this.$.gfsCheckoutWidget.requestDropPointsByAddress(preferredAddress.Street1, preferredAddress.PostCode, null, function (dropPoints) {
-                            if (dropPoints && dropPoints.length) {
-                                var dropPoint = dropPoints[0];
-                                self.selectCollectPoint(dropPoint.providerName, dropPoint.providerId, dropPoint.droppointId, dropPoint.geoLocation, function (err) {
-                                    //self.updateP4mCart();
-                                    callback(err);
-                                });
-                            }
-                            else {
-                                callback("No supported collection points found");
-                            }
-                        });
-                    }
-
-                }
-                else {
-                    callback("No shipping handler to get droppoints");
                 }
             },
 
@@ -1110,12 +997,8 @@
                 return this.consumerData.Addresses
                     .filter(function (item, i) { return (item.AddressType == "Address") }) //Only addresses, not droppoints
                     .sort(function (a, b) { if (a.Id == preferredAddressId) { return -1; } else { return 1 } })
-                    .filter(function (item, i) { return (i < maxItems || 5) }) //Up to 3 addresses                   
+                    .filter(function (item, i) { return (i < (maxItems || 5)) }) //Up to 3 addresses                   
                     .map(p4mAddressToGfsDroppoint);
-            },
-
-            _onSelectTab: function (e) {
-
             },
 
             onGfsServiceChanged: function (e) {
@@ -1154,6 +1037,11 @@
             goToAddresses: function () {
                 this.selectedTab = this.Tabs.ADDRESS;
                 this.$.addressList.addNewAddress();
+            },
+
+            _onSelectTab: function (tab) {
+                //Tab changed
+                console.log(tab);
             }
         });
 
@@ -1208,7 +1096,7 @@
                     Code: item.CountryCode || "GB",
                     Encoding: "ccISO_3166_1_Alpha2"
                 },
-                Postcode: item.PostCode,// "SO40 7JF", //ViewBag.InitialPostCode,
+                Postcode: item.PostCode || "",// "SO40 7JF", //ViewBag.InitialPostCode,
                 town: item.City,
                 addressLineCollection: [item.Street1]
             };
