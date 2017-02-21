@@ -42,8 +42,8 @@
                 <p4m-profile mode="basic"></p4m-profile>
             </div>
 
-            <div id="panelContainer">
-                <div id="detailPanel" class="p4m-panel">                   
+            <div id="panelContainer" class="horizontal layout">
+                <div id="detailPanel" class="p4m-panel flex-2">                   
                     <paper-tabs selected="{{selectedTab}}" no-bar>
                         <paper-tab>My Order</paper-tab>
                         <paper-tab>Delivery Options</paper-tab>
@@ -70,7 +70,7 @@
                         </iron-page>
                     </iron-pages>                 
                 </div>
-                <div id="summaryPanel" class="p4m-panel smallSummary">
+                <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>  
                     <!-- BAZINALD - i have moved this to the footer
                     <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text> -->
