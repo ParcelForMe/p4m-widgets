@@ -65,14 +65,13 @@ gfs-checkout brick-calendar .day.chosen
     background-color: #29a54f !important;
 }
 
-gfs-checkout ul.separated li:first-child {
-	border-top: 1px solid lightgrey;
-}
+// gfs-checkout ul.separated li:first-child {
+// 	border-top: 1px solid lightgrey;
+// }
 
 gfs-checkout ul.separated li {
-	padding-bottom: 21px;
-	padding-top: 21px;
-	border-bottom: 1px solid lightgrey;
+	background: #f8f8f8;
+	height: 64px;
 }
 
 .info_box_img img {

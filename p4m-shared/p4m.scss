@@ -717,7 +717,10 @@ p4m-register, p4m-login, p4m-checkout {
     }
     p {
         font-size: 12px;
-        margin: .5em 0
+        margin: .5em 0;
+        &.lg {
+        	font-size: 16px;
+        }
     }
 }
 
@@ -1187,8 +1190,8 @@ p4m-checkout {
         li {
 	        display: flex;
         	label {
-		        margin-top: 5px;
-		        margin-left: 4px;
+		        // margin-top: 5px;
+		        // margin-left: 4px;
 		    }
 	    }
     }
@@ -1413,9 +1416,9 @@ p4m-checkout {
     ul.carrier-list:last-child {
         margin-bottom: 5px;
     }
-    li.gfsStd label, li.delivery-place label {
-        margin-top: 3px;
-    }
+    // li.gfsStd label, li.delivery-place label {
+    //     margin-top: 3px;
+    // }
     li.delivery-place label {
         margin-bottom: 0;
     }
@@ -1680,7 +1683,84 @@ p4m-checkout {
        
 }
 
+.gfs-checkout {
+	.gfsStd {
+		box-sizing: border-box;
+		padding: 0 15px;
+		p {
+			font-weight: 600;
+			margin: 3px 0;
+			&.price {
+				color: $p4m-green;
+			}
+			&.deliveryDateRange {
+				font-weight: 400;
+				color: $grey-hb;
+			}
+		}
+		i {
+			font-size: 24px;
+			color: $grey-h2;
+			&.checked {
+				color: $p4m-green;
+			}
+		}
+	}
+}
 
+gfs-calendar {
+	.gfs-calendar {
+		border: none !important;
+		.calendar-col {
+			// background: rgba(200,200,200,0.15);
+			&:nth-of-type(even) {
+				background: rgba(200,200,200,0.02);
+				.calendar-cell {
+					&:nth-of-type(even) {
+						background: rgba(200, 200, 200, 0.15);
+					}
+					&:nth-of-type(odd) {
+						// background: rgba(10,10,10,0.5);
+					}
+					&:nth-of-type(1) {
+						background: $p4m-green-100;
+						color: $white;
+						font-weight: 600;
+						text-transform: uppercase;
+					}
+				}
+			}
+			
+		}
+		.calendar-col {
+			&:nth-of-type(odd) {
+				background: rgba(200,200,200,0.05);
+				.calendar-cell {
+					&:nth-of-type(odd) {
+						background: rgba(220,220,220,0.25);
+					}
+					&:nth-of-type(even) {
+						// background: rgba(10,10,10,0.5);
+					}
+					&:nth-of-type(1) {
+						background: lighten($p4m-green-100, 8%);
+						color: $white;
+						font-weight: 600;
+						text-transform: uppercase;
+					}
+				}
+			}
+		}
+		.calendar-cell {
+			&:nth-of-type(even) {
+				background: rgba(200,200,200,0.02);
+			}
+			&:nth-of-type(odd) {
+				background: rgba(200,200,200,0.3);
+			}
+		}
+	}
+}
 
 
 

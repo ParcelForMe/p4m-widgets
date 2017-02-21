@@ -1,10 +1,10 @@
 ﻿
 <link rel="import" href="../../polymer/polymer.html" />
 
-<dom-module id="gfs-calendar">
+<dom-module id="gfs-calendar" class="horizontal layout center">
 
     <template>
-        <div id="calendar-body">
+        <div id="calendar-body" class="horizontal layout center">
             <div class="calendar-col calendar-delivery-label">
                 <div class="calendar-cell calendar-day-label">Time</div>               
                 <template is="dom-repeat" items="{{_deliveryLabels}}">
@@ -39,9 +39,6 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
-            border-top: 1px solid silver;
-            border-right: 1px solid silver;
-            border-left: 1px solid silver;
         }
 
         .calendar-col {
@@ -57,7 +54,6 @@
         .calendar-cell {
             height: 64px;
             width: auto;
-            border-bottom: solid silver 1px;
             display: flex;
             flex-direction: column;
             text-align: center;
@@ -66,7 +62,7 @@
 
         }
         .calendar-delivery-option.calendar-cell:hover {
-            background-color: silver;
+            background-color: $p4m-green-100;
         }
 
 

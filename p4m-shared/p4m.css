@@ -644,6 +644,8 @@ p4m-register h6, p4m-login h6, p4m-checkout h6 {
 p4m-register p, p4m-login p, p4m-checkout p {
   font-size: 12px;
   margin: .5em 0; }
+  p4m-register p.lg, p4m-login p.lg, p4m-checkout p.lg {
+    font-size: 16px; }
 
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea {
   display: block;
@@ -1037,9 +1039,6 @@ p4m-checkout {
     padding: 5px; }
     p4m-checkout ul li {
       display: flex; }
-      p4m-checkout ul li label {
-        margin-top: 5px;
-        margin-left: 4px; }
   p4m-checkout paper-input {
     padding: 0 0; }
   p4m-checkout paper-dropdown-menu paper-input-container {
@@ -1198,8 +1197,6 @@ p4m-checkout {
     margin-bottom: 10px; }
   p4m-checkout ul.carrier-list:last-child {
     margin-bottom: 5px; }
-  p4m-checkout li.gfsStd label, p4m-checkout li.delivery-place label {
-    margin-top: 3px; }
   p4m-checkout li.delivery-place label {
     margin-bottom: 0; }
   p4m-checkout #calendarPanel {
@@ -1400,3 +1397,45 @@ p4m-checkout {
     margin: 3px; }
   p4m-checkout p4m-cart input {
     margin: 3px !important; }
+
+.gfs-checkout .gfsStd {
+  box-sizing: border-box;
+  padding: 0 15px; }
+  .gfs-checkout .gfsStd p {
+    font-weight: 600;
+    margin: 3px 0; }
+    .gfs-checkout .gfsStd p.price {
+      color: #37a553; }
+    .gfs-checkout .gfsStd p.deliveryDateRange {
+      font-weight: 400;
+      color: #aaa; }
+  .gfs-checkout .gfsStd i {
+    font-size: 24px;
+    color: #c5c5c5; }
+    .gfs-checkout .gfsStd i.checked {
+      color: #37a553; }
+
+gfs-calendar .gfs-calendar {
+  border: none !important; }
+  gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) {
+    background: rgba(200, 200, 200, 0.02); }
+    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(even) {
+      background: rgba(200, 200, 200, 0.15); }
+    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(1) {
+      background: #7bc78f;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase; }
+  gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) {
+    background: rgba(200, 200, 200, 0.05); }
+    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell:nth-of-type(odd) {
+      background: rgba(220, 220, 220, 0.25); }
+    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell:nth-of-type(1) {
+      background: #98d3a7;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase; }
+  gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(even) {
+    background: rgba(200, 200, 200, 0.02); }
+  gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(odd) {
+    background: rgba(200, 200, 200, 0.3); }

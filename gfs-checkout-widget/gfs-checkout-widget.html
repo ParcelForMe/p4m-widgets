@@ -41,10 +41,8 @@
                     <div id="calendar-loading" class="loading">
                         <paper-spinner active id="calendar-spinner"></paper-spinner>
                     </div>
-                    <div class="pageContent">
-                        <div>
-                            <gfs-calendar id="calendar" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}" selected-delivery-date="{{overrideDeliveryDate}}" selected-shipping-method-id="{{overrideShippingMethodId}}"></gfs-calendar>
-                        </div>
+                    <div class="pageContent horizontal layout">
+                        <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}" selected-delivery-date="{{overrideDeliveryDate}}" selected-shipping-method-id="{{overrideShippingMethodId}}"></gfs-calendar>
                     </div>
  
                 </iron-page>
@@ -162,13 +160,15 @@
                     <div id="standard-loading" class="loading"><paper-spinner active id="standard-spinner"></paper-spinner></div>
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
-                            <li class="gfsStd">
-                                <input name="shipping_method" on-click="updateDeliveryOptionsEvent" type="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
+                            <li class="gfsStd horizontal layout center">
                                 <label for$="{{item.id}}">
-                                    <span class="methodname">{{item.methodTitle}}</span>
-                                    <span class="price">{{currencySymbol}}{{item.price}}</span>
-                                    <span>{{item.deliveryDateRange}}</span>
+                                    <p class="methodname lg">{{item.methodTitle}}</p>
+                                    <p class="price lg">{{currencySymbol}}{{item.price}}</p>
+                                    <p class="deliveryDateRange">{{item.deliveryDateRange}}</p>
                                 </label>
+                                <div class="flex"></div>
+                                <i name="shipping_method" on-click="updateDeliveryOptionsEvent" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="p4micon-check-circle link standard-delivery-selection"></i>
+                                <!-- <inputtype="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection " /> -->
                             </li>
                         </template>
                     </ul>
