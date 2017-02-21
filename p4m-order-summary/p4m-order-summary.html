@@ -21,11 +21,16 @@
                     <div class="p4m-cell detail-col">Tax</div>
                     <div class="p4m-cell cost-col">{{currencySymbol}}{{_tax}}</div>
                 </div>
+                <div class="p4m-row" id="coupon">
+                    <div class="p4m-cell detail-col">Coupon</div>
+                    <div class="p4m-cell cost-col"><p4m-discount-input on-discount="onDiscount"></p4m-discount-input>
+                    </div>
+                </div>
                 <div class="p4m-row" id="discount">
                     <div class="p4m-cell detail-col">Discount</div>
                     <div class="p4m-cell cost-col">&ndash;&nbsp;{{currencySymbol}}{{_discount}}</div>
                 </div>
-                <div class="p4m-row">
+                <div class="p4m-row total">
                     <div class="p4m-cell detail-col">Total</div>
                     <div class="p4m-cell cost-col">{{currencySymbol}}{{_total}}</div>
                 </div>
@@ -34,63 +39,6 @@
 
         </div>
     </template>
-
-    <style>
-        #p4mContainer {
-            width: 90%;
-            margin: auto;
-            position: relative;
-        }
-        #p4mContainer.loading .p4m-table .p4m-cell {
-            color: #D0D0D0;
-        }
-        .p4m-table {
-            display: flex;
-            flex-direction: column;
-        }
-        .p4m-row {
-            display: flex;
-            flex-direction: row;
-        }
-        
-        .p4m-row .header-col {
-            color: #404040;
-            width: 20%;
-            display: none;
-        }
-        
-
-        .p4m-row .detail-col {
-            width: 60%;
-            display: block;
-        }
-        .p4m-cell.cost-col {
-            width: 40%; 
-            text-align: right;         
-        }
-        .p4m-row .p4m-cell {
-            min-width: 0;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        #spinner {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            top: 65px;
-            left: 40%;
-            margin: auto;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-
-
-    </style>
 
     <script>
     //

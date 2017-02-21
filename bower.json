@@ -26,7 +26,8 @@
     "paper-input": "^1.1.22",
     "polymer": "~1.6.0",
     "polymer-cookie": "^1.0.3",
-    "vaadin-combo-box": "latest" 
+    "vaadin-combo-box": "latest",
+    "paper-listbox": "PolymerElements/paper-listbox#~1.1.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

@@ -38,12 +38,13 @@
                 <!-- Not using due to Variable font baselines screwing alignment across browsers, Including in logo image instead.
                 <h2>Checkout &amp; Delivery</h2> -->
                 <div class="flex-spacer"></div>
-                <div><span class="font-weight-light">Welcome,</span> <span id="profileName">Mac DeMarco</span></div>
+                <div><span class="font-weight-light">Welcome,</span> </div>
                 <p4m-profile mode="basic"></p4m-profile>
             </div>
+
             <div id="panelContainer">
                 <div id="detailPanel" class="p4m-panel">                   
-                    <paper-tabs selected="{{selectedTab}}">
+                    <paper-tabs selected="{{selectedTab}}" no-bar>
                         <paper-tab>My Order</paper-tab>
                         <paper-tab>Delivery Options</paper-tab>
                         <paper-tab>Payment Options</paper-tab>
@@ -70,12 +71,21 @@
                     </iron-pages>                 
                 </div>
                 <div id="summaryPanel" class="p4m-panel smallSummary">
-                    <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
-                    <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>  
-                    <p4m-discount-input on-discount="onDiscount"></p4m-discount-input>    
+                    <!-- BAZINALD - i have moved this to the footer
+                    <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text> -->
+                   
+                    
+                      
                 </div>
-            </div>           
+            </div> 
+
+            <footer id="footerpPanel" class="footerPanel">
+                <!-- BAZINALD - i have moved this from the  -->
+                <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
+                <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
+            </footer>
+
         </div>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
@@ -84,11 +94,13 @@
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
         -->
 
+        <style include="p4m-shared"></style>
+
 
     </template>
 
 
-    <style include="p4m-shared"></style>
+
 
 
     <script>

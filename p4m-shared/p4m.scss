@@ -1,4 +1,1271 @@
 ﻿
 // P4M Universal Styles
-@import 'universal.scss';
+
+@import 'variables.scss';
+@import 'css3.scss';
+
+
+
+
+// Icon Font
+
+@font-face {
+    font-family: 'p4m';
+    src:  url('fonts/p4m.eot?it9ffc');
+    src:  url('fonts/p4m.eot?it9ffc#iefix') format('embedded-opentype'),
+      url('fonts/p4m.ttf?it9ffc') format('truetype'),
+      url('fonts/p4m.woff?it9ffc') format('woff'),
+      url('fonts/p4m.svg?it9ffc#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="p4micon-"], [class*=" p4micon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'p4m' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.p4micon-peli:before {
+    content: "\e900";
+}
+.p4micon-calendar:before {
+    content: "\e901";
+}
+.p4micon-schedule:before {
+    content: "\e902";
+}
+.p4micon-profile:before {
+    content: "\e903";
+}
+.p4micon-settings:before {
+    content: "\e904";
+}
+.p4micon-settings2:before {
+    content: "\e905";
+}
+.p4micon-logout:before {
+    content: "\e906";
+}
+.p4micon-like:before {
+    content: "\e907";
+}
+.p4micon-like-fill:before {
+    content: "\e908";
+}
+.p4micon-search:before {
+    content: "\e909";
+}
+.p4micon-chevron-down:before {
+    content: "\e90a";
+}
+.p4micon-chevron-up:before {
+    content: "\e90b";
+}
+.p4micon-chevron-left:before {
+    content: "\e90c";
+}
+.p4micon-chevron-right:before {
+    content: "\e90d";
+}
+.p4micon-subtract-circle:before {
+    content: "\e90e";
+}
+.p4micon-add:before {
+    content: "\e90f";
+}
+.p4micon-add-sml:before {
+    content: "\e910";
+}
+.p4micon-add-circle:before {
+    content: "\e911";
+}
+.p4micon-check:before {
+    content: "\e912";
+}
+.p4micon-check-circle:before {
+    content: "\e913";
+}
+.p4micon-check-square:before {
+    content: "\e914";
+}
+.p4micon-check-circle-fill:before {
+    content: "\e915";
+}
+.p4micon-delete:before {
+    content: "\e916";
+}
+.p4micon-delete-sml:before {
+    content: "\e917";
+}
+.p4micon-delete-circle:before {
+    content: "\e918";
+}
+.p4micon-refresh:before {
+    content: "\e919";
+}
+.p4micon-map-marker:before {
+    content: "\e91a";
+}
+.p4micon-map-with-marker:before {
+    content: "\e91b";
+}
+.p4micon-compass:before {
+    content: "\e91c";
+}
+.p4micon-heart:before {
+    content: "\e91d";
+}
+.p4micon-heart-fill:before {
+    content: "\e91e";
+}
+.p4micon-cart-empty:before {
+    content: "\e91f";
+}
+.p4micon-credit-card:before {
+    content: "\e920";
+}
+.p4micon-coupon:before {
+    content: "\e921";
+}
+.p4micon-coupon2:before {
+    content: "\e922";
+}
+.p4micon-paperclip:before {
+    content: "\e923";
+}
+.p4micon-list:before {
+  content: "\e924";
+}
+
+
+
+
+// Typography
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-BlaIta-webfont.eot');
+    src: url('fonts/Lato-BlaIta-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Lato-BlaIta-webfont.woff') format('woff'),
+    url('fonts/Lato-BlaIta-webfont.ttf') format('truetype'),
+    url('fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic') format('svg');
+    font-weight: 800;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Bla-webfont.eot');
+    src: url('fonts/Lato-Bla-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Lato-Bla-webfont.woff') format('woff'),
+    url('fonts/Lato-Bla-webfont.ttf') format('truetype'),
+    url('fonts/Lato-Bla-webfont.svg#LatoBlack') format('svg');
+    font-weight: 800;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-BolIta-webfont.eot');
+    src: url('fonts/Lato-BolIta-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-BolIta-webfont.woff') format('woff'),
+        url('fonts/Lato-BolIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-BolIta-webfont.svg#LatoBoldItalic') format('svg');
+    font-weight: 600;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Bol-webfont.eot');
+    src: url('fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-Bol-webfont.woff') format('woff'),
+        url('fonts/Lato-Bol-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-RegIta-webfont.eot');
+    src: url('fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-RegIta-webfont.woff') format('woff'),
+        url('fonts/Lato-RegIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Reg-webfont.eot');
+    src: url('fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-Reg-webfont.woff') format('woff'),
+        url('fonts/Lato-Reg-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-LigIta-webfont.eot');
+    src: url('fonts/Lato-LigIta-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-LigIta-webfont.woff') format('woff'),
+        url('fonts/Lato-LigIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-LigIta-webfont.svg#LatoLightItalic') format('svg');
+    font-weight: 200;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Lig-webfont.eot');
+    src: url('fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-Lig-webfont.woff') format('woff'),
+        url('fonts/Lato-Lig-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-HaiIta-webfont.eot');
+    src: url('fonts/Lato-HaiIta-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-HaiIta-webfont.woff') format('woff'),
+        url('fonts/Lato-HaiIta-webfont.ttf') format('truetype'),
+        url('fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic') format('svg');
+    font-weight: 100;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Hai-webfont.eot');
+    src: url('fonts/Lato-Hai-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/Lato-Hai-webfont.woff') format('woff'),
+        url('fonts/Lato-Hai-webfont.ttf') format('truetype'),
+        url('fonts/Lato-Hai-webfont.svg#LatoHairline') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+
+// OLD p4m Reset
+// [class*="p4m-"] > * {
+//   font-family: $p4m-font;
+//     font-size: 16px;
+// }
+
+// NEW p4m Reset
+p4m-register, p4m-login, p4m-checkout {
+	font-family: $p4m-font;
+      font-size: 16px;
+}
+
+// OLD p4m Reset
+// [class*="p4m-"] {
+// New
+p4m-register, p4m-login, p4m-checkout {
+    h1, h2, h3, h4, h5, h6 {
+    	font-weight: 600 !important;
+    	text-rendering: optimizeLegibility;
+    	letter-spacing: -.02em;
+    }
+    h1 {
+        font-size: 24px;
+        margin: .5em 0
+    }
+    h2 {
+        font-size: 21px;
+        margin: .5em 0
+    }
+    h3 {
+        font-size: 18px;
+        margin: .5em 0
+    }
+    h4 {
+        font-size: 16px;
+        margin: .5em 0
+    }
+    h5 {
+        font-size: 14px;
+        margin: .5em 0
+    }
+    h6 {
+        font-size: 12px;
+        margin: .5em 0
+    }
+    p {
+        font-size: 12px;
+        margin: .5em 0
+    }
+}
+
+
+
+// Forms
+p4m-checkout {
+	[type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea {
+	    display: block;
+	    box-sizing: border-box;
+	    width: 100%;
+	    height: 36px;
+	    margin: 0;
+	    padding: 0 0.5rem;
+	    border: 1px solid #cacaca;
+	    border-radius: 0;
+	    background-color: #fefefe;
+	    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+	    font-family: inherit;
+	    font-size: 14px;
+	    font-weight: 400;
+	    color: #0a0a0a;
+	    transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+	    -webkit-appearance: none;
+	    -moz-appearance: none;
+	    appearance: none;
+	}
+	[type='submit']:not(.search-button), .button:not(.search-button) {
+	    display: inline-block;
+	    vertical-align: middle;
+	    margin: 0;
+	    padding: 0 1em;
+	    -webkit-appearance: none;
+	    border: 1px solid transparent;
+	    border-radius: 0;
+	    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+	    font-size: 14px;
+	    font-weight: 600;
+	    line-height: 34px;
+	    text-align: center;
+	    cursor: pointer;
+	    background-color: #1d80a2;
+	    color: #fefefe;
+	}
+}
+
+
+
+
+
+
+
+// P4M Universal Styles
+
+.hidden {display: none;}
+.flex-spacer {display: flex; flex: 1;}
+.noscroll {xoverflow: hidden;}
+
+.font-weight-hairline {font-weight: 100;}
+.font-weight-light {font-weight: 200;}
+.font-weight-regular {font-weight: 400;}
+.font-weight-bold {font-weight: 600;}
+.font-weight-black {font-weight: 700;}
+
+
+// Buttons
+.p4m-button {
+    margin: 10px;
+    padding: 10px;
+    background: transparent;
+    color: #fff;
+    border-radius: 24px;
+    text-align: center;
+    border: solid 1px #fff;
+    cursor: pointer; 
+    min-width: 100px;
+    font-weight: bold;
+    @include transition;
+	&.p4m-button-active {
+	    background-color: #fff;
+	    color: #2aa54f;
+	    &:hover {
+		    background-color: #fff;
+		    color: #2aa54f;
+		}
+		&:active {
+		    background-color: rgba(255, 255, 255, 0.8);
+		    color: #2aa54f;
+		}
+		&.no {
+		    background-color: rgba(144, 68, 68, 1.0);
+		}
+		&.neutral {
+		    background-color: rgba(144, 144, 144, 1.0);
+		}
+	}
+	&.disabled {
+        background-color: rgba(100, 100, 100, 1.0);
+	}
+    &.white {
+        background-color: $p4m-green;
+        color: $white;
+        border: solid 2px $white;
+        i {
+            color: $white;
+            span {
+                border-color: $p4m-green;
+                color: $p4m-green;
+                background-color: $white;
+            }
+        }
+        &:hover {
+            background-color: $white;
+            border-color: $xpale-p4m-green;
+            color: $p4m-green;
+            i {
+                color: $p4m-green;
+                span {
+                    border-color: $white;
+                    color: $white;
+                    background-color: $p4m-green;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+.p4m-label { color: darkgreen }
+// used in the p4m-register widget 
+.corners-5px {
+	@include border-radius( 5px );
+}
+.corners-24px {
+	@include border-radius( 24px );
+}
+.corners-top-5px {
+    @include border-radius-separate( 5px, 5px, 0, 0 );
+}
+.corners-bottom-5px{
+    @include border-radius-separate( 0, 0, 5px, 5px );
+}
+
+
+
+
+
+// Cart Instances
+
+i.p4micon-cart-empty {
+    font-size: 24px;
+    margin-right: 6px;
+    line-height: 16px;
+    position: relative;
+    span {
+        width: 14px;
+        height: 14px;
+        padding: 0 1px 1px 1px;
+        box-sizing: border-box;
+        letter-spacing: -.02em;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        color: $white;
+        background: $p4m-green;
+        border: 1px solid $white;
+        position: absolute;
+        right: -2px;
+        top: -6px;
+        @include border-radius(50%);
+    }
+}
+
+
+
+
+
+// Profile
+#p4m-profile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    #profileImage {
+        height: 44px;
+        border-radius: 44px;
+        -webkit-border-radius: 22px;
+        -moz-border-radius: 22px;
+    }
+    #profileName {
+		font-size: 16px;
+		margin-top: 0;
+		margin-right: 0;
+		margin-left: 5px;
+    }
+    #profileImage.hide-image {
+        display: none;
+    }
+    #profileName.hide-name {
+        display: none;
+    }
+    #spinner {
+        width: 44px;
+        height: 44px;
+        position: absolute;
+        top: 0;
+        left: 4px;
+    }
+}
+
+
+
+
+
+
+// Registration Widget
+
+
+#p4mRegisterContainer {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 300px;
+    padding: 8px;
+    .button-container {
+        display: flex;
+        flex-direction: row;
+    }
+    #p4m-profile-container {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        #profileName {
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            margin-top: -24px;
+            margin-right: 0;
+            position: absolute;
+            background: rgba(51, 51, 51, 0.85);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            white-space: nowrap;
+            @include transition(.5s);
+            &:after {
+                content: "▼";
+                color: rgba(51, 51, 51, 0.85);
+                position: absolute;
+                bottom: -10px;
+                right: 50%;
+                margin-right: -6px;
+                font-size: 10px;
+            }
+        }
+        &:hover {
+            #profileName {
+                visibility: visible;
+                opacity: 1;
+                margin-top: -30px;
+            }
+        }
+    }
+    
+    .p4m-register-logo {
+        height: 80px;
+        align-self: center;
+        margin: 1em 0;
+    }
+    .p4m-register-title {
+        margin:auto;
+    }
+    div {
+        justify-content: center;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+    }
+    p {
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        justify-content: center;
+        font-size: 13px;
+        margin: 0 0 .7em 0;
+    }
+    .p4m-register-explain {
+        display: flex;
+        flex-direction: column;
+    }
+    .p4m-register-top {
+        display: flex;
+        flex-direction: row;
+        padding: 8px;
+        text-transform: uppercase;
+    }
+    .p4m-register-middle {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: $p4m-green;
+        color:#fff;
+        padding:10px;
+    }
+    .p4m-register-text {
+        text-align:center;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 12px;
+    }
+    .p4m-register-text-link {
+        display: flex;
+        flex-direction: row;
+        margin: .6em auto 1.5em auto;
+        cursor: pointer;
+        a {
+            color: white;
+            margin-left: 4px;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            @include transition;
+            &:hover {
+                border-bottom: 2px solid $white;
+            }
+        }
+    }
+    .p4m-button.p4m-register-button {
+        font-weight: 400;
+        font-size: 14px;
+        padding: 10px 15px;
+        display: flex;
+    }
+}            
+       
+
+
+
+// Checkout Widget
+
+p4m-checkout {
+
+    /* Material Design color palette for P4M products */
+
+    &:root {
+        --paper-p4m-green-100: #7bc78f;
+        --paper-p4m-green-300: #5fba76;
+        --paper-p4m-green-500: #37a553;
+        --paper-p4m-green-700: #2f8e47;
+    }
+
+    .price {
+        color: darkgreen;
+    } 
+
+    #container {
+        width: 100%;
+        margin: auto;
+        padding-bottom: 8px;
+    }
+
+    paper-tab.gfs-checkout {
+    	padding: 0 0;
+    }
+    
+    .topPanel {
+        display: flex;
+        flex: 1;
+        height: 64px;
+        background-color: $p4m-green;
+        color: $white;
+        padding: 0 24px;
+        align-items: center;
+        align-content: center;
+        img.p4m-register-logo {
+            width: 480px;
+            height: auto;
+        }
+        h4, h2 {
+            margin: 0px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: inline-block;
+            font-family: $p4m-heading-font;
+            font-weight: 200 !important;
+            font-size: 18px;
+        }
+        p4m-profile {
+            > * {
+                display: flex;
+            }
+            #profileName {
+                order: 1;
+            }
+            #profileImage {
+                order: 2;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    #panelContainer {
+        display: flex;
+        border-radius: 5px;
+        background-color: white;
+        > div {
+            @include transition();
+        }
+
+        .p4m-panel {
+            width: 50%; 
+            min-height: 320px;
+            border: none;
+            paper-tabs {
+                background: $pale-p4m-green;
+                color: $white;
+                font-weight: 600;
+                .iron-selected {
+                    // background: darken($pale-p4m-green, 8%);
+                }
+            }
+        }
+
+        gfs-checkout#gfsCheckoutWidget {
+            paper-tabs {
+                background: $grey-h10;
+                color: $grey-b6;
+                .iron-selected {
+                    background: rgba($p4m-green-100, .25);
+                }
+            }
+		}
+
+        #detailPanel {
+            .p4m-panel {
+                width: 67%;
+                padding-right: 8px;
+            }
+        }
+
+        #summaryPanel {
+            .p4m-panel {
+                width: 33%;
+                border-left: solid 1px #E0E0E0;
+            } 
+        }
+    } 
+
+
+    h3 {
+        margin-left: 0px;
+        clear: left;
+        margin-top: 0px;
+    }
+    div, span, h3, ul {
+        font-family: 'Lato', sans-serif;
+    }
+    .toggle-title {
+        width: 100%;
+        cursor: pointer;
+    }
+    .toggle-content {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .hidden {
+        display: none;
+        z-index: 0;
+    }
+    input[type=radio] {
+        margin-right: 4px;
+    }
+    ul {
+        padding: 5px;
+        li {
+	        display: flex;
+        	label {
+		        margin-top: 5px;
+		        margin-left: 4px;
+		    }
+	    }
+    }
+    paper-input {
+        padding: 0 0;
+    }
+
+    paper-dropdown-menu {
+    	iron-dropdown {
+    	}
+    	paper-input-container {
+    		padding: 0 !important;
+    		height: 36px;
+    		margin-top: -20px;
+    		.floated-label-placeholder {
+				
+    		}
+    	}
+    }
+
+    #mapTools {
+    	height: 48px;
+    }
+    
+
+    #mapContainer {
+        display: block;
+        position: relative;
+    }
+    #gfsMapCanvas {
+        height: 264px;
+        top: 0;
+        left: 0;
+    }
+    #gfsSidebar {
+        display: block;
+        width: 350px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    #mainMapArea {
+        width: 100%;
+    }
+    #mainMapArea.showPreferredDroppoints #gfsMapCanvas {
+        width: 60%;
+        float: left;
+    }
+    #mainMapArea.showPreferredDroppoints .preferredDroppoints {
+        width: 37%;
+        float: right;
+
+        height: 400px; /* same as map */
+        overflow-y: scroll;     
+        overflow-x: hidden;
+        display: block;  
+    }
+    /* By default, show two columns of cards and no preferred droppoints zone*/
+    #mainDropPointListArea .preferredDroppoints {
+       display: none;          
+    }
+    #mainDropPointListArea gfs-droppoint {
+        width: 368px;  
+        min-height: 258px;      
+    }
+    #mainDropPointListArea #dropPointList {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;        
+    }
+    /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
+    #mainDropPointListArea.showPreferredDroppoints #dropPointList {
+        width: 60%;
+        float: left;    
+        display: flex;
+        flex-direction: column;         
+    }
+    #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
+        width: 37%;
+        float: right;   
+        overflow-x: hidden;    
+        display: block;        
+    }
+    #mainDropPointListArea.showPreferredDroppoints gfs-droppoint {
+        width: auto;  
+        min-height: 258px;      
+    }
+    .preferredDroppoints h3 {
+        margin-top: -4px 10px;
+        font-size: 20px;
+    }
+    #mainDropPointListArea .preferredDroppoints h3 {
+        margin-top: 4px 10px;
+        font-size: 20px;
+    }
+    #locateme {
+        z-index: 2;
+        position: absolute;
+        opacity: 0.5;
+    }
+    #dropPointDetails {
+        position: absolute;
+        z-index: 1;
+    }
+    #droppoint_overlay {
+        background: rgba(0, 0, 0, 1);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 240px;
+        border-right: 1px solid #b9b9b9;
+        padding: 5px 15px 15px 15px;
+        /*font-family:gotham_bookregular;*/
+        color: silver;
+        float: left;
+        /*overflow-y: scroll;*/
+    }
+    #droppoint_overlay .dp-day-name {
+        color: white;
+    }
+    #droppoint_overlay_close {
+        position: absolute;
+        top: 32px;
+        right: 32px;
+        margin-top: -28px;
+        margin-right: -20px;
+    }
+    #droppoint_overlay gfs-checkout {
+        margin: auto;
+        width: 80%;
+    }
+    #droppoint-delivery-options {
+        clear: both;
+    }
+    .toggleDropPointsViewControls {
+    }
+    #mapTools, #listTools {
+        display: flex;
+        flex-direction: row;
+    }
+    #viewAsList, #viewAsMap {
+        padding-top: 16px;
+    }
+    .toggle-label {
+        display: inline-block;
+        font-size: 18px;
+        margin-right: 0.4em;
+    }
+    .fade-in {
+        opacity: 0.8;
+        transition: opacity 400ms ease-in;
+        z-index: 2;
+    }
+    .fade-out {
+        opacity: 0.0;
+        transition: opacity 400ms ease-in;
+        z-index: 0 !important;
+    }
+    #droppoint_info {
+        overflow-y: hidden;
+        a {
+        	&:visited, &:active {
+		        text-decoration: none;
+		        color: #29a54f;
+		        font-size: 11px;
+		        font-weight: bold;
+		    }
+        }
+    }
+    a.droppoint_info:hover {
+        text-decoration: underline;
+    }
+    .highlight {
+        color: #FFFFFF !important;
+        background-color: #90dca7 !important;
+    }
+    .toggle-content {
+        padding-left: 2px;
+    }
+    .cardList {
+        display: flex;
+        flex-direction: column;
+        height: 630px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    div.dark .open-late {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+    div#gfsMapCanvas .loading {
+        margin: auto;
+        width: 100px;
+        padding-top: 120px;
+    }
+    paper-spinner#map-spinner {
+        width: 100px;
+        height: 100px;
+    }
+    div.cardList .loading {
+        margin: auto;
+        width: 100px;
+        padding-top: 50px;
+    }
+    paper-spinner#list-spinner {
+        width: 100px;
+        height: 100px;
+    }
+    /* mp customization */
+    .dp-card-margin {
+        margin: 0 20px 0 0;
+    }
+    .dp-card-margin:nth-child(2n+1) {
+        margin-right: 0;
+    }
+    h3.carrier-name {
+        font-size: 20px;
+        margin: 0;
+    }
+    ul.carrier-list {
+        margin-bottom: 10px;
+    }
+    ul.carrier-list:last-child {
+        margin-bottom: 5px;
+    }
+    li.gfsStd label, li.delivery-place label {
+        margin-top: 3px;
+    }
+    li.delivery-place label {
+        margin-bottom: 0;
+    }
+    #calendarPanel {
+        padding: 15px;
+    }
+    span.gfsmethodname {
+        margin: 3px 0 0;
+    }
+    .toggle-content {
+        margin-top: 0;
+        /*padding: 10px 0 0 18px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;*/
+    }
+    .header {
+        padding: 0 10px;
+        line-height: 50px;
+    }
+    .header h3:hover {
+        cursor: pointer;
+    }
+    .header {
+        background: #fafafa;
+        margin: 0 0 15px;
+        padding-top: 5px;
+        border: 1px solid #fafafa;
+        box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
+    }
+    .header label h3 {
+        margin-bottom: 0;
+        padding: 0 0 0 5px;
+        display: inline-block;
+    }
+    div.header:last-child {
+        margin: 0;
+    }
+    .selected-radio-options {
+        transition: all .2s ease-in-out;
+        transform: scale(1.01);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        /*box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 4px -3px rgba(0, 0, 0, 0.2)*/
+    }
+    #gfsMapCanvas {
+        margin: 0 0 20px;
+        position: relative;
+    }
+    paper-spinner#standard-spinner {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        left: 50%;
+        margin-left: -50px;
+    }
+    paper-spinner#calendar-spinner {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        left: 50%;
+        margin-left: -50px;
+    }
+    paper-spinner#search-spinner {
+        width: 100px;
+        height: 100px;
+        margin-top: -50px;
+        margin-left: -50px;
+        top: 50%;
+        left: 50%;
+    }
+    .search-postcode-wrap {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+    }
+    #droppointAddress {
+    }
+
+    #wrongPostcode { 
+        color: #d60000;
+    }
+    #errorNotification {
+        --paper-toast-background-color: red;
+        --paper-toast-color: white;
+    }
+    .search-button {
+        position: absolute;
+        right: 15px;
+        left: initial;
+        top: 17px;
+        color: #ccc;
+    }              
+    .consumer-addresses {
+        display: flex;
+        flex-direction: row;
+        width: 280px;
+    }  
+    .pageContent {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }    
+
+
+
+    // p4m-order-summary
+
+    #detailPanel {
+    	display: flex;
+    	flex: 2;
+    	flex-direction: column;
+    }
+
+    #summaryPanel{
+    	display: flex;
+    	flex: 1;
+    	flex-direction: column;
+    	background: $grey-h10;
+    }
+
+    footer {
+    	display: flex;
+    	flex: 1;
+    	flex-direction: row;
+    	border-top: 2px solid $grey-h6;
+    	p4m-order-text {
+    		flex: 2;
+    	}
+    	p4m-purchase {
+    		flex: 1;
+    	}
+    }
+
+
+	p4m-order-summary {
+		h4 {
+		    font-size: 16px;
+		    margin: 0;
+		    height: 48px;
+		    padding: 0 20px;
+		    display: flex;
+		    align-items: center;
+		    color: $white;
+		    background: $p4m-green-300;
+		    -webkit-font-smoothing: antialiased;
+		}
+	    #p4mContainer {
+	        margin: auto;
+	        position: relative;
+	        &.loading .p4m-table .p4m-cell {
+		        color: #D0D0D0;
+		    }
+	    }
+	    #p4mContainer
+	    .p4m-table {
+	        display: flex;
+	        flex-direction: column;
+	        padding: 20px;
+	        .p4m-row {
+				display: flex;
+				flex-direction: row;
+				line-height: 18px;
+				align-items: center;
+				.p4m-cell {
+					display: flex;
+					flex-direction: row;
+			        text-overflow: ellipsis;
+			        white-space: nowrap;
+			        overflow: hidden;
+			        &.detail-col {
+				        flex:1;
+				    }
+					&.cost-col {
+				        flex:2;
+				        justify-content: flex-end;    
+				    }
+				}
+				.header-col {
+			        color: #404040;
+			        width: 20%;
+			        display: none;
+			    }
+			    p4m-discount-input {
+				    #p4mDiscountInputError {
+			            color: red;
+			        }  
+			        #p4mDiscountInputError.success {
+			            color: green;
+			        }
+			        #content {
+			            display: flex;
+			            flex-direction: row;
+			            align-items: center;
+			        }
+			        #content #drawer {
+			            display: flex;
+			            flex-direction: row;
+			        }
+			        a.icon {
+						display: flex;
+						width: 24px;
+						align-self: stretch;
+						align-items: center;
+						justify-content: center;
+						font-size: 24px;
+						margin-left: 2px;
+						color: #999;
+						text-decoration: none;
+			        }
+			    }
+			    &.total {
+			    	line-height: 36px;
+			    	font-size: 18px;
+			    	font-weight: 600;
+			    }
+		    }
+	    }
+	    
+	    #spinner {
+	        width: 50px;
+	        height: 50px;
+	        position: absolute;
+	        top: 65px;
+	        left: 40%;
+	        margin: auto;
+	    }
+	    .hidden {
+	        display: none;
+	    }
+
+	}
+       
+}
+
+
+
+
+
+
 

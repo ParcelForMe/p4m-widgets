@@ -5,9 +5,13 @@
   <template>
     <style>
         :root {
+            --paper-tabs-selection-bar: inherit;
+            --paper-tabs-content: inherit;
+            --paper-tabs-container: inherit;
+
             --paper-tabs-selection-bar-color: #5fba76;
-            --paper-tab-ink: #ffffff;
-            --paper-tabs: pink;
+            --paper-tab-ink: var(--paper-p4m-green-700);
+            --paper-tabs: var(--paper-p4m-green-700);
 
             --paper-p4m-green-100: #7bc78f;
             --paper-p4m-green-300: #5fba76;
@@ -15,12 +19,13 @@
             --paper-p4m-green-700: #2f8e47;
 
         }
-        .iron-selected {
-            background: #5fba76;
-        }
         paper-ripple {
-        color: var(--paper-tab-ink, --paper-p4m-green-700);
-      }
+        color: var(--paper-p4m-green-700);
+        }
+        paper-tabs[no-bar] paper-tab.iron-selected {
+            color: $white;
+            background: var(--paper-p4m-green-300);
+        }
     </style>
   </template>
 </dom-module>

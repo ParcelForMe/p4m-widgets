@@ -8,6 +8,10 @@
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
 <link rel="import" href="../../iron-icons/iron-icons.html" />
+<link rel="import" href="../../iron-dropdown/iron-dropdown.html" />
+<link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html" />
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
 
 <link rel="import" href="../gfs-droppoint/gfs-droppoint.html" />
 <link rel="import" href="../gfs-droppoint/gfs-location-button.html" />
@@ -23,472 +27,11 @@
     <!--<link rel="import" type="css" href="custom.css">-->
 
     <template>     
-        <style>
-
-            h3 {
-                margin-left: 0px;
-                clear: left;
-                margin-top: 0px;
-            }
-
-            div, span, h3, ul {
-                font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
-            }
-
-            .toggle-title {
-                width: 100%;
-                cursor: pointer;
-            }
-
-            .toggle-content {
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-
-            .hidden {
-                display: none;
-                z-index: 0;
-            }
-
-            input[type=radio] {
-                margin-right: 4px;
-            }
-
-            ul {
-                padding: 5px;
-            }
-
-            li {
-                display: flex;
-            }
-
-            li label {
-                margin-top: 5px;
-                margin-left: 4px;
-            }
-
-            #mapContainer {
-                display: block;
-                position: relative;
-            }
-
-            #gfsMapCanvas {
-                height: 400px;
-                top: 0;
-                left: 0;
-            }
-
-            #gfsSidebar {
-                display: block;
-                width: 350px;
-                overflow-y: auto;
-                padding: 10px;
-            }
-
-            #mainMapArea {
-                width: 100%;
-            }
-
-            #mainMapArea.showPreferredDroppoints #gfsMapCanvas {
-                width: 60%;
-                float: left;
-            }
-
-
-            #mainMapArea.showPreferredDroppoints .preferredDroppoints {
-                width: 37%;
-                float: right;
-
-                height: 400px; /* same as map */
-                overflow-y: scroll;     
-                overflow-x: hidden;
-                display: block;  
-            }
-
-            /* By default, show two columns of cards and no preferred droppoints zone*/
-            #mainDropPointListArea .preferredDroppoints {
-               display: none;          
-            }
-
-            #mainDropPointListArea gfs-droppoint {
-                width: 368px;  
-                min-height: 258px;      
-            }
-
-            #mainDropPointListArea #dropPointList {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;        
-            }
-
-            /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
-            #mainDropPointListArea.showPreferredDroppoints #dropPointList {
-                width: 60%;
-                float: left;    
-                display: flex;
-                flex-direction: column;         
-            }
-
-            #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
-                width: 37%;
-                float: right;   
-                overflow-x: hidden;    
-                display: block;        
-            }
-
-            #mainDropPointListArea.showPreferredDroppoints gfs-droppoint {
-                width: auto;  
-                min-height: 258px;      
-            }
-
-            .preferredDroppoints h3 {
-                margin-top: -4px 10px;
-                font-size: 20px;
-            }
-
-            .noscroll {
-                xoverflow: hidden;
-            }
-
-            #mainDropPointListArea .preferredDroppoints h3 {
-                margin-top: 4px 10px;
-                font-size: 20px;
-            }
-
-            #locateme {
-                z-index: 2;
-                position: absolute;
-                opacity: 0.5;
-            }
-
-            #dropPointDetails {
-                position: absolute;
-                z-index: 1;
-            }
-
-            #droppoint_overlay {
-                background: rgba(0, 0, 0, 1);
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 240px;
-                border-right: 1px solid #b9b9b9;
-                padding: 5px 15px 15px 15px;
-                /*font-family:gotham_bookregular;*/
-                color: silver;
-                float: left;
-                /*overflow-y: scroll;*/
-            }
-
-            #droppoint_overlay .dp-day-name {
-                color: white;
-            }
-
-            #droppoint_overlay_close {
-                position: absolute;
-                top: 32px;
-                right: 32px;
-                margin-top: -28px;
-                margin-right: -20px;
-            }
-
-            #droppoint_overlay gfs-checkout {
-                margin: auto;
-                width: 80%;
-            }
-
-            #droppoint-delivery-options {
-                clear: both;
-            }
-
-            .toggleDropPointsViewControls {
-                display: flex;
-                margin: 0 0 20px auto;
-            }
-
-            #mapTools, #listTools {
-                display: flex;
-                flex-direction: row;
-            }
-
-            #viewAsList, #viewAsMap {
-                padding-top: 16px;
-            }
-
-
-
-            .toggle-label {
-                display: inline-block;
-                font-size: 18px;
-                margin-right: 0.4em;
-            }
-
-            .fade-in {
-                opacity: 0.8;
-                transition: opacity 400ms ease-in;
-                z-index: 2;
-            }
-
-            .fade-out {
-                opacity: 0.0;
-                transition: opacity 400ms ease-in;
-                z-index: 0 !important;
-            }
-
-            #droppoint_info {
-               
-                overflow-y: hidden;
-            }
-
-
-
-            #droppoint_info a,
-            #droppoint_info a:visited,
-            #droppoint_info a:active {
-                text-decoration: none;
-                color: #29a54f;
-                font-size: 11px;
-                /*font-family: 'gotham_bookregular';*/
-                font-weight: bold;
-
-            }
-
-            a.droppoint_info:hover {
-                text-decoration: underline;
-            }
-
-            .highlight {
-                color: #FFFFFF !important;
-                background-color: #90dca7 !important;
-            }
-
-            .toggle-content {
-                padding-left: 2px;
-            }
-
-            .cardList {
-                display: flex;
-                flex-direction: column;
-                height: 630px;
-                overflow-x: hidden;
-                overflow-y: scroll;
-            }
-
-            div.dark .open-late {
-                -webkit-filter: invert(1);
-                filter: invert(1);
-            }
-
-            div#gfsMapCanvas .loading {
-                margin: auto;
-                width: 100px;
-                padding-top: 120px;
-            }
-
-            paper-spinner#map-spinner {
-                width: 100px;
-                height: 100px;
-            }
-
-            div.cardList .loading {
-                margin: auto;
-                width: 100px;
-                padding-top: 50px;
-            }
-
-            paper-spinner#list-spinner {
-                width: 100px;
-                height: 100px;
-            }
-
-
-            /* mp customization */
-
-
-            .dp-card-margin {
-                margin: 0 20px 0 0;
-            }
-
-            .dp-card-margin:nth-child(2n+1) {
-                margin-right: 0;
-            }
-
-            h3.carrier-name {
-                font-size: 20px;
-                margin: 0;
-            }
-
-            ul.carrier-list {
-                margin-bottom: 10px;
-            }
-
-            ul.carrier-list:last-child {
-                margin-bottom: 5px;
-            }
-
-            li.gfsStd label, li.delivery-place label {
-                margin-top: 3px;
-            }
-
-            li.delivery-place label {
-                margin-bottom: 0;
-            }
-
-            #calendarPanel {
-                padding: 15px;
-            }
-
-  
-            span.gfsmethodname {
-                margin: 3px 0 0;
-            }
-
-            .toggle-content {
-                margin-top: 0;
-                /*padding: 10px 0 0 18px;
-                border-top: 1px solid #ccc;
-                border-bottom: 1px solid #ccc;*/
-            }
-
-            .header {
-                padding: 0 10px;
-                line-height: 50px;
-            }
-
-            .header h3:hover {
-                cursor: pointer;
-            }
-
-            .header {
-                background: #fafafa;
-                margin: 0 0 15px;
-                padding-top: 5px;
-                border: 1px solid #fafafa;
-                box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
-            }
-
-            .header label h3 {
-                margin-bottom: 0;
-                padding: 0 0 0 5px;
-                display: inline-block;
-            }
-
-            div.header:last-child {
-                margin: 0;
-            }
-
-            .selected-radio-options {
-                transition: all .2s ease-in-out;
-                transform: scale(1.01);
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                /*box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 4px -3px rgba(0, 0, 0, 0.2)*/
-            }
-            /*
-            .droppoint-margin {
-                margin-right: 20px;
-                position: relative;
-            }
-
-            .droppoint-margin:nth-child(2n+1) {
-                margin-right: 0;
-            }
-            */
-
-            #gfsMapCanvas {
-                margin: 0 0 20px;
-                position: relative;
-            }
-
-            paper-spinner#standard-spinner {
-                width: 100px;
-                height: 100px;
-                position: relative;
-                left: 50%;
-                margin-left: -50px;
-            }
-
-            paper-spinner#calendar-spinner {
-                width: 100px;
-                height: 100px;
-                position: relative;
-                left: 50%;
-                margin-left: -50px;
-            }
-
-            paper-spinner#search-spinner {
-                width: 100px;
-                height: 100px;
-                margin-top: -50px;
-                margin-left: -50px;
-                top: 50%;
-                left: 50%;
-            }
-
-            :root {
-                --paper-tabs-selection-bar-color: blue;
-            }
-
-            /*
-            #gfsMapCanvas-loading {
-                background: rgba(0, 0, 0, .8);
-                width: 100%;
-                height: 90%;
-                position: absolute;
-                z-index: 100;
-            }
-            */
-
-            .search-postcode-wrap {
-                position: relative;
-                display: flex;
-                flex-direction: row;
-            }
-
-            #droppointAddress {
-                display: inline-block;
-                margin-top: 10px;
-                margin-left: 10px;
-                margin-right: 2px;
-                padding: 0px 5px 0px 5px;
-                height: 32px;
-            }
-
-            #wrongPostcode { 
-                color: #d60000;
-            }
-
-            #errorNotification {
-                --paper-toast-background-color: red;
-                --paper-toast-color: white;
-            }
-
-            .search-button {
-                position: absolute;
-                left: 206px;
-                top: 18px;
-                opacity: 0.5;
-            }   
-            
-            paper-tab {
-                --paper-tabs-selection-bar-color: blue;
-            }  
-                        
-            .consumer-addresses {
-                display: flex;
-                flex-direction: row;
-                width: 280px;
-            }  
-            
-            .pageContent {
-                padding: 20px 10px 10px 10px;
-            }    
-
-        </style>
 
         <map-region-manager id="regionManager"></map-region-manager>
 
 		<div id="widgetContainer">          
-            <paper-tabs selected="{{selectedTab}}">             
+            <paper-tabs selected="{{selectedTab}}" no-bar>           
                 <paper-tab>{{calendarDeliveryTitle}}</paper-tab>
                 <paper-tab>Click and Collect</paper-tab>
                 <paper-tab>{{standardDeliveryTitle}}</paper-tab>
@@ -507,13 +50,18 @@
                 </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="mapTools" class="pageContent">
-                        <div class="header" style="display:none">
+                        <!-- <div class="header" style="display:none">
                             <h3>{{dropPointTitle}}</h3>
-                        </div>
-                      
-                        <div class="search-postcode-wrap">
-                            <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
-                            <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
+                        </div> -->
+
+                        <div class="toggleDropPointsViewControls">
+                            <template is="dom-if" if="{{_showingDroppointsList}}">
+                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a map</a>
+                            </template>
+                            <template is="dom-if" if="{{_showingDroppointsMap}}">
+                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView"><i class="p4micon p4micon-list"></i></a>
+                            </template>
+                           
                         </div>
 
                         <div class="consumer-addresses">
@@ -522,16 +70,26 @@
                             </template>
 
                         </div>
-
-                        <div class="toggleDropPointsViewControls">
-                            <template is="dom-if" if="{{_showingDroppointsList}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a map</a>
-                            </template>
-                            <template is="dom-if" if="{{_showingDroppointsMap}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a list</a>
-                            </template>
-                           
+                      
+                        <div class="search-postcode-wrap">
+                            <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
+                            <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
                         </div>
+
+                        <div><p>or</p></div>
+
+                        <div>
+                        <paper-dropdown-menu label="Dinosaurs" noink no-animations>
+                          <paper-listbox class="dropdown-content">
+                            <paper-item>allosaurus</paper-item>
+                            <paper-item>brontosaurus</paper-item>
+                            <paper-item>carcharodontosaurus</paper-item>
+                            <paper-item>diplodocus</paper-item>
+                          </paper-listbox>
+                        </paper-dropdown-menu>
+                        </div>
+                        
+
 
                     </div>
                     <div class="page" id="pageDroppoints">
@@ -619,7 +177,12 @@
         </div>
         <input type="text" value="{{_selectedDropPoint.droppointId}}" id="dropPointRadio" class="hidden" />
         <paper-toast id="errorNotification" class="fit-bottom"></paper-toast>
+
+        <style include="p4m-shared"></style>
+
     </template>
+
+
 
     <script>
         /* Warning message goes here */
