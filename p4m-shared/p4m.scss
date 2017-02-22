@@ -416,6 +416,7 @@ left: 0;
     font-variant: normal;
     text-transform: none;
     line-height: 1;
+    font-size: 24px;
 
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
@@ -533,7 +534,12 @@ left: 0;
 .p4micon-list:before {
   content: "\e924";
 }
-
+.p4micon-edit:before {
+  content: "\e925";
+}
+.p4micon-edit-circle:before {
+  content: "\e926";
+}
 
 
 //////////////////////////////////////////////////
@@ -722,6 +728,13 @@ p4m-register, p4m-login, p4m-checkout {
         	font-size: 16px;
         }
     }
+}
+
+ul.separated li {
+	background: #f8f8f8;
+	height: 64px;
+	box-sizing: border-box;
+	padding: 0 15px;
 }
 
 
@@ -1154,6 +1167,20 @@ p4m-checkout {
         }
 
         #summaryPanel {
+        	position: relative;
+        	&:before{
+        		content:'';
+        		height: 100%;
+        		width: 2px;
+        		background: rgba(235, 235, 235, 0.5);
+        		display: flex;
+        		flex-direction: column;
+        		flex: 1;
+        		position: absolute;
+        		left: 0;
+        		top: 0;
+        		z-index: 1;
+        	}
             .p4m-panel {
                 width: 33%;
                 border-left: solid 1px #E0E0E0;
@@ -1187,6 +1214,7 @@ p4m-checkout {
     }
     ul {
         padding: 5px;
+        margin: 0;
         li {
 	        display: flex;
         	label {
@@ -1737,7 +1765,7 @@ gfs-calendar {
 				background: rgba(200,200,200,0.05);
 				.calendar-cell {
 					&:nth-of-type(odd) {
-						background: rgba(220,220,220,0.25);
+						background: rgba(220,220,220,0.25	);
 					}
 					&:nth-of-type(even) {
 						// background: rgba(10,10,10,0.5);
@@ -1762,6 +1790,127 @@ gfs-calendar {
 	}
 }
 
+
+#p4m-address-list, p4m-address-list {
+	.add-address {
+    	padding: 5px;
+    	box-sizing: border-box;
+    	i {
+    		margin: 6px 15px 0 0;
+    		color: $grey-hb;
+    	}
+    }
+}
+p4m-address {
+    #container {
+        display: flex;
+        flex-direction: column;
+    }
+    .side-action {
+        float: right;
+    }
+    .side-action a {
+        color: white;
+    }
+    .address-actions {
+        display: flex;
+        flex-direction: row;
+    }
+    .address-actions a {
+        color: black;
+        margin: 4px;          
+    }
+    .address-content {
+    }
+    p {
+    	margin: 3px 0;
+    }
+    i {
+    	color: $grey-h2;
+    	margin-left: 6px;
+    	&.p4micon-map-marker {
+    		margin-left: 0;
+    		margin-right: 6px;
+    		color: $grey-b4;
+    	}
+    }
+    .toggle-button {
+        border-radius: 32px;
+        -webkit-border-radius: 32px;
+        -moz-border-radius: 32px;
+        cursor: grab;
+		padding: 0 8px;
+		margin-left: 6px;
+		background-color: $grey-h2;
+        color: $grey-b4;
+        height: 24px;
+        font-size: 12px;
+        i {
+        	color: $grey-b4;
+        }
+    }
+    .toggle-button.chosen {
+        background-color: $p4m-green;
+        color: $white;
+        i {
+        	color: $white;
+        }
+    }
+
+    .toggle-button.chosen iron-icon {
+        color: white;
+    }
+    .address-tag {
+        color: #D0D0D0;
+        letter-spacing: 3px;
+        text-transform: uppercase;   
+    }
+
+    .p4m-button {
+        padding: 10px;
+        background-color: #808080;
+        color: #000000;
+        border-radius: 4px;
+    }
+    .p4m-button.p4m-primary-button {
+        background-color: rgba(13, 165, 83, 0.8);
+        color: #000000;
+    }
+    .p4m-address-label {
+    	font-weight: 600;
+    }
+    .address-text {
+    	font-weight: 400;
+    	color: $grey-hb;
+    }
+    .address-form {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .address-form input {
+        margin: 4px;
+        width: 100%;
+        max-width: 100%;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: row;
+        padding: 8px;
+    }
+    .card-body.card-edit {
+        display: flex;
+        flex-direction: column;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+        padding: 4px;
+    }
+    #actions {
+    }
+}
 
 
 

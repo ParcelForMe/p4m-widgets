@@ -19551,6 +19551,16 @@
 		"oAP": "\/gfs-calendar\/gfs-calendar.html",
 		"oF": 0
 		},
+	"\/gfs-checkout-widget\/css\/custom-min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/gfs-checkout-widget\/css\/custom-min-min.css",
+		"oF": 0,
+		"oS": 0
+		},
 	"\/gfs-checkout-widget\/css\/custom.css": {
 		"aP": 1,
 		"bl": 0,
@@ -20298,6 +20308,16 @@
 		"oAP": "\/p4m-shared\/fonts\/Lato-BolIta-webfont.woff",
 		"oF": 0
 		},
+	"\/p4m-shared\/fonts\/Lato-Hai-webfont 2.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/Lato-Hai-webfont 2.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
 	"\/p4m-shared\/fonts\/Lato-Hai-webfont.eot": {
 		"ft": 8192,
 		"oA": 2,
@@ -20464,34 +20484,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-shared\/fonts\/Lato-RegIta-webfont.woff",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/p4m.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/p4m.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/p4m.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/p4m.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/p4m.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/p4m.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/p4m.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/p4m.woff",
 		"oF": 0
 		},
 	"\/p4m-shared\/fonts\/SIL Open Font License 1.1.txt": {

@@ -394,6 +394,7 @@ body.fullbleed {
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  font-size: 24px;
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
@@ -508,6 +509,12 @@ body.fullbleed {
 
 .p4micon-list:before {
   content: "\e924"; }
+
+.p4micon-edit:before {
+  content: "\e925"; }
+
+.p4micon-edit-circle:before {
+  content: "\e926"; }
 
 @font-face {
   font-family: 'Lato';
@@ -646,6 +653,12 @@ p4m-register p, p4m-login p, p4m-checkout p {
   margin: .5em 0; }
   p4m-register p.lg, p4m-login p.lg, p4m-checkout p.lg {
     font-size: 16px; }
+
+ul.separated li {
+  background: #f8f8f8;
+  height: 64px;
+  box-sizing: border-box;
+  padding: 0 15px; }
 
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea {
   display: block;
@@ -1015,9 +1028,23 @@ p4m-checkout {
     p4m-checkout #panelContainer #detailPanel .p4m-panel {
       width: 67%;
       padding-right: 8px; }
-    p4m-checkout #panelContainer #summaryPanel .p4m-panel {
-      width: 33%;
-      border-left: solid 1px #E0E0E0; }
+    p4m-checkout #panelContainer #summaryPanel {
+      position: relative; }
+      p4m-checkout #panelContainer #summaryPanel:before {
+        content: '';
+        height: 100%;
+        width: 2px;
+        background: rgba(235, 235, 235, 0.5);
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1; }
+      p4m-checkout #panelContainer #summaryPanel .p4m-panel {
+        width: 33%;
+        border-left: solid 1px #E0E0E0; }
   p4m-checkout h3 {
     margin-left: 0px;
     clear: left;
@@ -1036,7 +1063,8 @@ p4m-checkout {
   p4m-checkout input[type=radio] {
     margin-right: 4px; }
   p4m-checkout ul {
-    padding: 5px; }
+    padding: 5px;
+    margin: 0; }
     p4m-checkout ul li {
       display: flex; }
   p4m-checkout paper-input {
@@ -1439,3 +1467,109 @@ gfs-calendar .gfs-calendar {
     background: rgba(200, 200, 200, 0.02); }
   gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.3); }
+
+#p4m-address-list .add-address, p4m-address-list .add-address {
+  padding: 5px;
+  box-sizing: border-box; }
+  #p4m-address-list .add-address i, p4m-address-list .add-address i {
+    margin: 6px 15px 0 0;
+    color: #aaa; }
+
+p4m-address #container {
+  display: flex;
+  flex-direction: column; }
+
+p4m-address .side-action {
+  float: right; }
+
+p4m-address .side-action a {
+  color: white; }
+
+p4m-address .address-actions {
+  display: flex;
+  flex-direction: row; }
+
+p4m-address .address-actions a {
+  color: black;
+  margin: 4px; }
+
+p4m-address p {
+  margin: 3px 0; }
+
+p4m-address i {
+  color: #c5c5c5;
+  margin-left: 6px; }
+  p4m-address i.p4micon-map-marker {
+    margin-left: 0;
+    margin-right: 6px;
+    color: #555; }
+
+p4m-address .toggle-button {
+  border-radius: 32px;
+  -webkit-border-radius: 32px;
+  -moz-border-radius: 32px;
+  cursor: grab;
+  padding: 0 8px;
+  margin-left: 6px;
+  background-color: #c5c5c5;
+  color: #555;
+  height: 24px;
+  font-size: 12px; }
+  p4m-address .toggle-button i {
+    color: #555; }
+
+p4m-address .toggle-button.chosen {
+  background-color: #37a553;
+  color: #fff; }
+  p4m-address .toggle-button.chosen i {
+    color: #fff; }
+
+p4m-address .toggle-button.chosen iron-icon {
+  color: white; }
+
+p4m-address .address-tag {
+  color: #D0D0D0;
+  letter-spacing: 3px;
+  text-transform: uppercase; }
+
+p4m-address .p4m-button {
+  padding: 10px;
+  background-color: #808080;
+  color: #000000;
+  border-radius: 4px; }
+
+p4m-address .p4m-button.p4m-primary-button {
+  background-color: rgba(13, 165, 83, 0.8);
+  color: #000000; }
+
+p4m-address .p4m-address-label {
+  font-weight: 600; }
+
+p4m-address .address-text {
+  font-weight: 400;
+  color: #aaa; }
+
+p4m-address .address-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+
+p4m-address .address-form input {
+  margin: 4px;
+  width: 100%;
+  max-width: 100%; }
+
+p4m-address .card-body {
+  display: flex;
+  flex-direction: row;
+  padding: 8px; }
+
+p4m-address .card-body.card-edit {
+  display: flex;
+  flex-direction: column; }
+
+p4m-address .buttons {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  padding: 4px; }
