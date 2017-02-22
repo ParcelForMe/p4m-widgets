@@ -390,7 +390,10 @@
                     favAddresses: self._getPreferredAddresses(3) || [],
                     defaultAddress: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)),
                     cartValue: orderValue,
-                    deliveryPreferences: null
+                    addressPreferences: null,
+                    deliveryPreferences: {
+                        preferSoonest: this.consumerData.PreferSoonestDelivery
+                    }
 
                 };
 
@@ -747,7 +750,7 @@
                 }
                 else {
                     //TODO: Replace with selectDeliveryAddress?
-                    self.set('cartData.AddressId', existingDropPoint.Id); //collectPointAddress.Id;
+                    this.set('cartData.AddressId', existingDropPoint.Id); //collectPointAddress.Id;
                     result = existingDropPoint;
                     callback(null);
                 }
@@ -827,6 +830,13 @@
             },
 
             onSelectAddressFromList: function (e) {
+                this.selectDeliveryAddress(e.detail.id, function (err) {
+                    if (err) {
+                        console.error("onSelectAddressFromList():", err);
+                    }
+                });
+
+                /*
                 var self = this;
                 if (e.detail) {
                     //self.preselectDeliveryMethod();//eeeee
@@ -843,10 +853,22 @@
                             }
                         });                     
                     }
-                }
+                }*/
             },
 
-            selectDeliveryAddress: function (addressId, update, callback) {
+            selectDeliveryAddress: function (addressId, callback) {
+
+                var address = this.getAddressById(addressId);
+                if (!address) {
+                    callback("No such address");
+                    return false;
+                }
+                else {
+                    //Send to GFS Checkout and await shipping event
+
+                }
+
+                /*
                 var self = this;
                 var address = self.getAddressById(addressId);
                 if (!address) {
@@ -884,7 +906,7 @@
                     else {
                         callback(null);
                     }
-                }
+                }*/
 
 
             },

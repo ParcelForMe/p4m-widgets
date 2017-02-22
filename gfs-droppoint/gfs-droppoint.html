@@ -136,9 +136,9 @@
 				margin-bottom: 0px;
 			}
 
-				#dp-distance .fa {
-					margin-right: 0.2em;
-				}
+			#dp-distance .fa {
+				margin-right: 0.2em;
+			}
 
 			.choose-droppoint {
 				background-color: #555555;
@@ -412,19 +412,19 @@
                     <div class="shippingOptions">
                         <div class="dp-small-heading">Collection options</div>
                         <ul>
-                            <template id="shippingOptionsTemplate" is="dom-repeat" items="{{droppointData.deliveries}}" xsort="sortServices">
+                            <template id="shippingOptionsTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
                                 <li class="delivery-place">
 
                                     <input type="radio"
                                             name="shipping_method_{{_id}}"
                                             checked="{{item.selected}}"
-                                            value="{{item.id}}"
-                                            id="dp-{{item.id}}"
+                                            value="{{item.service.id}}"
+                                            id="dp-{{item.service.id}}"
                                             on-click="onClickOption"
                                             class="radio droppoint-delivery-selection" />
 
-                                    <label for$="dp-{{item.id}}">
-                                        <span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.price}}</span>&nbsp;{{item.methodTitle}}</span>
+                                    <label for$="dp-{{item.service.id}}">
+                                        <span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>&nbsp;{{item.service.methodTitle}}</span>
                                         <div>{{item.deliveryDateRange}}</div>
                                     </label>
                                 </li>
@@ -588,7 +588,7 @@
 
 			select: function() {
 			    this.set('droppointData.selected', true);
-			    this.autoSelectMethod();
+			    //this.autoSelectMethod();
                 
 			    //this.fire('droppoint-selected', this.droppointData);
 			},
@@ -645,15 +645,18 @@
             //Select a shipping option by ID
             //Fire on-select-delivery-option to be received by parent
             //Set deliveries[n].selected to true on selected method, false on all others
-			selectMethod: function (shippingOptionId) {            
+			selectMethod: function (shippingOptionId) {
+			    debugger;
+			    this.select();
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
 
-			        this.set("droppointData.deliveries." + i + ".selected", item.id == shippingOptionId); //IMPORTANT: Don't use === here
+			        this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
 
 			    }
-			    //this.fire('select-delivery-method', shippingOptionId);
-			    this.fire('droppoint-selected', { droppoint: this.droppointData, methodId: shippingOptionId });
+			    var method = this.getSelectedMethod();
+			    this.droppointData.deliveryMethod = method.service.id;
+			    this.fire('droppoint-selected', this.droppointData);
 			},
 
 			getSelectedMethod: function () {
