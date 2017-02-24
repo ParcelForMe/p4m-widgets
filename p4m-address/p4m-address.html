@@ -283,10 +283,12 @@
                     this.set('addressData.CountryCode', e.detail.value.value);
                 }               
             },
-            markAsBilling: function () { 
+            markAsBilling: function () {
+                //debugger;
                 //this.set('cartData.BillingAddressId', this.addressData.Id);    
                 if (this.cartData.BillingAddressId !== this.addressData.Id) {
                     this.isBilling = true;
+                    console.log("Marking as billing");
                     this.fire('select', { 'isBilling': true, 'id': this.addressData.Id });
                 }
             },
@@ -333,6 +335,7 @@
 
             updateUi: function()
             {
+                //debugger;
                 this.isBilling = (this.addressData && this.cartData && (this.cartData.BillingAddressId === this.addressData.Id));
                 if (this.isBilling) {
                     this.$.billingToggle.classList.add('chosen');

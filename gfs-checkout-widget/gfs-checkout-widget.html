@@ -605,7 +605,7 @@
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
                             <li class="gfsStd">
-                                <input name="shipping_method" on-click="setDeliveryMethodEvent" type="radio" checked="{{item._originalMethodObject.selected}}" value="{{item.service.id}}" id="{{item.service.id}}" class="radio standard-delivery-selection" />
+                                <input name="shipping_method" on-click="setDeliveryMethodEvent" type="radio" checked="{{item._originalMethodObject.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
                                 <label for$="{{item.id}}">
                                     <span class="methodname">{{item.methodTitle}}</span>
                                     <span class="price">{{currencySymbol}}{{item.price}}</span>
@@ -1124,14 +1124,22 @@
             },
 
             //Put the address value into the GFS post data
-            setGfsAddress: function (address, callback) {
+            //TODO: Rename
+            setGfsAddress: function (address, autoSelectDeliveryMethod, callback) {
 
                 if (typeof (callback) !== "function") {
                     callback = function(){};
                 }
                 console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                 this._postData.Request.Order.Transit.Recipient.Location = address;
-                this.autoSelectDeliveryMethod(callback);
+                if (autoSelectDeliveryMethod) {
+                    this.autoSelectDeliveryMethod(callback);
+                }
+                else callback(null);
+            },
+
+            getDeliveryAddress: function() {
+                return this._postData.Request.Order.Transit.Recipient.Location
             },
 
             /*
@@ -1325,6 +1333,23 @@
 
             },
 
+            //Assuming a delivery method has been chosen, choose a delivery address
+            autoSelectDeliveryAddress: function (serviceDetails) {
+                //If it's a standard delivery method, choose default fav address
+                //newSelectedServiceDetails
+                if (serviceDetails.serviceType.type == "dmStandard") {
+                    this.setGfsAddress(this.config.defaultAddress);
+                }
+                else {
+                    //If it's a droppoint delivery method....?
+                    //TODO
+                }
+
+
+
+               
+            },
+
             //Select a delivery address based on the users preferences
             runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
 
@@ -1340,7 +1365,7 @@
                 //Process a priority list of address preferences
                 var self = this;
                 var handlers = {
-                    "useMyDeliveryAddress": function (callback) { self.setGfsAddress(defaultAddress, callback); },
+                    "useMyDeliveryAddress": function (callback) { self.setGfsAddress(defaultAddress, true, callback); },
                     "useMyDropPoints": function (callback) { self.selectNearestFavDroppoint(callback); },
                     "useRetailerDropPoint": function (callback) { self.selectNearestDropPoint(callback); }
                 };
@@ -1442,9 +1467,12 @@
                         newSelectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
                         this.set('_selectedDropPoint.deliveryMethod', methodId);
                     }
-                    else if (this._selectedDropPoint) {
-                        this._unselectDropPoint();
-                        
+                    else {
+                        if (this._selectedDropPoint) {
+                            this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
+                            this.autoSelectDeliveryAddress(newMethod); //This is a reference to the original delivery method object                           
+                        }
+                        newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
                     }
                     this.set('selectedServiceDetails', newSelectedServiceDetails);
                     
