@@ -289,15 +289,15 @@
                 if (this.cartData.BillingAddressId !== this.addressData.Id) {
                     this.isBilling = true;
                     console.log("Marking as billing");
-                    this.fire('select', { 'isBilling': true, 'id': this.addressData.Id });
+                    this.fire('select-address', { 'isBilling': true, 'id': this.addressData.Id });
                 }
             },
 
             markAsDelivery: function () {
-                //debugger;
+                debugger;
                 if (this.cartData.AddressId !== this.addressData.Id) {
                     this.isDelivery = true;
-                    this.fire('select', { 'isDelivery': true, 'id': this.addressData.Id });
+                    this.fire('select-address', { 'isDelivery': true, 'id': this.addressData.Id });
                 }
             },
 

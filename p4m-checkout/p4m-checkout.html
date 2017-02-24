@@ -671,7 +671,6 @@
                                     });
                                 }
                                 else {
-                                    debugger;
                                     self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
                                         self.updateP4mCart(function (err) {
                                             self.updatingShipping = false;
@@ -822,7 +821,6 @@
 
 
                 //TODO: Must set billing address etc
-                debugger;
                 var self = this;
                 if (e.detail) {
                     //self.preselectDeliveryMethod();//eeeee
@@ -849,15 +847,22 @@
                 var address = this.getAddressById(addressId);
                 if (!address) {
                     callback("No such address");
-                    return false;
+                    //return false;
                 }
                 else {
                     //Send to GFS Checkout and await shipping event
-                    this.set('cartData.AddressId', addressId); //This allows the address UI to update
+                   
+
+                    //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
-                        alert('TODO: Ask GFS Checkout for new details');
+                        //alert('TODO: Ask GFS Checkout for new details');
+                        this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, callback);
                     }
-                    callback(null, address);                
+                    else {
+                        this.set('cartData.AddressId', addressId); //This allows the address UI to update
+                        callback(null, address);
+                    }
+                    //callback(null, address);                
                 }
 
                 /*
@@ -930,6 +935,7 @@
                         function _postAddress(callback) {
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
+                                callback(err);
                             });
                         },
                         function _selectAddress(callback) {
@@ -938,9 +944,10 @@
                                 callback(err);
                             });
                         },
+                        /*
                         function _updateP4m(callback) {
                             self.updateP4mCart(callback);
-                        },
+                        },*/
                         function _getConsumer(callback) {
                             self._getConsumer(function (err) {
                                 callback(null, result)
@@ -1027,7 +1034,6 @@
             },
 
             onGfsServiceChanged: function (e) {
-                debugger;
                 if (this.initialising) {
                     console.warn('onGfsServiceChanged(): not updating while initialising');
                     return;

@@ -1125,14 +1125,14 @@
 
             //Put the address value into the GFS post data
             //TODO: Rename
-            setGfsAddress: function (address, autoSelectDeliveryMethod, callback) {
+            setGfsAddress: function (address, autoSelectDelivery, callback) {
 
                 if (typeof (callback) !== "function") {
                     callback = function(){};
                 }
                 console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                 this._postData.Request.Order.Transit.Recipient.Location = address;
-                if (autoSelectDeliveryMethod) {
+                if (autoSelectDelivery) {
                     this.autoSelectDeliveryMethod(callback);
                 }
                 else callback(null);
@@ -1160,6 +1160,22 @@
             setFavAddresses: function (addressList) {
                 //console.log("Setting consumer addresses", addressList);
                 this.set('_favAddresses', addressList);
+            },
+
+            selectFavAddress: function (addressId, autoSelectMethod, callback) {
+                var self = this;
+                var foundItem = self._favAddresses.find(function (item) {
+                    return item.id == addressId;
+                });
+                if (foundItem) {
+                    self._unselectDropPoint();
+                    
+                    self.setGfsAddress(foundItem, function (err) {
+                        if (autoSelectMethod) {
+                            self.autoSelectDeliveryMethod(callback)
+                        }
+                    });
+                }
             },
 
 
@@ -1317,18 +1333,21 @@
                         }
                         else {
                             this.standardRates = this.standardRates.sort(sortFunction);
-                            this.setDeliveryMethod(this.standardRates[0].service.id);
+                            this.setDeliveryMethod(this.standardRates[0].id);
+                            
                         }
+                        callback(null);
                     }
                     else {
                         if (this._selectedDropPoint) {
-                            this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].id);
+                            this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
                         }
                         else {
-                            this.setDeliveryMethod(this.standardRates[0]);
+                            this.setDeliveryMethod(this.standardRates[0].id);
                         }
+                        callback(null);
                     }
-                    callback(false);
+                   
                 }
 
             },
@@ -1500,6 +1519,7 @@
                     this.$.standardRatesTemplate.render();
                     debugger;
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    return this.selectedServiceDetails;
                 }
             },
 
@@ -2095,8 +2115,7 @@
             //=== Received event from droppoint widget
             //Make this droppoint the 'selected' one, and open the info window
             _onDropPointSelectedEvent: function (e) {
-                debugger;
-                console.warn("_onDropPointSelectedEvent()");
+                  console.warn("_onDropPointSelectedEvent()");
 
                 //if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppoint.droppointId) return; //Already selected
                 //If there is no method, _completeDropPointSelection will choose one for us
@@ -2137,7 +2156,6 @@
             },
 
             _selectDropPoint(dropPointId) {
-                debugger;
                 var self = this;
                 console.warn("_selectDropPoint()");
                 this._completeDropPointSelection(dropPointId, null, function () {
