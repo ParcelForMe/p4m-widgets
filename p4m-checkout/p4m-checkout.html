@@ -373,7 +373,7 @@
                 var self = this;
 
                 var orderValue = 0.0;
-                self.cartData.Items.forEach(function (item) {
+                this.cartData.Items.forEach(function (item) {
                     orderValue += item.Qty * item.Price;
                 });
 
@@ -388,7 +388,7 @@
                     recipientTitle: this.consumerData.Title || "",
                     favDropPoints: self._getPreferredDropPoints() || [],
                     favAddresses: self._getPreferredAddresses(3) || [],
-                    defaultAddress: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)),
+                    defaultAddress: p4mAddressToGfsAddress(self.getAddressById(this.consumerData.PrefDeliveryAddressId)),
                     cartValue: orderValue,
                     addressPreferences: null,
                     deliveryPreferences: {
@@ -399,7 +399,7 @@
 
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
-                if (!self.isNew) {
+                if (!this.isNew) {
                     selection = {
                         dropPointId: self.getAddressById(self.cartData.AddressId).droppointId,
                         deliveryMethodId: self.cartData.ServiceId,
@@ -408,7 +408,7 @@
                     }
                 }
   
-                self.$.gfsCheckoutWidget.init(gfsPostConfig, selection, callback);
+                this.$.gfsCheckoutWidget.init(gfsPostConfig, selection, callback);
 
             },
 

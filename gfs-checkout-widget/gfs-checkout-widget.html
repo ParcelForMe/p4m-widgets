@@ -1487,9 +1487,17 @@
                         this.set('_selectedDropPoint.deliveryMethod', methodId);
                     }
                     else {
+
+                        //If we have selected something other than a droppoint, and we previously had a droppoint selected,
+                        //We need to unselected it and then auto-select a standard address
                         if (this._selectedDropPoint) {
                             this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
                             this.autoSelectDeliveryAddress(newMethod); //This is a reference to the original delivery method object                           
+                        }
+                        else {
+                            //We had a standard address selected already, apparently. 
+                            //So we don't need to autoselect one.
+                            console.log("Not selecting a standard address automatically.")
                         }
                         newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
                     }
