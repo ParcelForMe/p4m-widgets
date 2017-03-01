@@ -1030,7 +1030,7 @@
                     .filter(function (item, i) { return (item.AddressType == "Address") }) //Only addresses, not droppoints
                     .sort(function (a, b) { if (a.Id == preferredAddressId) { return -1; } else { return 1 } })
                     .filter(function (item, i) { return (i < (maxItems || 5)) }) //Up to 3 addresses                   
-                    .map(p4mAddressToGfsAddress);//this is the wrong function
+                    .map(p4mAddressToGfsAddress);
             },
 
             onGfsServiceChanged: function (e) {
@@ -1131,7 +1131,8 @@
                 },
                 Postcode: item.PostCode || "",// "SO40 7JF", //ViewBag.InitialPostCode,
                 town: item.City,
-                addressLineCollection: [item.Street1]
+                addressLineCollection: [item.Street1],
+                name: item.Label
             };
             return gfsAddress;
 

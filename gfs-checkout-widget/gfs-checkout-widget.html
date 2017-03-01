@@ -520,7 +520,7 @@
 
                         <div class="consumer-addresses">
                             <template is="dom-repeat" items="{{_favAddresses}}">
-                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
+                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name={{item.name}} address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
                             </template>
 
                         </div>
@@ -1158,7 +1158,6 @@
             },
 
             setFavAddresses: function (addressList) {
-                //console.log("Setting consumer addresses", addressList);
                 this.set('_favAddresses', addressList);
             },
 
@@ -1532,7 +1531,7 @@
             },
 
 
-
+            
             selectNearestFavDropPoint: function(callback) {
                 if (this._favDropPoints.length) {
                     this._selectDropPoint(this._favDropPoints[0].id, callback);

@@ -19,7 +19,7 @@
                        debounce-duration="300">
             </iron-ajax>
             
-            <div class="gfs-button gfs-mini-button"><iron-icon icon="maps:place"></iron-icon>{{addressData.providerName}}</div>
+            <div class="gfs-button gfs-mini-button"><iron-icon icon="maps:place"></iron-icon>{{addressName}}</div>
         </div>
 
     </template>
@@ -30,6 +30,10 @@
             is: "gfs-location-button",
 
             properties: {
+                addressName: {
+                    type: String,
+                    value: ""
+                },
                 addressData: {
                     type: Object,
                     value: {}
@@ -44,7 +48,8 @@
 
             ready: function () {
                 //Now call Google geocoder to get lat and lng
-                this._geocodeAddress = this.addressData.geoLocation.addressLines[0] + "," + this.addressData.geoLocation.postCode;
+                debugger;
+                this._geocodeAddress = this.addressData.addressLineCollection[0] + "," + this.addressData.Postcode;
                 this.$.ajaxGetLocation.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + this._geocodeAddress + "&key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI"; //Make this a parameter
                 this.$.ajaxGetLocation.generateRequest();
             },
