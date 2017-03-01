@@ -567,7 +567,7 @@
                                     <div class="favDroppoints">
                                         <h3>My Collection Points</h3>
                                         <template id="mapFavDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
-                                            <gfs-droppoint on-droppoint-selected = "_onDropPointSelectedEvent" container-class="dp-mini-card" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected = "_onDropPointSelectedEvent" container-class="dp-mini-card" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </template>
@@ -2119,16 +2119,23 @@
             },
 
 
-            //=== Received event from droppoint widget
+            //=== Received event from droppoint widget, indicating that a delivery method from a droppoint has been chosen
+            //Note that this doesn't fire just when a droppoint is clicked on, or when selected is set to true;
+            //To fire, it must be selected AND a delivery method chosen.
+            //
             //Make this droppoint the 'selected' one, and open the info window
             _onDropPointSelectedEvent: function (e) {
-                  console.warn("_onDropPointSelectedEvent()");
+                debugger;
+                if (!e.detail.deliveryMethod) {
+                    debugger;
+                    console.log("No delivery method chosen.");
+                }
 
                 //if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppoint.droppointId) return; //Already selected
                 //If there is no method, _completeDropPointSelection will choose one for us
                 var self = this;
                 //Get selected delivery method
-
+                debugger;
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
 
                     //Show on the map, pop up the info window
@@ -2178,6 +2185,10 @@
                 console.warn("_selectDropPointMarker()");
                 var dp = this._droppointById(null, marker.customData.droppointId);
                 this._selectDropPoint(marker.customData.droppointId);
+            },
+
+            _selectFavDropPoint: function(e) {
+                this._selectDropPoint(e.target.droppointData.droppointId);
             },
 
             _unselectDropPoint: function () {
@@ -2509,14 +2520,14 @@
 			_onClickFavAddress: function (e) {
 			    this._panToGeoLocation(e.currentTarget.geoLocation);
 			},
-
+            /*
 			_onSelectFavDroppoint: function (dp) {
 			    var geoLocation = {
 			        lat: dp.currentTarget.droppointData.geoLocation.coordinates.latitude,
 			        lng: dp.currentTarget.droppointData.geoLocation.coordinates.longitude
 			    };
 			    this._panToGeoLocation(geoLocation);
-			},
+			},*/
 
 			_panToGeoLocation: function (geoLocation) {
                 this._map.panTo(geoLocation);
