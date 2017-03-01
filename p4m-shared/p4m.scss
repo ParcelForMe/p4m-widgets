@@ -673,6 +673,14 @@ left: 0;
 // P4M Universal Styles
 //////////////////////////////////////////////////
 
+a, a:visited {
+	color: $grey-hb;
+	@include transition();
+	&:hover {
+		color: $grey-b4;
+	}
+}
+
 .hidden {display: none;}
 .flex-spacer {display: flex; flex: 1;}
 .noscroll {xoverflow: hidden;}
@@ -683,6 +691,12 @@ left: 0;
 .font-weight-regular {font-weight: 400;}
 .font-weight-bold {font-weight: 600;}
 .font-weight-black {font-weight: 700;}
+
+.transition { 
+	-webkit-transition: .15s ease-in-out;
+	-moz-transition: .15s ease-in-out;
+	transition: .15s ease-in-out;
+}
 
 // NEW p4m Reset
 p4m-register, p4m-login, p4m-checkout {
@@ -737,11 +751,16 @@ ul.separated li {
 	padding: 0 15px;
 }
 
+paper-input .underline {
+	display: none !important;
+}
+
+
 
 
 // Forms
 p4m-checkout {
-	[type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea {
+	[type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
 	    display: block;
 	    box-sizing: border-box;
 	    width: 100%;
@@ -754,6 +773,7 @@ p4m-checkout {
 	    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
 	    font-family: inherit;
 	    font-size: 14px;
+	    line-height: 32px;
 	    font-weight: 400;
 	    color: #0a0a0a;
 	    transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
@@ -762,27 +782,58 @@ p4m-checkout {
 	    appearance: none;
 	}
 	[type='submit']:not(.search-button), .button:not(.search-button) {
-	    display: inline-block;
-	    vertical-align: middle;
-	    margin: 0;
-	    padding: 0 1em;
-	    -webkit-appearance: none;
-	    border: 1px solid transparent;
+	    // display: inline-block;
+	    // vertical-align: middle;
+	    // margin: 0;
+	    // padding: 0 1em;
+	    // -webkit-appearance: none;
+	    // border: 1px solid transparent;
 	    border-radius: 0;
 	    transition: background-color 0.25s ease-out, color 0.25s ease-out;
 	    font-size: 14px;
 	    font-weight: 600;
-	    line-height: 34px;
-	    text-align: center;
+	    // line-height: 34px;
+	    // text-align: center;
 	    cursor: pointer;
-	    background-color: #1d80a2;
-	    color: #fefefe;
+	    // background-color: #1d80a2;
+	    // color: #fefefe;
 	}
 }
 
 
 
 // Buttons
+
+// gfs buttons
+.gfs-button {
+    background-color: rgba(200, 200, 200, 1.0);
+    color: #000000;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer; 
+    &:hover {
+	    background-color: rgba(68, 144, 68, 1.0);
+	    color: #FFFFFF;
+	    transition-duration: 0.5s;
+	}
+	&.disabled {
+	    background-color: rgba(200, 200, 200, 0.5);
+	    cursor: not-allowed;
+	}
+	&.gfs-mini-button {
+	    margin-left: 2px;
+	    margin-right: 2px;
+	    padding-top: 4px;
+	    padding-left: 0px;
+	    padding-right: 2px;
+	    height: 32px;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    overflow: hidden;
+	}
+}
+
+// p4m buttons
 .p4m-button {
     margin: 10px;
     padding: 10px;
@@ -1228,20 +1279,29 @@ p4m-checkout {
     }
 
     paper-dropdown-menu {
+    	min-width: 100%;
     	iron-dropdown {
     	}
     	paper-input-container {
     		padding: 0 !important;
     		height: 36px;
-    		margin-top: -20px;
-    		.floated-label-placeholder {
-				
+    		// margin-top: -20px;
+    		.floated-label-placeholder, .label-is-floating label {
+				display: none;
+    		}
+    		input, label {
+    			line-height: 34px !important;
+    			height: 34px !important;
+    			font-size: 14px !important;
+    			font-family: 'Lato', sans-serif;
     		}
     	}
     }
 
     #mapTools {
     	height: 48px;
+    	display: flex;
+    	align-items: center;
     }
     
 
@@ -1281,8 +1341,10 @@ p4m-checkout {
        display: none;          
     }
     #mainDropPointListArea gfs-droppoint {
-        width: 368px;  
-        min-height: 258px;      
+		// height: 100%; 
+		display: flex;
+		flex:1;
+		min-width: 100%;
     }
     #mainDropPointListArea #dropPointList {
         display: flex;
@@ -1296,6 +1358,14 @@ p4m-checkout {
         display: flex;
         flex-direction: column;         
     }
+    // #dropPointList {
+    // 	display: flex;
+    // 	flex-direction: column;
+    // }
+    // #dropPointList gfs-droppoint {
+    // 	display: flex;
+    // 	flex: 1;
+    // }
     #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
         width: 37%;
         float: right;   
@@ -1359,9 +1429,84 @@ p4m-checkout {
         display: flex;
         flex-direction: row;
     }
-    #viewAsList, #viewAsMap {
-        padding-top: 16px;
+    a#viewAsList, a#viewAsMap {
+		text-decoration: none;
+		display: flex;
+		height: 48px;
+		width: 48px;
+		justify-content: center;
+		align-items: center;
     }
+    paper-menu-button iron-dropdown {
+		margin-bottom: 8px;
+		margin-top: 8px;
+    }
+    paper-item {
+    	padding: 10px !important;
+    	i.p4micon {
+    		font-size: 18px;
+    	}
+    }
+    paper-listbox {
+    	// padding: 0 !important;
+    }
+    #dropdown {
+	    margin-bottom: 0 !important;
+	    margin-top: 0 !important;
+    }
+    #contentWrapper .dropdown-content {
+        margin-bottom: 0 !important;
+        margin-top: -10px;
+        top: 10px;
+     }
+    .adjoiner {
+    	display: flex;
+		height: 48px;
+		width: 24px;
+		justify-content: center;
+		align-items: center;
+		p {
+			font-size: 14px;
+			font-style: italic;
+			color: #aaa;
+		}
+    }
+    .collection-points, .location-points, .search-postcode-wrap {
+    	width: 18vw;
+    	margin: 0 .5vw;
+    }
+    .addressTitle {
+	   	display: flex;
+	    align-items: center;
+    }
+    address-lookup-field {
+    	width: 100%;
+    }
+    paper-menu-button #contentWrapper {
+		.dropdown-content {
+			// min-width: calc(18vw - 32px);
+			min-width: 18vw;
+			width: 18vw;
+		}
+	}
+	gfs-location-button {
+		.wrap {
+			min-width: calc(18vw - 32px);
+		}
+		.addressTitle {
+			display: flex;
+			font-weight: 600;
+			line-height: 15px;
+		}
+		p {
+			padding-left: 18px;
+			margin: 2px 0;
+			line-height: 1.2em;
+			font-size: 14px;
+		}
+	}
+	
+
     .toggle-label {
         display: inline-block;
         font-size: 18px;
@@ -1391,6 +1536,58 @@ p4m-checkout {
     a.droppoint_info:hover {
         text-decoration: underline;
     }
+
+    .collection-points paper-items {
+    	// padding-top: 10px;
+    	// padding-bottom: 5px;
+    }
+
+    .dp-details.gfs-droppoint {
+	    display: flex;
+	    flex-direction: row;
+	}
+	.dp-icon.gfs-droppoint {
+	    margin: 0 0 5px;
+	    float: left;
+	    padding-right: 10px;
+	}
+	#dp-distance {
+		display: flex;
+		align-items: center;
+		margin-top: 8px;
+		i {
+			font-size: 16px;
+			margin-left: 4px;
+		}
+	}
+	td.dp-day-name {
+	    font-weight: 600;
+	}
+	.dp-opening-hours {
+		.title {
+			font-size: 13px;
+			margin-top: 8px;
+		}
+	}
+	#opening-hours-link {
+		display: flex;
+		align-items: center;
+	}
+    .dpProviderName {
+	    display: flex;
+	    font-weight: 600;
+	    line-height: 15px;
+	    align-items: center;
+	    .dpProviderLogo {
+	    	width: 24px;
+	    	margin-right: 5px;
+	    }
+	}
+	#dp-address {
+		margin: 2px 0;
+		line-height: 1.2em;
+		font-size: 14px;
+	}
     .highlight {
         color: #FFFFFF !important;
         background-color: #90dca7 !important;
@@ -1398,12 +1595,46 @@ p4m-checkout {
     .toggle-content {
         padding-left: 2px;
     }
+    .shippingOptions .font-weight-600.title {
+    	font-size: 13px;
+    	margin-top: 8px;
+    }
+    .delivery-place {
+    	font-size: 12px;
+    }
+
+    .gm-style-iw {
+    	.dpProviderName {
+    		justify-content: space-between;
+    	}
+    }
+
     .cardList {
         display: flex;
         flex-direction: column;
-        height: 630px;
+        height: 100%;
+        max-height: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
+    }
+    iron-page#pageDroppoints {
+    	display: flex;
+    	flex-direction: column;
+    }
+    iron-page#pageDroppoints > #pageDroppoints {
+    	display: flex;
+    	flex-direction: row;
+    	height: 272px;
+    }
+    #mapContainer {
+    	display: flex;
+    	flex: 2;
+    }
+    #dropPointListContainer {
+    	display: flex;
+    	flex: 1;
+		height: 100%;
+		overflow: scroll;
     }
     div.dark .open-late {
         -webkit-filter: invert(1);
@@ -1532,16 +1763,15 @@ p4m-checkout {
         --paper-toast-color: white;
     }
     .search-button {
-        position: absolute;
-        right: 15px;
-        left: initial;
-        top: 17px;
-        color: #ccc;
+		position: absolute;
+		right: 4px;
+		left: initial;
+		top: 6px;
+		color: #ccc;
     }              
     .consumer-addresses {
         display: flex;
         flex-direction: row;
-        width: 280px;
     }  
     .pageContent {
         display: flex;
@@ -1736,6 +1966,8 @@ p4m-checkout {
 	}
 }
 
+// Choose your delivery date
+
 gfs-calendar {
 	.gfs-calendar {
 		border: none !important;
@@ -1791,6 +2023,8 @@ gfs-calendar {
 }
 
 
+
+// Addresses
 #p4m-address-list, p4m-address-list {
 	.add-address {
     	padding: 5px;
@@ -1865,12 +2099,42 @@ p4m-address {
         letter-spacing: 3px;
         text-transform: uppercase;   
     }
-
+    .address-form {
+    	input, vaadin-combo-box-light input {
+	    	margin-left: 0 !important;
+	    	margin-right: 0 !important;
+	    }
+    }
+    .cancel-button {
+    	a {
+    		text-decoration: none;
+    	}
+    }
     .p4m-button {
-        padding: 10px;
-        background-color: #808080;
-        color: #000000;
-        border-radius: 4px;
+		height: 36px;
+		background-color: #37a553;
+		color: #fff;
+		border-radius: 20px;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		justify-content: center;
+		padding-left: 12px;
+		padding-right: 12px;
+		width: auto;
+		min-width: initial;
+        i {
+        	color: $white;
+        	font-size: 18px;
+        	font-weight: 600;
+        }
+        &:hover {
+        	color: $white;
+        	i {
+	        	color: $white;
+	        }
+        }
     }
     .p4m-button.p4m-primary-button {
         background-color: rgba(13, 165, 83, 0.8);
@@ -1899,8 +2163,11 @@ p4m-address {
         padding: 8px;
     }
     .card-body.card-edit {
-        display: flex;
-        flex-direction: column;
+	    display: flex;
+	    flex-direction: column;
+	    background: #f8f8f8;
+	    box-sizing: border-box;
+	    padding: 15px;
     }
     .buttons {
         display: flex;

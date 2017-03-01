@@ -7,7 +7,7 @@
 		"uuidString": "D0369AB1-525B-4F8D-B38F-723270A2867B"
 		}
 	],
-"creatorBuild": "25504",
+"creatorBuild": "25568",
 "files": {
 	"\/.gitignore": {
 		"ft": 8192,
@@ -20486,6 +20486,34 @@
 		"oAP": "\/p4m-shared\/fonts\/Lato-RegIta-webfont.woff",
 		"oF": 0
 		},
+	"\/p4m-shared\/fonts\/p4m.eot": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.eot",
+		"oF": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.ttf": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.ttf",
+		"oF": 0
+		},
+	"\/p4m-shared\/fonts\/p4m.woff": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts\/p4m.woff",
+		"oF": 0
+		},
 	"\/p4m-shared\/fonts\/SIL Open Font License 1.1.txt": {
 		"ft": 8192,
 		"oA": 2,
@@ -21501,6 +21529,10 @@
 			"active": 0,
 			"optionString": ""
 			},
+		"no-multi-assign": {
+			"active": 0,
+			"optionString": ""
+			},
 		"no-multi-spaces": {
 			"active": 0,
 			"optionString": "{'exceptions': {'Property': true, 'BinaryExpression': false, 'VariableDeclarator': false, 'ImportDeclaration': false}}"
@@ -21829,6 +21861,10 @@
 			"active": 0,
 			"optionString": ""
 			},
+		"prefer-promise-reject-errors": {
+			"active": 0,
+			"optionString": "{'allowEmptyReject': false}"
+			},
 		"prefer-rest-params": {
 			"active": 0,
 			"optionString": ""
@@ -21922,6 +21958,10 @@
 			"optionString": ""
 			},
 		"template-curly-spacing": {
+			"active": 0,
+			"optionString": "'never'"
+			},
+		"template-tag-spacing": {
 			"active": 0,
 			"optionString": "'never'"
 			},

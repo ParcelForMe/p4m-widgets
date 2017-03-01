@@ -36,6 +36,9 @@
                 <iron-page>
                     <div class="card-panel">
                         <div class="card-body card-edit">
+                            <div class="vertical layout end cancel-button">
+                            <a class="" href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                            </div>
                             <div class="address-form">
                                 <input is="iron-input" type="text" id="address-label" bind-value="{{addressData.Label}}" placeholder="Label, e.g. 'Home'" />
                                 <input is="iron-input" type="text" id="address-street-1" bind-value="{{addressData.Street1}}" placeholder="Street address" />
@@ -48,9 +51,8 @@
                                     <input is="iron-input"/>
                                 </vaadin-combo-box-light>
                             </div>
-                            <div class="address-actions">
-                                <a class="p4m-button p4m-primary-button" href="#" on-tap="save">Save</a>
-                                <a class="p4m-button" href="#" on-tap="cancel">Cancel</a>
+                            <div class="vertical layout end"">
+                                <a class="p4m-button" href="#" on-tap="save">Add <i class="p4micon p4micon-add"></i></a>
                             </div>
                         </div>
                     </div>

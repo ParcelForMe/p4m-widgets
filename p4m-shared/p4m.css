@@ -11,6 +11,12 @@
 .translucent-p4m-green-light {
   background-color: rgba(77, 143, 94, 0.1) !important; }
 
+.font-weight-400, normal {
+  font-weight: 400; }
+
+.font-weight-600, bold {
+  font-weight: 600; }
+
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
   By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
@@ -586,6 +592,17 @@ body.fullbleed {
   font-weight: 100;
   font-style: normal; }
 
+a, a:visited {
+  color: #aaa;
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -khtml-transition: all 0.15s ease-in-out 0s;
+  -moz-transition: all 0.15s ease-in-out 0s;
+  -ms-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
+  transition: all 0.15s ease-in-out 0s; }
+  a:hover, a:visited:hover {
+    color: #555; }
+
 .hidden {
   display: none; }
 
@@ -613,6 +630,11 @@ body.fullbleed {
 
 .font-weight-black {
   font-weight: 700; }
+
+.transition {
+  -webkit-transition: .15s ease-in-out;
+  -moz-transition: .15s ease-in-out;
+  transition: .15s ease-in-out; }
 
 p4m-register, p4m-login, p4m-checkout {
   font-family: "Lato", sans-serif;
@@ -660,7 +682,10 @@ ul.separated li {
   box-sizing: border-box;
   padding: 0 15px; }
 
-p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea {
+paper-input .underline {
+  display: none !important; }
+
+p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -673,6 +698,7 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   font-family: inherit;
   font-size: 14px;
+  line-height: 32px;
   font-weight: 400;
   color: #0a0a0a;
   transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
@@ -681,21 +707,35 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   appearance: none; }
 
 p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.search-button) {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0;
-  padding: 0 1em;
-  -webkit-appearance: none;
-  border: 1px solid transparent;
   border-radius: 0;
   transition: background-color 0.25s ease-out, color 0.25s ease-out;
   font-size: 14px;
   font-weight: 600;
-  line-height: 34px;
+  cursor: pointer; }
+
+.gfs-button {
+  background-color: #c8c8c8;
+  color: #000000;
+  border-radius: 4px;
   text-align: center;
-  cursor: pointer;
-  background-color: #1d80a2;
-  color: #fefefe; }
+  cursor: pointer; }
+  .gfs-button:hover {
+    background-color: #449044;
+    color: #FFFFFF;
+    transition-duration: 0.5s; }
+  .gfs-button.disabled {
+    background-color: rgba(200, 200, 200, 0.5);
+    cursor: not-allowed; }
+  .gfs-button.gfs-mini-button {
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 4px;
+    padding-left: 0px;
+    padding-right: 2px;
+    height: 32px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; }
 
 .p4m-button {
   margin: 10px;
@@ -708,12 +748,12 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   cursor: pointer;
   min-width: 100px;
   font-weight: bold;
-  -webkit-transition: all 0.1s ease-in-out 0s;
-  -khtml-transition: all 0.1s ease-in-out 0s;
-  -moz-transition: all 0.1s ease-in-out 0s;
-  -ms-transition: all 0.1s ease-in-out 0s;
-  -o-transition: all 0.1s ease-in-out 0s;
-  transition: all 0.1s ease-in-out 0s; }
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -khtml-transition: all 0.15s ease-in-out 0s;
+  -moz-transition: all 0.15s ease-in-out 0s;
+  -ms-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
+  transition: all 0.15s ease-in-out 0s; }
   .p4m-button.p4m-button-active {
     background-color: #fff;
     color: #2aa54f; }
@@ -943,12 +983,12 @@ i.p4micon-cart-empty {
       margin-left: 4px;
       border-bottom: 2px solid transparent;
       padding-bottom: 2px;
-      -webkit-transition: all 0.1s ease-in-out 0s;
-      -khtml-transition: all 0.1s ease-in-out 0s;
-      -moz-transition: all 0.1s ease-in-out 0s;
-      -ms-transition: all 0.1s ease-in-out 0s;
-      -o-transition: all 0.1s ease-in-out 0s;
-      transition: all 0.1s ease-in-out 0s; }
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
       #p4mRegisterContainer .p4m-register-text-link a:hover {
         border-bottom: 2px solid #fff; }
   #p4mRegisterContainer .p4m-button.p4m-register-button {
@@ -1007,12 +1047,12 @@ p4m-checkout {
     border-radius: 5px;
     background-color: white; }
     p4m-checkout #panelContainer > div {
-      -webkit-transition: all 0.1s ease-in-out 0s;
-      -khtml-transition: all 0.1s ease-in-out 0s;
-      -moz-transition: all 0.1s ease-in-out 0s;
-      -ms-transition: all 0.1s ease-in-out 0s;
-      -o-transition: all 0.1s ease-in-out 0s;
-      transition: all 0.1s ease-in-out 0s; }
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
     p4m-checkout #panelContainer .p4m-panel {
       min-height: 320px;
       border: none; }
@@ -1069,12 +1109,22 @@ p4m-checkout {
       display: flex; }
   p4m-checkout paper-input {
     padding: 0 0; }
-  p4m-checkout paper-dropdown-menu paper-input-container {
-    padding: 0 !important;
-    height: 36px;
-    margin-top: -20px; }
+  p4m-checkout paper-dropdown-menu {
+    min-width: 100%; }
+    p4m-checkout paper-dropdown-menu paper-input-container {
+      padding: 0 !important;
+      height: 36px; }
+      p4m-checkout paper-dropdown-menu paper-input-container .floated-label-placeholder, p4m-checkout paper-dropdown-menu paper-input-container .label-is-floating label {
+        display: none; }
+      p4m-checkout paper-dropdown-menu paper-input-container input, p4m-checkout paper-dropdown-menu paper-input-container label {
+        line-height: 34px !important;
+        height: 34px !important;
+        font-size: 14px !important;
+        font-family: 'Lato', sans-serif; }
   p4m-checkout #mapTools {
-    height: 48px; }
+    height: 48px;
+    display: flex;
+    align-items: center; }
   p4m-checkout #mapContainer {
     display: block;
     position: relative; }
@@ -1103,8 +1153,9 @@ p4m-checkout {
   p4m-checkout #mainDropPointListArea .preferredDroppoints {
     display: none; }
   p4m-checkout #mainDropPointListArea gfs-droppoint {
-    width: 368px;
-    min-height: 258px; }
+    display: flex;
+    flex: 1;
+    min-width: 100%; }
   p4m-checkout #mainDropPointListArea #dropPointList {
     display: flex;
     flex-direction: row;
@@ -1163,8 +1214,59 @@ p4m-checkout {
   p4m-checkout #mapTools, p4m-checkout #listTools {
     display: flex;
     flex-direction: row; }
-  p4m-checkout #viewAsList, p4m-checkout #viewAsMap {
-    padding-top: 16px; }
+  p4m-checkout a#viewAsList, p4m-checkout a#viewAsMap {
+    text-decoration: none;
+    display: flex;
+    height: 48px;
+    width: 48px;
+    justify-content: center;
+    align-items: center; }
+  p4m-checkout paper-menu-button iron-dropdown {
+    margin-bottom: 8px;
+    margin-top: 8px; }
+  p4m-checkout paper-item {
+    padding: 10px !important; }
+    p4m-checkout paper-item i.p4micon {
+      font-size: 18px; }
+  p4m-checkout #dropdown {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important; }
+  p4m-checkout #contentWrapper .dropdown-content {
+    margin-bottom: 0 !important;
+    margin-top: -10px;
+    top: 10px; }
+  p4m-checkout .adjoiner {
+    display: flex;
+    height: 48px;
+    width: 24px;
+    justify-content: center;
+    align-items: center; }
+    p4m-checkout .adjoiner p {
+      font-size: 14px;
+      font-style: italic;
+      color: #aaa; }
+  p4m-checkout .collection-points, p4m-checkout .location-points, p4m-checkout .search-postcode-wrap {
+    width: 18vw;
+    margin: 0 .5vw; }
+  p4m-checkout .addressTitle {
+    display: flex;
+    align-items: center; }
+  p4m-checkout address-lookup-field {
+    width: 100%; }
+  p4m-checkout paper-menu-button #contentWrapper .dropdown-content {
+    min-width: 18vw;
+    width: 18vw; }
+  p4m-checkout gfs-location-button .wrap {
+    min-width: calc(18vw - 32px); }
+  p4m-checkout gfs-location-button .addressTitle {
+    display: flex;
+    font-weight: 600;
+    line-height: 15px; }
+  p4m-checkout gfs-location-button p {
+    padding-left: 18px;
+    margin: 2px 0;
+    line-height: 1.2em;
+    font-size: 14px; }
   p4m-checkout .toggle-label {
     display: inline-block;
     font-size: 18px;
@@ -1186,17 +1288,74 @@ p4m-checkout {
       font-weight: bold; }
   p4m-checkout a.droppoint_info:hover {
     text-decoration: underline; }
+  p4m-checkout .dp-details.gfs-droppoint {
+    display: flex;
+    flex-direction: row; }
+  p4m-checkout .dp-icon.gfs-droppoint {
+    margin: 0 0 5px;
+    float: left;
+    padding-right: 10px; }
+  p4m-checkout #dp-distance {
+    display: flex;
+    align-items: center;
+    margin-top: 8px; }
+    p4m-checkout #dp-distance i {
+      font-size: 16px;
+      margin-left: 4px; }
+  p4m-checkout td.dp-day-name {
+    font-weight: 600; }
+  p4m-checkout .dp-opening-hours .title {
+    font-size: 13px;
+    margin-top: 8px; }
+  p4m-checkout #opening-hours-link {
+    display: flex;
+    align-items: center; }
+  p4m-checkout .dpProviderName {
+    display: flex;
+    font-weight: 600;
+    line-height: 15px;
+    align-items: center; }
+    p4m-checkout .dpProviderName .dpProviderLogo {
+      width: 24px;
+      margin-right: 5px; }
+  p4m-checkout #dp-address {
+    margin: 2px 0;
+    line-height: 1.2em;
+    font-size: 14px; }
   p4m-checkout .highlight {
     color: #FFFFFF !important;
     background-color: #90dca7 !important; }
   p4m-checkout .toggle-content {
     padding-left: 2px; }
+  p4m-checkout .shippingOptions .font-weight-600.title {
+    font-size: 13px;
+    margin-top: 8px; }
+  p4m-checkout .delivery-place {
+    font-size: 12px; }
+  p4m-checkout .gm-style-iw .dpProviderName {
+    justify-content: space-between; }
   p4m-checkout .cardList {
     display: flex;
     flex-direction: column;
-    height: 630px;
+    height: 100%;
+    max-height: 100%;
     overflow-x: hidden;
     overflow-y: scroll; }
+  p4m-checkout iron-page#pageDroppoints {
+    display: flex;
+    flex-direction: column; }
+  p4m-checkout iron-page#pageDroppoints > #pageDroppoints {
+    display: flex;
+    flex-direction: row;
+    height: 272px; }
+  p4m-checkout #mapContainer {
+    display: flex;
+    flex: 2; }
+  p4m-checkout #dropPointListContainer {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    overflow: scroll; }
   p4m-checkout div.dark .open-late {
     -webkit-filter: invert(1);
     filter: invert(1); }
@@ -1291,14 +1450,13 @@ p4m-checkout {
     --paper-toast-color: white; }
   p4m-checkout .search-button {
     position: absolute;
-    right: 15px;
+    right: 4px;
     left: initial;
-    top: 17px;
+    top: 6px;
     color: #ccc; }
   p4m-checkout .consumer-addresses {
     display: flex;
-    flex-direction: row;
-    width: 280px; }
+    flex-direction: row; }
   p4m-checkout .pageContent {
     display: flex;
     flex-direction: row;
@@ -1532,11 +1690,35 @@ p4m-address .address-tag {
   letter-spacing: 3px;
   text-transform: uppercase; }
 
+p4m-address .address-form input, p4m-address .address-form vaadin-combo-box-light input {
+  margin-left: 0 !important;
+  margin-right: 0 !important; }
+
+p4m-address .cancel-button a {
+  text-decoration: none; }
+
 p4m-address .p4m-button {
-  padding: 10px;
-  background-color: #808080;
-  color: #000000;
-  border-radius: 4px; }
+  height: 36px;
+  background-color: #37a553;
+  color: #fff;
+  border-radius: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  width: auto;
+  min-width: initial; }
+  p4m-address .p4m-button i {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600; }
+  p4m-address .p4m-button:hover {
+    color: #fff; }
+    p4m-address .p4m-button:hover i {
+      color: #fff; }
 
 p4m-address .p4m-button.p4m-primary-button {
   background-color: rgba(13, 165, 83, 0.8);
@@ -1566,7 +1748,10 @@ p4m-address .card-body {
 
 p4m-address .card-body.card-edit {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  background: #f8f8f8;
+  box-sizing: border-box;
+  padding: 15px; }
 
 p4m-address .buttons {
   display: flex;

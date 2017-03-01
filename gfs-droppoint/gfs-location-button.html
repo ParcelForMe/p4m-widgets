@@ -9,7 +9,7 @@
         <style> 
         </style>
 
-        <div>
+        <div class="wrap">
             <iron-ajax id="ajaxGetLocation"
                        method="GET"
                        handle-as="json"
@@ -19,7 +19,13 @@
                        debounce-duration="300">
             </iron-ajax>
             
-            <div class="gfs-button gfs-mini-button"><iron-icon icon="maps:place"></iron-icon>{{addressData.providerName}}</div>
+            <div class="content">
+            <div class="addressTitle"><i class="p4micon p4micon-map-marker"></i>{{addressData.providerName}}</div>
+            <!-- <p>{{addressData.Street1}}<br />
+            {{addressData.City}} {{addressData.State}}</p> -->
+            <p>212 Strand<br />
+            London, WC2R 1AP</p>
+            </div>
         </div>
 
     </template>

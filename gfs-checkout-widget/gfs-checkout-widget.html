@@ -54,35 +54,112 @@
 
                         <div class="toggleDropPointsViewControls">
                             <template is="dom-if" if="{{_showingDroppointsList}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a map</a>
+                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">
+                                <i class="p4micon p4micon-map-with-marker"></i>
+                                </a>
                             </template>
                             <template is="dom-if" if="{{_showingDroppointsMap}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView"><i class="p4micon p4micon-list"></i></a>
+                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">
+                                <i class="p4micon p4micon-list"></i></a>
                             </template>
                            
                         </div>
 
-                        <div class="consumer-addresses">
+
+                        <div class="location-points">
+                        <paper-dropdown-menu label="My Locations" noink no-animations>
+                          <paper-listbox class="dropdown-content">
+                            <paper-item>
                             <template is="dom-repeat" items="{{_consumerAddresses}}">
                                 <gfs-location-button on-click="_onClickConsumerAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
                             </template>
-
+                            <div id="dp-address" class="style-scope gfs-droppoint">
+                            </div>
+                            </paper-item>
+                            <paper-item>
+                            <template is="dom-repeat" items="{{_consumerAddresses}}">
+                                <gfs-location-button on-click="_onClickConsumerAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
+                            </template>
+                            <div id="dp-address" class="style-scope gfs-droppoint">
+                            </div>
+                            </paper-item>
+                            
+                          </paper-listbox>
+                        </paper-dropdown-menu>
                         </div>
+
+                        <div class="adjoiner"><p>or</p></div>
                       
                         <div class="search-postcode-wrap">
                             <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
                             <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
                         </div>
 
-                        <div><p>or</p></div>
+                        <div class="adjoiner"><p>or</p></div>
 
-                        <div>
-                        <paper-dropdown-menu label="Dinosaurs" noink no-animations>
+                        <div class="collection-points">
+                        <paper-dropdown-menu label="My Collection Points" noink no-animations>
                           <paper-listbox class="dropdown-content">
-                            <paper-item>allosaurus</paper-item>
-                            <paper-item>brontosaurus</paper-item>
-                            <paper-item>carcharodontosaurus</paper-item>
-                            <paper-item>diplodocus</paper-item>
+                            <paper-item>
+                                <div class="wrap gfs-droppoint">
+                                    <div class="dpProviderName style-scope gfs-droppoint">
+                                    <div class="dpProviderLogo"><local-image local-folder="gfs-droppoint/images" class="imageicon style-scope gfs-droppoint" height="45">
+                                        <img class="style-scope local-image" src="http://localhost:8081/lib/p4m-widgets/gfs-droppoint/images/DPD.png">
+                                    </local-image></div>
+                                    DPD
+                                    </div>
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+                                    
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+
+                                    <div id="dp-address" class="style-scope gfs-droppoint">
+                                        212 Strand
+                                        <br class="style-scope gfs-droppoint">
+                                        <template is="dom-repeat" class="style-scope gfs-droppoint"></template>
+                                        London, WC2R 1AP
+                                    </div>
+                                </div>
+                            </paper-item>
+                            <paper-item>
+                                <div class="wrap gfs-droppoint">
+                                    <div class="dpProviderName style-scope gfs-droppoint">
+                                    <div class="dpProviderLogo"><local-image local-folder="gfs-droppoint/images" class="imageicon style-scope gfs-droppoint" height="45">
+                                        <img class="style-scope local-image" src="http://localhost:8081/lib/p4m-widgets/gfs-droppoint/images/DPD.png">
+                                    </local-image></div>
+                                    DPD
+                                    </div>
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+                                    
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+
+                                    <div id="dp-address" class="style-scope gfs-droppoint">
+                                        212 Strand
+                                        <br class="style-scope gfs-droppoint">
+                                        <template is="dom-repeat" class="style-scope gfs-droppoint"></template>
+                                        London, WC2R 1AP
+                                    </div>
+                                </div>
+                            </paper-item>
+                            <paper-item>
+                                <div class="wrap gfs-droppoint">
+                                    <div class="dpProviderName style-scope gfs-droppoint">
+                                    <div class="dpProviderLogo"><local-image local-folder="gfs-droppoint/images" class="imageicon style-scope gfs-droppoint" height="45">
+                                        <img class="style-scope local-image" src="http://localhost:8081/lib/p4m-widgets/gfs-droppoint/images/DPD.png">
+                                    </local-image></div>
+                                    DPD
+                                    </div>
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+                                    
+                                    <template is="dom-if" class="style-scope gfs-droppoint"></template>
+
+                                    <div id="dp-address" class="style-scope gfs-droppoint">
+                                        212 Strand
+                                        <br class="style-scope gfs-droppoint">
+                                        <template is="dom-repeat" class="style-scope gfs-droppoint"></template>
+                                        London, WC2R 1AP
+                                    </div>
+                                </div>
+                            </paper-item>
                           </paper-listbox>
                         </paper-dropdown-menu>
                         </div>
@@ -140,14 +217,14 @@
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-select-delivery-option="onUpdateDroppointDeliveryOptions" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-select-delivery-option="onUpdateDroppointDeliveryOptions" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
 
                                     <div class="preferredDroppoints">
                                         <h3>My Collection Points</h3>
                                         <template id="listPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint  click-to-choose="true" on-select="_onSelectPreferredDroppoint" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint  click-to-choose="true" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
