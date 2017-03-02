@@ -378,9 +378,10 @@
                 });
 
                 var gfsPostConfig = {
-                    countryCode: "",
-                    town: "",
-                    postCode: "",
+                    countryCode: null,
+                    town: "London",
+                    Town: "London",
+                    postCode: null,
                     addressLines: [],
                     contactEmail: "nocontact@nocontact.com",
                     recipientFirstName: this.consumerData.FamilyName,
@@ -400,14 +401,14 @@
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
                 if (!this.isNew) {
+                    debugger;
                     selection = {
-                        dropPointId: self.getAddressById(self.cartData.AddressId).droppointId,
+                        dropPointId: self.getAddressById(self.cartData.AddressId).DropPointId,
                         deliveryMethodId: self.cartData.ServiceId,
-                        addressId: self.cartData.AddressId,
-                        //deliveryDate:
+                        address: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)) || null
                     }
+                    //selection = null;
                 }
-  
                 this.$.gfsCheckoutWidget.init(gfsPostConfig, selection, callback);
 
             },
@@ -1050,7 +1051,8 @@
 
             //The selected service wasn't available, so choose a default
             onGfsNoService: function (e) {
-                this.preselectDeliveryMethod();
+                // this.preselectDeliveryMethod();
+                console.error('No GFS service');
             },
 
             getAddressById: function(id) {

@@ -794,6 +794,10 @@
                 //
                 // Do not modify these properties.
 
+
+                _suppliedSelection: {
+                    type: Object
+                },
                 selectedServiceDetails: {
                     type: Object,
                     value: {
@@ -1196,6 +1200,7 @@
  
             init: function (config, selection, finalCallback) {
                 var self = this;
+                this._suppliedSelection = selection;
                 var requiredFields = [
                     'countryCode',
                     'postCode',
@@ -1224,7 +1229,11 @@
                     //==== Create post data
                     var now = new Date();
                     var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
- 
+                    
+
+
+
+
                     this._postData = {
                         "Request":
                         {
@@ -1237,10 +1246,10 @@
                                     "Recipient": {
                                         "Location": {
                                             "CountryCode": {
-                                                "Code": config.countryCode,
+                                                "Code":  config.countryCode,
                                                 "Encoding": "ccISO_3166_1_Alpha2"
                                             },
-                                            "Postcode": config.Postcode,
+                                            "Postcode": config.postcode,
                                             "town": config.town,
                                             "addressLineCollection": config.addressLines
                                         },
@@ -1266,20 +1275,41 @@
                             }
                         }
                     };
-                                     
+
+                    if (selection && selection.address) {
+                        debugger;
+                        var location = this._postData.Request.Order.Transit.Recipient.Location;
+                        location.CountryCode = selection.address.CountryCode,
+                        location.Postcode = selection.address.Postcode, 
+                        location.town = selection.address.town || "",
+                        location.addressLineCollection = selection.address.addressLineCollection
+                    }
+
                     
                     //==== Set fav address data
                     this.setFavDropPoints(this.config.favDropPoints); 
                     this.setFavAddresses(this.config.favAddresses);
 
                     //if everything has been preselected, preselect,
-                    if (false) {                      
-                        this.applySelection(selection);//TODO
-                        this.postGfsData(finalCallback);
+                    if (selection && selection.deliveryMethodId) {
+                        //Post, then try to re-select the chosen method
+                        this.postGfsData(function (err) {
+                            if (!err) {
+
+                                if (selection.dropPointId) {
+                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
+                                }
+                                else {
+                                    self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                                }
+                            }
+                            finalCallback(err);
+                        });
                     }
-                        //Otherwise auto-select address and delivery method according to preferences (if any)
+                    //Otherwise auto-select address and delivery method according to preferences (if any)
                     else {
                         //Set delivery address first. This will then trigger auto-setting of delivery method
+
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
                             self.postGfsData(finalCallback);
                             //finalCallback(err);
@@ -1290,14 +1320,14 @@
             },
 
             //TODO
+            /*
             applySelection: function(selection) {
-
-                /*
-                    dropPointId
-                    deliveryMethodId
-                    addressId
-                    deliveryDate
-                */
+                
+                //    dropPointId
+                //    deliveryMethodId
+                //    addressId
+                //    deliveryDate
+               
                 if (selection.dropPointId) {
                     this._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
                 }
@@ -1305,7 +1335,7 @@
                     this.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                 }
                 
-            },
+            },*/
 
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
@@ -1521,10 +1551,8 @@
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
                     //this.set('dayDefinite', JSON.parse(JSON.stringify(this.dayDefinite)));
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    //debugger;
 
                     this.$.standardRatesTemplate.render();
-                    debugger;
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
                     return this.selectedServiceDetails;
                 }
@@ -2125,7 +2153,6 @@
             //
             //Make this droppoint the 'selected' one, and open the info window
             _onDropPointSelectedEvent: function (e) {
-                debugger;
                 if (!e.detail.deliveryMethod) {
                     debugger;
                     console.log("No delivery method chosen.");
@@ -2135,7 +2162,6 @@
                 //If there is no method, _completeDropPointSelection will choose one for us
                 var self = this;
                 //Get selected delivery method
-                debugger;
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
 
                     //Show on the map, pop up the info window
@@ -2539,5 +2565,10 @@
             }
 
         });
+
+        function isNull(a, b) {
+            if (a == null || typeof (a) == "undefined" || a == "" || a.length == 0) return b
+            else return a;
+        }
     </script>
 </dom-module>

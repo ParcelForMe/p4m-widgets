@@ -48,7 +48,6 @@
 
             ready: function () {
                 //Now call Google geocoder to get lat and lng
-                debugger;
                 this._geocodeAddress = this.addressData.addressLineCollection[0] + "," + this.addressData.Postcode;
                 this.$.ajaxGetLocation.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + this._geocodeAddress + "&key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI"; //Make this a parameter
                 this.$.ajaxGetLocation.generateRequest();
