@@ -405,7 +405,8 @@
                     selection = {
                         dropPointId: self.getAddressById(self.cartData.AddressId).DropPointId,
                         deliveryMethodId: self.cartData.ServiceId,
-                        address: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)) || null
+                        address: p4mAddressToGfsAddress(self.getAddressById(self.cartData.AddressId)) || null,
+                        deliveryDate: new Date(self.cartData.ExpDeliveryDate)
                     }
                     //selection = null;
                 }
