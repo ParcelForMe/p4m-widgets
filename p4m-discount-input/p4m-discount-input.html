@@ -7,43 +7,16 @@
 
     <template>
         <div id="content">
-            <a href="#" id="prompt" on-click="show">Redeem a coupon</a>
             <div id="drawer" class="hidden">
-                <input is="iron-input" type="text" id="discountCode"  on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />                            
-            </div>
+                <input is="iron-input" type="text" id="discountCode"  on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />   
+            </div> 
+                <a href="#" id="prompt" class="icon" on-click="show"><i class="p4micon-add-circle"></i></a>
+                <a href="#" id="prompt" class="icon" on-click="hide"><i class="p4micon-delete-circle"></i></a>                    
             <div id="p4mDiscountInputError" class="hidden">{{errorMsg}}</div>
         </div>
         <p4m-api id="localApi" is-local="true"></p4m-api>
     </template>
 
-    <style>
-        #p4mDiscountInputError {
-            padding: 8px;
-            color: red;
-        }  
-
-        #p4mDiscountInputError.success {
-            color: green;
-        }
-          
-        #content {
-
-            display: flex;
-            flex-direction: column;
-            margin: 4px 4px 8px 14px;
-            
-        }
-
-        #content #drawer {
-            display: flex;
-            flex-direction: row;
-                
-        }
-
-
-
-
-    </style>
 
     <script>
 
@@ -96,15 +69,18 @@
             sendCode: function() {
                 this.$.localApi.call('applyDiscountCode', { discountCode: this.discountCode }, null, this.onResponse.bind(this));
             },
-            onResponse: function (e) {
-                if (e.Success == false) {
-                    this.showError("This isn't a valid discount code");
-                    //this.showError(e.Error);
+            onResponse: function (e, data) {
+                if (e) {
+                    if (e.Error) {
+                        this.showError(e.Error);
+                    } else {
+                        this.showError("This isn't a valid discount code");
+                    }
                 }
                 else {
                     this.showError("Discount applied", true);
                     this.hide();
-                    this.fire('discount', e);
+                    this.fire('discount', data);
                     this.discountCode = null;
                 }
             },

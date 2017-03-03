@@ -8,6 +8,7 @@
 		<style>
             .content {
                  cursor: pointer;
+                 width: 100%;
             }
 
 			h3 {
@@ -15,7 +16,8 @@
 			}
 
 			ul {
-				padding-left: 2px;
+				padding: 0 20px 2px 0 !important;
+				margin: 0;
 			}
 
 			li {
@@ -26,11 +28,17 @@
 			tr {
 				line-height: 0.6em;
 			}
+			td {
+				padding: 2px 0;
+			}
 
 			.content-container {
-				margin: auto;
-				/*width: 100%;*/
-                cursor: pointer;
+				cursor: pointer;
+				padding: 0 0 1em 0;
+				flex: 1;
+				margin: .65em 1em;
+				border-bottom: 2px solid #eaeaea;
+				position: relative;
 			}
 
 			.overlay {
@@ -48,7 +56,7 @@
 
             .dp-large-card .dp-details {
                 display: flex;
-                flex-direction: row;     
+                flex-direction: column;     
                 min-height: 175px;     
             }
 
@@ -141,9 +149,9 @@
 			}
 
 			.choose-droppoint {
-				background-color: #555555;
 				border: none;
-				color: white;
+				background: #eaeaea;
+				color: #fff;
 				margin-top: 3px;
 				padding: 8px 20px;
 				text-align: center;
@@ -151,31 +159,42 @@
 				font-size: 16px;
 				/*float: right;*/
 				cursor: pointer;
-				transition: opacity 300ms ease-in-out 
+				-webkit-transition: all 0.2s ease;
+				-moz-transition: all 0.2s ease;
+				-o-transition: all 0.2s ease;
+				transition: all 0.2s ease;
+				position: absolute;
+				top: 2px;
+				right: 2px;
+				border-radius: 50%;
+				padding: 0;
 			}
 
 			.choose-droppoint:hover {
-				opacity: .85;
+				background-color: #7bc78f;
+				color: #fff;
 			}
 
-			.choose-droppoint.selected {
-				background-color: #4CAF50; /* Green */
+			.choose-droppoint.chosen {
+				background-color: #37a553; /* Green */
+				color: #fff;
 			}
 
-			.choose-droppoint.unselected:hover {
-				opacity: 1;
+				.choose-droppoint.chosen:hover {
+					opacity: .8;
+				}
+
+			.choose-droppoint.unchoose {
+				background-color: #7bc78f; /* Green */
 			}
 
-			.choose-droppoint.unselect {
-				background-color: #d60000; /* Green */
-			}
-
-			.choose-droppoint.unselect:hover {
-				opacity: 1;
+			.choose-droppoint.unchoose:hover {
+				opacity: .8;
 			}
 
 			.dp-opening-hours table {
 				margin-top: 6px;
+				width: 100%;
 			}
 
 			div.dp-day-name {
@@ -192,14 +211,14 @@
                 float: right;
 			}
 
-			.b-tick.not-selected {
+			.b-tick.unchosen {
                 display: none;
 				background-image: url('./images/tick.png');
 				background-position: -6px 0;
 				background-repeat: no-repeat;
 			}
 
-			.b-tick.selected {
+			.b-tick.chosen {
 				background-image: url('./images/tick_on.png');
 				background-position: -6px 0;
 				background-repeat: no-repeat;
@@ -310,7 +329,6 @@
 			}
 
 			#dp-address {
-				max-width: 200px;
 			}
 
             input[type="radio"] {
@@ -340,16 +358,17 @@
 			<div class="content">
 
 				<div class="dp-details">
-                    <div class="dp-header">
-                        <div class="dp-icon">
-                            <template is="dom-if" if="{{droppointData.providerName}}">
-                                <local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
-                                <b class="dpProviderName">{{droppointData.providerName}}</b>
-                            </template>
-                        </div>
-                        <template is="dom-if" if="{{_isTickButton}}">
-                            <div class$="b-tick {{buttonClass}}"></div>
+
+                    <div class="dp-icon">
+                        <template is="dom-if" if="{{droppointData.providerName}}">
+                            <local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
                         </template>
+                    </div>
+                    <div class="content">
+                        <div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}">
+                            <div class$="b-tick {{buttonClass}}"></div>
+                        </template></div>
+                        
                         <div id="dp-address">
                             <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
                                 {{item}}
@@ -360,44 +379,44 @@
                         </div>
                         <template is="dom-if" if="{{showDistance}}">
                             <div id="dp-distance">
-                                <div class="dp-small-heading">Distance</div>
-                                <i class="fa fa-road"></i>{{droppointData.localizedDistance}}
+                                <div class="font-weight-600">Distance:</div>
+                                <i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
                             </div>
                         </template>
 
-                    </div>
+        
 
                     <div id="dp-body">
                         <div id="dp-minor-info">
 
                             <template is="dom-if" if="{{showOpeningHoursLink}}">
 
-                                <div id="opening-hours-link">
-                                    <div class="dp-small-heading">Opening Hours</div>
-                                    <a class="droppoint_info" on-click="_openingHoursLinkClick"> View Opening Hours </a>
-                                </div>
-                            </template>
+	                                <div id="opening-hours-link">
+	                                    <div class="font-weight-600">Opening Hours</div>
+	                                    <a class="droppoint_info" on-click="_openingHoursLinkClick"> View Opening Hours </a>
+	                                </div>
+	                            </template>
 
 
                             <template is="dom-if" if="{{showOpeningHours}}">
 
-                                <div class="dp-opening-hours">
-                                    <div class="dp-small-heading">Opening Hours</div>
-                                    <table>
-                                        <template is="dom-repeat" items="{{_weekCollection}}">
-                                            <tr>
-                                                <td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
-                                                <td class="dp-day-time-slots">
-                                                    <ul class="testMe">
-                                                        <template is="dom-repeat" items={{item.timeSlots}}>
-                                                            <li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
-                                                        </template>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </table>
-                                </div>
+	                                <div class="dp-opening-hours">
+	                                    <div class="font-weight-600 title">Opening Hours</div>
+	                                    <table>
+	                                        <template is="dom-repeat" items="{{_weekCollection}}">
+	                                            <tr>
+	                                                <td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
+	                                                <td class="dp-day-time-slots">
+	                                                    <ul class="testMe">
+	                                                        <template is="dom-repeat" items={{item.timeSlots}}>
+	                                                            <li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
+	                                                        </template>
+	                                                    </ul>
+	                                                </td>
+	                                            </tr>
+	                                        </template>
+	                                    </table>
+	                                </div>
 
                             </template>
                         </div>
@@ -405,12 +424,12 @@
                     </div>
 
 
-                </div>
-            </div>
+
+
             <template is="dom-if" if="{{showShippingOptions}}">
                 <template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
                     <div class="shippingOptions">
-                        <div class="dp-small-heading">Collection options</div>
+                       <div class="font-weight-600 title">Collection Options</div>
                         <ul>
                             <template id="shippingOptionsTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
                                 <li class="delivery-place">
@@ -435,11 +454,20 @@
 
             </template>
 
-			<div class="actions">
-				<template is="dom-if" if="{{_isStandardButton}}">
-					<div on-click="select" class$="button choose-droppoint {{buttonClass}}">{{buttonText}}</div>
-				</template>
-			</div>
+						<div class="actions">
+							<template is="dom-if" if="{{isStandardButton}}">
+								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
+							</template>
+						</div>
+
+                </div>
+
+
+
+
+
+            </div>
+            
 		</div>
 
 	</template>
@@ -646,7 +674,6 @@
             //Fire on-select-delivery-option to be received by parent
             //Set deliveries[n].selected to true on selected method, false on all others
 			selectMethod: function (shippingOptionId) {
-			    debugger;
 			    this.select();
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];

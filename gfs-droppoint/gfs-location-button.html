@@ -9,7 +9,7 @@
         <style> 
         </style>
 
-        <div>
+        <div class="wrap">
             <iron-ajax id="ajaxGetLocation"
                        method="GET"
                        handle-as="json"
@@ -19,7 +19,13 @@
                        debounce-duration="300">
             </iron-ajax>
             
-            <div class="gfs-button gfs-mini-button"><iron-icon icon="maps:place"></iron-icon>{{addressName}}</div>
+            <div class="content">
+            <div class="addressTitle"><i class="p4micon p4micon-map-marker"></i>{{addressName}}</div>
+				<p>
+					{{_addressTop}}<br />
+					{{_addressBottom}}					
+				</p>
+            </div>
         </div>
 
     </template>
@@ -43,14 +49,29 @@
                 },
                 geoLocation: {
                     type: Object
-                }
+                },
+				_addressTop: {
+					type: String
+				},
+				_addressBottom: {
+					type: String
+				}
             },
 
             ready: function () {
-                //Now call Google geocoder to get lat and lng
-                this._geocodeAddress = this.addressData.addressLineCollection[0] + "," + this.addressData.Postcode;
-                this.$.ajaxGetLocation.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + this._geocodeAddress + "&key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI"; //Make this a parameter
-                this.$.ajaxGetLocation.generateRequest();
+               
+                this._geocodeAddress = this.addressData.addressLineCollection[0] || this.addressData.addressLines + "," + this.addressData.Postcode;
+                this._addressTop = this.addressData.addressLineCollection[0];
+                this._addressBottom = this.addressData.town + ", " + this.addressData.Postcode;
+                if (this.addressData.lat && this.addressData.lng) {
+                    this.geoLocation = { lat: this.addressData.lat, lng: this.addressData.lng };
+                }
+                else {
+                    //Now call Google geocoder to get lat and lng
+                    this.$.ajaxGetLocation.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + this._geocodeAddress + "&key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI"; //Make this a parameter
+                    this.$.ajaxGetLocation.generateRequest();
+                }
+
             },
 
             _handleGetLocationResponse: function (e) {
@@ -58,10 +79,12 @@
                 var results = e.detail.response.results;
                 if (results && results.length) {
                     this.geoLocation = results[0].geometry.location;
+
                 }
                 else {
                     console.error("Failed to geocode", this._geocodeAddress);
                 }
+
             },
 
             _handleError: function(err) {

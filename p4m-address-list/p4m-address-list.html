@@ -7,7 +7,9 @@
 
     <template>
         <div id="container">
-            <p><a id="addNewAddress" href="#" on-tap="addNewAddress">Add a new address</a></p>
+            <div class="add-address container horizontal layout center end-justified style-scope p4m-address-list">
+            <i class="p4micon-add-circle link" id="addNewAddress" on-tap="addNewAddress"></i>
+            </div>
 
             <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
                 <p4m-address address-data="{{item}}" on-canceledit="cancelAdd" cart-data="{{cartData}}" mode="edit" on-save="onAddAddress"></p4m-address>
@@ -112,8 +114,7 @@
             },
 
             onSelectAddress: function (e) {
-                //console.log("*** Selected address");
-                debugger;
+                console.log("*** Selected address");
                 this.fire('select', e.detail);
             },
 
