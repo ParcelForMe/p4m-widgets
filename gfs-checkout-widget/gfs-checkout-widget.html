@@ -123,7 +123,7 @@
                         </div>
 
                         <div style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" on-click="_hideDropPointDetails" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                         </div>
                         <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
@@ -135,7 +135,7 @@
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" disable-unchoose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
@@ -143,6 +143,7 @@
                             </div>
                         </div>
                     </div>
+
                 </iron-page>
                 <iron-page id="pageStandard">
                     <div id="standard-loading" class="loading"><paper-spinner active id="standard-spinner"></paper-spinner></div>

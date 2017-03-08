@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/ParcelForMe/p4m-widgets#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.17.1",
     "cookies": "^0.6.2",
     "express": "^4.14.0",
     "oidc-client-node": "^1.0.10",
