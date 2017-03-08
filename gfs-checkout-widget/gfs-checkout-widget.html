@@ -100,19 +100,12 @@
                       </div>
                       <div class="page" id="pageDroppoints">
 
+
+
                       <div id="mapContainer">
 
-                            <div id="dropPointDetails" class$="{{_dropPointDetailsClass}}">
-                                <div id="droppoint_overlay" style="height: {{mapHeight}}px; display: block">
-                                    <div id="droppoint_overlay_close" on-click="_hideDropPointDetails">
-                                        <img src="./images/x.png" alt="close" />
-                                    </div>
-                                    <gfs-droppoint id="overlay-droppoint" droppoint-data="{{_selectedDropPoint}}" on-click="_hideDropPointDetails" container-class="overlay" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                                </div>
-                            </div>
                             <div class="hidden">
-                                <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                <div id="droppoint_info" class="noscroll">Selected
                                 </div>
                             </div>
                             <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
@@ -129,6 +122,9 @@
                             </div>
                         </div>
 
+                        <div style="height: {{mapHeight}}px; display: block">
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" on-click="_hideDropPointDetails" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                        </div>
                         <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
 
@@ -140,14 +136,6 @@
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
                                             <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" disable-unchoose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-                                        </template>
-                                    </div>
-
-                                    <div class="preferredDroppoints">
-                                        <h3>My Collection Points</h3>
-                                        <template id="listFavDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
-
-                                            <gfs-droppoint on-droppoint-selected="_onDropPointSelectedEvent" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
@@ -468,9 +456,6 @@
                     value: null
                 },
 
-                _infoBoxDroppoint: {
-                    type: Object
-                },
             },
 
             listeners: {
@@ -695,11 +680,6 @@
             setFavDropPoints: function (droppointList) {
                 this._favDropPoints = droppointList;
                 this._processFavDroppoints();
-
-                if (this._favDropPoints.length > 0) {
-                    this._showFavDroppoints();
-                }
-
             },
 
             setFavAddresses: function (addressList) {
@@ -898,6 +878,8 @@
                             this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
                             //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
                             //this.setDeliveryMethod();
+                            
+                            //Can I get away without selecting it via the droppoint widget?
                             this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
                         }
                         else {
@@ -1614,12 +1596,6 @@
                 this._dropPointDetailsClass = "fade-out";
             },
 
-            _showFavDroppoints: function () {
-                this.$.mainMapArea.classList.add("showFavDroppoints");
-                this.$.mainDropPointListArea.classList.add("showFavDroppoints");
-                var self = this;
-                this._resetMap(this._map);
-            },
 
             _getHomeIcon: function() {
                 if (this.homeIcon) {
