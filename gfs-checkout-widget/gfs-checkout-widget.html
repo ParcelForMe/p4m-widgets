@@ -167,7 +167,7 @@
                                     <p class="deliveryDateRange">{{item.deliveryDateRange}}</p>
                                 </label>
 								<div class="flex"></div>
-                                <i name="shipping_method" on-click="setDeliveryMethodEvent" checked="{{item._originalMethodObject.selected}}" value="{{item.id}}" id="{{item.id}}" class="p4micon-check-circle link standard-delivery-selection"></i>
+                                <i name="shipping_method" on-click="setDeliveryMethodEvent" value="{{item.id}}" id="{{item.id}}" class$="p4micon-check-circle link standard-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
                             </li>
                         </template>
                     </ul>
@@ -2023,9 +2023,9 @@
 
           
             setDeliveryMethodEvent: function (e) {
-                if (e.target.checked) {                    
+                //if (e.target.checked) {                    
                     this.setDeliveryMethod(e.target.id);
-                }
+                //}
             },
 
             onSelectTab: function (e) {

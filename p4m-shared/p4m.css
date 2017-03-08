@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 .p4m-green {
   background-color: #37a553 !important; }
 
@@ -1598,7 +1598,7 @@ p4m-checkout {
   .gfs-checkout .gfsStd i {
     font-size: 24px;
     color: #c5c5c5; }
-    .gfs-checkout .gfsStd i.checked {
+    .gfs-checkout .gfsStd i.selected_true {
       color: #37a553; }
 
 gfs-calendar .gfs-calendar {

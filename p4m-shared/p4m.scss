@@ -1960,7 +1960,7 @@ p4m-checkout {
 		i {
 			font-size: 24px;
 			color: $grey-h2;
-			&.checked {
+			&.selected_true {
 				color: $p4m-green;
 			}
 		}
