@@ -681,7 +681,7 @@ a, a:visited {
 	}
 }
 
-.hidden {display: none;}
+.hidden {display: none !important;}
 .flex-spacer {display: flex; flex: 1;}
 .noscroll {xoverflow: hidden;}
 .link {cursor:pointer;}
@@ -1916,6 +1916,12 @@ p4m-checkout {
 					position: absolute;
 					bottom: 0;
 				}
+                #quantity {
+                    input {
+                        width: 40px;
+                        text-align: right;
+                    }
+                }
 			}
 		}
 		#image img {
