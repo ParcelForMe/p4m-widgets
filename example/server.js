@@ -56,10 +56,11 @@ that the widgets will actually work
 */
 site.use('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
 site.use('/p4m/localLogin', p4mEndpoint.localLogin); 
-site.use('/p4m/checkout', p4mEndpoint.checkout); 
+site.use('/p4m/checkout', p4mEndpoint.checkout);
+site.post('/p4m/updShippingService', p4mEndpoint.updShippingService);
 
 // TODO : check if discount code is valid or not ("AAA" is valid !)
-site.use('/p3m/applyDiscountCode', simulateDelay); // and then continue on to static file
+site.use('/p4m/applyDiscountCode', simulateDelay); // and then continue on to static file
 
 /*
 

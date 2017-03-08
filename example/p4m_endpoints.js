@@ -5,7 +5,7 @@ the widgets to function - this is NOT a full P4M implementation
 
 */
 
-var Express 		= require('express');
+var Express = require('express');
 
 var Cookies     	= require('cookies');
 var request 		= require('request');
@@ -140,4 +140,16 @@ function returnTemplateFile(file, find, replace, res) {
 	});
 
 
+}
+
+exports.updShippingService = function(req, res) {
+    var result = {
+        Discount: 0,
+        Error: null,
+        Shipping: req.body.Amount,
+        Success: true
+    };
+    result.Tax = Math.floor(result.Shipping / 10);
+    result.Total = result.Tax + result.Shipping;
+    res.status(200).json(result);
 }
