@@ -371,8 +371,10 @@
                         
                         <div id="dp-address">
                             <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
-                                {{item}}
-                                <br />
+                                <template is="dom-if" if="{{item}}">
+                                	{{item}}
+                                	<br />
+                                </template>
                             </template>
                             {{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
 

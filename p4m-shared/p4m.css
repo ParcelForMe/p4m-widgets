@@ -1288,6 +1288,12 @@ p4m-checkout {
       font-weight: bold; }
   p4m-checkout a.droppoint_info:hover {
     text-decoration: underline; }
+  p4m-checkout .collection-points paper-item {
+    border-bottom: 1px solid #e0e0e0; }
+    p4m-checkout .collection-points paper-item:focus {
+      font-weight: inherit !important; }
+      p4m-checkout .collection-points paper-item:focus:before {
+        background: #aaa; }
   p4m-checkout .dp-details.gfs-droppoint {
     display: flex;
     flex-direction: row; }
@@ -1298,7 +1304,7 @@ p4m-checkout {
   p4m-checkout #dp-distance {
     display: flex;
     align-items: center;
-    margin-top: 8px; }
+    line-height: 1em; }
     p4m-checkout #dp-distance i {
       font-size: 16px;
       margin-left: 4px; }
@@ -1321,8 +1327,7 @@ p4m-checkout {
   p4m-checkout #dp-address {
     margin: 2px 0;
     line-height: 1.2em;
-    font-size: 14px;
-    margin-left: 29px; }
+    font-size: 14px; }
   p4m-checkout .highlight {
     color: #FFFFFF !important;
     background-color: #90dca7 !important; }
