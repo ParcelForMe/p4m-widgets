@@ -278,7 +278,9 @@
             },
 
             _waitForAuthCompletion: function() {
-                this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
+                if (!this._authCompletionInterval) {
+                    this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
+                }             
             },
 
             _checkAuthIsComplete: function() {
