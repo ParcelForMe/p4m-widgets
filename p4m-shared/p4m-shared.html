@@ -22,8 +22,17 @@
             --paper-p4m-green-300: #5fba76;
             --paper-p4m-green-500: #37a553;
             --paper-p4m-green-700: #2f8e47;
-            --paper-item-selected-weight: 400;
+            --paper-tabs-selection-bar-color: blue;
         }
+        :host(:focus):before, .paper-item:focus:before {
+
+            background: blue !important;
+            content: '';
+            opacity: var(--dark-divider-opacity);
+            pointer-events: none;
+
+            @apply(--paper-item-focused-before);
+          }
         paper-ripple {
         color: var(--paper-p4m-green-700);
         }

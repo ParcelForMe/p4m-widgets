@@ -1537,9 +1537,14 @@ p4m-checkout {
         text-decoration: underline;
     }
 
-    .collection-points paper-items {
-    	// padding-top: 10px;
-    	// padding-bottom: 5px;
+    .collection-points paper-item {
+    	border-bottom: 1px solid $grey-h6;
+        &:focus {
+            font-weight: inherit !important;
+            &:before {
+                background: $grey-hb;
+            }
+        }
     }
 
     .dp-details.gfs-droppoint {
@@ -1554,7 +1559,7 @@ p4m-checkout {
 	#dp-distance {
 		display: flex;
 		align-items: center;
-		margin-top: 8px;
+		line-height: 1em;
 		i {
 			font-size: 16px;
 			margin-left: 4px;
@@ -1587,7 +1592,6 @@ p4m-checkout {
 		margin: 2px 0;
 		line-height: 1.2em;
 		font-size: 14px;
-		margin-left: 29px;
 	}
     .highlight {
         color: #FFFFFF !important;
