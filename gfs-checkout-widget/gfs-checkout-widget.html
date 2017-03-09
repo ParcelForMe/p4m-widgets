@@ -68,16 +68,15 @@
                         <div class="location-points">
 							<paper-dropdown-menu label="My Locations" noink no-animations>
 								<paper-listbox class="dropdown-content">
-									
+									    <paper-item>
+                                            <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
+                                        </paper-item>
+
 			                            <template is="dom-repeat" items="{{_favAddresses}}">
                                             <paper-item>
     			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
                                             </paper-item>
-			                            </template>
-                                        <paper-item>
-                                            <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
-                                        </paper-item>
-                                       
+			                            </template>                                    
 									
 								</paper-listbox>
 							</paper-dropdown-menu>
