@@ -123,6 +123,14 @@ console.log('HERE with ', body);
 
 }
 
+
+exports.itemQtyChanged = function(req, res) {
+    var result = {
+        Success: true
+    };
+    res.status(200).json(result);
+}
+
 function returnTemplateFile(file, find, replace, res) {
 
 	fs.readFile('static_api/templates/'+file, function read(err, file_contents) {

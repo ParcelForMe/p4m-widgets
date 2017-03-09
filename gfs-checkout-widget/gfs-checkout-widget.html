@@ -122,7 +122,7 @@
                             </div>
                         </div>
 
-                        <div style="height: {{mapHeight}}px; display: block">
+                        <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
                             <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                         </div>
                         <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
@@ -1498,6 +1498,16 @@
                 this._mapViewPort = [southWest, northEast];
             },
 
+            _updateUi: function() {
+                //Display/hide things based on the current state
+                if (this._selectedDropPoint) {
+                    this.$.selectedDropPointPanel.classList.remove("hidden");
+                }
+                else {
+                    this.$.selectedDropPointPanel.classList.add("hidden");
+                }
+            },
+
             
             _reloadDroppoints: function() {
                 if (this._sessionId) {
@@ -1593,11 +1603,6 @@
                 }           
             },
 
-            _hideDropPointDetails: function() {
-                this._dropPointDetailsClass = "fade-out";
-            },
-
-
             _getHomeIcon: function() {
                 if (this.homeIcon) {
                     return this.homeIcon;
@@ -1682,6 +1687,8 @@
 
                     //Show on the map, pop up the info window
                     self._openSelectedDropPointInfoWindow();
+                    self._updateUi();
+
                 });
 
             },
@@ -1711,6 +1718,8 @@
                 
             },
 
+
+
             _selectDropPoint(dropPointId) {
                 var self = this;
                 console.warn("_selectDropPoint()");
@@ -1739,7 +1748,8 @@
                     if (this._infoWindow) {
                         this._infoWindow.close();
                     }
-                    this._hideDropPointDetails();
+                    //this._hideDropPointDetails();
+                    this._updateUi();
                     this._selectedDropPoint = null;
                 }
             },

@@ -145,7 +145,7 @@
 
             _updateCurrencyAmounts: function () {
                 this.set('_tax', this.cartData.Tax.toFixed(2));
-                this.set('_discount', Number(this._discount).toFixed(2));
+                this.set('_discount', Number(this._discount||0).toFixed(2));
                 this.set('_shipping', Number(this.cartData.ShippingAmt).toFixed(2));
                 this.set('_total',  Number(this.cartData.Total).toFixed(2));
                 
