@@ -68,12 +68,17 @@
                         <div class="location-points">
 							<paper-dropdown-menu label="My Locations" noink no-animations>
 								<paper-listbox class="dropdown-content">
-									<paper-item>
+									
 			                            <template is="dom-repeat" items="{{_favAddresses}}">
-			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name={{item.name}} address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
+                                            <paper-item>
+    			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
+                                            </paper-item>
 			                            </template>
-										<div id="dp-address" class="style-scope gfs-droppoint"></div>
-									</paper-item>
+                                        <paper-item>
+                                            <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
+                                        </paper-item>
+                                       
+									
 								</paper-listbox>
 							</paper-dropdown-menu>
 							
@@ -107,8 +112,7 @@
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">Selected
                                 </div>
-                            </div>
-                            <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
+                            </div>                           
                             <!--
                                <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
                             -->
@@ -1775,17 +1779,16 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-
-                            self._map.setCenter(pos);
-
+                            self._panToGeoLocation(pos);
                         },
-                        function() {
-                            handleLocationError(true, self._infoWindow, GMap.getCenter());
+                        function(err) {
+                           console.error(JSON.stringify(err));
                         }
                     );
-                } else {
-                    // Browser doesn't support Geolocation
-                    //handleLocationError(false, infoWindow, GMap.getCenter());
+                } 
+                else {
+                    console.error("Browser does not support geolocation");
+
                 }
             },
 
