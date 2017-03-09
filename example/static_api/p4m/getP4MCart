@@ -8,9 +8,9 @@
         "ShippingAmt"     : 20.00,
         "Tax"             : 10.00,
         "Total"           : 100.00,
-        "ServiceId"	    : "Shipping service Id",
-        "ServiceName"     : "next day",
-        "ExpDeliveryDate"	: "2017-02-16T14:55:43.511Z",
+        "xServiceId"	    : "Shipping service Id",
+        "xServiceName"     : "next day",
+        "xExpDeliveryDate"	: "2017-02-16T14:55:43.511Z",
         "PaymentType"       : "DB",
         "Items"	        : [
             {
