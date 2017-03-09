@@ -36,9 +36,10 @@
             </template> -->
 
             <div id="quantity" class="card-panel horizontal layout center">
-                <i on-tap="add-qty" class="p4micon-add-circle link"></i>
-                <input label="Qty" _is="iron-input" prevent-invalid-input allowed-pattern="[0-9]" type="text" id="qty" bind-value="{{cartItemData.Qty}}" value="{{cartItemData.Qty}}" />
                 <i on-tap="remove-qty" class="p4micon-subtract-circle link"></i>
+                <input label="Qty" _is="iron-input" prevent-invalid-input allowed-pattern="[0-9]" type="text" id="qty" bind-value="{{cartItemData.Qty}}" value="{{cartItemData.Qty}}" />
+                <i on-tap="add-qty" class="p4micon-add-circle link"></i>
+                
             </div>
 
             <div id="delete">
