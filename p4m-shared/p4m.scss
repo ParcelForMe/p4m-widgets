@@ -1503,8 +1503,22 @@ p4m-checkout {
 			margin: 2px 0;
 			line-height: 1.2em;
 			font-size: 14px;
+            font-weight: 400;
 		}
 	}
+
+    .location-points {
+        paper-dropdown-menu paper-listbox paper-item.gfs-checkout {
+            height: initial !important;
+            min-height: initial !important;
+            line-height: 1.2em;
+        }
+        [address-name*="Current"] {
+            p { 
+                display: none;
+            }
+        }
+    }
 	
 
     .toggle-label {
@@ -1537,7 +1551,7 @@ p4m-checkout {
         text-decoration: underline;
     }
 
-    .collection-points paper-item {
+    .collection-points paper-item, .location-points paper-item {
     	border-bottom: 1px solid $grey-h6;
         &:focus {
             font-weight: inherit !important;
@@ -1901,10 +1915,11 @@ p4m-checkout {
 	}
 
 	p4m-cart {
-		#container {
-			overflow: scroll;
-			max-height: 260px;
-
+		> #container {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            height: 260px;
+            box-sizing: border-box;
 		}
 		p4m-cart-card {
 			#container {

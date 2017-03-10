@@ -19457,6 +19457,12 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/example\/.gitignore": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/example\/.gitignore",
+		"oF": 0
+		},
 	"\/example\/index.html": {
 		"ft": 8192,
 		"oA": 2,

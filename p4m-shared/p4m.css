@@ -1266,7 +1266,14 @@ p4m-checkout {
     padding-left: 18px;
     margin: 2px 0;
     line-height: 1.2em;
-    font-size: 14px; }
+    font-size: 14px;
+    font-weight: 400; }
+  p4m-checkout .location-points paper-dropdown-menu paper-listbox paper-item.gfs-checkout {
+    height: initial !important;
+    min-height: initial !important;
+    line-height: 1.2em; }
+  p4m-checkout .location-points [address-name*="Current"] p {
+    display: none; }
   p4m-checkout .toggle-label {
     display: inline-block;
     font-size: 18px;
@@ -1288,11 +1295,11 @@ p4m-checkout {
       font-weight: bold; }
   p4m-checkout a.droppoint_info:hover {
     text-decoration: underline; }
-  p4m-checkout .collection-points paper-item {
+  p4m-checkout .collection-points paper-item, p4m-checkout .location-points paper-item {
     border-bottom: 1px solid #e0e0e0; }
-    p4m-checkout .collection-points paper-item:focus {
+    p4m-checkout .collection-points paper-item:focus, p4m-checkout .location-points paper-item:focus {
       font-weight: inherit !important; }
-      p4m-checkout .collection-points paper-item:focus:before {
+      p4m-checkout .collection-points paper-item:focus:before, p4m-checkout .location-points paper-item:focus:before {
         background: #aaa; }
   p4m-checkout .dp-details.gfs-droppoint {
     display: flex;
@@ -1560,9 +1567,11 @@ p4m-checkout {
     margin: -12px 0 0 -12px; }
   p4m-checkout p4m-order-summary .hidden {
     display: none; }
-  p4m-checkout p4m-cart #container {
-    overflow: scroll;
-    max-height: 260px; }
+  p4m-checkout p4m-cart > #container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 260px;
+    box-sizing: border-box; }
   p4m-checkout p4m-cart p4m-cart-card #container {
     padding: .5rem;
     box-sizing: border-box;
