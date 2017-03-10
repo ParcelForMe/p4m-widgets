@@ -18,6 +18,7 @@
 <link rel="import" href="../gfs-calendar/gfs-calendar.html" />
 <link rel="import" href="../map-region-manager/map-region-manager.html" />
 
+
 <script src="../../momentjs/min/moment.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI&libraries=places"></script>
 <link href="css/custom.css" rel="stylesheet" />
@@ -155,7 +156,7 @@
                             <li class="gfsStd horizontal layout center">
                                 <label for$="{{item.id}}">
                                     <p class="methodname lg">{{item.methodTitle}}</p>
-                                    <p class="price lg">{{currencySymbol}}{{item.price}}</p>
+                                    <p class="price lg">{{item.localizedPrice}}</p>
                                     <p class="deliveryDateRange">{{item.deliveryDateRange}}</p>
                                 </label>
 								<div class="flex"></div>
@@ -1110,19 +1111,21 @@
 
             //This runs after the GFS requests have returned data
             _delayedInit: function () {
-                this._processInputData();
+                this._processRateData();
 
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
-                    this._processAllDroppoints();
+                    //this._processAllDroppoints();
                 }
+
+               //this.processRates();
 
                 //this.showPage_Standard();
             },
 
             //Index and tidy GFS rate data
-            _processInputData: function () {
+            _processRateData: function () {
                 if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
                     this._data.standardRates = this._getStandardServices();
                     this.set('standardRates', this._data.standardRates);
@@ -1974,6 +1977,7 @@
                         id: item.service.id,
                         methodTitle: item.service.methodTitle,
                         price: item.service.price,
+                        localizedPrice: item.service.localizedPrice,
                         _originalMethodObject: item.service
                     };
                     // non day definite
