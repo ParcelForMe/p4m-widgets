@@ -180,10 +180,6 @@
         var DOW_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', '?'];
         var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-        // set them here so you can access the home marker
-        var geocoder = null;
-        //var marker = null;
-
         // element registration
         Polymer({
             is: "gfs-checkout",
@@ -1397,7 +1393,7 @@
                 //self.initialAddress = address;
                 //self.$$("#gfsMapCanvas-loading").classList.remove('hidden');
 
-                geocoder = new google.maps.Geocoder();
+                var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
                         country: this.countryCode,
@@ -1430,7 +1426,7 @@
 
             _geoCodeAddress: function (streetAddress, postCode, countryCode, callback) {
                 var addressStr = streetAddress + "," + postCode;
-                geocoder = new google.maps.Geocoder();
+                var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
                         country: countryCode || this.countryCode
@@ -2033,7 +2029,6 @@
                     this.onShowPage_Droppoints();
                 }
                 else {
-                    console.error("Unknown tab");
                 }
             },
 
