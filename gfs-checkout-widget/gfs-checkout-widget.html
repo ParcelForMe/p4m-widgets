@@ -817,19 +817,21 @@
                     this.setFavAddresses(this.config.favAddresses);
 
                     //if everything has been preselected, preselect,
+                    debugger;
                     if (selection && selection.deliveryMethodId) {
                         //Post, then try to re-select the chosen method
                         this.postGfsData(function (err) {
                             if (!err) {
 
                                 if (selection.dropPointId) {
-                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
+                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                                 }
                                 else {
                                     self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                                    finalCallback();
                                 }
                             }
-                            finalCallback(err);
+                            else finalCallback(err);
                         });
                     }
                     //Otherwise auto-select address and delivery method according to preferences (if any)
@@ -1002,6 +1004,7 @@
             //Select a delivery service
             //TODO: Refactor?
             setDeliveryMethod: function (methodId, dateOverride) {
+                debugger;
                 if (!methodId) return;
 
                 var newMethod = this._getDeliveryRateById(methodId);
@@ -1059,20 +1062,7 @@
                         newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
                     }
                     this.set('selectedServiceDetails', newSelectedServiceDetails);
-                    
-
-                    //this._selectService(methodId);
-                    //---- _selectService
-                    /*var serviceSelected = null;
-
-                    var all = this.standardRates.concat(this.dayDefinite).concat([]);
-
-                    for (var i = 0; i < this.all.length; i++) {
-                        var item = this.all[i];
-                        item.selected = (item.id == id);
-                    }
-                    //-----------------------
-                    */
+                  
 
                     this.set('standardRates', this._getStandardServices());
 
@@ -1513,6 +1503,7 @@
                 else {
                     this.$.selectedDropPointPanel.classList.add("hidden");
                 }
+                this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
             },
 
             
@@ -1686,7 +1677,7 @@
                     console.log("No delivery method chosen.");
                 }
 
-                //if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppoint.droppointId) return; //Already selected
+                //.if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppointId) return; //Already selected
                 //If there is no method, _completeDropPointSelection will choose one for us
                 var self = this;
                 //Get selected delivery method
@@ -1704,25 +1695,48 @@
             //If no method chosen, auto-choose one
             _completeDropPointSelection(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
+                /*if (this._runningCompleteDropPointSelection) {
+                    callback(null);
+                    return;
+                }
+                this._runningCompleteDropPointSelection = true;*/
+                
                 console.warn("_completeDropPointSelection()");
                 var self = this;
-                var dp = this._droppointById(null, droppointId)            
-                this.set("_selectedDropPoint", dp);
-                this.set("_selectedDropPoint.selected", true);
-                //this.set("_selectedDropPoint.deliveryMethod", methodId);
-                if (methodId) {
-                    this.setDeliveryMethod(methodId);
-                    this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
-                    callback(null);
-                }
-             
+                if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
+                    callback(null);  
+                }  
                 else {
-                    this.autoSelectDeliveryMethod(function (err) {
-                        self.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
-                        callback(err);
-                    });
+
+                    var dp = this._droppointById(null, droppointId)            
+                    this.set("_selectedDropPoint", dp);
+                    this.set("_selectedDropPoint.selected", true);
+                    //this.set("_selectedDropPoint.deliveryMethod", methodId);
+
+                    if (methodId) {    
+                        //If we're selecting a new droppoint and/or method,
+                        
+
+                        this.$['infobox-droppoint'].select();
+                        this.$['infobox-droppoint'].selectMethod(methodId, true);      
+                        this.setDeliveryMethod(methodId);    
+
+                        self._updateUi(); 
+                        //self._runningCompleteDropPointSelection = false;      
+
+                        callback(null);
+                    }
+                 
+                    else {
+                        this.autoSelectDeliveryMethod(function (err) {
+                            
+                            self._updateUi();
+                            //this._runningCompleteDropPointSelection = false;
+                            callback(err);
+                        });
+                    }
                 }
-                
+               
             },
 
 
