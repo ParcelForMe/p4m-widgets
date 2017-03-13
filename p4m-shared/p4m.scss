@@ -675,6 +675,7 @@ left: 0;
 
 a, a:visited {
 	color: $grey-hb;
+    cursor: pointer;
 	@include transition();
 	&:hover {
 		color: $grey-b4;
@@ -1935,6 +1936,16 @@ p4m-checkout {
     	border-top: 2px solid $grey-h8;
     	p4m-order-text {
     		flex: 2;
+            font-size: 16px;
+            line-height: 20px;
+            color: $grey-b2;
+            p {
+                font-size: 16px;
+                margin: 0;
+            }
+            span {
+                font-weight: 600;
+            }
     	}
     	p4m-purchase {
     		flex: 1;
@@ -1944,6 +1955,7 @@ p4m-checkout {
 
     // p4m-order-summary
 	p4m-order-summary {
+        font-size: 14px;
 		h4 {
 		    font-size: 16px;
 		    margin: 0;
@@ -1962,7 +1974,6 @@ p4m-checkout {
 		        color: #D0D0D0;
 		    }
 	    }
-	    #p4mContainer
 	    .p4m-table {
 	        padding: 20px;
 	        .p4m-row {
@@ -2010,8 +2021,8 @@ p4m-checkout {
 			        }
 			    }
 			    &.total {
-			    	line-height: 36px;
-			    	font-size: 18px;
+			    	line-height: 32px;
+			    	font-size: 16px;
 			    	font-weight: 600;
 			    }
 		    }
@@ -2067,6 +2078,22 @@ p4m-checkout {
         }
         p4m-card-list {
             
+        }
+    }
+
+    .select-payment-type {
+        height: 36px;
+        paper-tab {
+            color: $grey-b4;
+            background: $white;
+            margin: 0 15px 0 0;
+            border-radius: 5px;
+            width: 92px;
+            padding: 0;
+            flex: initial;
+            * {
+                font-size: 36px;
+            }
         }
     }
 

@@ -594,6 +594,7 @@ body.fullbleed {
 
 a, a:visited {
   color: #aaa;
+  cursor: pointer;
   -webkit-transition: all 0.15s ease-in-out 0s;
   -khtml-transition: all 0.15s ease-in-out 0s;
   -moz-transition: all 0.15s ease-in-out 0s;
@@ -1585,84 +1586,84 @@ p4m-checkout {
     flex-direction: row;
     border-top: 2px solid #f5f5f5; }
     p4m-checkout footer p4m-order-text {
-      flex: 2; }
+      flex: 2;
+      font-size: 16px;
+      line-height: 20px;
+      color: #777; }
+      p4m-checkout footer p4m-order-text p {
+        font-size: 16px;
+        margin: 0; }
+      p4m-checkout footer p4m-order-text span {
+        font-weight: 600; }
     p4m-checkout footer p4m-purchase {
       flex: 1; }
-  p4m-checkout p4m-order-summary h4 {
-    font-size: 16px;
-    margin: 0;
-    height: 48px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    color: #fff;
-    background: #5fba76;
-    -webkit-font-smoothing: antialiased; }
-  p4m-checkout p4m-order-summary #p4mContainer {
-    margin: auto;
-    position: relative; }
-    p4m-checkout p4m-order-summary #p4mContainer.loading .p4m-table .p4m-cell {
-      color: #D0D0D0; }
-  p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table {
-    padding: 20px; }
-    p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row {
-      line-height: 1.2em;
+  p4m-checkout p4m-order-summary {
+    font-size: 14px; }
+    p4m-checkout p4m-order-summary h4 {
+      font-size: 16px;
+      margin: 0;
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
       align-items: center;
-      margin-bottom: 3px; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row .p4m-cell {
-        display: flex;
-        flex-direction: row;
-        text-overflow: ellipsis;
-        white-space: normal;
-        overflow: hidden; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row .header-col {
-        color: #404040;
-        width: 20%;
-        display: none; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError {
-        color: red; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError.success {
-        color: green; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row p4m-discount-input #content {
-        display: flex;
-        flex-direction: row;
-        align-items: center; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row p4m-discount-input #content #drawer {
-        display: flex;
-        flex-direction: row; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row p4m-discount-input a.icon {
-        display: flex;
-        width: 24px;
-        align-self: stretch;
+      color: #fff;
+      background: #5fba76;
+      -webkit-font-smoothing: antialiased; }
+    p4m-checkout p4m-order-summary #p4mContainer {
+      margin: auto;
+      position: relative; }
+      p4m-checkout p4m-order-summary #p4mContainer.loading .p4m-table .p4m-cell {
+        color: #D0D0D0; }
+    p4m-checkout p4m-order-summary .p4m-table {
+      padding: 20px; }
+      p4m-checkout p4m-order-summary .p4m-table .p4m-row {
+        line-height: 1.2em;
         align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        margin-left: 2px;
-        color: #999;
-        text-decoration: none; }
-      p4m-checkout p4m-order-summary #p4mContainer
-.p4m-table .p4m-row.total {
-        line-height: 36px;
-        font-size: 18px;
-        font-weight: 600; }
-  p4m-checkout p4m-order-summary #spinner {
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -12px 0 0 -12px; }
-  p4m-checkout p4m-order-summary .hidden {
-    display: none; }
+        margin-bottom: 3px; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row .p4m-cell {
+          display: flex;
+          flex-direction: row;
+          text-overflow: ellipsis;
+          white-space: normal;
+          overflow: hidden; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row .header-col {
+          color: #404040;
+          width: 20%;
+          display: none; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError {
+          color: red; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError.success {
+          color: green; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
+          display: flex;
+          flex-direction: row;
+          align-items: center; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
+          display: flex;
+          flex-direction: row; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
+          display: flex;
+          width: 24px;
+          align-self: stretch;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          margin-left: 2px;
+          color: #999;
+          text-decoration: none; }
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row.total {
+          line-height: 32px;
+          font-size: 16px;
+          font-weight: 600; }
+    p4m-checkout p4m-order-summary #spinner {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -12px 0 0 -12px; }
+    p4m-checkout p4m-order-summary .hidden {
+      display: none; }
   p4m-checkout #cardPage #cardList > #container {
     overflow-y: auto;
     overflow-x: hidden;
@@ -1683,6 +1684,18 @@ p4m-checkout {
     width: 290px; }
     p4m-checkout #cardPage #cardList p4m-card > div#container .card-panel {
       margin-right: 8px; }
+  p4m-checkout .select-payment-type {
+    height: 36px; }
+    p4m-checkout .select-payment-type paper-tab {
+      color: #555;
+      background: #fff;
+      margin: 0 15px 0 0;
+      border-radius: 5px;
+      width: 92px;
+      padding: 0;
+      flex: initial; }
+      p4m-checkout .select-payment-type paper-tab * {
+        font-size: 36px; }
   p4m-checkout p4m-cart > #container {
     overflow-y: auto;
     overflow-x: hidden;

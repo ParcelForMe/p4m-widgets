@@ -575,7 +575,6 @@
             //WARNING: Nothing in this function should send messages to the shipping selector or an endless feedback loop will ensue!
             currentService: {},
             updateShippingService: function (data, callback) { //service, shipping, expDeliveryDate, collectPoint) {
-                debugger;
                 var self = this;
                 if (!callback) {
                     throw "updateShippingService(): No callback";
