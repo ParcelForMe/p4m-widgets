@@ -69,12 +69,12 @@
                         <div class="location-points">
 							<paper-dropdown-menu label="My Locations" noink no-animations>
 								<paper-listbox class="dropdown-content">
-									    <paper-item>
+									    <paper-item >
                                             <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
                                         </paper-item>
 
 			                            <template is="dom-repeat" items="{{_favAddresses}}">
-                                            <paper-item>
+                                            <paper-item label={{item.name}}>
     			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
                                             </paper-item>
 			                            </template>                                    
@@ -95,7 +95,7 @@
 								<paper-dropdown-menu label="My Collection Points" noink no-animations>
 									<paper-listbox class="dropdown-content">
 									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
-					                     <paper-item>
+					                     <paper-item label="{{item.droppointDescription}}">
     										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected = "_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
 	                            		 </paper-item>						
 									  </template>
@@ -817,7 +817,6 @@
                     this.setFavAddresses(this.config.favAddresses);
 
                     //if everything has been preselected, preselect,
-                    debugger;
                     if (selection && selection.deliveryMethodId) {
                         //Post, then try to re-select the chosen method
                         this.postGfsData(function (err) {
@@ -1004,7 +1003,7 @@
             //Select a delivery service
             //TODO: Refactor?
             setDeliveryMethod: function (methodId, dateOverride) {
-                debugger;
+
                 if (!methodId) return;
 
                 var newMethod = this._getDeliveryRateById(methodId);
@@ -2090,6 +2089,7 @@
 			},
 
 			_onClickFavAddress: function (e) {
+                this.$.favAddressDropDown.text = "Hello";
 			    this._panToGeoLocation(e.currentTarget.geoLocation);
 			},
             /*
