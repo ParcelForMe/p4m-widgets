@@ -1033,6 +1033,7 @@
 
                     if (dateOverride) {
                         newSelectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
+                        this.$.calendar.selectShippingOption(methodId, dateOverride, true);
                     }
                     else {
                         newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
@@ -1071,6 +1072,7 @@
 
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    debugger;
                     return this.selectedServiceDetails;
                 }
             },

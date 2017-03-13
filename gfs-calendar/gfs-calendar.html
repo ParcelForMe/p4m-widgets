@@ -380,17 +380,19 @@
                 
             },
 
-            selectShippingOption: function (methodId, deliveryDateStr) {
+            selectShippingOption: function (methodId, deliveryDateStr, suppressEvent) {
                 //var shippingOption = e.currentTarget.getAttribute('data-shipping');
                 //shippingOption.selected = true;
                 this.selectedShippingMethodId = methodId;
                 this.selectedDeliveryDate = deliveryDateStr;
-                this.fire('select-shipping-option',
+                if (!suppressEvent) {
+                    this.fire('select-shipping-option',
                     {
                         shippingMethodId: this.selectedShippingMethodId,
                         deliveryDate: this.selectedDeliveryDate
-                    }
-                );
+                    });                
+                }
+
                 this._updateUi();
             },
 
