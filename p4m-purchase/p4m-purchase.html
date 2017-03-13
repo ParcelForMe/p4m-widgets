@@ -424,7 +424,7 @@
                 this.$.p4mPaypalButton.classList.add('p4m-button-active');
                 this.$.p4mPaypalButton.classList.remove('disabled');*/
                 this.setLoadingState(false);
-                this.topClass = "invalid";
+                this.topClass = "invalid missing-cvv";
                 this._state = States.CVV_NEEDED;
                 var card = this.$$('#card');
                 //if (card) {
