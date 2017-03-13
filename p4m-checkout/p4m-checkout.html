@@ -278,6 +278,7 @@
                             function _gfs(callback) {
                                 console.log('_gfs()');
                                 if (self.$.gfsCheckoutWidget) {
+                                    self.initialising = false;
                                     self._updateGfs(callback);
                                 }
                                 else {
@@ -286,6 +287,7 @@
                             },
 
                             function _p4mCart(callback) {
+                                //self.initialising = true;
                                 console.log('_p4mCart()');
                                 //self.preselectDeliveryMethod();
                                 self.updateP4mCart(callback); //This will set IsNew to false
@@ -573,6 +575,7 @@
             //WARNING: Nothing in this function should send messages to the shipping selector or an endless feedback loop will ensue!
             currentService: {},
             updateShippingService: function (data, callback) { //service, shipping, expDeliveryDate, collectPoint) {
+                debugger;
                 var self = this;
                 if (!callback) {
                     throw "updateShippingService(): No callback";

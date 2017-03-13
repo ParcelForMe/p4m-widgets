@@ -675,7 +675,7 @@
             //Select a shipping option by ID
             //Fire on-select-delivery-option to be received by parent
             //Set deliveries[n].selected to true on selected method, false on all others
-			selectMethod: function (shippingOptionId) {
+			selectMethod: function (shippingOptionId, supressEvent) {
 			    this.select();
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
@@ -685,7 +685,10 @@
 			    }
 			    var method = this.getSelectedMethod();
 			    this.droppointData.deliveryMethod = method.service.id;
-			    this.fire('droppoint-selected', this.droppointData);
+			    if (!supressEvent) {
+			    	this.fire('droppoint-selected', this.droppointData);
+			    }
+			    
 			},
 
 			getSelectedMethod: function () {
