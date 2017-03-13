@@ -675,6 +675,7 @@ left: 0;
 
 a, a:visited {
 	color: $grey-hb;
+    cursor: pointer;
 	@include transition();
 	&:hover {
 		color: $grey-b4;
@@ -701,6 +702,22 @@ a, a:visited {
 	-moz-transition: .15s ease-in-out;
 	transition: .15s ease-in-out;
 }
+
+// Payment Method Icons
+.Visa .payment-method-logo, .payment-method-logo.visa {background-image: url('../p4m-card/assets/visa.png');}
+.Mastercard .payment-method-logo, .payment-method-logo.mastercard  {background-image: url('../p4m-card/assets/mastercard.png');}
+.Amex .payment-method-logo, .payment-method-logo.amex {background-image: url('../p4m-card/assets/amex.png');}
+.cirrus .payment-method-logo, .payment-method-logo.cirrus {background-image: url('../p4m-card/assets/cirrus.png');}
+.maestro .payment-method-logo, .payment-method-logo.maestro {background-image: url('../p4m-card/assets/maestro.png');}
+.diners .payment-method-logo, .payment-method-logo.diners {background-image: url('../p4m-card/assets/diners.png');}
+.paypal .payment-method-logo, .payment-method-logo.paypal {
+    background-image: url('../p4m-card/assets/paypal.png');    
+    background-size: 72px auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+i.payment-method-logo {height: 32px; width: 130px;display: flex;}
+
 
 // NEW p4m Reset
 p4m-register, p4m-login, p4m-checkout {
@@ -765,7 +782,6 @@ p4m-card {
     display: flex;
     max-width: 100%;
     height: 125px;
-    margin: 5px 5px 15px 5px;
     > div#container {
         width: 50%;
         flex: 1;
@@ -806,6 +822,7 @@ p4m-card {
                         position: relative;
                         width: 100%;
                         align-items: flex-end;
+                        justify-content: space-between;
                     }
                 }
                 .card-name {
@@ -835,11 +852,11 @@ p4m-card {
                     }
                 }
             }
-            .card-logo {
+            .payment-method-logo {
                 height: 24px;
+                width: 100px;
                 background-size: auto 100%;
                 background-repeat: no-repeat;
-                position: absolute;
                 background-position: right center;
             }
         }            
@@ -1935,6 +1952,16 @@ p4m-checkout {
     	border-top: 2px solid $grey-h8;
     	p4m-order-text {
     		flex: 2;
+            font-size: 16px;
+            line-height: 20px;
+            color: $grey-b2;
+            p {
+                font-size: 16px;
+                margin: 0;
+            }
+            span {
+                font-weight: 600;
+            }
     	}
     	p4m-purchase {
     		flex: 1;
@@ -1944,6 +1971,7 @@ p4m-checkout {
 
     // p4m-order-summary
 	p4m-order-summary {
+        font-size: 14px;
 		h4 {
 		    font-size: 16px;
 		    margin: 0;
@@ -1962,7 +1990,6 @@ p4m-checkout {
 		        color: #D0D0D0;
 		    }
 	    }
-	    #p4mContainer
 	    .p4m-table {
 	        padding: 20px;
 	        .p4m-row {
@@ -2010,8 +2037,8 @@ p4m-checkout {
 			        }
 			    }
 			    &.total {
-			    	line-height: 36px;
-			    	font-size: 18px;
+			    	line-height: 32px;
+			    	font-size: 16px;
 			    	font-weight: 600;
 			    }
 		    }
@@ -2059,6 +2086,7 @@ p4m-checkout {
             }
             p4m-card {
                 width: 290px;
+                margin: 5px 5px 15px 5px;
                  > div#container .card-panel {
                     margin-right: 8px;
                  }
@@ -2067,6 +2095,34 @@ p4m-checkout {
         }
         p4m-card-list {
             
+        }
+    }
+
+    .select-payment-type {
+        height: 48px;
+        #tabsContainer {
+            overflow: visible;
+        }
+        paper-tab {
+            color: $grey-b4;
+            background: $white;
+            margin: 2px 12px 5px 0;
+            border-radius: 5px;
+            width: 92px;
+            height: 36px !important;
+            padding: 0;
+            flex: initial;
+            border: 2px solid #fff;
+            @include transition();
+            * {
+                font-size: 36px;
+            }
+            &:hover {
+                box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+            }
+            &[aria-selected="true"] {
+                border-color: $p4m-green;
+            }
         }
     }
 
@@ -2341,6 +2397,40 @@ p4m-address {
     }
 }
 
+
+
+
+footer.p4m-checkout {
+    p4m-purchase-btn#p4mPurchaseBtn {
+        display: flex;
+        flex: 1;
+        width: 180px;
+        #p4mPurchaseBtnContainer {
+            display: flex;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: center;
+            button {
+                height: 48px;
+                background: $p4m-green;
+                color: $white;
+                font-size: 21px;
+                padding: 0 18px;
+                font-weight: 600;
+                letter-spacing: .02em;
+                border-radius: 24px;
+                border: 2px solid $p4m-green;
+                box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+                &.payWith_card {
+
+                }
+                &.payWith_paypal {
+
+                }
+            }
+        }
+    }
+}
 
 
 

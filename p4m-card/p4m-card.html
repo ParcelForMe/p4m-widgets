@@ -24,7 +24,7 @@
                         <custom-validator id="validator" validator-name="cvv"></custom-validator>
                         <div class="card-details">
                             <div class="card-name">{{cardData.Name}}</div>
-                            <div class="card-logo"></div>
+                            <div class="payment-method-logo"></div>
                         </div>   
                         <div class="card-description creditcard">
                             <span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>   
@@ -44,9 +44,6 @@
         #container {
             display: flex;
             flex-direction: column;
-            width: 350px;
-            padding-right: 4px;
-            margin-bottom: 4px;
         }
 
         .show-actions .card-actions {
@@ -116,25 +113,7 @@
             margin-right: 9px;
         }
 
-        .card-list-item .card-logo {
-            height: 84px;
-            width: 134px;
-            top: 6px;
-            right: 8px;
-        }
 
-     
-        .Visa .card-logo {
-            background-image: url('assets/visa.png');
-        }
-
-        .Mastercard .card-logo {
-            background-image: url('assets/mastercard.png');
-        }
-
-        .Amex .card-logo {
-            background-image: url('assets/amex.png');
-        }
 
     </style>
 
