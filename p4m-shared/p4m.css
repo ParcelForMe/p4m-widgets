@@ -691,6 +691,77 @@ ul.separated li {
 paper-input .underline {
   display: none !important; }
 
+p4m-card {
+  display: flex;
+  max-width: 100%;
+  height: 125px;
+  margin: 5px 5px 15px 5px; }
+  p4m-card > div#container {
+    width: 50%;
+    flex: 1;
+    display: flex;
+    max-height: 20vw;
+    padding: 0;
+    margin: 0; }
+    p4m-card > div#container .card-panel {
+      border-radius: 6px;
+      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+      display: flex;
+      align-self: stretch;
+      flex: 1;
+      color: #777; }
+      p4m-card > div#container .card-panel .card-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column; }
+        p4m-card > div#container .card-panel .card-body .card-actions {
+          justify-content: flex-end; }
+          p4m-card > div#container .card-panel .card-body .card-actions #selectedToggle {
+            align-items: center;
+            padding: 0 8px;
+            margin-bottom: 10px; }
+            p4m-card > div#container .card-panel .card-body .card-actions #selectedToggle i {
+              margin-right: -5px; }
+        p4m-card > div#container .card-panel .card-body .card-content {
+          flex-direction: column;
+          padding: 0; }
+          p4m-card > div#container .card-panel .card-body .card-content .card-details {
+            padding: 0;
+            min-height: 30px;
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            width: 100%;
+            align-items: flex-end; }
+        p4m-card > div#container .card-panel .card-body .card-name {
+          height: 24px;
+          line-height: inherit;
+          font-weight: 600;
+          font-size: 16px;
+          display: flex;
+          align-items: flex-end; }
+        p4m-card > div#container .card-panel .card-body .creditcard {
+          number-format: "#### ####", "creditcard";
+          font-size: 18px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 10px; }
+          p4m-card > div#container .card-panel .card-body .creditcard span {
+            display: flex;
+            flex: 1; }
+          p4m-card > div#container .card-panel .card-body .creditcard i {
+            display: flex;
+            justify-content: flex-end;
+            color: #aaa;
+            font-size: 32px; }
+      p4m-card > div#container .card-panel .card-logo {
+        height: 24px;
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        position: absolute;
+        background-position: right center; }
+
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
   display: block;
   box-sizing: border-box;
@@ -1098,7 +1169,9 @@ p4m-checkout {
       width: 67%;
       padding-right: 8px; }
     p4m-checkout #panelContainer #summaryPanel {
-      position: relative; }
+      position: relative;
+      min-width: 320px;
+      flex: 1; }
       p4m-checkout #panelContainer #summaryPanel:before {
         content: '';
         height: 100%;
@@ -1114,6 +1187,8 @@ p4m-checkout {
       p4m-checkout #panelContainer #summaryPanel .p4m-panel {
         width: 33%;
         border-left: solid 1px #E0E0E0; }
+      p4m-checkout #panelContainer #summaryPanel paper-tabs.select-payment-type {
+        background: transparent; }
   p4m-checkout h3 {
     margin-left: 0px;
     clear: left;
@@ -1275,18 +1350,17 @@ p4m-checkout {
       font-style: italic;
       color: #aaa; }
   p4m-checkout .collection-points, p4m-checkout .location-points, p4m-checkout .search-postcode-wrap {
-    width: 18vw;
-    margin: 0 .5vw; }
+    width: 26%;
+    margin: 0 1%; }
   p4m-checkout .addressTitle {
     display: flex;
     align-items: center; }
   p4m-checkout address-lookup-field {
     width: 100%; }
   p4m-checkout paper-menu-button #contentWrapper .dropdown-content {
-    min-width: 18vw;
-    width: 18vw; }
+    max-height: 50vh !important; }
   p4m-checkout gfs-location-button .wrap {
-    min-width: calc(18vw - 32px); }
+    min-width: calc(26% - 32px); }
   p4m-checkout gfs-location-button .addressTitle {
     display: flex;
     font-weight: 600;
@@ -1376,17 +1450,6 @@ p4m-checkout {
     font-size: 12px; }
   p4m-checkout .gm-style-iw .dpProviderName {
     justify-content: space-between; }
-  p4m-checkout #cardList > #container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 260px;
-    box-sizing: border-box; }
-  p4m-checkout #cardList .cardList {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    max-height: 100%;
-    overflow: visible; }
   p4m-checkout iron-page#pageDroppoints {
     display: flex;
     flex-direction: column; }
@@ -1600,73 +1663,26 @@ p4m-checkout {
     margin: -12px 0 0 -12px; }
   p4m-checkout p4m-order-summary .hidden {
     display: none; }
-  p4m-checkout #cardPage p4m-card-list > div#container {
+  p4m-checkout #cardPage #cardList > #container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 260px;
+    box-sizing: border-box;
     margin-left: 0;
     padding: 10px;
     box-sizing: border-box;
     align-content: flex-start; }
-    p4m-checkout #cardPage p4m-card-list > div#container .cardList {
-      justify-content: space-around; }
-    p4m-checkout #cardPage p4m-card-list > div#container p4m-card {
-      display: flex;
-      width: 290px;
-      max-width: 100%;
-      height: 125px;
-      margin: 5px 5px 15px 5px; }
-      p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container {
-        width: 50%;
-        flex: 1;
-        display: flex;
-        max-height: 20vw;
-        padding: 0;
-        margin: 0; }
-        p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel {
-          border-radius: 6px;
-          margin-right: 8px;
-          box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
-          display: flex;
-          align-self: stretch;
-          flex: 1;
-          color: #777; }
-          p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body {
-            display: flex;
-            flex: 1;
-            flex-direction: column; }
-            p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .card-actions {
-              justify-content: flex-end; }
-              p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .card-actions #selectedToggle {
-                align-items: center;
-                padding: 0 8px; }
-                p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .card-actions #selectedToggle i {
-                  margin-right: -5px; }
-            p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .card-name {
-              height: 24px;
-              line-height: inherit;
-              font-weight: 600;
-              font-size: 16px;
-              display: flex;
-              align-items: flex-end; }
-            p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .creditcard {
-              number-format: "#### ####", "creditcard";
-              font-size: 18px;
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              margin-top: 6px; }
-              p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .creditcard span {
-                display: flex;
-                flex: 1; }
-              p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-body .creditcard i {
-                display: flex;
-                justify-content: flex-end;
-                color: #aaa;
-                font-size: 32px; }
-          p4m-checkout #cardPage p4m-card-list > div#container p4m-card > div#container .card-panel .card-logo {
-            height: 24px;
-            background-size: auto 100%;
-            background-repeat: no-repeat;
-            position: absolute;
-            background-position: right center; }
+  p4m-checkout #cardPage #cardList .cardList {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    max-height: 100%;
+    overflow: visible;
+    justify-content: space-around; }
+  p4m-checkout #cardPage #cardList p4m-card {
+    width: 290px; }
+    p4m-checkout #cardPage #cardList p4m-card > div#container .card-panel {
+      margin-right: 8px; }
   p4m-checkout p4m-cart > #container {
     overflow-y: auto;
     overflow-x: hidden;

@@ -24,10 +24,12 @@
                         <custom-validator id="validator" validator-name="cvv"></custom-validator>
                         <div class="card-details">
                             <div class="card-name">{{cardData.Name}}</div>
-                            <input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="Verification code" />
                             <div class="card-logo"></div>
                         </div>   
-                        <div class="card-description creditcard"><span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>                     
+                        <div class="card-description creditcard">
+                            <span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>   
+                        <div class="inputs"><input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="Verification code" />
+                        </div>                  
                     </div>
                 </div>
                 
@@ -84,15 +86,6 @@
             padding-left: 168px;
         }*/
 
-        .card-panel {
-            border-radius: 7px;
-            margin-right: 8px;
-            box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-top: 6px;
-        }
 
         .card-body {
                 padding: 15px;
@@ -101,7 +94,6 @@
         .card-content {
             display: flex;
             flex-direction: column;
-            padding: 6px 0;
         }
 
         .card-details {

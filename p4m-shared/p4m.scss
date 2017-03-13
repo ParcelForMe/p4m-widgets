@@ -760,6 +760,93 @@ paper-input .underline {
 }
 
 
+// Credit Card Instances
+p4m-card {
+    display: flex;
+    max-width: 100%;
+    height: 125px;
+    margin: 5px 5px 15px 5px;
+    > div#container {
+        width: 50%;
+        flex: 1;
+        display: flex;
+        max-height: 20vw;
+        padding: 0;
+        margin: 0;  
+        .card-panel {
+            border-radius: 6px;
+            box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+            display: flex;
+            align-self: stretch;
+            flex: 1;
+            color: $grey-b2;
+            .card-body {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                .card-actions {
+                    justify-content: flex-end;
+                    #selectedToggle {
+                        align-items: center;
+                        padding: 0 8px;
+                        margin-bottom: 10px;
+                        i {
+                            margin-right: -5px;
+                        }
+                    }
+                }
+                .card-content {
+                    flex-direction: column;
+                    padding: 0;
+                    .card-details {
+                        padding: 0;
+                        min-height: 30px;
+                        display: flex;
+                        flex-direction: row;
+                        position: relative;
+                        width: 100%;
+                        align-items: flex-end;
+                    }
+                }
+                .card-name {
+                    height: 24px;
+                    line-height: inherit;
+                    font-weight: 600;
+                    font-size: 16px;
+                    display: flex;
+                    align-items: flex-end;
+                }
+                .creditcard {
+                    number-format: "#### ####", "creditcard";
+                    font-size: 18px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    margin-top: 10px;
+                    span {
+                        display: flex;
+                        flex: 1;
+                    }
+                    i {
+                        display: flex;
+                        justify-content: flex-end;
+                        color: $grey-hb;
+                        font-size: 32px;
+                    }
+                }
+            }
+            .card-logo {
+                height: 24px;
+                background-size: auto 100%;
+                background-repeat: no-repeat;
+                position: absolute;
+                background-position: right center;
+            }
+        }            
+    }
+}
+
+
 
 
 // Forms
@@ -1251,6 +1338,8 @@ p4m-checkout {
 
         #summaryPanel {
         	position: relative;
+            min-width: 320px;
+            flex: 1;
         	&:before{
         		content:'';
         		height: 100%;
@@ -1268,6 +1357,9 @@ p4m-checkout {
                 width: 33%;
                 border-left: solid 1px #E0E0E0;
             } 
+            paper-tabs.select-payment-type {
+                background: transparent;
+            }
         }
     } 
 
@@ -1504,8 +1596,8 @@ p4m-checkout {
 		}
     }
     .collection-points, .location-points, .search-postcode-wrap {
-    	width: 18vw;
-    	margin: 0 .5vw;
+    	width: 26%;
+    	margin: 0 1%;
     }
     .addressTitle {
 	   	display: flex;
@@ -1516,14 +1608,15 @@ p4m-checkout {
     }
     paper-menu-button #contentWrapper {
 		.dropdown-content {
-			// min-width: calc(18vw - 32px);
-			min-width: 18vw;
-			width: 18vw;
+			// // min-width: calc(18vw - 32px);
+			// min-width: 26%;
+			// width: 26%;
+            max-height: 50vh !important;
 		}
 	}
 	gfs-location-button {
 		.wrap {
-			min-width: calc(18vw - 32px);
+			min-width: calc(26% - 32px);
 		}
 		.addressTitle {
 			display: flex;
@@ -1658,22 +1751,6 @@ p4m-checkout {
     	.dpProviderName {
     		justify-content: space-between;
     	}
-    }
-
-    #cardList {
-        > #container {
-            overflow-y: auto;
-            overflow-x: hidden;
-            height: 260px;
-            box-sizing: border-box;
-        }
-        .cardList {
-            display: flex;
-            flex-direction: row;
-            height: 100%;
-            max-height: 100%;
-            overflow: visible;
-        }
     }
 
     iron-page#pageDroppoints {
@@ -1958,90 +2035,43 @@ p4m-checkout {
     // Payment Options - #cardPage
 
     #cardPage {
-        p4m-card-list {
-            > div#container {
+        #cardList {
+            > #container {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: 260px;
+                box-sizing: border-box;
                 margin-left: 0;
                 padding: 10px;
                 box-sizing: border-box;
                 align-content: flex-start;
+            }
                 .cardList {
+                    display: flex;
+                    flex-direction: row;
+                    height: 100%;
+                    max-height: 100%;
+                    overflow: visible;
                     justify-content: space-around;
                 }
-                p4m-card {
-                    display: flex;
-                    width: 290px;
-                    max-width: 100%;
-                    height: 125px;
-                    margin: 5px 5px 15px 5px;
-                    > div#container {
-                        width: 50%;
-                        flex: 1;
-                        display: flex;
-                        max-height: 20vw;
-                        padding: 0;
-                        margin: 0;  
-                        .card-panel {
-                            border-radius: 6px;
-                            margin-right: 8px;
-                            box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
-                            display: flex;
-                            align-self: stretch;
-                            flex: 1;
-                            color: $grey-b2;
-                            .card-body {
-                                display: flex;
-                                flex: 1;
-                                flex-direction: column;
-                                .card-actions {
-                                    justify-content: flex-end;
-                                    #selectedToggle {
-                                        align-items: center;
-                                        padding: 0 8px;
-                                        i {
-                                            margin-right: -5px;
-                                        }
-                                    }
-                                }
-                                .card-name {
-                                    height: 24px;
-                                    line-height: inherit;
-                                    font-weight: 600;
-                                    font-size: 16px;
-                                    display: flex;
-                                    align-items: flex-end;
-                                }
-                                .creditcard {
-                                    number-format: "#### ####", "creditcard";
-                                    font-size: 18px;
-                                    display: flex;
-                                    flex-direction: row;
-                                    align-items: center;
-                                    margin-top: 6px;
-                                    span {
-                                        display: flex;
-                                        flex: 1;
-                                    }
-                                    i {
-                                        display: flex;
-                                        justify-content: flex-end;
-                                        color: $grey-hb;
-                                        font-size: 32px;
-                                    }
-                                }
-                            }
-                            .card-logo {
-                                height: 24px;
-                                background-size: auto 100%;
-                                background-repeat: no-repeat;
-                                position: absolute;
-                                background-position: right center;
-                            }
-                        }            
-                    }
-                }
+            .cardList {
+                
+            }
+            p4m-card {
+                width: 290px;
+                 > div#container .card-panel {
+                    margin-right: 8px;
+                 }
+
             }
         }
+        p4m-card-list {
+            
+        }
     }
+
+    
+
 
     
 	p4m-cart {
