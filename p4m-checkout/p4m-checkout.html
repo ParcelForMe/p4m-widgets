@@ -5,6 +5,7 @@
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
 
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../p4m-shared/p4m-shared.html" />
 <link rel="import" href="../p4m-profile/p4m-profile.html" />
 <link rel="import" href="../p4m-api/p4m-api.html" />
@@ -46,10 +47,10 @@
             <div id="panelContainer" class="horizontal layout">
                 <div id="detailPanel" class="p4m-panel flex-2">                   
                     <paper-tabs selected="{{selectedTab}}" no-bar>
-                        <paper-tab>My Order</paper-tab>
-                        <paper-tab>Addresses</paper-tab>
-                        <paper-tab>Delivery Options</paper-tab>
-                        <paper-tab>Payment Options</paper-tab>                  
+                        <paper-tab>My Order<p4m-spinner id="myorder-spinner"></p4m-spinner></paper-tab>
+                        <paper-tab>Addresses<p4m-spinner id="addresses-spinner"></p4m-spinner></paper-tab>
+                        <paper-tab>Delivery Options<p4m-spinner id="delivery-spinner"></p4m-spinner></paper-tab>
+                        <paper-tab>Payment Options<p4m-spinner id="payment-spinner"></p4m-spinner></paper-tab>                  
                     </paper-tabs>
                     <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">                   
                         <iron-page id="cartPage">                       
@@ -93,7 +94,19 @@
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
         -->
 
-        <style include="p4m-shared"></style>
+        <style include="p4m-shared">
+            .litte-spinner {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            xtop: 65px;
+            xleft: 40%;
+            margin-left: auto;
+            }
+
+
+
+        </style>
 
     </template>
 
@@ -575,7 +588,6 @@
             //WARNING: Nothing in this function should send messages to the shipping selector or an endless feedback loop will ensue!
             currentService: {},
             updateShippingService: function (data, callback) { //service, shipping, expDeliveryDate, collectPoint) {
-                debugger;
                 var self = this;
                 if (!callback) {
                     throw "updateShippingService(): No callback";
