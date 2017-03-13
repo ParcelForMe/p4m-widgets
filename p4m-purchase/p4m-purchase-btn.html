@@ -5,7 +5,7 @@
 
     <template>
         <div id="p4mPurchaseBtnContainer" class$="{{_topClass}}">     
-            <div class$="button-container {{_btnClass}} payWith_{{_paymentType}}">{{buttonText}}</div>         
+            <button on-click="onClick" class$="button-container {{_btnClass}} payWith_{{_paymentType}}">{{buttonText}}</button>         
         </div>
     </template>
 
@@ -29,7 +29,7 @@
                 },
                 btnMsgNeedCvv: {
                     type: String,
-                    value: "Buy now"
+                    value: "Enter CVV"
                 },
                 btnMsgBuying: {
                     type: String,
@@ -74,9 +74,14 @@
                 this.load();
             },
 
+            onClick: function() {
+                this.fire('buy');
+            },
+
 
             onPaymentStateEvent: function(e) {
                 this.set('_state', e.detail);
+
             },
 
             onPaymentTypeEvent: function(e) {
@@ -135,7 +140,7 @@
             },
 
             showAsCvvRequired: function() {
-                this.buttonText = this.btnMsgNeedCvv; //"Enter CVV";
+                this.buttonText = this.btnMsgNotPurchased; //"Enter CVV";
                 this.setLoadingState(false);
                 this.set('_topClass', 'invalid');
             },

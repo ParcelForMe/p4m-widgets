@@ -194,6 +194,7 @@
             ready: function ()
             {
                 this.selectedPaymentType = PaymentTypes.CARD;
+                window.addEventListener('buy', this.buyNow.bind(this), false);
                 this.load();
             },
 
@@ -206,7 +207,7 @@
             onCvv: function (e) {
 
                 
-                var card = this.$$('#card');
+                var card = e.target; //.this.$$('#card');
                 if (!card || !card.cvv || card.cvv === "" || e.detail === false) {
                     this._state = States.CVV_NEEDED;
                 }
