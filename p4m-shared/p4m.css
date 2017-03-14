@@ -1937,7 +1937,7 @@ p4m-address .buttons {
 footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
   flex: initial;
-  width: 180px; }
+  width: 240px; }
   footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer {
     display: flex;
     flex: 1;
@@ -1945,6 +1945,8 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
     align-items: center; }
     footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button {
       height: 48px;
+      display: flex;
+      align-items: center;
       background: #37a553;
       color: #fff;
       font-size: 21px;
@@ -1953,4 +1955,45 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
       letter-spacing: .02em;
       border-radius: 24px;
       border: 2px solid #37a553;
-      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px; }
+      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button:after {
+        content: '';
+        display: flex;
+        width: 0;
+        height: 32px;
+        justify-content: flex-end;
+        align-items: center;
+        -webkit-transition: all 0.15s ease-in-out 0s;
+        -khtml-transition: all 0.15s ease-in-out 0s;
+        -moz-transition: all 0.15s ease-in-out 0s;
+        -ms-transition: all 0.15s ease-in-out 0s;
+        -o-transition: all 0.15s ease-in-out 0s;
+        transition: all 0.15s ease-in-out 0s; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
+        content: '\e920';
+        font-family: 'p4m' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        font-size: 32px;
+        width: 32px;
+        margin-left: 8px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_paypal:after {
+        content: '';
+        width: 72px;
+        margin-left: 8px;
+        background-image: url("../p4m-card/assets/paypal-white.png");
+        background-size: 72px auto;
+        background-repeat: no-repeat;
+        background-position: center center; }

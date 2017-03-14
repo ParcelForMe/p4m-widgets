@@ -20162,6 +20162,26 @@
 		"opt": 0,
 		"q": 100
 		},
+	"\/p4m-card\/assets\/paypal-white.png": {
+		"ft": 32768,
+		"iS": 2694,
+		"l": 1,
+		"oA": 0,
+		"oAP": "\/p4m-card\/assets\/paypal-white.png",
+		"oF": 0,
+		"opt": 0,
+		"q": 100
+		},
+	"\/p4m-card\/assets\/paypal.png": {
+		"ft": 32768,
+		"iS": 3848,
+		"l": 1,
+		"oA": 0,
+		"oAP": "\/p4m-card\/assets\/paypal.png",
+		"oF": 0,
+		"opt": 0,
+		"q": 100
+		},
 	"\/p4m-card\/assets\/visa.png": {
 		"ft": 32768,
 		"iS": 5167,
@@ -20753,16 +20773,6 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
-		},
-	"\/p4m-shared\/paypal.png": {
-		"ft": 32768,
-		"iS": 5521,
-		"l": 1,
-		"oA": 0,
-		"oAP": "\/p4m-shared\/paypal.png",
-		"oF": 0,
-		"opt": 0,
-		"q": 100
 		},
 	"\/p4m-shared\/variables.css": {
 		"aP": 1,
