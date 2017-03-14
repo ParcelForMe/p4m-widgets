@@ -436,6 +436,7 @@
                     }
 
                     //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
+                    self._showAsLoadingShipping(true)
 
                     self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                         //console.log("Called local api itemQtyChanged");
@@ -444,6 +445,7 @@
                         self.updCartTotals(newCartTotals, function (err) {
                             self.cartData.Discounts = newCartTotals.Discounts;
                             self.updateP4mCart();
+                            self._showAsLoadingShipping(false);
                         });
 
                     });
