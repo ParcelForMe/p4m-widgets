@@ -48,7 +48,7 @@
                                 <input is="iron-input" type="text" id="address-state" bind-value="{{addressData.State}}" placeholder="State/County" />
                                 <input is="iron-input" type="text" id="address-phone" bind-value="{{addressData.Phone}}" placeholder="Phone at address" />
                                 <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="address-country" label="Country" items="{{countries}}">
-                                    <input is="iron-input"/>
+                                    <input is="iron-input" placeholder="Country" />
                                 </vaadin-combo-box-light>
                             </div>
                             <div class="vertical layout end"">
