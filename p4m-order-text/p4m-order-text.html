@@ -11,11 +11,11 @@
                 Choose your <a on-click="requestAddress">Delivery address</a>.<br />
             </template>
             <template is="dom-if" if="{{cartData.AddressId}}">
-                <p>We'll deliver your order to your {{addressTypeStr}}:
-                <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}}
+                <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span>.</p>
+                <p>to your {{addressTypeStr}}:
+                <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}} by 
                 <span class="p4m-label"><span>{{deliveryDateStr}}.</span></span></p>
-                <p>Your order will be sent via
-                <span class="p4m-label">{{deliveryMethodStr}} delivery</span>.</p>
+                
             </template>
             <template is="dom-if" if="{{isLoading}}">
                 <p>Getting your delivery details now...</p>
@@ -133,7 +133,7 @@
                     return moment(new Date(dateStr)).format('ddd Do MMM YYYY');
                 }
                 else {
-                    return "Please select a delivery date";
+                    return "Select a delivery date";
                 }
                 
             },
