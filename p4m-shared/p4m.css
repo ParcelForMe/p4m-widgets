@@ -791,6 +791,17 @@ p4m-card {
         background-size: auto 100%;
         background-repeat: no-repeat;
         background-position: right center; }
+  p4m-card #cvvField {
+    display: none; }
+  p4m-card .show-cvv #cvvField {
+    display: block;
+    margin-top: 4px;
+    width: 54px;
+    border-radius: 3px;
+    border: 2px solid #e0e0e0; }
+    p4m-card .show-cvv #cvvField:focus {
+      outline: none;
+      border-color: #37a553; }
 
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
   display: block;
@@ -1202,18 +1213,6 @@ p4m-checkout {
       position: relative;
       min-width: 320px;
       flex: 1; }
-      p4m-checkout #panelContainer #summaryPanel:before {
-        content: '';
-        height: 100%;
-        width: 2px;
-        background: rgba(235, 235, 235, 0.5);
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 1; }
       p4m-checkout #panelContainer #summaryPanel .p4m-panel {
         width: 33%;
         border-left: solid 1px #E0E0E0; }
@@ -1627,6 +1626,7 @@ p4m-checkout {
     p4m-checkout footer p4m-purchase {
       flex: 1; }
   p4m-checkout p4m-order-summary {
+    background: #f8f8f8;
     font-size: 14px; }
     p4m-checkout p4m-order-summary h4 {
       font-size: 16px;
@@ -1644,7 +1644,7 @@ p4m-checkout {
       p4m-checkout p4m-order-summary #p4mContainer.loading .p4m-table .p4m-cell {
         color: #D0D0D0; }
     p4m-checkout p4m-order-summary .p4m-table {
-      padding: 20px; }
+      padding: 20px 20px 10px 20px; }
       p4m-checkout p4m-order-summary .p4m-table .p4m-row {
         line-height: 1.2em;
         align-items: center;
@@ -1683,7 +1683,8 @@ p4m-checkout {
         p4m-checkout p4m-order-summary .p4m-table .p4m-row.total {
           line-height: 32px;
           font-size: 16px;
-          font-weight: 600; }
+          font-weight: 600;
+          margin-bottom: 0; }
     p4m-checkout p4m-order-summary #spinner {
       width: 24px;
       height: 24px;
@@ -1693,6 +1694,12 @@ p4m-checkout {
       margin: -12px 0 0 -12px; }
     p4m-checkout p4m-order-summary .hidden {
       display: none; }
+  p4m-checkout p4m-purchase {
+    background: #f8f8f8;
+    border-top: 3px solid #fff;
+    padding: 15px; }
+    p4m-checkout p4m-purchase #p4mPurchaseContainer {
+      margin: 0; }
   p4m-checkout #cardPage #cardList > #container {
     overflow-y: auto;
     overflow-x: hidden;
@@ -1929,8 +1936,8 @@ p4m-address .buttons {
 
 footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
-  flex: 1;
-  width: 180px; }
+  flex: initial;
+  width: 240px; }
   footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer {
     display: flex;
     flex: 1;
@@ -1938,6 +1945,8 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
     align-items: center; }
     footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button {
       height: 48px;
+      display: flex;
+      align-items: center;
       background: #37a553;
       color: #fff;
       font-size: 21px;
@@ -1946,4 +1955,45 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
       letter-spacing: .02em;
       border-radius: 24px;
       border: 2px solid #37a553;
-      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px; }
+      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button:after {
+        content: '';
+        display: flex;
+        width: 0;
+        height: 32px;
+        justify-content: flex-end;
+        align-items: center;
+        -webkit-transition: all 0.15s ease-in-out 0s;
+        -khtml-transition: all 0.15s ease-in-out 0s;
+        -moz-transition: all 0.15s ease-in-out 0s;
+        -ms-transition: all 0.15s ease-in-out 0s;
+        -o-transition: all 0.15s ease-in-out 0s;
+        transition: all 0.15s ease-in-out 0s; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
+        content: '\e920';
+        font-family: 'p4m' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        font-size: 32px;
+        width: 32px;
+        margin-left: 8px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale; }
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_paypal:after {
+        content: '';
+        width: 72px;
+        margin-left: 8px;
+        background-image: url("../p4m-card/assets/paypal-white.png");
+        background-size: 72px auto;
+        background-repeat: no-repeat;
+        background-position: center center; }

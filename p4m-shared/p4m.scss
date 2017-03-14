@@ -861,6 +861,20 @@ p4m-card {
             }
         }            
     }
+    #cvvField {
+        display: none;
+    }
+    .show-cvv #cvvField {
+        display: block;
+        margin-top: 4px;
+        width: 54px;
+        border-radius: 3px;
+        border: 2px solid $grey-h6;
+        &:focus {
+            outline: none;
+            border-color: $p4m-green;
+        }
+    }
 }
 
 
@@ -1357,19 +1371,19 @@ p4m-checkout {
         	position: relative;
             min-width: 320px;
             flex: 1;
-        	&:before{
-        		content:'';
-        		height: 100%;
-        		width: 2px;
-        		background: rgba(235, 235, 235, 0.5);
-        		display: flex;
-        		flex-direction: column;
-        		flex: 1;
-        		position: absolute;
-        		left: 0;
-        		top: 0;
-        		z-index: 1;
-        	}
+        	// &:before{
+        	// 	content:'';
+        	// 	height: 100%;
+        	// 	width: 2px;
+        	// 	background: rgba(235, 235, 235, 0.5);
+        	// 	display: flex;
+        	// 	flex-direction: column;
+        	// 	flex: 1;
+        	// 	position: absolute;
+        	// 	left: 0;
+        	// 	top: 0;
+        	// 	z-index: 1;
+        	// }
             .p4m-panel {
                 width: 33%;
                 border-left: solid 1px #E0E0E0;
@@ -1971,6 +1985,7 @@ p4m-checkout {
 
     // p4m-order-summary
 	p4m-order-summary {
+        background: $grey-h10;
         font-size: 14px;
 		h4 {
 		    font-size: 16px;
@@ -1991,7 +2006,7 @@ p4m-checkout {
 		    }
 	    }
 	    .p4m-table {
-	        padding: 20px;
+	        padding: 20px 20px 10px 20px;
 	        .p4m-row {
 				line-height: 1.2em;
 				align-items: center;
@@ -2040,6 +2055,7 @@ p4m-checkout {
 			    	line-height: 32px;
 			    	font-size: 16px;
 			    	font-weight: 600;
+                    margin-bottom: 0;
 			    }
 		    }
 	    }
@@ -2057,6 +2073,19 @@ p4m-checkout {
 	    }
 
 	}
+
+
+
+    // p4m-purchase
+    p4m-purchase {
+        background: $grey-h10;
+        border-top: 3px solid $white;
+        padding: 15px;
+        #p4mPurchaseContainer {
+           margin: 0;
+        }   
+    }
+
 
 
     // Payment Options - #cardPage
@@ -2403,8 +2432,8 @@ p4m-address {
 footer.p4m-checkout {
     p4m-purchase-btn#p4mPurchaseBtn {
         display: flex;
-        flex: 1;
-        width: 180px;
+        flex: initial;
+        width: 240px;
         #p4mPurchaseBtnContainer {
             display: flex;
             flex: 1;
@@ -2412,6 +2441,8 @@ footer.p4m-checkout {
             align-items: center;
             button {
                 height: 48px;
+                display: flex;
+                align-items: center;
                 background: $p4m-green;
                 color: $white;
                 font-size: 21px;
@@ -2421,11 +2452,43 @@ footer.p4m-checkout {
                 border-radius: 24px;
                 border: 2px solid $p4m-green;
                 box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+                @include transition();
+                &:after {
+                    content: '';
+                    display: flex;
+                    width: 0;
+                    height: 32px;
+                    justify-content: flex-end;
+                    align-items: center;
+                    @include transition();
+                }
                 &.payWith_card {
-
+                    &:after {
+                        content: '\e920';
+                        font-family: 'p4m' !important;
+                        speak: none;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-variant: normal;
+                        text-transform: none;
+                        line-height: 1;
+                        font-size: 32px;
+                        width: 32px;
+                        margin-left: 8px;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                    }
                 }
                 &.payWith_paypal {
-
+                    &:after {
+                        content:'';
+                        width: 72px;
+                        margin-left: 8px;
+                        background-image: url('../p4m-card/assets/paypal-white.png');    
+                        background-size: 72px auto;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                    }
                 }
             }
         }
