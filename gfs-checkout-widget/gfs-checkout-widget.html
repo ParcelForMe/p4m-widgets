@@ -1199,8 +1199,8 @@
                 else {
                     return (
                         function(a, b) {
-                            if (a && b) {
-                                 return a.price||a.service.price > b.price ||a.service.price ? 1 : -1;
+                            if (a && b && a.service && b.service) {
+                                 return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
                             }
                             else {
                                 console.warn("Sorting by price: invalid parameter: ", a, b);
