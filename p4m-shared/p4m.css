@@ -523,38 +523,73 @@ body.fullbleed {
   content: "\e926"; }
 
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url("fonts/proximanova-light-webfont.eot");
-  src: url("fonts/proximanova-light-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/proximanova-light-webfont.woff") format("woff"), url("fonts/proximanova-light-webfont.ttf") format("truetype"), url("fonts/proximanova-light-webfont.svg") format("svg");
-  font-weight: 200;
+  font-family: 'Lato';
+  src: url("fonts/Lato-BlaIta-webfont.eot");
+  src: url("fonts/Lato-BlaIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BlaIta-webfont.woff") format("woff"), url("fonts/Lato-BlaIta-webfont.ttf") format("truetype"), url("fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic") format("svg");
+  font-weight: 800;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-Bla-webfont.eot");
+  src: url("fonts/Lato-Bla-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bla-webfont.woff") format("woff"), url("fonts/Lato-Bla-webfont.ttf") format("truetype"), url("fonts/Lato-Bla-webfont.svg#LatoBlack") format("svg");
+  font-weight: 800;
   font-style: normal; }
 
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url("fonts/proximanova-regular-webfont.eot");
-  src: url("fonts/proximanova-regular-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/proximanova-regular-webfont.woff") format("woff"), url("fonts/proximanova-regular-webfont.ttf") format("truetype"), url("fonts/proximanova-regular-webfont.svg") format("svg");
-  font-weight: 400;
-  font-style: normal; }
+  font-family: 'Lato';
+  src: url("fonts/Lato-BolIta-webfont.eot");
+  src: url("fonts/Lato-BolIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BolIta-webfont.woff") format("woff"), url("fonts/Lato-BolIta-webfont.ttf") format("truetype"), url("fonts/Lato-BolIta-webfont.svg#LatoBoldItalic") format("svg");
+  font-weight: 600;
+  font-style: italic; }
 
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url("fonts/proximanova-semibold-webfont.eot");
-  src: url("fonts/proximanova-semibold-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/proximanova-semibold-webfont.woff") format("woff"), url("fonts/proximanova-semibold-webfont.ttf") format("truetype"), url("fonts/proximanova-semibold-webfont.svg") format("svg");
-  font-weight: 500;
-  font-style: normal; }
-
-@font-face {
-  font-family: 'Proxima Nova';
-  src: url("fonts/proximanova-extrabld-webfont.eot");
-  src: url("fonts/proximanova-extrabld-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/proximanova-extrabld-webfont.woff") format("woff"), url("fonts/proximanova-extrabld-webfont.ttf") format("truetype"), url("fonts/proximanova-extrabld-webfont.svg") format("svg");
+  font-family: 'Lato';
+  src: url("fonts/Lato-Bol-webfont.eot");
+  src: url("fonts/Lato-Bol-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bol-webfont.woff") format("woff"), url("fonts/Lato-Bol-webfont.ttf") format("truetype"), url("fonts/Lato-Bol-webfont.svg#LatoBold") format("svg");
   font-weight: 600;
   font-style: normal; }
 
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url("fonts/proximanova-black-webfont.eot");
-  src: url("fonts/proximanova-black-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/proximanova-black-webfont.woff") format("woff"), url("fonts/proximanova-black-webfont.ttf") format("truetype"), url("fonts/proximanova-black-webfont.svg") format("svg");
-  font-weight: 800;
+  font-family: 'Lato';
+  src: url("fonts/Lato-RegIta-webfont.eot");
+  src: url("fonts/Lato-RegIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-RegIta-webfont.woff") format("woff"), url("fonts/Lato-RegIta-webfont.ttf") format("truetype"), url("fonts/Lato-RegIta-webfont.svg#LatoItalic") format("svg");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-Reg-webfont.eot");
+  src: url("fonts/Lato-Reg-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Reg-webfont.woff") format("woff"), url("fonts/Lato-Reg-webfont.ttf") format("truetype"), url("fonts/Lato-Reg-webfont.svg#LatoRegular") format("svg");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-LigIta-webfont.eot");
+  src: url("fonts/Lato-LigIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-LigIta-webfont.woff") format("woff"), url("fonts/Lato-LigIta-webfont.ttf") format("truetype"), url("fonts/Lato-LigIta-webfont.svg#LatoLightItalic") format("svg");
+  font-weight: 200;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-Lig-webfont.eot");
+  src: url("fonts/Lato-Lig-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Lig-webfont.woff") format("woff"), url("fonts/Lato-Lig-webfont.ttf") format("truetype"), url("fonts/Lato-Lig-webfont.svg#LatoLight") format("svg");
+  font-weight: 200;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-HaiIta-webfont.eot");
+  src: url("fonts/Lato-HaiIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-HaiIta-webfont.woff") format("woff"), url("fonts/Lato-HaiIta-webfont.ttf") format("truetype"), url("fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic") format("svg");
+  font-weight: 100;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Lato';
+  src: url("fonts/Lato-Hai-webfont.eot");
+  src: url("fonts/Lato-Hai-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Hai-webfont.woff") format("woff"), url("fonts/Lato-Hai-webfont.ttf") format("truetype"), url("fonts/Lato-Hai-webfont.svg#LatoHairline") format("svg");
+  font-weight: 100;
   font-style: normal; }
 
 a, a:visited {
@@ -596,9 +631,6 @@ a, a:visited {
 
 .font-weight-regular {
   font-weight: 400; }
-
-.font-weight-demibold {
-  font-weight: 500; }
 
 .font-weight-bold {
   font-weight: 600; }
@@ -680,7 +712,7 @@ i.payment-method-logo {
   display: flex; }
 
 p4m-register, p4m-login, p4m-checkout {
-  font-family: "Proxima Nova", sans-serif;
+  font-family: "Lato", sans-serif;
   font-size: 16px;
   color: #555; }
 
@@ -738,8 +770,7 @@ p4m-card {
     display: flex;
     max-height: 20vw;
     padding: 0;
-    margin: 0;
-    position: relative; }
+    margin: 0; }
     p4m-card > div#container .card-panel {
       border-radius: 6px;
       box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -774,7 +805,7 @@ p4m-card {
         p4m-card > div#container .card-panel .card-body .card-name {
           height: 24px;
           line-height: inherit;
-          font-weight: 500;
+          font-weight: 600;
           font-size: 16px;
           display: flex;
           align-items: flex-end; }
@@ -811,13 +842,6 @@ p4m-card {
       outline: none;
       border-color: #37a553; }
 
-.selectedPaymentMethod_paypal #container:before {
-  content: '';
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: transparent; }
-
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
   display: block;
   box-sizing: border-box;
@@ -843,7 +867,7 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   border-radius: 0;
   transition: background-color 0.25s ease-out, color 0.25s ease-out;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer; }
 
 .gfs-button {
@@ -947,7 +971,7 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   color: white; }
 
 .p4m-label {
-  color: #37a553; }
+  color: darkgreen; }
 
 .corners-5px {
   -webkit-border-radius: 5px;
@@ -1009,7 +1033,7 @@ i.p4micon-cart-empty {
     align-content: center;
     justify-content: center;
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 600;
     color: #fff;
     background: #37a553;
     border: 1px solid #fff;
@@ -1188,7 +1212,7 @@ p4m-checkout {
       letter-spacing: 3px;
       text-transform: uppercase;
       display: inline-block;
-      font-family: "Proxima Nova", sans-serif;
+      font-family: "Lato", sans-serif;
       font-weight: 200 !important;
       font-size: 18px; }
     p4m-checkout .topPanel p4m-profile > * {
@@ -1253,7 +1277,7 @@ p4m-checkout {
     clear: left;
     margin-top: 0px; }
   p4m-checkout div, p4m-checkout span, p4m-checkout h3, p4m-checkout ul {
-    font-family: 'Proxima Nova', sans-serif; }
+    font-family: 'Lato', sans-serif; }
   p4m-checkout .toggle-title {
     width: 100%;
     cursor: pointer; }
@@ -1283,7 +1307,7 @@ p4m-checkout {
         line-height: 34px !important;
         height: 34px !important;
         font-size: 14px !important;
-        font-family: 'Proxima Nova', sans-serif; }
+        font-family: 'Lato', sans-serif; }
   p4m-checkout #mapTools {
     height: 48px;
     display: flex;
@@ -1422,7 +1446,7 @@ p4m-checkout {
     min-width: calc(26% - 32px); }
   p4m-checkout gfs-location-button .addressTitle {
     display: flex;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 15px; }
   p4m-checkout gfs-location-button p {
     padding-left: 18px;
@@ -1478,7 +1502,7 @@ p4m-checkout {
       font-size: 16px;
       margin-left: 4px; }
   p4m-checkout td.dp-day-name {
-    font-weight: 500; }
+    font-weight: 600; }
   p4m-checkout .dp-opening-hours .title {
     font-size: 13px;
     margin-top: 8px; }
@@ -1487,7 +1511,7 @@ p4m-checkout {
     align-items: center; }
   p4m-checkout .dpProviderName {
     display: flex;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 15px;
     align-items: center; }
     p4m-checkout .dpProviderName .dpProviderLogo {
@@ -1653,7 +1677,7 @@ p4m-checkout {
         font-size: 16px;
         margin: 0; }
       p4m-checkout footer p4m-order-text span {
-        font-weight: 500; }
+        font-weight: 600; }
     p4m-checkout footer p4m-purchase {
       flex: 1; }
   p4m-checkout p4m-order-summary {
@@ -1714,7 +1738,7 @@ p4m-checkout {
         p4m-checkout p4m-order-summary .p4m-table .p4m-row.total {
           line-height: 32px;
           font-size: 16px;
-          font-weight: 500;
+          font-weight: 600;
           margin-bottom: 0; }
     p4m-checkout p4m-order-summary #spinner {
       width: 24px;
@@ -1803,8 +1827,7 @@ p4m-checkout {
   p4m-checkout p4m-cart #image img {
     max-width: 64px; }
   p4m-checkout p4m-cart #details {
-    padding: .5rem;
-    flex-direction: column; }
+    padding: .5rem; }
     p4m-checkout p4m-cart #details > div {
       margin-bottom: 3px; }
     p4m-checkout p4m-cart #details #price {
@@ -1820,7 +1843,7 @@ p4m-checkout {
   box-sizing: border-box;
   padding: 0 15px; }
   .gfs-checkout .gfsStd p {
-    font-weight: 500;
+    font-weight: 600;
     margin: 3px 0; }
     .gfs-checkout .gfsStd p.price {
       color: #37a553; }
@@ -1842,7 +1865,7 @@ gfs-calendar .gfs-calendar {
     gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(1) {
       background: #7bc78f;
       color: #fff;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase; }
   gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.05); }
@@ -1851,7 +1874,7 @@ gfs-calendar .gfs-calendar {
     gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell:nth-of-type(1) {
       background: #98d3a7;
       color: #fff;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase; }
   gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(even) {
     background: rgba(200, 200, 200, 0.02); }
@@ -1938,7 +1961,7 @@ p4m-address .p4m-button.p4m-primary-button {
   color: #000000; }
 
 p4m-address .p4m-address-label {
-  font-weight: 500; }
+  font-weight: 600; }
 
 p4m-address .address-text {
   font-weight: 400;
