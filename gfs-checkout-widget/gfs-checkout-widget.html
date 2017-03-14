@@ -951,7 +951,7 @@
                 var self = this;
                 var handlers = {
                     "useMyDeliveryAddress": function (callback) { self.setGfsAddress(defaultAddress, true, callback); },
-                    "useMyDropPoints": function (callback) { self.selectNearestFavDroppoint(callback); },
+                    "useMyDropPoints": function (callback) { self.selectNearestFavDropPoint(callback); },
                     "useRetailerDropPoint": function (callback) { self.selectNearestDropPoint(callback); }
                 };
                 var handlerArray = [];
@@ -1088,7 +1088,7 @@
             
             selectNearestFavDropPoint: function(callback) {
                 if (this._favDropPoints.length) {
-                    this._selectDropPoint(this._favDropPoints[0].id, callback);
+                    this._selectDropPoint(this._favDropPoints[0].droppointId, callback);
                 }
                 else {
                     callback("No favourite drop-points");
@@ -1099,7 +1099,7 @@
                 this.requestDropPointsByAddress(this.config.defaultAddress.Street1, this.config.defaultAddress.PostCode, null, function (dropPoints) {
                     if (dropPoints && dropPoints.length) {
                         var dropPoint = dropPoints[0];
-                        this._selectDropPoint(dropPointId, callback);
+                        this._selectDropPoint(dropPoint.droppointId, callback);
                     }
                     else {
                         callback("No supported drop-points found");
@@ -1204,8 +1204,8 @@
                 else {
                     return (
                         function(a, b) {
-                            if (a && b) {
-                                 return a.price||a.service.price > b.price ||a.service.price ? 1 : -1;
+                            if (a && b && a.service && b.service) {
+                                 return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
                             }
                             else {
                                 console.warn("Sorting by price: invalid parameter: ", a, b);

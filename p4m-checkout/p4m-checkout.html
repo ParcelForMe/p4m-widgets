@@ -305,7 +305,10 @@
                                 //self.initialising = true;
                                 console.log('_p4mCart()');
                                 //self.preselectDeliveryMethod();
-                                self.updateP4mCart(callback); //This will set IsNew to false
+                                self.updateP4mCart(function(err) {//This will set IsNew to false
+                                    //self._updateGfs(callback); //Try to fill out delivery method
+                                    callback(err);
+                                }); 
                             }
                         ],
                         function (err) {
@@ -358,7 +361,7 @@
                     favAddresses: self._getPreferredAddresses(3) || [],
                     defaultAddress: p4mAddressToGfsAddress(self.getAddressById(this.consumerData.PrefDeliveryAddressId)),
                     cartValue: orderValue,
-                    addressPreferences: null,
+                    addressPreferences: this.consumerData.DeliveryPreferences.split(','),
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.PreferSoonestDelivery
                     }
@@ -368,7 +371,6 @@
 
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
-                debugger;
                 if (!this.isNew) {
                     selection = {
                         dropPointId: self.getAddressById(self.cartData.AddressId).DropPointId,
@@ -530,7 +532,6 @@
                         window.location.reload(true);
                     }                  
                     else {
-                        debugger;
                         this.cartData = data.Cart;
                         this.isNew = data.IsNew;
                         /*var address = this.getAddressById(this.cartData.AddressId);
@@ -611,7 +612,7 @@
                             }
                             else {
                                 this.currentService = data;
-
+                                debugger;
                                 self.set('cartData.Carrier', data.carrier);
                                 self.set('cartData.ShippingAmt', data.shipping);
                                 self.set('cartData.ServiceName', data.service);
