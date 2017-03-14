@@ -474,11 +474,14 @@
             toggleLoading: function (loading) {
                 if (loading) {
                     this.$.orderSummary.showAsLoading();
-                    this.$.p4mPurchase.setLoadingState(true);
+                    this._showAsLoadingShipping(true);
+
+                    //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
                     this.$.orderSummary.showAsLoaded();
-                    this.$.p4mPurchase.setLoadingState(false);
+                    this._showAsLoadingShipping(false);
+                    //this.$.p4mPurchase.setLoadingState(false);
                 }
 
             },
