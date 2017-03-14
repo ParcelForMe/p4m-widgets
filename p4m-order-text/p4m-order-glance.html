@@ -6,7 +6,7 @@
     <template>
         <div id="container">
             <template is="dom-if" if="{{cartData.ExpDeliveryDate}}">
-                Delivering to: <a href="#">{{deliveryAddressStr}} {{deliveryDatePrefixStr}} {{deliveryDateStr}}, via {{deliveryMethodStr}}.</a>
+                Delivering to: <a href="#"><span>{{deliveryAddressStr}} {{deliveryDatePrefixStr}} {{deliveryDateStr}}</span>, via {{deliveryMethodStr}}.</a>
             </template>
             <template is="dom-if" if="{{isLoading}}">
                 <p>...</p>
@@ -115,7 +115,7 @@
                     return moment(new Date(dateStr)).format('dddd Do MMMM YYYY');
                 }
                 else {
-                    return "<span>Please select a delivery date</span>";
+                    return "Please select a delivery date";
                 }
 
             },

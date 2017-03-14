@@ -9,12 +9,6 @@
 	],
 "creatorBuild": "25704",
 "files": {
-	"\/.gitignore": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/.gitignore",
-		"oF": 0
-		},
 	"\/address-lookup-field\/address-lookup-field.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19471,12 +19465,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/example\/.gitignore": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/example\/.gitignore",
-		"oF": 0
-		},
 	"\/example\/index.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19506,11 +19494,12 @@
 		"oO": 0,
 		"oS": 1
 		},
-	"\/example\/profile.jpg": {
-		"ft": 16384,
-		"iS": 6339,
+	"\/example\/profile.png": {
+		"ft": 32768,
+		"iS": 15324,
+		"l": 1,
 		"oA": 0,
-		"oAP": "\/example\/profile.jpg",
+		"oAP": "\/example\/profile.png",
 		"oF": 0,
 		"opt": 0,
 		"q": 100
@@ -19541,12 +19530,6 @@
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
-		},
-	"\/example\/static_api\/p4m\/getP4MCart": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/example\/static_api\/p4m\/getP4MCart",
-		"oF": 0
 		},
 	"\/example\/static_api\/p4m\/isLocallyLoggedIn": {
 		"ft": 8192,
@@ -19591,12 +19574,6 @@
 		"oAP": "\/gfs-checkout-widget\/css\/custom-min.css",
 		"oF": 0,
 		"oS": 0
-		},
-	"\/gfs-checkout-widget\/gfs-checkout-widget.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-checkout-widget\/gfs-checkout-widget.html",
-		"oF": 0
 		},
 	"\/gfs-checkout-widget\/images\/back_button.png": {
 		"ft": 32768,
@@ -19924,12 +19901,6 @@
 		"oAP": "\/gfs-droppoint\/gfs-droppoint-text.html",
 		"oF": 0
 		},
-	"\/gfs-droppoint\/gfs-droppoint.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-droppoint\/gfs-droppoint.html",
-		"oF": 0
-		},
 	"\/gfs-droppoint\/gfs-location-button.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20214,12 +20185,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-cart\/p4m-cart.html",
-		"oF": 0
-		},
-	"\/p4m-checkout\/p4m-checkout.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-checkout\/p4m-checkout.html",
 		"oF": 0
 		},
 	"\/p4m-country-select\/p4m-country-select.html": {
@@ -20745,6 +20710,16 @@
 		"opt": 0,
 		"q": 100
 		},
+	"\/p4m-shared\/img\/profile.png": {
+		"ft": 32768,
+		"iS": 15324,
+		"l": 1,
+		"oA": 0,
+		"oAP": "\/p4m-shared\/img\/profile.png",
+		"oF": 0,
+		"opt": 0,
+		"q": 100
+		},
 	"\/p4m-shared\/p4m-shared.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20796,12 +20771,6 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
-		},
-	"\/p4m-spinner\/p4m-spinner.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-spinner\/p4m-spinner.html",
-		"oF": 0
 		},
 	"\/p4m-wish\/p4m-wish.html": {
 		"ft": 8192,
