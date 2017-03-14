@@ -391,19 +391,9 @@
                     <div id="dp-body">
                         <div id="dp-minor-info">
 
-                            <template is="dom-if" if="{{showOpeningHoursLink}}">
-
-	                                <div id="opening-hours-link">
-	                                    <div class="font-weight-600">Opening Hours</div>
-	                                    <a class="droppoint_info" on-click="_openingHoursLinkClick"> View Opening Hours </a>
-	                                </div>
-	                            </template>
-
-
-                            <template is="dom-if" if="{{showOpeningHours}}">
 
 	                                <div class="dp-opening-hours">
-	                                    <div class="font-weight-600 title">Opening Hours</div>
+	                                    <div class="font-weight-600 title"><a href="#">Opening Hours</a></div>
 	                                    <table>
 	                                        <template is="dom-repeat" items="{{_weekCollection}}">
 	                                            <tr>
@@ -420,7 +410,7 @@
 	                                    </table>
 	                                </div>
 
-                            </template>
+
                         </div>
 
                     </div>
@@ -433,7 +423,7 @@
                     <div class="shippingOptions">
                        <div class="font-weight-600 title">Collection Options</div>
                         <ul>
-                            <template id="shippingOptionsTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
+                            <template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
                                 <li class="delivery-place">
 
                                     <input type="radio"
@@ -535,7 +525,7 @@
 
                 //== Private properties
                 _weekCollection: {
-                    type: Object,
+                    type: Array,
                     notify: true
                 },
                 _id: {
@@ -613,6 +603,7 @@
 					});
 
 					this.set('_weekCollection', buildWeekCollection);
+					//this.$.weekCollectionTemplate.render();
 				}
 			},
 
