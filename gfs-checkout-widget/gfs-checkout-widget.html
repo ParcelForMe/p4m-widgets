@@ -587,7 +587,6 @@
                             callback(result.message);
                         }
                         else {
-                            debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
@@ -817,7 +816,6 @@
                     this.setFavAddresses(this.config.favAddresses);
 
                     //if everything has been preselected, preselect,
-                    debugger;
                     if (selection && selection.deliveryMethodId) {
                         //Post, then try to re-select the chosen method
                         this.postGfsData(function (err) {
@@ -940,7 +938,6 @@
             runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
 
                 //Select address based on preferences
-                debugger;
                 var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
                 if (!prefs || prefs.constructor !== Array) {
                     console.log("runDeliveryAddressPreferences: using default", defaultPrefs);
