@@ -643,12 +643,12 @@ a, a:visited {
   -moz-transition: .15s ease-in-out;
   transition: .15s ease-in-out; }
 
-.change footer {
+.change {
   cursor: pointer;
-  -webkit-animation: pulse 54s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  -moz-animation: pulse 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  -ms-animation: pulse 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  animation: pulse 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95); }
+  -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
+  -moz-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
+  -ms-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
+  animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95); }
 
 @-webkit-keyframes change {
   0% {
