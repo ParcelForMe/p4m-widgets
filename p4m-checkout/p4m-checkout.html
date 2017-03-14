@@ -972,8 +972,8 @@
 
             triggerChangeIndicator: function() {
 
-                this.set("_changeIndicatorClass", "change");
-                window.setTimeout(function(){this.set("_changeIndicatorClass", "not_changed")}.bind(this), 4000);
+                this.set("_changeIndicatorClass", "not_changed");
+                window.setTimeout(function(){this.set("_changeIndicatorClass", "change")}.bind(this), 50);
                 
 
             },
