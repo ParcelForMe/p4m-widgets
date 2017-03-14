@@ -4,13 +4,9 @@
     "Cart" : {
         "SessionId"	    : "SessionA1",
         "Reference"	    : "ORD01",
-        "Currency"	    : "AUD",    
-        "ShippingAmt"     : 20.00,
+        "Currency"	    : "GBP",    
         "Tax"             : 10.00,
         "Total"           : 100.00,
-        "xServiceId"	    : "Shipping service Id",
-        "xServiceName"     : "next day",
-        "xExpDeliveryDate"	: "2017-02-16T14:55:43.511Z",
         "PaymentType"       : "DB",
         "Items"	        : [
             {
