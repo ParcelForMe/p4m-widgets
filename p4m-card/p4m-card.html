@@ -28,7 +28,7 @@
                         </div>   
                         <div class="card-description creditcard">
                             <span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>   
-                        <div class="inputs"><input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="Verification code" />
+                        <div class="inputs"><input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="CVV" />
                         </div>                  
                     </div>
                 </div>
@@ -62,17 +62,6 @@
 
         .show-toggle-btn .toggle-button {
             display: flex;
-        }
-
-        .show-cvv #cvvField {
-            display: block;
-            margin-top: 4px;
-            width: 158px;
-        }
-
-
-        #cvvField {
-            display: none;
         }
 
 /*        .card-tag {
