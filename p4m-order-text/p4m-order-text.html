@@ -13,7 +13,7 @@
             <template is="dom-if" if="{{cartData.AddressId}}">
                 <p>We'll deliver your order to your {{addressTypeStr}}:
                 <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}}
-                <span class="p4m-label">{{deliveryDateStr}}.</span></p>
+                <span class="p4m-label"><span>{{deliveryDateStr}}.</span></span></p>
                 <p>Your order will be sent via
                 <span class="p4m-label">{{deliveryMethodStr}} delivery</span>.</p>
             </template>
@@ -133,7 +133,7 @@
                     return moment(new Date(dateStr)).format('ddd Do MMM YYYY');
                 }
                 else {
-                    return "<span>Please select a delivery date</span>";
+                    return "Please select a delivery date";
                 }
                 
             },
