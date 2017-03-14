@@ -968,8 +968,9 @@
             },
 
             triggerChangeIndicator: function() {
-                this.set("_changeIndicatorClass", "");
+
                 this.set("_changeIndicatorClass", "change");
+                window.setTimeout(function(){this.set("_changeIndicatorClass", "not_changed")}.bind(this), 4000);
                 
 
             },
