@@ -513,7 +513,7 @@
                     this.toggleLoading(true);
                     this.$.p4mCheckoutApi.call('postCart', null, cartMessage, function (err, data) {
                         if (err) {
-                            callback(err);
+                            callback(null);//EEE we are suppressing the error here
                         }
                         else {
                             self.updating = false;
