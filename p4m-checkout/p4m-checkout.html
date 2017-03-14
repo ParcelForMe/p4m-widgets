@@ -33,7 +33,7 @@
     <template>
         <p4m-api id="p4mCheckoutApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
-        <div id="container">
+        <div id="container" class$="{{_changeIndicatorClass}}">
 
             <div id="topPanel" class="topPanel">
                 <img class="p4m-register-logo" src="../p4m-shared/img/P4M-Top-Header.png" id="peli-icon-header" />
@@ -185,6 +185,10 @@
                 _changeTimer: {
                     //Timer object to allow sending of changes once user has finished interaction
                     type: Object
+                },
+                _changeIndicatorClass: {
+                    type: String,
+                    value: "not_changed"
                 }
                 
             },
@@ -612,7 +616,6 @@
                             }
                             else {
                                 this.currentService = data;
-                                debugger;
                                 self.set('cartData.Carrier', data.carrier);
                                 self.set('cartData.ShippingAmt', data.shipping);
                                 self.set('cartData.ServiceName', data.service);
@@ -959,8 +962,15 @@
                 }
                 else {
                     console.log("p4m widget: onGfsServiceChanged():", e);
+                    this.triggerChangeIndicator();
                     this.updateShippingService(e.detail, function () { console.log("onGfsServiceChanged: updateShippingService complete")});
                 }
+            },
+
+            triggerChangeIndicator: function() {
+                this.set("_changeIndicatorClass", "change");
+                this.set("_changeIndicatorClass", "");
+
             },
 
             onGfsServicePreselect: function (e) {
