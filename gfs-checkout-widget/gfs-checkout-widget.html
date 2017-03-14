@@ -662,14 +662,11 @@
             //Put the address value into the GFS post data
             //TODO: Rename
             setGfsAddress: function (address, autoSelectDelivery, callback) {
-                debugger;
-
                 if (typeof (callback) !== "function") {
                     callback = function(){};
                 }
                 console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                 this._postData.Request.Order.Transit.Recipient.Location = address;
-                debugger;
                 if (autoSelectDelivery) {
                     this.autoSelectDeliveryMethod(callback);
                 }
@@ -841,7 +838,15 @@
                         //Set delivery address first. This will then trigger auto-setting of delivery method
 
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
-                            self.postGfsData(finalCallback);
+                            self.postGfsData(function(err) {
+                                if (err) {
+                                    finalCallback(err);
+                                }
+                                else
+                                {
+                                    self.autoSelectDeliveryMethod(finalCallback);
+                                }
+                            });
                             //finalCallback(err);
                         });
                     }                 
@@ -934,7 +939,7 @@
             runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
 
                 //Select address based on preferences
-   
+                debugger;
                 var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
                 if (!prefs || prefs.constructor !== Array) {
                     console.log("runDeliveryAddressPreferences: using default", defaultPrefs);
@@ -1236,7 +1241,6 @@
             },
 
             _sortDropPointServices: function() {
-//zzzzz
                 if (this.config.deliveryPreferences) {
                     var sortFunction = this._getDeliveryMethodSortFunction();
                     this._dropPoints.map(
