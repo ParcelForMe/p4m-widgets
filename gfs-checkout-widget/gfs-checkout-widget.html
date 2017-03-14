@@ -1113,6 +1113,7 @@
                     this._makeMap();
                     this._findPostcode();
                     this._processAllDroppoints();
+                    this.panToDefaultLocation();
                 }
 
                //this.processRates();
@@ -1623,7 +1624,7 @@
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map);
                     this._openSelectedDropPointInfoWindow();
-                    this.panToDefaultLocation();
+                    //this.panToDefaultLocation();
 
                 }
                 else {
