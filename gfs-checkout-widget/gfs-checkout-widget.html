@@ -587,6 +587,7 @@
                             callback(result.message);
                         }
                         else {
+                            debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
@@ -888,9 +889,9 @@
                 }
                 else {
                     if (this.config.deliveryPreferences) {
-                        var sortFunction = this._getDeliveryMethodSortFunction();
+                        //var sortFunction = this._getDeliveryMethodSortFunction();
                         if (this._selectedDropPoint) {
-                            this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
+                            //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
                             //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
                             //this.setDeliveryMethod();
                             
@@ -1114,7 +1115,7 @@
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
-                    //this._processAllDroppoints();
+                    this._processAllDroppoints();
                 }
 
                //this.processRates();
@@ -1204,8 +1205,14 @@
                 else {
                     return (
                         function(a, b) {
-                            if (a && b && a.service && b.service) {
-                                 return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
+                            if (a && b) {
+                                if ((a.service && !a.service.price) ||(b.service && !b.service.price)) {
+                                    console.warn("Sorting by price: invalid parameter: ", a, b);
+                                    return 1;
+                                }
+                                else {
+                                    return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
+                                }                              
                             }
                             else {
                                 console.warn("Sorting by price: invalid parameter: ", a, b);
@@ -1257,6 +1264,7 @@
                 var self = this;
                 this._dropPoints.map(
                     function (item) {
+
                         item.collectionPoint = true;
                         item.deliveries = self._findDropPointDeliveries(item.providerId);
                         return item;
@@ -1680,7 +1688,6 @@
             */
 
             _openSelectedDropPointInfoWindow: function () {
-                console.warn("_openSelectedDropPointInfoWindow()");
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
                     var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
                     
@@ -1734,13 +1741,7 @@
             //If no method chosen, auto-choose one
             _completeDropPointSelection(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
-                /*if (this._runningCompleteDropPointSelection) {
-                    callback(null);
-                    return;
-                }
-                this._runningCompleteDropPointSelection = true;*/
-                
-                console.warn("_completeDropPointSelection()");
+
                 var self = this;
                 if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
                     callback(null);  
@@ -1782,7 +1783,6 @@
 
             _selectDropPoint(dropPointId) {
                 var self = this;
-                console.warn("_selectDropPoint()");
                 this._completeDropPointSelection(dropPointId, null, function () {
                     self.$['infobox-droppoint'].select(); //The gfs-droppoint widget will fire droppoint-selected 
                     //Next stop _onDropPointSelectedEvent() 
@@ -1793,7 +1793,6 @@
             //Make it the 'selected' one
             //Select the infobox's gfs-droppoint widget.
             _selectDropPointMarker: function (marker) {
-                console.warn("_selectDropPointMarker()");
                 var dp = this._droppointById(null, marker.customData.droppointId);
                 this._selectDropPoint(marker.customData.droppointId);
             },
@@ -1803,7 +1802,6 @@
             },
 
             _unselectDropPoint: function () {
-                console.warn("_unselectDropPoint()");
                 if (this._selectedDropPoint) {
                     if (this._infoWindow) {
                         this._infoWindow.close();
