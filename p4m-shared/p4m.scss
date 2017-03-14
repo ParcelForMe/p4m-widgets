@@ -546,122 +546,63 @@ left: 0;
 // Typography
 //////////////////////////////////////////////////
 
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-BlaIta-webfont.eot');
-    src: url('fonts/Lato-BlaIta-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Lato-BlaIta-webfont.woff') format('woff'),
-    url('fonts/Lato-BlaIta-webfont.ttf') format('truetype'),
-    url('fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic') format('svg');
-    font-weight: 800;
-    font-style: italic;
-
-}
 
 @font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-Bla-webfont.eot');
-    src: url('fonts/Lato-Bla-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Lato-Bla-webfont.woff') format('woff'),
-    url('fonts/Lato-Bla-webfont.ttf') format('truetype'),
-    url('fonts/Lato-Bla-webfont.svg#LatoBlack') format('svg');
-    font-weight: 800;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-BolIta-webfont.eot');
-    src: url('fonts/Lato-BolIta-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-BolIta-webfont.woff') format('woff'),
-        url('fonts/Lato-BolIta-webfont.ttf') format('truetype'),
-        url('fonts/Lato-BolIta-webfont.svg#LatoBoldItalic') format('svg');
-    font-weight: 600;
-    font-style: italic;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-Bol-webfont.eot');
-    src: url('fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-Bol-webfont.woff') format('woff'),
-        url('fonts/Lato-Bol-webfont.ttf') format('truetype'),
-        url('fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
-    font-weight: 600;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-RegIta-webfont.eot');
-    src: url('fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-RegIta-webfont.woff') format('woff'),
-        url('fonts/Lato-RegIta-webfont.ttf') format('truetype'),
-        url('fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
-    font-weight: 400;
-    font-style: italic;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-Reg-webfont.eot');
-    src: url('fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-Reg-webfont.woff') format('woff'),
-        url('fonts/Lato-Reg-webfont.ttf') format('truetype'),
-        url('fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
-    font-weight: 400;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-LigIta-webfont.eot');
-    src: url('fonts/Lato-LigIta-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-LigIta-webfont.woff') format('woff'),
-        url('fonts/Lato-LigIta-webfont.ttf') format('truetype'),
-        url('fonts/Lato-LigIta-webfont.svg#LatoLightItalic') format('svg');
-    font-weight: 200;
-    font-style: italic;
-
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-Lig-webfont.eot');
-    src: url('fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-Lig-webfont.woff') format('woff'),
-        url('fonts/Lato-Lig-webfont.ttf') format('truetype'),
-        url('fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-light-webfont.eot');
+    src: url('fonts/proximanova-light-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/proximanova-light-webfont.woff') format('woff'),
+    url('fonts/proximanova-light-webfont.ttf') format('truetype'),
+    url('fonts/proximanova-light-webfont.svg') format('svg');
     font-weight: 200;
     font-style: normal;
 
 }
 
 @font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-HaiIta-webfont.eot');
-    src: url('fonts/Lato-HaiIta-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-HaiIta-webfont.woff') format('woff'),
-        url('fonts/Lato-HaiIta-webfont.ttf') format('truetype'),
-        url('fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic') format('svg');
-    font-weight: 100;
-    font-style: italic;
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-regular-webfont.eot');
+    src: url('fonts/proximanova-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/proximanova-regular-webfont.woff') format('woff'),
+    url('fonts/proximanova-regular-webfont.ttf') format('truetype'),
+    url('fonts/proximanova-regular-webfont.svg') format('svg');
+    font-weight: 400;
+    font-style: normal;
 
 }
 
 @font-face {
-    font-family: 'Lato';
-    src: url('fonts/Lato-Hai-webfont.eot');
-    src: url('fonts/Lato-Hai-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/Lato-Hai-webfont.woff') format('woff'),
-        url('fonts/Lato-Hai-webfont.ttf') format('truetype'),
-        url('fonts/Lato-Hai-webfont.svg#LatoHairline') format('svg');
-    font-weight: 100;
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-semibold-webfont.eot');
+    src: url('fonts/proximanova-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/proximanova-semibold-webfont.woff') format('woff'),
+        url('fonts/proximanova-semibold-webfont.ttf') format('truetype'),
+        url('fonts/proximanova-semibold-webfont.svg') format('svg');
+    font-weight: 500;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-extrabld-webfont.eot');
+    src: url('fonts/proximanova-extrabld-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/proximanova-extrabld-webfont.woff') format('woff'),
+        url('fonts/proximanova-extrabld-webfont.ttf') format('truetype'),
+        url('fonts/proximanova-extrabld-webfont.svg') format('svg');
+    font-weight: 600;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-black-webfont.eot');
+    src: url('fonts/proximanova-black-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/proximanova-black-webfont.woff') format('woff'),
+        url('fonts/proximanova-black-webfont.ttf') format('truetype'),
+        url('fonts/proximanova-black-webfont.svg') format('svg');
+    font-weight: 800;
     font-style: normal;
 
 }
@@ -694,6 +635,7 @@ a, a:visited {
 .font-weight-hairline {font-weight: 100;}
 .font-weight-light {font-weight: 200;}
 .font-weight-regular {font-weight: 400;}
+.font-weight-demibold {font-weight: 500;}
 .font-weight-bold {font-weight: 600;}
 .font-weight-black {font-weight: 700;}
 
@@ -849,6 +791,7 @@ p4m-card {
         max-height: 20vw;
         padding: 0;
         margin: 0;  
+        position: relative;
         .card-panel {
             border-radius: 6px;
             box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -888,7 +831,7 @@ p4m-card {
                 .card-name {
                     height: 24px;
                     line-height: inherit;
-                    font-weight: 600;
+                    font-weight: 500;
                     font-size: 16px;
                     display: flex;
                     align-items: flex-end;
@@ -937,6 +880,14 @@ p4m-card {
     }
 }
 
+.selectedPaymentMethod_paypal #container:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: transparent;
+}
+
 
 
 
@@ -973,7 +924,7 @@ p4m-checkout {
 	    border-radius: 0;
 	    transition: background-color 0.25s ease-out, color 0.25s ease-out;
 	    font-size: 14px;
-	    font-weight: 600;
+	    font-weight: 500;
 	    // line-height: 34px;
 	    // text-align: center;
 	    cursor: pointer;
@@ -1107,7 +1058,7 @@ p4m-checkout {
 
 
 
-.p4m-label { color: darkgreen }
+.p4m-label { color: $p4m-green; }
 // used in the p4m-register widget 
 .corners-5px {
 	@include border-radius( 5px );
@@ -1145,7 +1096,7 @@ i.p4micon-cart-empty {
         align-content: center;
         justify-content: center;
         font-size: 10px;
-        font-weight: 600;
+        font-weight: 500;
         color: $white;
         background: $p4m-green;
         border: 1px solid $white;
@@ -1480,7 +1431,7 @@ p4m-checkout {
         margin-top: 0px;
     }
     div, span, h3, ul {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Proxima Nova', sans-serif;
     }
     .toggle-title {
         width: 100%;
@@ -1527,7 +1478,7 @@ p4m-checkout {
     			line-height: 34px !important;
     			height: 34px !important;
     			font-size: 14px !important;
-    			font-family: 'Lato', sans-serif;
+    			font-family: 'Proxima Nova', sans-serif;
     		}
     	}
     }
@@ -1730,7 +1681,7 @@ p4m-checkout {
 		}
 		.addressTitle {
 			display: flex;
-			font-weight: 600;
+			font-weight: 500;
 			line-height: 15px;
 		}
 		p {
@@ -1815,7 +1766,7 @@ p4m-checkout {
 		}
 	}
 	td.dp-day-name {
-	    font-weight: 600;
+	    font-weight: 500;
 	}
 	.dp-opening-hours {
 		.title {
@@ -1829,7 +1780,7 @@ p4m-checkout {
 	}
     .dpProviderName {
 	    display: flex;
-	    font-weight: 600;
+	    font-weight: 500;
 	    line-height: 15px;
 	    align-items: center;
 	    .dpProviderLogo {
@@ -2055,7 +2006,7 @@ p4m-checkout {
                 margin: 0;
             }
             span {
-                font-weight: 600;
+                font-weight: 500;
             }
     	}
     	p4m-purchase {
@@ -2135,7 +2086,7 @@ p4m-checkout {
 			    &.total {
 			    	line-height: 32px;
 			    	font-size: 16px;
-			    	font-weight: 600;
+			    	font-weight: 500;
                     margin-bottom: 0;
 			    }
 		    }
@@ -2276,6 +2227,7 @@ p4m-checkout {
 		}
 		#details {
 			padding: .5rem;
+            flex-direction: column;
 			> div {
 				margin-bottom: 3px;
 			}
@@ -2302,7 +2254,7 @@ p4m-checkout {
 		box-sizing: border-box;
 		padding: 0 15px;
 		p {
-			font-weight: 600;
+			font-weight: 500;
 			margin: 3px 0;
 			&.price {
 				color: $p4m-green;
@@ -2341,7 +2293,7 @@ gfs-calendar {
 					&:nth-of-type(1) {
 						background: $p4m-green-100;
 						color: $white;
-						font-weight: 600;
+						font-weight: 500;
 						text-transform: uppercase;
 					}
 				}
@@ -2361,7 +2313,7 @@ gfs-calendar {
 					&:nth-of-type(1) {
 						background: lighten($p4m-green-100, 8%);
 						color: $white;
-						font-weight: 600;
+						font-weight: 500;
 						text-transform: uppercase;
 					}
 				}
@@ -2475,7 +2427,7 @@ p4m-address {
         color: #000000;
     }
     .p4m-address-label {
-    	font-weight: 600;
+    	font-weight: 500;
     }
     .address-text {
     	font-weight: 400;
