@@ -3,20 +3,28 @@
 <dom-module id="p4m-spinner">
 
     <template>
-        <div id="container" class="spinner">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
+        <div id="container">
+            <template is="dom-if" if="{{_ellipsis}}">
+                <div class="ellipsis spinner">
+                  <div class="bounce1"></div>
+                  <div class="bounce2"></div>
+                  <div class="bounce3"></div>
+                </div>
+            </template>
+            <template is="dom-if" if="{{_shuffler}}">
+                <div class="shuffler spinner"></div>
+            </template>
         </div>
     </template>
 
     <style>
-        .spinner {
+        /* ---- Ellipsis */
+        .spinner.ellipsis {
           width: 70px;
           text-align: center;
         }
 
-        .spinner > div {
+        .spinner.ellipsis > div {
           width: 9px;
           height: 9px;
           background-color: white;
@@ -27,14 +35,46 @@
           animation: sk-bouncedelay 1.4s infinite ease-in-out both;
         }
 
-        .spinner .bounce1 {
+        .spinner.ellipsis .bounce1 {
           -webkit-animation-delay: -0.32s;
           animation-delay: -0.32s;
         }
 
-        .spinner .bounce2 {
+        .spinner.ellipsis .bounce2 {
           -webkit-animation-delay: -0.16s;
           animation-delay: -0.16s;
+        }
+
+        /* ---- Shuffler */
+        .spinner.shuffler {
+          width: 40px;
+          height: 40px;
+          background-color: rgba(68, 144, 68, 1.0);
+
+          margin: 100px auto;
+          -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+          animation: sk-rotateplane 1.2s infinite ease-in-out;
+        }
+
+        /* ---- General effects */
+
+        @-webkit-keyframes sk-rotateplane {
+          0% { -webkit-transform: perspective(120px) }
+          50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+          100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+        }
+
+        @keyframes sk-rotateplane {
+          0% { 
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+          } 50% { 
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+          } 100% { 
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+          }
         }
 
         @-webkit-keyframes sk-bouncedelay {
@@ -52,6 +92,7 @@
           }
         }
 
+
     </style>
 
     <script>
@@ -60,19 +101,35 @@
             is: "p4m-spinner",
 
             properties: {
+                species: {
+                    type: String,
+                    value: "ellipsis",
+                    observer: "changeSpecies"
+                },
                 active: {
                     type: Object,
                     value: false,
                     observer: "renderMe"
+                },
+                _ellipsis: {
+                    type: Object,
+                    value: false
+                },
+                _shuffler: {
+                    type: Object,
+                    value: false
                 }
-
             },
-
-
 
             ready: function()
             {
+                this.changeSpecies();
                 this.renderMe();               
+            },
+
+            changeSpecies: function() {
+                this._ellipsis = (this.species.toLowerCase() == "ellipsis");
+                this._shuffler = (this.species.toLowerCase() == "shuffler");
             },
 
             renderMe: function() {
