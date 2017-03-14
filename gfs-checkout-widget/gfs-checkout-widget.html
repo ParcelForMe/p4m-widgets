@@ -2,17 +2,22 @@
 <link rel="import" href="../../iron-list/iron-list.html" />
 
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../../paper-toast/paper-toast.html" />
 <link rel="import" href="../../paper-button/paper-button.html" />
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
 <link rel="import" href="../../iron-icons/iron-icons.html" />
+<link rel="import" href="../../iron-dropdown/iron-dropdown.html" />
+<link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html" />
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
 
 <link rel="import" href="../gfs-droppoint/gfs-droppoint.html" />
 <link rel="import" href="../gfs-droppoint/gfs-location-button.html" />
 <link rel="import" href="../gfs-calendar/gfs-calendar.html" />
 <link rel="import" href="../map-region-manager/map-region-manager.html" />
+
 
 <script src="../../momentjs/min/moment.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI&libraries=places"></script>
@@ -23,472 +28,11 @@
     <!--<link rel="import" type="css" href="custom.css">-->
 
     <template>     
-        <style>
-
-            h3 {
-                margin-left: 0px;
-                clear: left;
-                margin-top: 0px;
-            }
-
-            div, span, h3, ul {
-                font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
-            }
-
-            .toggle-title {
-                width: 100%;
-                cursor: pointer;
-            }
-
-            .toggle-content {
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-
-            .hidden {
-                display: none;
-                z-index: 0;
-            }
-
-            input[type=radio] {
-                margin-right: 4px;
-            }
-
-            ul {
-                padding: 5px;
-            }
-
-            li {
-                display: flex;
-            }
-
-            li label {
-                margin-top: 5px;
-                margin-left: 4px;
-            }
-
-            #mapContainer {
-                display: block;
-                position: relative;
-            }
-
-            #gfsMapCanvas {
-                height: 400px;
-                top: 0;
-                left: 0;
-            }
-
-            #gfsSidebar {
-                display: block;
-                width: 350px;
-                overflow-y: auto;
-                padding: 10px;
-            }
-
-            #mainMapArea {
-                width: 100%;
-            }
-
-            #mainMapArea.showPreferredDroppoints #gfsMapCanvas {
-                width: 60%;
-                float: left;
-            }
-
-
-            #mainMapArea.showPreferredDroppoints .preferredDroppoints {
-                width: 37%;
-                float: right;
-
-                height: 400px; /* same as map */
-                overflow-y: scroll;     
-                overflow-x: hidden;
-                display: block;  
-            }
-
-            /* By default, show two columns of cards and no preferred droppoints zone*/
-            #mainDropPointListArea .preferredDroppoints {
-               display: none;          
-            }
-
-            #mainDropPointListArea gfs-droppoint {
-                width: 368px;  
-                min-height: 258px;      
-            }
-
-            #mainDropPointListArea #dropPointList {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;        
-            }
-
-            /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
-            #mainDropPointListArea.showPreferredDroppoints #dropPointList {
-                width: 60%;
-                float: left;    
-                display: flex;
-                flex-direction: column;         
-            }
-
-            #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
-                width: 37%;
-                float: right;   
-                overflow-x: hidden;    
-                display: block;        
-            }
-
-            #mainDropPointListArea.showPreferredDroppoints gfs-droppoint {
-                width: auto;  
-                min-height: 258px;      
-            }
-
-            .preferredDroppoints h3 {
-                margin-top: -4px 10px;
-                font-size: 20px;
-            }
-
-            .noscroll {
-                xoverflow: hidden;
-            }
-
-            #mainDropPointListArea .preferredDroppoints h3 {
-                margin-top: 4px 10px;
-                font-size: 20px;
-            }
-
-            #locateme {
-                z-index: 2;
-                position: absolute;
-                opacity: 0.5;
-            }
-
-            #dropPointDetails {
-                position: absolute;
-                z-index: 1;
-            }
-
-            #droppoint_overlay {
-                background: rgba(0, 0, 0, 1);
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 240px;
-                border-right: 1px solid #b9b9b9;
-                padding: 5px 15px 15px 15px;
-                /*font-family:gotham_bookregular;*/
-                color: silver;
-                float: left;
-                /*overflow-y: scroll;*/
-            }
-
-            #droppoint_overlay .dp-day-name {
-                color: white;
-            }
-
-            #droppoint_overlay_close {
-                position: absolute;
-                top: 32px;
-                right: 32px;
-                margin-top: -28px;
-                margin-right: -20px;
-            }
-
-            #droppoint_overlay gfs-checkout {
-                margin: auto;
-                width: 80%;
-            }
-
-            #droppoint-delivery-options {
-                clear: both;
-            }
-
-            .toggleDropPointsViewControls {
-                display: flex;
-                margin: 0 0 20px auto;
-            }
-
-            #mapTools, #listTools {
-                display: flex;
-                flex-direction: row;
-            }
-
-            #viewAsList, #viewAsMap {
-                padding-top: 16px;
-            }
-
-
-
-            .toggle-label {
-                display: inline-block;
-                font-size: 18px;
-                margin-right: 0.4em;
-            }
-
-            .fade-in {
-                opacity: 0.8;
-                transition: opacity 400ms ease-in;
-                z-index: 2;
-            }
-
-            .fade-out {
-                opacity: 0.0;
-                transition: opacity 400ms ease-in;
-                z-index: 0 !important;
-            }
-
-            #droppoint_info {
-               
-                overflow-y: hidden;
-            }
-
-
-
-            #droppoint_info a,
-            #droppoint_info a:visited,
-            #droppoint_info a:active {
-                text-decoration: none;
-                color: #29a54f;
-                font-size: 11px;
-                /*font-family: 'gotham_bookregular';*/
-                font-weight: bold;
-
-            }
-
-            a.droppoint_info:hover {
-                text-decoration: underline;
-            }
-
-            .highlight {
-                color: #FFFFFF !important;
-                background-color: #90dca7 !important;
-            }
-
-            .toggle-content {
-                padding-left: 2px;
-            }
-
-            .cardList {
-                display: flex;
-                flex-direction: column;
-                height: 630px;
-                overflow-x: hidden;
-                overflow-y: scroll;
-            }
-
-            div.dark .open-late {
-                -webkit-filter: invert(1);
-                filter: invert(1);
-            }
-
-            div#gfsMapCanvas .loading {
-                margin: auto;
-                width: 100px;
-                padding-top: 120px;
-            }
-
-            paper-spinner#map-spinner {
-                width: 100px;
-                height: 100px;
-            }
-
-            div.cardList .loading {
-                margin: auto;
-                width: 100px;
-                padding-top: 50px;
-            }
-
-            paper-spinner#list-spinner {
-                width: 100px;
-                height: 100px;
-            }
-
-
-            /* mp customization */
-
-
-            .dp-card-margin {
-                margin: 0 20px 0 0;
-            }
-
-            .dp-card-margin:nth-child(2n+1) {
-                margin-right: 0;
-            }
-
-            h3.carrier-name {
-                font-size: 20px;
-                margin: 0;
-            }
-
-            ul.carrier-list {
-                margin-bottom: 10px;
-            }
-
-            ul.carrier-list:last-child {
-                margin-bottom: 5px;
-            }
-
-            li.gfsStd label, li.delivery-place label {
-                margin-top: 3px;
-            }
-
-            li.delivery-place label {
-                margin-bottom: 0;
-            }
-
-            #calendarPanel {
-                padding: 15px;
-            }
-
-  
-            span.gfsmethodname {
-                margin: 3px 0 0;
-            }
-
-            .toggle-content {
-                margin-top: 0;
-                /*padding: 10px 0 0 18px;
-                border-top: 1px solid #ccc;
-                border-bottom: 1px solid #ccc;*/
-            }
-
-            .header {
-                padding: 0 10px;
-                line-height: 50px;
-            }
-
-            .header h3:hover {
-                cursor: pointer;
-            }
-
-            .header {
-                background: #fafafa;
-                margin: 0 0 15px;
-                padding-top: 5px;
-                border: 1px solid #fafafa;
-                box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
-            }
-
-            .header label h3 {
-                margin-bottom: 0;
-                padding: 0 0 0 5px;
-                display: inline-block;
-            }
-
-            div.header:last-child {
-                margin: 0;
-            }
-
-            .selected-radio-options {
-                transition: all .2s ease-in-out;
-                transform: scale(1.01);
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                /*box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 4px -3px rgba(0, 0, 0, 0.2)*/
-            }
-            /*
-            .droppoint-margin {
-                margin-right: 20px;
-                position: relative;
-            }
-
-            .droppoint-margin:nth-child(2n+1) {
-                margin-right: 0;
-            }
-            */
-
-            #gfsMapCanvas {
-                margin: 0 0 20px;
-                position: relative;
-            }
-
-            paper-spinner#standard-spinner {
-                width: 100px;
-                height: 100px;
-                position: relative;
-                left: 50%;
-                margin-left: -50px;
-            }
-
-            paper-spinner#calendar-spinner {
-                width: 100px;
-                height: 100px;
-                position: relative;
-                left: 50%;
-                margin-left: -50px;
-            }
-
-            paper-spinner#search-spinner {
-                width: 100px;
-                height: 100px;
-                margin-top: -50px;
-                margin-left: -50px;
-                top: 50%;
-                left: 50%;
-            }
-
-            :root {
-                --paper-tabs-selection-bar-color: blue;
-            }
-
-            /*
-            #gfsMapCanvas-loading {
-                background: rgba(0, 0, 0, .8);
-                width: 100%;
-                height: 90%;
-                position: absolute;
-                z-index: 100;
-            }
-            */
-
-            .search-postcode-wrap {
-                position: relative;
-                display: flex;
-                flex-direction: row;
-            }
-
-            #droppointAddress {
-                display: inline-block;
-                margin-top: 10px;
-                margin-left: 10px;
-                margin-right: 2px;
-                padding: 0px 5px 0px 5px;
-                height: 32px;
-            }
-
-            #wrongPostcode { 
-                color: #d60000;
-            }
-
-            #errorNotification {
-                --paper-toast-background-color: red;
-                --paper-toast-color: white;
-            }
-
-            .search-button {
-                position: absolute;
-                left: 206px;
-                top: 18px;
-                opacity: 0.5;
-            }   
-            
-            paper-tab {
-                --paper-tabs-selection-bar-color: blue;
-            }  
-                        
-            .consumer-addresses {
-                display: flex;
-                flex-direction: row;
-                width: 280px;
-            }  
-            
-            .pageContent {
-                padding: 20px 10px 10px 10px;
-            }    
-
-        </style>
 
         <map-region-manager id="regionManager"></map-region-manager>
 
 		<div id="widgetContainer">          
-            <paper-tabs selected="{{selectedTab}}">             
+            <paper-tabs selected="{{selectedTab}}" no-bar>           
                 <paper-tab>{{calendarDeliveryTitle}}</paper-tab>
                 <paper-tab>Click and Collect</paper-tab>
                 <paper-tab>{{standardDeliveryTitle}}</paper-tab>
@@ -496,102 +40,106 @@
             <iron-pages id="pages" selected="{{selectedTab}}"  on-iron-select="onSelectTab">           
                 <iron-page id="pageCalendar">
                     <div id="calendar-loading" class="loading">
-                        <paper-spinner active id="calendar-spinner"></paper-spinner>
+                        <p4m-spinner species="shuffler" id="calendar-spinner"></p4m-spinner>
                     </div>
-                    <div class="pageContent">
-                        <div>
-                            <gfs-calendar id="calendar" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}" selected-delivery-date="{{overrideDeliveryDate}}" selected-shipping-method-id="{{overrideShippingMethodId}}"></gfs-calendar>
-                        </div>
+                    <div class="pageContent horizontal layout">
+                        <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
  
                 </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="mapTools" class="pageContent">
-                        <div class="header" style="display:none">
+                        <!-- <div class="header" style="display:none">
                             <h3>{{dropPointTitle}}</h3>
+                        </div> -->
+
+                        <div class="toggleDropPointsViewControls">
+                            <template is="dom-if" if="{{_showingDroppointsList}}">
+                                <a id="viewAsList" on-tap="_toggleDroppointView">
+                                <i class="p4micon p4micon-map-with-marker"></i>
+                                </a>
+                            </template>
+                            <template is="dom-if" if="{{_showingDroppointsMap}}">
+                                <a id="viewAsList" on-tap="_toggleDroppointView">
+                                <i class="p4micon p4micon-list"></i></a>
+                            </template>
                         </div>
+					
+					
+                        <div class="location-points">
+							<paper-dropdown-menu label="My Locations" noink no-animations>
+								<paper-listbox class="dropdown-content">
+									    <paper-item >
+                                            <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
+                                        </paper-item>
+
+			                            <template is="dom-repeat" items="{{_favAddresses}}">
+                                            <paper-item label={{item.name}}>
+    			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
+                                            </paper-item>
+			                            </template>                                    
+									
+								</paper-listbox>
+							</paper-dropdown-menu>
+							
+                        </div>
+						<div class="adjoiner"><p>or</p></div>
                       
                         <div class="search-postcode-wrap">
                             <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
                             <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
                         </div>
 
-                        <div class="consumer-addresses">
-                            <template is="dom-repeat" items="{{_consumerAddresses}}">
-                                <gfs-location-button on-click="_onClickConsumerAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-data="{{item}}" on-locate="panToLocation"></gfs-location-button>
-                            </template>
+						<div class="adjoiner"><p>or</p></div>
+							<div class="collection-points">
+								<paper-dropdown-menu label="My Collection Points" noink no-animations>
+									<paper-listbox class="dropdown-content">
+									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
+					                     <paper-item label="{{item.droppointDescription}}">
+    										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected = "_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+	                            		 </paper-item>						
+									  </template>
+								   </paper-listbox>
+								</paper-dropdown-menu>
+							</div>
+                      </div>
+                      <div class="page" id="pageDroppoints">
 
-                        </div>
 
-                        <div class="toggleDropPointsViewControls">
-                            <template is="dom-if" if="{{_showingDroppointsList}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a map</a>
-                            </template>
-                            <template is="dom-if" if="{{_showingDroppointsMap}}">
-                                <a href="#" id="viewAsList" on-tap="_toggleDroppointView">View as a list</a>
-                            </template>
-                           
-                        </div>
 
-                    </div>
-                    <div class="page" id="pageDroppoints">
+                      <div id="mapContainer">
 
-                        <div id="mapContainer">
-
-                            <div id="dropPointDetails" class$="{{_dropPointDetailsClass}}">
-                                <div id="droppoint_overlay" style="height: {{mapHeight}}px; display: block">
-                                    <div id="droppoint_overlay_close" on-click="_hideDropPointDetails">
-                                        <img src="./images/x.png" alt="close" />
-                                    </div>
-                                    <gfs-droppoint id="overlay-droppoint" click-to-choose="true" droppoint-data="{{_selectedDropPoint}}" disable-unchoose="true" on-click="_hideDropPointDetails" container-class="overlay" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                                </div>
-                            </div>
                             <div class="hidden">
-                                <div id="droppoint_info" class="noscroll">
-                                    <gfs-droppoint show-opening-hours-link="true" click-to-choose="true" on-opening-hours-link-click="_showDropPointDetails" disable-unchoose="true" id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-select-delivery-option="onUpdateDroppointDeliveryOptions" show-shipping-options="true" button-type="tick"></gfs-droppoint>
+                                <div id="droppoint_info" class="noscroll">Selected
                                 </div>
-                            </div>
-                            <img id="locateme" on-click="_locateMe" src="./images/locateme.png" />
+                            </div>                           
                             <!--
                                <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
                             -->
                             <div id="mainMapArea">
                                 <div id="gfsMapCanvas">
                                     <div class="loading">
-                                        <paper-spinner active id="map-spinner"></paper-spinner>
+                                        <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner>
                                     </div>
                                 </div>
-                                <template is="dom-if" if="{{_preferredDroppoints.length}}">
-                                    <div class="preferredDroppoints">
-                                        <h3>My Collection Points</h3>
-                                        <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint click-to-choose="true" on-select="_onSelectPreferredDroppoint" container-class="dp-mini-card" xon-droppoint-click="_onClickDroppoint" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-                                        </template>
-                                    </div>
-                                </template>
-
 
                             </div>
                         </div>
 
-                        <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{chosen}}" multi="false"></array-selector>
+                        <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                        </div>
+                        <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
 
                             <div class="cardList">
                                 <div id="list-loading" class="loading">
-                                    <paper-spinner active id="list-spinner"></paper-spinner>
+                                    <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner>
                                 </div>
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-select-delivery-option="onUpdateDroppointDeliveryOptions" on-select="_onSelectPreferredDroppoint" disable-unchoose="true" scroll-into-view-on-choose="true" show-shipping-options="true" show-opening-hours="true" show-distance="true" container-class="dp-large-card" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-                                        </template>
-                                    </div>
-
-                                    <div class="preferredDroppoints">
-                                        <h3>My Collection Points</h3>
-                                        <template id="listPreferredDropPointList" is="dom-repeat" items="{{_preferredDroppoints}}" sort="sortByDistance">
-                                            <gfs-droppoint  click-to-choose="true" on-select="_onSelectPreferredDroppoint" container-class="dp-mini-card" disable-unchoose="true" button-type="tick" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
@@ -599,18 +147,20 @@
                             </div>
                         </div>
                     </div>
+
                 </iron-page>
                 <iron-page id="pageStandard">
-                    <div id="standard-loading" class="loading"><paper-spinner active id="standard-spinner"></paper-spinner></div>
+                    <div id="standard-loading" class="loading"><p4m-spinner species="shuffler" id="standard-spinner"></p4m-spinner></div>
                     <ul class="separated">
-                        <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}" sort="sortServices">
-                            <li class="gfsStd">
-                                <input name="shipping_method" on-click="updateDeliveryOptionsEvent" type="radio" checked="{{item.selected}}" value="{{item.id}}" id="{{item.id}}" class="radio standard-delivery-selection" />
+                        <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}">
+                            <li class="gfsStd horizontal layout center">
                                 <label for$="{{item.id}}">
-                                    <span class="methodname">{{item.methodTitle}}</span>
-                                    <span class="price">{{currencySymbol}}{{item.price}}</span>
-                                    <span>{{item.deliveryDateRange}}</span>
+                                    <p class="methodname lg">{{item.methodTitle}}</p>
+                                    <p class="price lg">{{item.localizedPrice}}</p>
+                                    <p class="deliveryDateRange">{{item.deliveryDateRange}}</p>
                                 </label>
+								<div class="flex"></div>
+                                <i name="shipping_method" on-click="setDeliveryMethodEvent" value="{{item.id}}" id="{{item.id}}" class$="p4micon-check-circle link standard-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
                             </li>
                         </template>
                     </ul>
@@ -619,6 +169,9 @@
         </div>
         <input type="text" value="{{_selectedDropPoint.droppointId}}" id="dropPointRadio" class="hidden" />
         <paper-toast id="errorNotification" class="fit-bottom"></paper-toast>
+
+        <style include="p4m-shared"></style>
+
     </template>
 
     <script>
@@ -627,10 +180,6 @@
         var DAY_MS = 1000 * 60 * 60 * 24;
         var DOW_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', '?'];
         var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-        // set them here so you can access the home marker
-        var geocoder = null;
-        var marker = null;
 
         // element registration
         Polymer({
@@ -649,13 +198,8 @@
                     value: '£'
                 },
 
-                gfsData: {
-                    type: String
-                },
-
-                autoLoad: {
-                    type: Object,
-                    value: true
+                config: {
+                    type: Object
                 },
 
                 preselect: {
@@ -696,24 +240,19 @@
                 defaultTab: {
                     type: String //If 'calendar', shows calendar on startup
                 },
-
-                initialAddress: {
+/*
+                defaultAddress: { //initialAddress
                     type: String
-                },
-               
+                },*/
+               /*
                 defaultPostCode: {
                     type: String
                 },
 
                 defaultCountryCode: {
                     type: String
-                },
-
-                /*
-                selectedTab: {
-                    type: String,
-                    value: "2"
                 },*/
+
 
                 // ATTRIBUTES
                 //
@@ -747,22 +286,7 @@
                     type: String,
                     value: 'Standard Delivery'
                 },
-
-                //If set, preselect this shipping method (if possible)
-                overrideShippingMethodId: {
-                    type: String
-                },
-
-                //If set, preselect this shipping date (if possible)
-                overrideDeliveryDate: {
-                    type: String //ISO Date format
-                },
-
-                //If set, preselect this droppoint (if possible)
-                overrideDroppointId: {
-                    type: String
-                },
-
+                
                 hideMapUI: {
                     type: Object,
                     value: false
@@ -785,18 +309,6 @@
                     type: String
                 },
 
-                //TODO: Investigate removing these
-                /*startingLatitude: {
-                	type: Number,
-                	value: 37.4220279
-                },
-
-                //TODO: Investigate removing these
-                startingLongitude: {
-                	type: Number,
-                	value: -122.0840677
-                },*/
-
                 startingZoomLevel: {
                     type: Number,
                     value: 14
@@ -807,6 +319,20 @@
                     value: "cheapestFirst"
                 },
 
+                selectedTab: {
+                    type: Number,
+                    value: 2
+                },
+
+
+                // PRIVATE PROPERTIES
+                //
+                // Do not modify these properties.
+
+
+                _suppliedSelection: {
+                    type: Object
+                },
                 selectedServiceDetails: {
                     type: Object,
                     value: {
@@ -821,9 +347,10 @@
                     }
                 },
 
-                // PRIVATE PROPERTIES
-                //
-                // Do not modify these properties.
+                standardRates: {
+                    type: Array,
+                    value: []
+                },
 
                 _postData: {
                     type: Object,
@@ -870,12 +397,12 @@
                     notify: true
                 },
 
-                _preferredDroppoints: {
+                _favDropPoints: {
                     type: Array,
                     value: []
                 },
 
-                _consumerAddresses: {
+                _favAddresses: {
                     type: Array,
                     value: [],
                     notify: true
@@ -935,49 +462,13 @@
                     value: null
                 },
 
-                _infoBoxDroppoint: {
-                    type: Object
-                },
-
-                // set default service parameters when API is not available
-                /*
-                defaultService: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultCarrier: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultPrice: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultMinDeliveryTime: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultMaxDeliveryTime: {
-                    type: String,
-                    value: ""
-                },
-
-                defaultCarrierCode: {
-                    type: String,
-                    value: ""
-                }*/
-
             },
 
             listeners: {
                 "datetoggleon": "_deliveryDateSelected",
                 "prevmonth": "_calendarMonthChanged",
-                "nextmonth": "_calendarMonthChanged",
-                "droppoint-changed": "_droppointChanged"
+                "nextmonth": "_calendarMonthChanged"
+                //"droppoint-selected": "_onDropPointSelectedEvent"
             },
 
             // METHODS
@@ -985,75 +476,26 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
-                //this.countryCode = this.defaultCountryCode;
-                //this.postCode = this.defaultPostCode;
+                /*
                 if (this.gfsData) {
-                    if (this.gfsData) {
-                        this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                    }
-                    else if (this.autoLoad) {
+                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
+                    if (this.autoLoad) {
                         this.postGfsData(function () { });
                     }
-                }               
+                }  */             
             },
 
-            createPostData: function (config) {
-                var requiredFields = ['countryCode', 'Postcode', 'town', 'addressLines', 'contactEmail', 'recipientFirstName', 'recipientLastName', 'recipientTitle', 'cartValue'];
-                var missingFields = requiredFields.filter(function (f) {
-                    return (typeof (requiredFields[f]) !== "undefined");
-                });
-                if (missingFields.length) {
-                    throw ("Missing fields: " + missingFields.toString());
-                }
-                else {
-                    var now = new Date();
-                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
- 
-                    this._postData = {
-                        "Request": {
-                            "DateRange": {
-                                "DateFrom": this._makeDateStr(now),
-                                "DateTo": this._makeDateStr(maxDate)
-                            },
-                            "Order": {
-                                "Transit": {
-                                    "Recipient": {
-                                        "Location": {
-                                            "CountryCode": {
-                                                "Code": config.countryCode,
-                                                "Encoding": "ccISO_3166_1_Alpha2"
-                                            },
-                                            "Postcode": config.Postcode,
-                                            "town": config.town,
-                                            "addressLineCollection": config.addressLines
-                                        },
-                                        "contactDetails": {
-                                            "Email": config.contactEmail
-                                        },
-                                        "Person": {
-                                            "firstName": config.recipientFirstName,
-                                            "lastName": config.recipientLastName,
-                                            "title": config.recipientTitle
-                                        }
-                                    }
-                                },
-                                "Value": {
-                                    "CurrencyCode": "GBP",
-                                    "Value": config.cartValue
-                                }
-                            },
-                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
-                            "Session": {
-                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
-                                "sessionID": ""
-                            }
-                        }
-                    }
-                }
-              
-            },
 
+            //eeeeeee
             postGfsData: function (callback) {
+                this._postReq(this._postData, callback);             
+            },
+
+            _makeRequest: function (method, url, callback) {
+                if (!callback || typeof (callback) !== "function") {
+                    throw "No callback";
+                }
+
                 if (this.accessToken === "") {
                     var error =  "No access token";
                     this.$.errorNotification = error;
@@ -1061,42 +503,35 @@
                     callback(error);
                 }
                 else {
-                    console.log(this._postData);
-                    this._postReq(this._postData, callback);
-                }
-            },
+                    var httpRequest = new XMLHttpRequest();
+                    this._showAsLoading(true);
 
-            _makeRequest: function (method, url, callback) {
-                if (!callback || typeof (callback) !== "function") {
-                    throw "No callback";
-                }
-                var httpRequest = new XMLHttpRequest();
-                this._showAsLoading(true);
+                    httpRequest.open(method, url, true);
+                    this._attachHeaders(httpRequest, method);
 
-                httpRequest.open(method, url, true);
-                this._attachHeaders(httpRequest, method);
-
-                httpRequest.onreadystatechange = (function () {
-                    if (httpRequest.readyState !== XMLHttpRequest.DONE) {
-                        this._showAsLoading(true);
-                    }
-                    else {
-                        this._showAsLoading(false);
-                        try {
-                            if (httpRequest.status == 200 || httpRequest.status == 201) {
-                                callback(null, httpRequest.responseText);
+                    httpRequest.onreadystatechange = (function () {
+                        if (httpRequest.readyState !== XMLHttpRequest.DONE) {
+                            this._showAsLoading(true);
+                        }
+                        else {
+                            this._showAsLoading(false);
+                            try {
+                                if (httpRequest.status == 200 || httpRequest.status == 201) {
+                                    callback(null, httpRequest.responseText);
+                                }
+                                else {                               
+                                    callback(httpRequest.status, httpRequest.responseText);
+                                }                                 
                             }
-                            else {                               
-                                callback(httpRequest.status, httpRequest.responseText);
-                            }                                 
+                            catch (e) {
+                                console.error(e.stack);
+                                callback(e);
+                            }
                         }
-                        catch (e) {
-                            console.error(e.stack);
-                            callback(e);
-                        }
-                    }
-                }).bind(this);
+                    }).bind(this);                   
+                }
                 return httpRequest;
+
             },
 
             _attachHeaders: function(httpReq, method) {
@@ -1152,11 +587,10 @@
                             callback(result.message);
                         }
                         else {
-                            //debugger;
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
                             this._processAllDroppoints();
-                            this._requestDroppointList(this._preferredDroppoints, (function (err) {
+                            this._requestDroppointList(this._favDropPoints, (function (err) {
                                 this._delayedInit.bind(self)();
                                 callback(err);
                             }).bind(this));
@@ -1225,23 +659,54 @@
                 //this.postGfsData(callback);
             },
 
-            setGfsAddress: function (address) {
+            //Put the address value into the GFS post data
+            //TODO: Rename
+            setGfsAddress: function (address, autoSelectDelivery, callback) {
+                if (typeof (callback) !== "function") {
+                    callback = function(){};
+                }
                 console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                 this._postData.Request.Order.Transit.Recipient.Location = address;
-                //this.postGfsData(callback);
+                if (autoSelectDelivery) {
+                    this.autoSelectDeliveryMethod(callback);
+                }
+                else callback(null);
             },
 
+            getDeliveryAddress: function() {
+                return this._postData.Request.Order.Transit.Recipient.Location
+            },
+
+            /*
             setGfsService: function(serviceId) {
-                updateDeliveryOptions();
+                setDeliveryMethod(serviceId);
+            },*/
+
+            setFavDropPoints: function (droppointList) {
+                this._favDropPoints = droppointList;
+                this._processFavDroppoints();
             },
 
-            _handleError: function (e) {
-                console.error("GFS Checkout Error", e);
-              },
-
-            _handlePatchResponse: function (e) {
-                this.fire("close-checkout-complete", e.detail.response);
+            setFavAddresses: function (addressList) {
+                this.set('_favAddresses', addressList);
             },
+
+            selectFavAddress: function (addressId, autoSelectMethod, callback) {
+                var self = this;
+                var foundItem = self._favAddresses.find(function (item) {
+                    return item.id == addressId;
+                });
+                if (foundItem) {
+                    self._unselectDropPoint();
+                    
+                    self.setGfsAddress(foundItem, function (err) {
+                        if (autoSelectMethod) {
+                            self.autoSelectDeliveryMethod(callback)
+                        }
+                    });
+                }
+            },
+
 
             requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
   
@@ -1258,49 +723,426 @@
                 })
             },
 
-            _handleGetLocationResponse: function(e) {
-                console.log(e);
+ 
+            init: function (config, selection, finalCallback) {
+                var self = this;
+                this._suppliedSelection = selection;
+                var requiredFields = [
+                    'countryCode',
+                    'postCode',
+                    'town',
+                    'addressLines',
+                    'contactEmail',
+                    'recipientFirstName',
+                    'recipientLastName',
+                    'recipientTitle',
+                    'cartValue',
+                    'addressPreferences',
+                    'deliveryPreferences',
+                    'favDropPoints',
+                    'favAddresses',
+                    'defaultAddress'
+                ];
+                var missingFields = requiredFields.filter(function (f) {
+                    return (typeof (config[f]) == "undefined");
+                });
+                if (missingFields.length) {
+                    throw ("Missing fields: " + missingFields.toString());
+                }
+                else {
+                    this.config = config;
+
+                    //==== Create post data
+                    var now = new Date();
+                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
+                    
+
+
+
+
+                    this._postData = {
+                        "Request":
+                        {
+                            "DateRange": {
+                                "DateFrom": this._makeDateStr(now),
+                                "DateTo": this._makeDateStr(maxDate)
+                            },
+                            "Order": {
+                                "Transit": {
+                                    "Recipient": {
+                                        "Location": {
+                                            "CountryCode": {
+                                                "Code":  config.countryCode,
+                                                "Encoding": "ccISO_3166_1_Alpha2"
+                                            },
+                                            "Postcode": config.postcode,
+                                            "town": config.town,
+                                            "addressLineCollection": config.addressLines
+                                        },
+                                        "contactDetails": {
+                                            "Email": config.contactEmail
+                                        },
+                                        "Person": {
+                                            "firstName": config.recipientFirstName,
+                                            "lastName": config.recipientLastName,
+                                            "title": config.recipientTitle || "Mr"
+                                        }
+                                    }
+                                },
+                                "Value": {
+                                    "CurrencyCode": "GBP",
+                                    "Value": config.cartValue
+                                }
+                            },
+                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
+                            "Session": {
+                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
+                                "sessionID": ""
+                            }
+                        }
+                    };
+
+                    if (selection && selection.address) {
+                        var location = this._postData.Request.Order.Transit.Recipient.Location;
+                        location.CountryCode = selection.address.CountryCode,
+                        location.Postcode = selection.address.Postcode, 
+                        location.town = selection.address.town || "",
+                        location.addressLineCollection = selection.address.addressLineCollection
+                    }
+
+                    
+                    //==== Set fav address data
+                    this.setFavDropPoints(this.config.favDropPoints); 
+                    this.setFavAddresses(this.config.favAddresses);
+
+                    //if everything has been preselected, preselect,
+                    if (selection && selection.deliveryMethodId) {
+                        //Post, then try to re-select the chosen method
+                        this.postGfsData(function (err) {
+                            if (!err) {
+
+                                if (selection.dropPointId) {
+                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
+                                }
+                                else {
+                                    self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                                    finalCallback();
+                                }
+                            }
+                            else finalCallback(err);
+                        });
+                    }
+                    //Otherwise auto-select address and delivery method according to preferences (if any)
+                    else {
+                        //Set delivery address first. This will then trigger auto-setting of delivery method
+
+                        this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
+                            self.postGfsData(function(err) {
+                                if (err) {
+                                    finalCallback(err);
+                                }
+                                else
+                                {
+                                    self.autoSelectDeliveryMethod(finalCallback);
+                                }
+                            });
+                            //finalCallback(err);
+                        });
+                    }                 
+        
+                }
             },
 
-            _delayedInit: function () {
-                this._processInputData();
+            //TODO
+            /*
+            applySelection: function(selection) {
+                
+                //    dropPointId
+                //    deliveryMethodId
+                //    addressId
+                //    deliveryDate
+               
+                if (selection.dropPointId) {
+                    this._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
+                }
+                else {
+                    this.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                }
+                
+            },*/
 
+
+            //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
+            //preferSoonest: true/false
+            //
+            autoSelectDeliveryMethod: function (callback) {
+
+                //If the address chosen is a droppoint,
+                //   Get the delivery methods on the droppoint
+                //   Choose the most preferred
+                //Else if the address chosen isn't a droppoint,
+                //   Choose the most preferred standard delivery
+                if (!this.standardRates.length) {
+                    callback(null); //No delivery methods available yet
+                }
+                else {
+                    if (this.config.deliveryPreferences) {
+                        //var sortFunction = this._getDeliveryMethodSortFunction();
+                        if (this._selectedDropPoint) {
+                            //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
+                            //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
+                            //this.setDeliveryMethod();
+                            
+                            //Can I get away without selecting it via the droppoint widget?
+                            this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
+                        }
+                        else {
+                            
+                            this.setDeliveryMethod(this.standardRates[0].id);
+                            
+                        }
+                        callback(null);
+                    }
+                    else {
+                        if (this._selectedDropPoint) {
+                            this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
+                        }
+                        else {
+                            this.setDeliveryMethod(this.standardRates[0].id);
+                        }
+                        callback(null);
+                    }
+                   
+                }
+
+            },
+
+            //Assuming a delivery method has been chosen, choose a delivery address
+            autoSelectDeliveryAddress: function (serviceDetails) {
+                //If it's a standard delivery method, choose default fav address
+                //newSelectedServiceDetails
+                if (serviceDetails.serviceType.type == "dmStandard") {
+                    this.setGfsAddress(this.config.defaultAddress);
+                }
+                else {
+                    //If it's a droppoint delivery method....?
+                    //TODO
+                }
+
+
+
+               
+            },
+
+            //Select a delivery address based on the users preferences
+            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
+
+                //Select address based on preferences
+                var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
+                if (!prefs || prefs.constructor !== Array) {
+                    console.log("runDeliveryAddressPreferences: using default", defaultPrefs);
+                    prefs = defaultPrefs;
+                }
+
+                //Preferred address
+                //Process a priority list of address preferences
+                var self = this;
+                var handlers = {
+                    "useMyDeliveryAddress": function (callback) { self.setGfsAddress(defaultAddress, true, callback); },
+                    "useMyDropPoints": function (callback) { self.selectNearestFavDropPoint(callback); },
+                    "useRetailerDropPoint": function (callback) { self.selectNearestDropPoint(callback); }
+                };
+                var handlerArray = [];
+                prefs.forEach(function (pref) {
+                    handlerArray.push(handlers[pref]);
+                });
+
+                function runHandler(index) {
+                    handler = handlerArray[index || 0];
+                    if (handler) {
+                        //console.log("Running handler", index);
+                        handler(function (err, data) {
+                            //console.log("Handler returned", err);
+                            if (err) {
+                                runHandler(index + 1);
+                            }
+                            else {
+                                finalCallback();
+                            }
+                        });
+                    }
+                    else {
+                        finalCallback();
+                        //console.log("Finished running handlers");
+                    }
+                }
+
+                runHandler(0);
+
+            },
+
+            _preselectForCalendar: function () {
+                //this.$.calendar.autoSelect();
+            },
+
+            //TODO: Change to use _originalShippingService.selected
+            _preselectForStandard: function () {
+                /*
+                //TODO This function needs to change
+                if (this.standardRates) {
+                    //this.set('_selectedDropPoint', null);
+                    this._unselectDropPoint();
+                    var preselectedService = this.standardRates[0];
+                    if (!preselectedService.selected) {
+                        preselectedService.selected = true;
+                    }                   
+                    
+                    this.setDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
+                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+                    this.$.standardRatesTemplate.render();
+                    //this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
+                    //this.fire('preselectedservice', this.selectedServiceDetails);
+                }*/
+
+            },
+
+            //Select a delivery service
+            //TODO: Refactor?
+            setDeliveryMethod: function (methodId, dateOverride) {
+
+                if (!methodId) return;
+
+                var newMethod = this._getDeliveryRateById(methodId);
+                if (!newMethod) {
+                    console.error("Method not available");
+                    this.fire('noservice');
+                    return;
+                }
+
+                else {
+                    //The original service object is attached directly to selectedServiceDetails, allowing us to deselect it directly
+                    if (this.selectedServiceDetails && this.selectedServiceDetails._originalMethodObject) {
+                        this.selectedServiceDetails._originalMethodObject.selected = false;
+                    }
+
+                    newMethod.selected = true;
+
+                    var newSelectedServiceDetails = {
+                        _originalMethodObject: newMethod,
+                        serviceId: methodId,
+                        service: newMethod.methodTitle,
+                        serviceCode: newMethod.carrierCode,
+                        carrier: newMethod.carrierName,
+                        shipping: newMethod.price,
+                        currencySymbol: this.currencySymbol
+                    }
+
+                    if (dateOverride) {
+                        newSelectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
+                        this.$.calendar.selectShippingOption(methodId, dateOverride, true);
+                    }
+                    else {
+                        newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
+                    }
+
+                    if (newMethod.serviceType.type == "dmStandardDropPoint") {
+                        newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
+                        newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
+                        newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
+                        newSelectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
+                        this.set('_selectedDropPoint.deliveryMethod', methodId);
+                    }
+                    else {
+
+                        //If we have selected something other than a droppoint, and we previously had a droppoint selected,
+                        //We need to unselected it and then auto-select a standard address
+                        if (this._selectedDropPoint) {
+                            this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
+                            this.autoSelectDeliveryAddress(newMethod); //This is a reference to the original delivery method object                           
+                        }
+                        else {
+                            //We had a standard address selected already, apparently. 
+                            //So we don't need to autoselect one.
+                            console.log("Not selecting a standard address automatically.")
+                        }
+                        newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
+                    }
+                    this.set('selectedServiceDetails', newSelectedServiceDetails);
+                  
+
+                    this.set('standardRates', this._getStandardServices());
+
+                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+                    //this.set('dayDefinite', JSON.parse(JSON.stringify(this.dayDefinite)));
+                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
+
+                    this.$.standardRatesTemplate.render();
+                    this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    return this.selectedServiceDetails;
+                }
+            },
+
+
+            
+            selectNearestFavDropPoint: function(callback) {
+                if (this._favDropPoints.length) {
+                    this._selectDropPoint(this._favDropPoints[0].droppointId, callback);
+                }
+                else {
+                    callback("No favourite drop-points");
+                }
+            },
+
+            selectNearestDropPoint: function(callback) {
+                this.requestDropPointsByAddress(this.config.defaultAddress.Street1, this.config.defaultAddress.PostCode, null, function (dropPoints) {
+                    if (dropPoints && dropPoints.length) {
+                        var dropPoint = dropPoints[0];
+                        this._selectDropPoint(dropPoint.droppointId, callback);
+                    }
+                    else {
+                        callback("No supported drop-points found");
+                    }
+                });
+            },
+
+            //This runs after the GFS requests have returned data
+            _delayedInit: function () {
+                this._processRateData();
 
                 if (this.useDropPoints) {
                     this._makeMap();
                     this._findPostcode();
                     this._processAllDroppoints();
+                    this.panToDefaultLocation();
                 }
 
-                this.showPage_Standard(this.preselect);
+               //this.processRates();
+
+                //this.showPage_Standard();
             },
 
-            _apiKeyChanged: function(newValue, oldValue) {
-                console.log('API Key changed to', newValue);
-            },
-
-            isNonGfs: function(item) {
-                return item.carrierCode !== 'gfs';
-            },
-
-            isGfs: function(item) {
-                return item.carrierCode === 'gfs';
-            },
-
-            _processInputData: function () {
-                this._processDayDefiniteData();
-                this._processNonDayDefiniteData();
+            //Index and tidy GFS rate data
+            _processRateData: function () {
+                if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
+                    this._data.standardRates = this._getStandardServices();
+                    this.set('standardRates', this._data.standardRates);
+                    //console.log(this.standardRates);
+                }
+                this.notifyPath('_data.dayDefinite'); //??? Needed?
             },
 
             _showAsLoading: function (loading) {
+
                 if (loading) {
-                    this.$$('#list-spinner').active = true;
+                    this.$$('#list-spinner').active = "true";
+                    this.$$('#standard-spinner').active = "true";
                     this.$$('#list-loading').classList.remove('hidden');
                     this.$$('#standard-loading').classList.remove('hidden');
                     this.$$('#calendar-loading').classList.remove('hidden');
                 }
                 else {
-                    this.$$('#list-spinner').active = false;
+                    this.$$('#list-spinner').active = null;
+                    this.$$('#standard-spinner').active = null;
                     this.$$('#list-loading').classList.add('hidden');
                     this.$$('#standard-loading').classList.add('hidden');
                     this.$$('#calendar-loading').classList.add('hidden');
@@ -1309,8 +1151,8 @@
 
 
             sortByDistance: function (a, b) {
-                if (a.chosen) return -1
-                else if (b.chosen) return 1
+                if (a.selected) return -1
+                else if (b.selected) return 1
                 else if (a === b) return 0;
                 else return a.distanceInMeters < b.distanceInMeters ? -1 : 1;
             },
@@ -1342,60 +1184,51 @@
                 });
             },*/
 
-            sortServices: function (a, b) {
-                if (a == b) return 0;
+            _getDeliveryMethodSortFunction: function() {
 
-                switch (this.serviceSortOrder) {
-                    case "cheapestFirst":
-                        return a.price < b.price ? -1 : 1;
-                    case "fastestFirst":
-                        return a.deliveryTimeFrom < b.deliveryTimeFrom ? -1 : 1;
-                    case "expensiveFirst":
-                        return a.price > b.price ? -1 : 1;
-                    case "slowestFirst":
-                        return a.deliveryTimeFrom > b.deliveryTimeFrom ? -1 : 1;
-                    default:
-                        return;
+                if (this.config.deliveryPreferences.preferSoonest) {
+                    return (
+                        function(a, b) {
+                            if (a && b) {
+                                return a.deliveryTimeFrom || a.deliveryDate < b.deliveryTimeFrom || a.deliveryDate ? 1 : -1;
+                            }
+                            else {
+                                console.warn("Sorting by deliveryDate: invalid parameter: ", a, b);
+                                return 1;
+                            }
+                            
+                        }
+                    );
+                }
+                else {
+                    return (
+                        function(a, b) {
+                            if (a && b) {
+                                if ((a.service && !a.service.price) ||(b.service && !b.service.price)) {
+                                    console.warn("Sorting by price: invalid parameter: ", a, b);
+                                    return 1;
+                                }
+                                else {
+                                    return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
+                                }                              
+                            }
+                            else {
+                                console.warn("Sorting by price: invalid parameter: ", a, b);
+                                return 1;
+                            }
+                           
+                        }
+                    );
                 }
             },
-
-            sortDayDefiniteServices: function (a, b) {
-                if (a == b) return 0;
-
-                switch (this.serviceSortOrder) {
-                    case "expensiveFirst":
-                        return a.price > b.price ? -1 : 1;
-                    case "cheapestFirst":
-                    case "fastestFirst":
-                    case "slowestFirst":
-                    default:
-                        return a.price < b.price ? -1 : 1;
-                }
-            },
-
-
-            setPreferredDroppoints: function (droppointList) {
-                this._preferredDroppoints = droppointList;//.filter(function (item) { return true });
-                this._processPreferredDroppoints();
-
-                if (this._preferredDroppoints.length > 0) {             
-                    this._showPreferredDroppoints();
-                }
-               
-            },
-
-            setConsumerAddresses: function (addressList) {
-                //console.log("Setting consumer addresses", addressList);
-                this.set('_consumerAddresses', addressList);
-            },
-
-
+            
             _processAllDroppoints: function () {
-                //debugger;
                 this._removeDupDropPoints();
                 this._addDropPointDeliveries();
-                this._processPreferredDroppoints();
-                this._findAllDeliveryDroppoints();
+                this._sortDropPointServices();
+                this._processFavDroppoints();
+                this._indexDropPointProviders(this._data.dayDefinite);
+                this._indexDropPointProviders(this._data.nonDayDefinite);
             },
 
             _removeDupDropPoints: function () {
@@ -1412,109 +1245,45 @@
                 this.set('_dropPoints', uniques);
             },
 
-            _processPreferredDroppoints: function()
-            {
-                //Now replace preferred items with real data
-                var self = this;
-                this._preferredDroppoints = this._preferredDroppoints.map(function (item) {
-                    var existingItem = self._droppointById(null, item.droppointId);
-                    if (existingItem) {
-                        existingItem.chosen = item.chosen;
-                    }
-                    return existingItem || item;
-                });
+            _sortDropPointServices: function() {
+                if (this.config.deliveryPreferences) {
+                    var sortFunction = this._getDeliveryMethodSortFunction();
+                    this._dropPoints.map(
+                        function(item) {
+                            if (item.deliveries && item.deliveries.length) {
+                                item.deliveries = item.deliveries.sort(sortFunction);
+                            }                           
+                        });
+                    
+                }
             },
 
-            _addDropPointDeliveries: function()
-            {
+            _addDropPointDeliveries: function () {
                 var self = this;
                 this._dropPoints.map(
                     function (item) {
-                        item.collectionPoint = true;
 
-                        //TODO: This often seems to return delivery method IDs associated with the wrong provider?
+                        item.collectionPoint = true;
                         item.deliveries = self._findDropPointDeliveries(item.providerId);
                         return item;
                     }
                 );
                 console.log(this._dropPoints);
             },
-            
-            // find the earliest of each service
-            _getGroupedByService: function() {
+
+            _processFavDroppoints: function()
+            {
+                //Now replace preferred items with real data
                 var self = this;
-                var results = [];
-                var services = [];
-
-                // find the earliest of each non day definite service
-                this._data.nonDayDefinite.forEach(function(day) {
-                    day.rates.forEach(function(service) {
-                        if (service.serviceType.type === "dmStandard") {
-                            if (typeof(services[service.methodTitle]) === "undefined") {
-                                services[service.methodTitle] = {
-                                    deliveryDate: day.deliveryDate,
-                                    service: service
-                                };
-                            } else {
-                                var servicesDay = new Date(services[service.methodTitle].deliveryDate)
-                                var nonDayDefiniteDay = new Date(day.deliveryDate);
-                                if (servicesDay.getTime() > nonDayDefiniteDay.getTime())
-                                    services[service.methodTitle] = {
-                                        deliveryDate: day.deliveryDate,
-                                        service: service
-                                    };
-                            }
-                        }
-                    });
-                });
-
-                // create array for display in polymer
-                for (var service in services) {
-                    var item = services[service];
-                    var obj = {
-                        id: item.service.id,
-                        methodTitle: item.service.methodTitle,
-                        price: item.service.price,
-                    };
-                    // non day definite
-                    var startDate = new Date(item.deliveryDate);
-                    var endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + (item.service.maxDD - 1));
-                    obj.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
-                    obj.deliveryTimeFrom = endDate.getTime();
-                    results.push(obj);
-                }
-                return results;
-            },
-
-            _getDeliveryRateById: function(id) {
-                var combinedRateGroups = this._data.dayDefinite.concat(this._data.nonDayDefinite);
-                var rates = [];
-                combinedRateGroups.forEach(function(group) {
-                    rates = rates.concat(group.rates);
-                });
-                var resultList = rates.filter(function(rate) {
-                    return rate.id == id
-                });
-                if (resultList.length) {
-                    if (resultList.length > 1) {
-                        console.warn("getDeliveryRateById(): Multiple matches");
+                this._favDropPoints = this._favDropPoints.map(function (item) {
+                    var existingItem = self._droppointById(null, item.droppointId);
+                    if (existingItem) {
+                        existingItem.selected = item.selected;
                     }
-                    return resultList[0];
-                } else return null;
+                    return existingItem || item;
+                }).sort(this.sortByDistance);
             },
-
-            _processNonDayDefiniteData: function() {
-                if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
-                    this._data.standardRates = this._getGroupedByService();
-                    this.standardRates = this._data.standardRates;
-                }
-            },
-
-            _processDayDefiniteData: function() {
-                this.notifyPath('_data.dayDefinite');
-            },
-
+            
             _makeMap: function () {
                 var self = this;
 
@@ -1570,41 +1339,6 @@
                 self._map = new google.maps.Map(self.$.gfsMapCanvas, mapOptions);
                 window.map = self._map;            
 
-                //=== Home marker
-                //TODO: Replace with call to geoCodeAddress
-                /*
-                geocoder = new google.maps.Geocoder();
-                geocoder.geocode({
-                    componentRestrictions: {
-                        country: this.countryCode,
-                        postalCode: this.postCode
-                    }
-                }, function(results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        //self._map.setCenter(results[0].geometry.location);
-                        var homeMarkerConfig = {
-                            position: results[0].geometry.location,
-                            map: self._map,
-                            //animation: google.maps.Animation.DROP,
-                            title: 'Home',
-                            html: 'Home',
-                            icon: self._getHomeIcon()
-                        };
-                        marker = new google.maps.Marker(homeMarkerConfig);
-                        self._map.setCenter(homeMarkerConfig.position);
-                        self._loadDroppointMarkers();
-                        //self._showDropPointsView();
-                        self._resetMap(self._map);
-                    } else {
-
-                        console.log('Google Maps API ERROR - Geocode was not successful for the following reason: ' + status);
-                        //TODO: Include this in the template, instead of in code
-                        $("#gfsMapCanvas").append("<div style='color: #d60000; margin: 20px auto; text-align: center;'> Postcode <strong>" + self.initialAddress + "</strong> return zero restults </div>");
-                    }
-                });
-                */
-
-
                 // 'idle' event is triggered when the user stopped zooming/dragging;
                 google.maps.event.addListener(self._map, 'idle', function (event) {
                     //console.log(JSON.stringify(event));
@@ -1614,7 +1348,7 @@
 
                 google.maps.event.addListener(self._map, 'click', function (event) {
                     //console.log('MAP EVENT click');
-                    self._unselectDropPoint();
+                    //self._unselectDropPoint();
                 });
 
                 google.maps.event.addListener(self._map, 'center_changed', function (event) {
@@ -1645,7 +1379,6 @@
 					    //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
 					    marker = new google.maps.Marker(markerConfig);
 					    marker.addListener('click', function (clickedMarker) {
-					        //debugger;
 					        self._selectDropPointMarker(this);
 					    });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
@@ -1698,7 +1431,7 @@
                 //self.initialAddress = address;
                 //self.$$("#gfsMapCanvas-loading").classList.remove('hidden');
 
-                geocoder = new google.maps.Geocoder();
+                var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
                         country: this.countryCode,
@@ -1731,7 +1464,7 @@
 
             _geoCodeAddress: function (streetAddress, postCode, countryCode, callback) {
                 var addressStr = streetAddress + "," + postCode;
-                geocoder = new google.maps.Geocoder();
+                var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
                         country: countryCode || this.countryCode
@@ -1807,6 +1540,17 @@
                 this._mapViewPort = [southWest, northEast];
             },
 
+            _updateUi: function() {
+                //Display/hide things based on the current state
+                if (this._selectedDropPoint) {
+                    this.$.selectedDropPointPanel.classList.remove("hidden");
+                }
+                else {
+                    this.$.selectedDropPointPanel.classList.add("hidden");
+                }
+                this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
+            },
+
             
             _reloadDroppoints: function() {
                 if (this._sessionId) {
@@ -1871,7 +1615,7 @@
 
             _showDropPointsView: function () {
                 var self = this;
-                this.fire('show-droppoints');
+                //this.fire('show-droppoints');
                 if (this._showingDroppointsMap) {
                     //Show droppoints
                     this.$.dropPointListContainer.classList.add('hidden');
@@ -1879,15 +1623,15 @@
                     //this._makeMap();
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map);
-                    this._fixMapMarker();
-                    this.panToDefaultLocation();
+                    this._openSelectedDropPointInfoWindow();
+                    //this.panToDefaultLocation();
 
                 }
                 else {
                     this.$.dropPointListContainer.classList.remove('hidden');
                     this.$.mapContainer.classList.add('hidden');
-                    this._resetMap(this._map);
-                    this._fixMapMarker();
+                    //this._resetMap(this._map);
+                    //this._openSelectedDropPointInfoWindow();
                 }
 
             },
@@ -1902,17 +1646,6 @@
                 }           
             },
 
-            _hideDropPointDetails: function() {
-                this._dropPointDetailsClass = "fade-out";
-            },
-
-            _showPreferredDroppoints: function () {
-                this.$.mainMapArea.classList.add("showPreferredDroppoints");
-                this.$.mainDropPointListArea.classList.add("showPreferredDroppoints");
-                var self = this;
-                this._resetMap(this._map);
-            },
-
             _getHomeIcon: function() {
                 if (this.homeIcon) {
                     return this.homeIcon;
@@ -1921,23 +1654,23 @@
                 }
             },
 
-            //Select a drop point marker
-            _selectDropPointMarker: function (marker) {
-                this.selectDropPoint(marker.customData.droppointId);
-                //marker.customData.chosen = true;
-                //this.fire("droppoint-changed", marker.customData);
-            },
-
-            selectDropPoint: function(dropPointId) {
+            //Select a droppoint
+            /*
+            selectDropPoint: function (dropPointId) {
                 //Select the drop point, if it is known.
                 var dp = this._droppointById(null, dropPointId);
-                if (dp) {
-                    this.set("_selectedDropPoint", dp);
-                    this.set('_selectedDropPoint.chosen', true);
-                    this.fire("droppoint-changed", dp);
+                if (!dp) {
+                    return "No such droppoint";
                 }
                 else {
-                    console.log("Couldn't find droppoint", dropPointId);
+                    //Unselect the old droppoint (if any)
+                    this._unselectDropPoint();
+                    
+
+                    //Select this by setting it to selected and assigning _selectedDropPoint
+                    //dp.selected = true;
+                    this.set("_selectedDropPoint", dp);
+                    this.set("_selectedDropPoint.selected", true);
                 }
             },
 
@@ -1947,65 +1680,136 @@
                         this._infoWindow.close();
                     }
                     this._hideDropPointDetails();
-                    this._selectedDropPoint.chosen = false;
                     this._selectedDropPoint = null;
-                    //this._preselectForStandard();
                 }
             },
+            */
 
-            _chooseDroppointEvent: function (e) {
-                this.chooseDroppoint(e.detail);
-            },
-
-            chooseDroppoint: function(droppoint) {
-                this.chooseDropPointId(droppoint.droppointId);
-            },
-
-            chooseDropPointId: function(droppointId) {
-                var dp = this._droppointById(null, droppointId);
-                if (dp) {
-                    this.selectDropPoint(droppointId);
-                    this.set('_selectedDropPoint.chosen', true);
-                    //this.fire("droppoint-changed", this._selectedDropPoint);
-                }
-            },
-
-            _fixMapMarker: function () {
+            _openSelectedDropPointInfoWindow: function () {
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
                     var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
+                    
                     if (dp) {
-                        this._currentMarker = dp.marker;
+                        if (this._currentMarker == dp.marker) return;
+                        else this._currentMarker = dp.marker;
                     }
+                    /*
                     else {
-                        //Make a marker
+                        console.error("Droppoint not found", this._selectedDropPoint.droppointId);
+                         //Make a marker
                         this._loadDroppointMarkers([this._selectedDropPoint]);
                         this._currentMarker = this._selectedDropPoint.marker; //this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId).marker;
-                    }
+                    }*/
                     //console.log("### Opening info box");
                    
                     this.$.dropPointRadio.setAttribute('checked', 'true');
                     this._map.panTo(this._currentMarker.getPosition());
                     var self = this;
-                    window.setTimeout(function () {
-                        self._infoWindow.open(self._map, self._currentMarker);
-                    }, 200);
+                    this._infoWindow.open(self._map, self._currentMarker);
+
                 }
             },
 
-            _droppointChanged: function(e) {
-                //console.log('_droppointChanged', e.detail);
-                var changedDroppoint = e.detail;
 
-                if (this._selectedDropPoint)
-                    if (changedDroppoint.droppointId !== this._selectedDropPoint.droppointId)
-                        this._unselectDropPoint();
+            //=== Received event from droppoint widget, indicating that a delivery method from a droppoint has been chosen
+            //Note that this doesn't fire just when a droppoint is clicked on, or when selected is set to true;
+            //To fire, it must be selected AND a delivery method chosen.
+            //
+            //Make this droppoint the 'selected' one, and open the info window
+            _onDropPointSelectedEvent: function (e) {
+                if (!e.detail.deliveryMethod) {
+                    console.log("No delivery method chosen.");
+                }
 
-                this.set("_selectedDropPoint", changedDroppoint);
-                this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
-                //this.$.listPreferredDropPointList.render(); //Re-sort the preferred list
-                this._fixMapMarker();            
+                //.if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppointId) return; //Already selected
+                //If there is no method, _completeDropPointSelection will choose one for us
+                var self = this;
+                //Get selected delivery method
+                this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
+
+                    //Show on the map, pop up the info window
+                    self._openSelectedDropPointInfoWindow();
+                    self._updateUi();
+
+                });
+
             },
 
+            //==== Make this droppoint the 'selected' one
+            //If no method chosen, auto-choose one
+            _completeDropPointSelection(droppointId, methodId, callback) {
+                if (!callback) { callback = function () { }; }
+
+                var self = this;
+                if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
+                    callback(null);  
+                }  
+                else {
+
+                    var dp = this._droppointById(null, droppointId)            
+                    this.set("_selectedDropPoint", dp);
+                    this.set("_selectedDropPoint.selected", true);
+                    //this.set("_selectedDropPoint.deliveryMethod", methodId);
+
+                    if (methodId) {    
+                        //If we're selecting a new droppoint and/or method,
+                        
+
+                        this.$['infobox-droppoint'].select();
+                        this.$['infobox-droppoint'].selectMethod(methodId, true);      
+                        this.setDeliveryMethod(methodId);    
+
+                        self._updateUi(); 
+                        //self._runningCompleteDropPointSelection = false;      
+
+                        callback(null);
+                    }
+                 
+                    else {
+                        this.autoSelectDeliveryMethod(function (err) {
+                            
+                            self._updateUi();
+                            //this._runningCompleteDropPointSelection = false;
+                            callback(err);
+                        });
+                    }
+                }
+               
+            },
+
+
+
+            _selectDropPoint(dropPointId) {
+                var self = this;
+                this._completeDropPointSelection(dropPointId, null, function () {
+                    self.$['infobox-droppoint'].select(); //The gfs-droppoint widget will fire droppoint-selected 
+                    //Next stop _onDropPointSelectedEvent() 
+                })
+            },
+
+            //=== Select a drop point marker
+            //Make it the 'selected' one
+            //Select the infobox's gfs-droppoint widget.
+            _selectDropPointMarker: function (marker) {
+                var dp = this._droppointById(null, marker.customData.droppointId);
+                this._selectDropPoint(marker.customData.droppointId);
+            },
+
+            _selectFavDropPoint: function(e) {
+                this._selectDropPoint(e.target.droppointData.droppointId);
+            },
+
+            _unselectDropPoint: function () {
+                if (this._selectedDropPoint) {
+                    if (this._infoWindow) {
+                        this._infoWindow.close();
+                    }
+                    //this._hideDropPointDetails();
+                    this._updateUi();
+                    this._selectedDropPoint = null;
+                }
+            },
+           
             _droppointById: function (providerId, droppointId) {
                 if (!this._dropPoints) {
                     return;
@@ -2027,21 +1831,21 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-
-                            self._map.setCenter(pos);
-
+                            self._panToGeoLocation(pos);
                         },
-                        function() {
-                            handleLocationError(true, self._infoWindow, GMap.getCenter());
+                        function(err) {
+                           console.error(JSON.stringify(err));
                         }
                     );
-                } else {
-                    // Browser doesn't support Geolocation
-                    //handleLocationError(false, infoWindow, GMap.getCenter());
+                } 
+                else {
+                    console.error("Browser does not support geolocation");
+
                 }
             },
 
-            setMapHome: function(location) {
+            setMapHome: function (location) {
+                /*
                 var homeMarkerConfig = {
                     position: location,
                     map: this._map,
@@ -2050,7 +1854,7 @@
                     html: 'Home',
                     icon: this._getHomeIcon()
                 };
-                marker = new google.maps.Marker(homeMarkerConfig);
+                marker = new google.maps.Marker(homeMarkerConfig);*/
                 //this._map.setCenter(homeMarkerConfig.position);
             },
 
@@ -2075,11 +1879,11 @@
                     });
 
                 }
-                else if (this._consumerAddresses.length) {
-                    if (this._consumerAddresses[0].geoLocation.coordinates.latitude && this._consumerAddresses[0].geoLocation.coordinates.longitude) {
+                else if (this._favAddresses.length) {
+                    if (this._favAddresses[0].geoLocation.coordinates.latitude && this._favAddresses[0].geoLocation.coordinates.longitude) {
                         var geoLocation = {
-                            lat: this._consumerAddresses[0].geoLocation.coordinates.latitude,
-                            lng: this._consumerAddresses[0].geoLocation.coordinates.longitude
+                            lat: this._favAddresses[0].geoLocation.coordinates.latitude,
+                            lng: this._favAddresses[0].geoLocation.coordinates.longitude
                         };
                         this._panToGeoLocation(geoLocation);
                     }
@@ -2102,7 +1906,7 @@
 
             _selectCalendarShippingOption: function (e) {
                 //console.log('Updating delivery options with', e.detail.shippingMethodId, e.detail.deliveryDate);
-                this.updateDeliveryOptions(e.detail.shippingMethodId, e.detail.deliveryDate);
+                this.setDeliveryMethod(e.detail.shippingMethodId, e.detail.deliveryDate);
             },
 
             _formatDayDefiniteDate: function(deliveryDate) {
@@ -2120,23 +1924,24 @@
                     var results = [];
                     for (var service in this._deliveryDroppoints[providerId]) {
                         var item = this._deliveryDroppoints[providerId][service];
-                        var obj = {
+                        /*var obj = {
                             id: item.service.id,
                             methodTitle: item.service.methodTitle,
                             price: item.service.price,
-                        };
+                        };*/
                         if (item.service.maxDD == item.service.minDD) {
                             // day definite
                             var startDate = new Date(item.deliveryDate);
-                            obj.deliveryDateRange = this._formatDayDefiniteDate(startDate);
-                        } else {
+                            item.deliveryDateRange = this._formatDayDefiniteDate(startDate);
+                        }
+                        else {
                             // non day definite
                             var startDate = new Date(item.deliveryDate);
                             var endDate = new Date(startDate);
                             endDate.setDate(endDate.getDate() + (item.service.maxDD - 1));
-                            obj.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
+                            item.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
                         }
-                        results.push(obj);
+                        results.push(item);
                     }
                     return results;
                 } else {
@@ -2144,27 +1949,35 @@
                 }
             },
 
-            //Make a lookup for droppoint provider, allowing all shipping methods for that provider to be returned
-            _processDeliveryArray: function (obj) {
+            //Make a lookup for droppoint providers, allowing all shipping methods for that provider to be returned
+            _indexDropPointProviders: function (deliveryDayArray) {
                 var self = this;
-                obj.forEach(function(day) {
-                    day.rates.forEach(function(service) {
+                //For each item in the array of delivery days,
+                deliveryDayArray.forEach(function (day) {
+                    //For each rate on the day,
+                    day.rates.forEach(function (service) {
+                        //If this is a droppoint,
                         if (service.serviceType.type === "dmStandardDropPoint") {
-                            service.serviceType.droppointProviders.forEach(function (provider) {
-                                //console.log('PROVIDER:', provider.id, provider.name);
-                                if (typeof(self._deliveryDroppoints[provider.id]) === "undefined")
-                                    self._deliveryDroppoints[provider.id] = [];
-                                if (typeof(self._deliveryDroppoints[provider.id][service.methodTitle]) === "undefined") {
-                                    self._deliveryDroppoints[provider.id][service.methodTitle] = {
+                            //For each droppoint provider that covers this droppoint,
+                            service.serviceType.droppointProviders.forEach(function (provider) {                              
+                                //If this is a provider not yet seen, instantiate with a blank object
+                                if (typeof (self._deliveryDroppoints[provider.id]) === "undefined") {
+                                    self._deliveryDroppoints[provider.id] = {};
+                                }
+                                //If this is a service not known for this provider, add it    
+                                if (typeof(self._deliveryDroppoints[provider.id][service.id]) === "undefined") {
+                                    self._deliveryDroppoints[provider.id][service.id] = {
                                         deliveryDate: day.deliveryDate,
                                         service: service
                                     };
-                                } else {
-                                	var objsDay = new Date(self._deliveryDroppoints[provider.id][service.methodTitle].deliveryDate);
-                                	var droppointDay = new Date(day.deliveryDate);
-                                	if (objsDay.getTime() > droppointDay.getTime())
-                                    if (self._deliveryDroppoints[provider.id][service.methodTitle].deliveryDate < day.deliveryDate) {
-                                        self._deliveryDroppoints[provider.id][service.methodTitle] = {
+                                }
+                                //Else if this is a known service for this provider,
+                                else {
+                                    //If this new one has an earlier delivery date, use that one
+                                	var oldDay = new Date(self._deliveryDroppoints[provider.id][service.id].deliveryDate);
+                                	var thisDay = new Date(day.deliveryDate);
+                                	if (oldDay.getTime() > thisDay.getTime()) {
+                                        self._deliveryDroppoints[provider.id][service.id] = {
                                             deliveryDate: day.deliveryDate,
                                             service: service
                                         };
@@ -2176,88 +1989,82 @@
                 });
             },
 
-            _findAllDeliveryDroppoints: function() {
-                this._processDeliveryArray(this._data.dayDefinite);
-                this._processDeliveryArray(this._data.nonDayDefinite);
-            },
+            // find the earliest of each non-day-definite service
+            _getStandardServices: function () {
+                var self = this;
+                var results = [];
+                var services = {};
 
-            _selectService: function (id) {
-                var serviceSelected = null;
-                if (this.standardRates && this.standardRates.length) {
-                    this.standardRates.map(function (item) {
-                        item.selected = (item.id == id);
-                        if (item.selected) {
-                            serviceSelected = item;
+
+
+
+                //For each non day definite item,
+                this._data.nonDayDefinite.forEach(function (day) {
+                    //For each rate on the day,
+                    day.rates.forEach(function (serviceItem) {
+                        //If this is a standard rate,
+                        if (serviceItem.serviceType.type === "dmStandard") {
+                            //If this is a provider not yet seen, instantiate 
+                            if (typeof (services[serviceItem.id]) === "undefined") {
+                                services[serviceItem.id] = {
+                                    deliveryDate: day.deliveryDate,
+                                    service: serviceItem
+                                };
+                            }                         
+                            //If this new one has an earlier delivery date, use that one
+                            var oldDay = new Date(services[serviceItem.id].deliveryDate);
+                            var thisDay = new Date(day.deliveryDate);
+                            if (oldDay > thisDay) {
+                                services[serviceItem.id].deliveryDate = day.deliveryDate;
+                            }
+                            services[serviceItem.id].selected = services[serviceItem.id].selected || serviceItem.selected;
                         }
-                        return item;
                     });
-                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    //if (serviceSelected) return serviceSelected;
+                });
+
+                //Now convert the index into an array
+                for (var service in services) {
+                    var item = services[service];
+                    var obj = {
+                        id: item.service.id,
+                        methodTitle: item.service.methodTitle,
+                        price: item.service.price,
+                        localizedPrice: item.service.localizedPrice,
+                        _originalMethodObject: item.service
+                    };
+                    // non day definite
+                    var startDate = new Date(item.deliveryDate);
+                    var endDate = new Date(startDate);
+                    endDate.setDate(endDate.getDate() + (item.service.maxDD - 1));
+                    obj.deliveryDateRange = this._formatNonDayDefiniteDate(startDate, endDate);
+                    obj.deliveryTimeFrom = endDate.getTime();
+                    results.push(obj);
                 }
 
-                if (this.dayDefinite && this.dayDefinite.length) {
-                    this.dayDefinite.map(function (item) {
-                        item.selected = (item.id == id);
-                        if (item.selected) serviceSelected = item;
-                        return item;
-                    });
-                    return serviceSelected;
+                if (this.config.deliveryPreferences) {
+                    var sortFunction = this._getDeliveryMethodSortFunction();
+                    results = results.sort(sortFunction);
+                }
+
+                return results;
+            },
+
+            
+            _getDeliveryRateById: function (id) {
+                var combinedRateGroups = this._data.dayDefinite.concat(this._data.nonDayDefinite);
+                var rates = [];
+                combinedRateGroups.forEach(function (group) {
+                    rates = rates.concat(group.rates);
+                });
+                var resultList = rates.filter(function (rate) {
+                    return rate.id == id
+                });
+                if (resultList.length) {
+                    return resultList[0];
                 }
                 else return null;
             },
 
-            _preselectForCalendar: function() {
-                this.$.calendar.autoSelect();
-            },
-
-            _preselectForStandard: function () {
-                if (this.standardRates) {
-                    //this.set('_selectedDropPoint', null);
-                    this._unselectDropPoint();
-                    var preselectedService = this.standardRates[0];
-                    if (!preselectedService.selected) {
-                        preselectedService.selected = true;
-                    }                   
-                    
-                    this.updateDeliveryOptions(preselectedService.id, preselectedService.deliveryDate);
-                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    this.$.standardRatesTemplate.render();
-                    this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
-                    this.fire('preselectedservice', this.selectedServiceDetails);
-                }
-
-            },
-
-            _selectCheapestMethod: function (cheapestMethod) {
-                /*
-				cheapestMethod.selected = true;
-				var method = this._getDeliveryRateById(cheapestMethod.id);
-				this.selectedServiceDetails.serviceId = method.id;
-				this.selectedServiceDetails.service = method.methodTitle;
-				this.selectedServiceDetails.serviceCode = method.carrierCode;
-				this.selectedServiceDetails.carrier = method.carrierName;
-				this.selectedServiceDetails.shipping = method.price;
-			    //this.selectedServiceDetails.expDeliveryDateStart = moment(method.deliveryTimeFrom).toISOString();
-				this.selectedServiceDetails.expDeliveryDate = moment.utc(method.deliveryTimeTo).toISOString();
-				//this.selectedServiceDetails.expDeliveryDateEnd = moment(method.deliveryTimeFrom).add(method.maxDD - method.minDD, 'days').toISOString();
-				this.selectedServiceDetails.checked = cheapestMethod.selected;
-				this.selectedServiceDetails.currencySymbol = this.currencySymbol;
-
-                if (this._selectedDropPoint) {
-					this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
-					this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
-				} else {
-					this.selectedServiceDetails.collectionPoint = null;
-					this.selectedServiceDetails.deliveryAddress = actualPost.Request.Order.Transit.Recipient.Location; //TODO: What is this?
-                }
-				this.fire('selectedservicechanged', this.selectedServiceDetails);
-				this.fire("getStandardSelectedService", this.selectedServiceDetails);*/
-			},
-
-
-            getChosenServiceDetails: function() {
-				return JSON.stringify(this.selectedServiceDetails);
-            },
 
             _unselectMethod: function() {
                 var methods = this.standardRates;
@@ -2266,78 +2073,11 @@
                 });
             },
 
-            //Select a delivery service
-            updateDeliveryOptions: function (methodId, dateOverride) {
-                //debugger;
-                /*this._unselectMethod();
-                if (this.selectedServiceDetails) {
-                    var currentMethod = this._getDeliveryRateById(this.selectedServiceDetails.serviceId);
-                    if (currentMethod) {
-                        currentMethod.selected = false;
-                        // this.notifyPath('_data.standardRates');
-
-
-                        var _data = JSON.parse(JSON.stringify(this.standardRates));
-                        this.set('standardRates', _data);
-                        
-                    }
-                }
-                this.$.standardRatesTemplate.render();
-                //zzzzzzzzz
-                */
-                var newMethod = this._getDeliveryRateById(methodId);
-                if (!newMethod) {
-                    console.error("Method not available");
-                    this.fire('noservice');
-                    return;
-                }
-                else {
-                    this.selectedServiceDetails.serviceId = methodId;
-                    this.selectedServiceDetails.service = newMethod.methodTitle;
-                    this.selectedServiceDetails.serviceCode = newMethod.carrierCode;
-                    this.selectedServiceDetails.carrier = newMethod.carrierName;
-                    this.selectedServiceDetails.shipping = newMethod.price;
-                    this.selectedServiceDetails.selected = true;
-                    this.selectedServiceDetails.checked = true;
-                    this.selectedServiceDetails.currencySymbol = this.currencySymbol;
-
-                    if (dateOverride) {
-                        this.selectedServiceDetails.expDeliveryDate = moment.utc(dateOverride).toISOString();
-                    }
-                    else {
-                        this.selectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
-                    }
-
-                    if (this._selectedDropPoint) {
-                        this.selectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
-                        this.selectedServiceDetails.providerId = this._selectedDropPoint.providerId;
-                        this.selectedServiceDetails.provider = this._selectedDropPoint.providerName;
-                        this.selectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
-                    }
-                    else {
-                        this.selectedServiceDetails.collectionPoint = null;
-                        this.selectedServiceDetails.providerId = null;
-                        this.selectedServiceDetails.provider = null;
-                        this.selectedServiceDetails.deliveryAddress = null;
-                    }
-
-                    this._selectService(methodId);
-                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    //debugger;
-                    this.$.standardRatesTemplate.render();
-                    this.fire('selectedservicechanged', this.selectedServiceDetails);
-                }
-            },
-
-
-            updateDeliveryOptionsEvent: function (e) {
-                if (e.target.checked) {                    
-                    this.updateDeliveryOptions(e.target.id);
-                }
-            },
-
-            onUpdateDroppointDeliveryOptions: function(e) {
-                this.updateDeliveryOptions(e.detail);
+          
+            setDeliveryMethodEvent: function (e) {
+                //if (e.target.checked) {                    
+                    this.setDeliveryMethod(e.target.id);
+                //}
             },
 
             onSelectTab: function (e) {
@@ -2351,7 +2091,6 @@
                     this.onShowPage_Droppoints();
                 }
                 else {
-                    console.error("Unknown tab");
                 }
             },
 
@@ -2362,37 +2101,16 @@
 
             onShowPage_Calendar: function(preselect) {
                 this.showingDroppoints = false;
-                //TODO: Choose soonest option by default
-                
-                this._unselectDropPoint();
-                if (preselect) {
-                    this._preselectForCalendar();                  
-                }
-               
-                this.fire('show-calendar');
+
             },
 
             showPage_Standard: function (preselect) {
                 this.$.pages.select(2)           
-                this.onShowPage_Standard(preselect);
 			},
 
 			onShowPage_Standard: function(preselect) {
 			    this.showingDroppoints = false;
-                //If preselect override,
-			    if (typeof (preselect) !== "undefined") {
-			        if (preselect) {
-			            this._preselectForStandard();
-			        }                   
-			    }
-			    else {
-			        if (this.preselect) {
-			            this._preselectForStandard();
-			        }
-			    }
-			    //zzzzz
-			    this.$.standardRatesTemplate.render();
-			    this.fire('show-standard');
+  			    this.$.standardRatesTemplate.render();
 			},
 
             showPage_Droppoints: function () {
@@ -2411,31 +2129,22 @@
 
 			},
 
-			_onClickDroppoint: function(e) {
-			    this.selectDropPoint(e.detail);
+			_onClickDroppoint: function (e) {
+
 			},
 
-			broadcastState: function () {
-			    //fire events relating to UI state
-			    if (this.showingDroppoints) {
-			        this.showPage_Droppoints();
-			    }
-			    else {
-			        //this.showPage_Standard();
-			    }
-			},
-
-			_onClickConsumerAddress: function (e) {
+			_onClickFavAddress: function (e) {
+                //this.$.favAddressDropDown.text = "Hello";
 			    this._panToGeoLocation(e.currentTarget.geoLocation);
 			},
-
-			_onSelectPreferredDroppoint: function (dp) {
+            /*
+			_onSelectFavDroppoint: function (dp) {
 			    var geoLocation = {
 			        lat: dp.currentTarget.droppointData.geoLocation.coordinates.latitude,
 			        lng: dp.currentTarget.droppointData.geoLocation.coordinates.longitude
 			    };
 			    this._panToGeoLocation(geoLocation);
-			},
+			},*/
 
 			_panToGeoLocation: function (geoLocation) {
                 this._map.panTo(geoLocation);
@@ -2447,5 +2156,10 @@
             }
 
         });
+
+        function isNull(a, b) {
+            if (a == null || typeof (a) == "undefined" || a == "" || a.length == 0) return b
+            else return a;
+        }
     </script>
 </dom-module>

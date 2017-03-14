@@ -1,10 +1,17 @@
 ﻿
 <link rel="import" href="../../polymer/polymer.html" />
 
-<dom-module id="gfs-calendar">
+<dom-module id="gfs-calendar" class="horizontal layout center">
 
     <template>
-        <div id="calendar-body">
+        <div id="calendar-body" class="horizontal layout center">
+
+            <div class="calendar-buttons flex self-stretch">
+                <div on-click="seePreviousWeek" class$="gfs-button transition {{_previousWeekClass}}">
+                    <i class="p4micon-chevron-left"></i>
+                </div>
+            </div>
+
             <div class="calendar-col calendar-delivery-label">
                 <div class="calendar-cell calendar-day-label">Time</div>               
                 <template is="dom-repeat" items="{{_deliveryLabels}}">
@@ -19,17 +26,20 @@
                             <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell"><div>{{shippingOption.localizedPrice}}</div></div>
                         </template>
                         <template restamp="true" is="dom-if" if="{{_calendarShippingOptionIsSelected(shippingOption)}}">
-                            <div class="makeFollowingSelected"></div>
-                            <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell"><div>{{shippingOption.localizedPrice}}</div></div>
+                            <div class="makeFollowingSelected">
+                            <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell"><div>{{shippingOption.localizedPrice}}</div>
+                            </div>
                         </template>
                     </template>                
                 </div>
             </template>
 
-        </div>
-        <div class="calendar-buttons">
-            <div on-click="seePreviousWeek" class$="gfs-button {{_previousWeekClass}}">See previous 7 days</div>
-            <div on-click="seeNextWeek" class$="gfs-button {{_nextWeekClass}}">See next 7 days</div>
+            <div class="calendar-buttons flex self-stretch">
+                <div on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}}">
+                    <i class="p4micon-chevron-right"></i>
+                </div>
+            </div>
+
         </div>
 
     </template>
@@ -39,16 +49,17 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
-            border-top: 1px solid silver;
-            border-right: 1px solid silver;
-            border-left: 1px solid silver;
+            flex: 1;
         }
 
         .calendar-col {
             display: flex;
             flex-direction: column;   
             margin: auto;
-            width: 100%;                  
+            width: 100%;
+            -webkit-transition: .15s ease-in-out;
+            -moz-transition: .15s ease-in-out;
+            transition: .15s ease-in-out;              
         }
         
         .calendar-day-label {
@@ -57,16 +68,15 @@
         .calendar-cell {
             height: 64px;
             width: auto;
-            border-bottom: solid silver 1px;
             display: flex;
             flex-direction: column;
             text-align: center;
             justify-content: center;
-            padding: 4px;
+            position: relative;  
 
         }
         .calendar-delivery-option.calendar-cell:hover {
-            background-color: silver;
+            background-color: $p4m-green-100;
         }
 
 
@@ -77,11 +87,36 @@
         .calendar-buttons {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
         }
-
+        .calendar-buttons .gfs-button {
+            height: 64px;
+            max-height: 64px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #98d3a7;
+            -moz-border-radius: 0;
+            -webkit-border-radius: 0;
+            border-radius: 0;
+            -webkit-transition: .15s ease-in-out;
+            -moz-transition: .15s ease-in-out;
+            transition: .15s ease-in-out;
+            cursor: pointer;
+        }
+        .calendar-buttons .gfs-button:hover {
+            background: #7bc78f;
+        }
+        .calendar-buttons .gfs-button.concealed {
+            visibility: visible;
+            background: #eee;
+        }
+        .calendar-buttons .gfs-button i {
+            color: #fff;
+        }
+        .calendar-buttons .gfs-button.concealed i {
+            color: #c5c5c5;
+        }
         .calendar-buttons div.gfs-button {
-            min-width: 180px;
         }
 
         .concealed {
@@ -89,7 +124,22 @@
         }
 
         .makeFollowingSelected + div {
-            background-color: #f8cb37;           
+            background-color: #f8cb37; 
+        }
+
+        .makeFollowingSelected > div:after {
+            content: '\e912';
+            font-family: 'p4m' !important;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            font-size: 24px;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
         }
 
     </style>
@@ -218,12 +268,11 @@
 
                 //Make buckets  
                 this._buckets = [];
-
                 bucketTemplate.forEach(function (rateData) {
                     self._buckets.push(dateToTimeMinutes(new Date(rateData.deliveryTimeTo)));
                 })
-                this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 });
-
+                this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 }).filter((item, pos) => { return this._buckets.indexOf(item) == pos; }); //sort and remove dups
+                
                 //Fill buckets
                 this._calendar = [];
                 this.dayDefiniteData.forEach(function (dayData) {
@@ -332,17 +381,19 @@
                 
             },
 
-            selectShippingOption: function (methodId, deliveryDateStr) {
+            selectShippingOption: function (methodId, deliveryDateStr, suppressEvent) {
                 //var shippingOption = e.currentTarget.getAttribute('data-shipping');
                 //shippingOption.selected = true;
                 this.selectedShippingMethodId = methodId;
                 this.selectedDeliveryDate = deliveryDateStr;
-                this.fire('select-shipping-option',
+                if (!suppressEvent) {
+                    this.fire('select-shipping-option',
                     {
                         shippingMethodId: this.selectedShippingMethodId,
                         deliveryDate: this.selectedDeliveryDate
-                    }
-                );
+                    });                
+                }
+
                 this._updateUi();
             },
 

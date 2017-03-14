@@ -10,46 +10,35 @@
 
     <template>
         <div id="container">  
- 
+            <ul class="address-list separated">
             <iron-pages selected="{{selectedMode}}">
                 <iron-page>
-                    <div class="card-panel">
-                        <div class="card-heading">
-                            <span class="p4m-address-label">{{addressData.Label}}</span>
-                            <span class="side-action"><a href="#" on-tap="edit"><iron-icon icon="editor:mode-edit"></iron-icon></a></span>
+                    <li class="horizontal layout center">
 
+                        <i class="p4micon-map-marker"></i>
+                        <div class="address-content">
+                            <p class="p4m-address-label lg">{{addressData.Label}}</p>
+                            <p class="address-text lg font-weight-regular">{{addressData.Street1}}</p>
                         </div>
-                        <div class="card-body">
-                            <div class="address-content">
-                                <div class="address-text">{{addressData.Street1}}</div>
-                                <div class="address-actions">
-                                    <div>
-                                        <template is="dom-if" if="{{isBilling}}">
-                                            <div class="address-tag">Billing Address</div>
-                                        </template>
-                                        <template is="dom-if" if="{{isDelivery}}">
-                                            <div class="address-tag">Delivery Address</div>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buttons">
-                                <div id="deliveryToggle" class="toggle-button side-action">
-                                    <div on-tap="markAsDelivery"><iron-icon icon="maps:local-shipping" />Delivery</div>
-                                </div>
-                                <div id="billingToggle" class="toggle-button side-action">
-                                    <div on-tap="markAsBilling"><iron-icon icon="credit-card" />Billing</div>
-                                </div>
-                            </div>
+                        <div class="flex-spacer"></div>
+                        <div id="deliveryToggle" class="toggle-button horizontal layout center">
+                            <span on-tap="markAsDelivery">Shipping</span>
+                            <template is="dom-if" if="{{isDelivery}}"><i class="p4micon-check"></i></template>
                         </div>
-
-
-                    </div>
-
+                        <div id="billingToggle" class="toggle-button horizontal layout center">
+                            <span on-tap="markAsBilling">Billing</span>
+                            <template is="dom-if" if="{{isBilling}}"><i class="p4micon-check"></i></template>
+                        </div>
+                        <i on-tap="edit" class="p4micon-edit-circle link"></i>
+                        <i on-tap="delete" class="p4micon-delete-circle link"></i>
+                    </li>
                 </iron-page>
                 <iron-page>
                     <div class="card-panel">
                         <div class="card-body card-edit">
+                            <div class="vertical layout end cancel-button">
+                            <a class="" href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                            </div>
                             <div class="address-form">
                                 <input is="iron-input" type="text" id="address-label" bind-value="{{addressData.Label}}" placeholder="Label, e.g. 'Home'" />
                                 <input is="iron-input" type="text" id="address-street-1" bind-value="{{addressData.Street1}}" placeholder="Street address" />
@@ -62,9 +51,8 @@
                                     <input is="iron-input"/>
                                 </vaadin-combo-box-light>
                             </div>
-                            <div class="address-actions">
-                                <a class="p4m-button p4m-primary-button" href="#" on-tap="save">Save</a>
-                                <a class="p4m-button" href="#" on-tap="cancel">Cancel</a>
+                            <div class="vertical layout end"">
+                                <a class="p4m-button" href="#" on-tap="save">Add <i class="p4micon p4micon-add"></i></a>
                             </div>
                         </div>
                     </div>
@@ -82,131 +70,17 @@
                     </div>
                 </iron-page>
             </iron-pages>  
-  
+            </ul>
         </div>
 
     </template>
 
     <style>
-        #container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .side-action {
-            float: right;
-        }
-        .side-action a {
-            color: white;
-        }
-        .address-actions {
-            display: flex;
-            flex-direction: row;
-
-        }
-        .address-actions a {
-            color: black;
-            margin: 4px;          
-        }
-
-        .address-content {
-            width: 500px;
-        }
-
-        .toggle-button {
-            margin: 4px;
-            height: 50px;
-            width: 50px;
-            border-radius: 50px;
-            -webkit-border-radius: 25px;
-            -moz-border-radius: 25px;
-            background-color: #C0C0C0;
-            cursor: grab;
-        }
-
-        .toggle-button.chosen {
-            background-color: rgba(13, 165, 83, 0.8); /*peli icon colour*/
-        }
-
-        .toggle-button iron-icon {
-            margin: 13px;
-
-        }
-
-        .toggle-button.chosen iron-icon {
-            color: white;
-        }
-
-        .address-tag {
-            color: #D0D0D0;
-            letter-spacing: 3px;
-            text-transform: uppercase;   
-        }
-
-        .card-panel {
-            /*border: 1px #D0D0D0 solid;*/
-            border-radius: 7px;
-            margin: 8px;
-            box-shadow: rgba(128, 128, 128, 0.2) 0px 2px 6px 0px;
-        }
-
-        .card-heading {
-            background-color: #D0D0D0;
-            color: white;
-            padding: 4px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .p4m-button {
-            padding: 10px;
-            background-color: #808080;
-            color: #000000;
-            border-radius: 4px;
-        }
-     
-        .p4m-button.p4m-primary-button {
-            background-color: rgba(13, 165, 83, 0.8);
-            color: #000000;
-
-        }
-
-        .address-form {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .address-form input {
-            margin: 4px;
+        vaadin-combo-box-light {
             width: 100%;
-            max-width: 100%;
         }
-
-        .card-body {
-            display: flex;
-            flex-direction: row;
-            padding: 8px;
-        }
-
-        .card-body.card-edit {
-            display: flex;
-            flex-direction: column;                 
- 
-
-        }
-
-        .buttons {
-            display: flex;
-            flex-direction: row;
-            margin: auto;
-            padding: 4px;
-        }
-
-        #actions {
-        }
-
     </style>
+
 
     <script>
         var pageReference = {
@@ -287,15 +161,16 @@
                 //this.set('cartData.BillingAddressId', this.addressData.Id);    
                 if (this.cartData.BillingAddressId !== this.addressData.Id) {
                     this.isBilling = true;
-                    this.fire('select', { 'isBilling': true, 'id': this.addressData.Id });
+                    console.log("Marking as billing");
+                    this.fire('select-address', { 'isBilling': true, 'id': this.addressData.Id });
                 }
             },
 
             markAsDelivery: function () {
-                //debugger;
+                debugger;
                 if (this.cartData.AddressId !== this.addressData.Id) {
                     this.isDelivery = true;
-                    this.fire('select', { 'isDelivery': true, 'id': this.addressData.Id });
+                    this.fire('select-address', { 'isDelivery': true, 'id': this.addressData.Id });
                 }
             },
 
