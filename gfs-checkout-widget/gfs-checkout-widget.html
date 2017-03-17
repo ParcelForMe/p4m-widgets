@@ -46,7 +46,6 @@
                         <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
  
-                </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="mapTools" class="pageContent">
                         <!-- <div class="header" style="display:none">
@@ -699,11 +698,22 @@
                 if (foundItem) {
                     self._unselectDropPoint();
                     
-                    self.setGfsAddress(foundItem, function (err) {
-                        if (autoSelectMethod) {
+                    self.setGfsAddress(foundItem, autoSelectMethod, callback);
+                    /*function (err) {
+                        if (err) {
+                            callback(err)
+                        }
+                        else if (autoSelectMethod) {
                             self.autoSelectDeliveryMethod(callback)
                         }
-                    });
+                        else {
+                            callback(err);
+                        }
+                    });*/
+                    
+                }
+                else {
+                    callback("Address not found");
                 }
             },
 

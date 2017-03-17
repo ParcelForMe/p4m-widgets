@@ -157,7 +157,14 @@ exports.updShippingService = function(req, res) {
         Shipping: req.body.Amount,
         Success: true
     };
+    try {
     result.Tax = Math.floor(result.Shipping / 10);
     result.Total = result.Tax + result.Shipping;
+    }
+    catch(e) {
+    	console.error(e);
+    	result.Tax = 0;
+    	result.Total = result.Shipping;
+    }
     res.status(200).json(result);
 }

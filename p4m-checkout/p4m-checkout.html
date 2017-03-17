@@ -61,11 +61,6 @@
                         </iron-page>
                         <iron-page id="deliveryPage">
                             <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
-                            <template is="dom-if" if="{{_notUseGfsCheckout}}">
-                                <p4m-delivery></p4m-delivery>
-                            </template>
-                            <template is="dom-if" if="{{useGfsCheckout}}">
-                            </template>
                         </iron-page>
                         <iron-page id="cardPage">
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
@@ -472,7 +467,11 @@
             },
 
             _showAsLoadingShipping: function(loading) {
-                 this.$.delivery_spinner.active = loading;
+                this.$.delivery_spinner.active = loading;
+            },
+            
+            _toggleAddressesLoading: function(loading) {
+                this.$.addresses_spinner.active = loading;  
             },
 
             toggleLoading: function (loading) {
@@ -880,7 +879,7 @@
                         },*/
                         function _getConsumer(callback) {
                             self._getConsumer(function (err) {
-                                callback(null, result)
+                                callback(err, result)
                             });
                         }
 
@@ -893,16 +892,18 @@
 
             onUpdateAddress: function (addressElement) {
                 // here we're adding or updating an address only, not setting a default value on the consumer at this stage
-                this.$.addressList.showAsLoading();
+                this._toggleAddressesLoading(true);//eeee
+                //this.$.addressList.showAsLoading();
                 var self = this;
                 this.saveAddress(addressElement.detail.addressData, function (err, result) {
                     if (err) {
+                        self._toggleAddressesLoading(false);
                         throw err;
                     }
                     else {
                         addressElement.detail.addressData.Id = result.Address.Id;
                         //addressElement.detail.mode = "view";
-                        self.$.addressList.showAsLoaded();
+                        self._toggleAddressesLoading(false);
                     }
                 });
 
