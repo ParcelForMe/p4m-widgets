@@ -193,7 +193,7 @@
 
             onDataChange: function (e) {
                 if (this.cardData) {
-                    if (this.cardData.Issuer == "Visa") {
+                    if (this.cardData.Issuer != "Amex") {
                         this._cvvLength = 3;
                     }
                     else {

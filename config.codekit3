@@ -9,12 +9,6 @@
 	],
 "creatorBuild": "25704",
 "files": {
-	"\/.gitignore": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/.gitignore",
-		"oF": 0
-		},
 	"\/address-lookup-field\/address-lookup-field.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19471,12 +19465,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/example\/.gitignore": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/example\/.gitignore",
-		"oF": 0
-		},
 	"\/example\/index.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19488,15 +19476,6 @@
 		"oA": 2,
 		"oAP": "\/build\/example\/node_modules",
 		"oF": 0
-		},
-	"\/example\/p4m_endpoints-min.js": {
-		"ft": 64,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/example\/p4m_endpoints-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
 		},
 	"\/example\/p4m_endpoints.js": {
 		"ft": 64,
@@ -19514,15 +19493,6 @@
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
-		},
-	"\/example\/profile.jpg": {
-		"ft": 16384,
-		"iS": 7414,
-		"oA": 0,
-		"oAP": "\/example\/profile.jpg",
-		"oF": 0,
-		"opt": 0,
-		"q": 100
 		},
 	"\/example\/profile.png": {
 		"ft": 32768,
@@ -19560,12 +19530,6 @@
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
-		},
-	"\/example\/static_api\/p4m\/getP4MCart": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/example\/static_api\/p4m\/getP4MCart",
-		"oF": 0
 		},
 	"\/example\/static_api\/p4m\/isLocallyLoggedIn": {
 		"ft": 8192,
@@ -19610,12 +19574,6 @@
 		"oAP": "\/gfs-checkout-widget\/css\/custom-min.css",
 		"oF": 0,
 		"oS": 0
-		},
-	"\/gfs-checkout-widget\/gfs-checkout-widget.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-checkout-widget\/gfs-checkout-widget.html",
-		"oF": 0
 		},
 	"\/gfs-checkout-widget\/images\/back_button.png": {
 		"ft": 32768,
@@ -19943,12 +19901,6 @@
 		"oAP": "\/gfs-droppoint\/gfs-droppoint-text.html",
 		"oF": 0
 		},
-	"\/gfs-droppoint\/gfs-droppoint.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-droppoint\/gfs-droppoint.html",
-		"oF": 0
-		},
 	"\/gfs-droppoint\/gfs-location-button.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20233,12 +20185,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-cart\/p4m-cart.html",
-		"oF": 0
-		},
-	"\/p4m-checkout\/p4m-checkout.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-checkout\/p4m-checkout.html",
 		"oF": 0
 		},
 	"\/p4m-country-select\/p4m-country-select.html": {
@@ -20704,146 +20650,6 @@
 		"oAP": "\/p4m-shared\/fonts\/p4m.woff",
 		"oF": 0
 		},
-	"\/p4m-shared\/fonts\/proximanova-black-webfont.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-black-webfont.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-black-webfont.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-black-webfont.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-black-webfont.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-black-webfont.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-black-webfont.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-black-webfont.woff",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-extrabld-webfont.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-extrabld-webfont.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-extrabld-webfont.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-extrabld-webfont.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-extrabld-webfont.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-extrabld-webfont.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-extrabld-webfont.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-extrabld-webfont.woff",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-light-webfont.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-light-webfont.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-light-webfont.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-light-webfont.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-light-webfont.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-light-webfont.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-light-webfont.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-light-webfont.woff",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-regular-webfont.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-regular-webfont.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-regular-webfont.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-regular-webfont.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-regular-webfont.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-regular-webfont.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-regular-webfont.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-regular-webfont.woff",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-semibold-webfont.eot": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-semibold-webfont.eot",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-semibold-webfont.svg": {
-		"ft": 2097152,
-		"miP": 0,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-semibold-webfont.svg",
-		"oF": 0,
-		"opt": 0,
-		"plM": 3758088159,
-		"prP": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-semibold-webfont.ttf": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-semibold-webfont.ttf",
-		"oF": 0
-		},
-	"\/p4m-shared\/fonts\/proximanova-semibold-webfont.woff": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-shared\/fonts\/proximanova-semibold-webfont.woff",
-		"oF": 0
-		},
 	"\/p4m-shared\/fonts\/SIL Open Font License 1.1.txt": {
 		"ft": 8192,
 		"oA": 2,
@@ -20971,12 +20777,6 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
-		},
-	"\/p4m-spinner\/p4m-spinner.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-spinner\/p4m-spinner.html",
-		"oF": 0
 		},
 	"\/p4m-wish\/p4m-wish.html": {
 		"ft": 8192,

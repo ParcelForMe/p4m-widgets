@@ -129,14 +129,20 @@
             },
 
             onConsumerData: function (consumer) {
-                //this.set('payerExist', "1");
-                this.set('payerExist',(consumer.PaymentMethods.length > 0) ? "1" : "0");
+                this.set('payerExist', "2");
+                //this.set('payerExist',(consumer.PaymentMethods.length > 0) ? "1" : "0");
             },
 
             loadRealexForm: function() {
                 this.newCardId = Math.floor(Math.random() * 9999999) + "-" + Math.floor(Math.random() * 9999999);
                 var d = new Date();
-                var timeStampStr = (d.getFullYear().toString() + '-' + (d.getMonth() + 1 < 10 ? '0' : '') + (d.getMonth() + 1).toString() + '-' + d.getDate().toString() + "T" + (d.getHours() + 1 < 10 ? '0' : '') + d.getHours().toString() + ':' + (d.getMinutes() + 1 < 10 ? '0' : '') + d.getMinutes().toString() + ':' + (d.getSeconds() + 1 < 10 ? '0' : '') + d.getSeconds().toString());
+                //var timeStampStr = (d.getFullYear().toString() + '-' + (d.getMonth() + 1 < 10 ? '0' : '') + (d.getMonth() + 1).toString() + '-' + d.getDate().toString() + "T" + (d.getHours() + 1 < 10 ? '0' : '') + d.getHours().toString() + ':' + (d.getMinutes() + 1 < 10 ? '0' : '') + d.getMinutes().toString() + ':' + (d.getSeconds() + 1 < 10 ? '0' : '') + d.getSeconds().toString());
+                var timeStampStr = d.getFullYear().toString() + '-' +
+                                   this.pad(d.getMonth() + 1, 2) + '-' +
+                                   this.pad(d.getDate(), 2) + "T" +
+                                   this.pad(d.getHours(), 2) + ':' +
+                                   this.pad(d.getMinutes(), 2) + ':' +
+                                   this.pad(d.getSeconds(), 2);
 
                 this.api = document.getElementById("p4mCheckoutApi");
                 this.api.call('cardTokenHash',
@@ -148,6 +154,12 @@
                     amount: 0
                 }, null, this.onCardHash.bind(this));
 
+            },
+
+            pad: function (n, width, z) {
+                z = z || '0';
+                n = n + '';
+                return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
             },
 
             onCardHash: function (err, hashResponse) {

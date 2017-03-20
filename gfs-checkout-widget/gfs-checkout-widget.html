@@ -46,7 +46,6 @@
                         <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
  
-                </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="mapTools" class="pageContent">
                         <!-- <div class="header" style="display:none">
@@ -699,11 +698,22 @@
                 if (foundItem) {
                     self._unselectDropPoint();
                     
-                    self.setGfsAddress(foundItem, function (err) {
-                        if (autoSelectMethod) {
+                    self.setGfsAddress(foundItem, autoSelectMethod, callback);
+                    /*function (err) {
+                        if (err) {
+                            callback(err)
+                        }
+                        else if (autoSelectMethod) {
                             self.autoSelectDeliveryMethod(callback)
                         }
-                    });
+                        else {
+                            callback(err);
+                        }
+                    });*/
+                    
+                }
+                else {
+                    callback("Address not found");
                 }
             },
 
@@ -1203,14 +1213,18 @@
                 else {
                     return (
                         function(a, b) {
+
                             if (a && b) {
-                                if ((a.service && !a.service.price) ||(b.service && !b.service.price)) {
-                                    console.warn("Sorting by price: invalid parameter: ", a, b);
-                                    return 1;
+                                if (a.service && b.service) {
+                                    aPrice = a.service.price;
+                                    bPrice = a.service.price;
                                 }
                                 else {
-                                    return a.price || a.service.price > b.price || b.service.price ? 1 : -1;
-                                }                              
+                                    aPrice = a.price;
+                                    bPrice = b.price;
+                                }  
+                                return aPrice > bPrice? 1 : -1;
+                                                            
                             }
                             else {
                                 console.warn("Sorting by price: invalid parameter: ", a, b);

@@ -1,6 +1,5 @@
 # P4M Widgets Example
 
-
 ### Install
 
 `$ npm install`

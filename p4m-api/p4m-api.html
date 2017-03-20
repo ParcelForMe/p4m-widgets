@@ -358,7 +358,7 @@
             },
 
             _handleResponse: function (apiRequest, finalCallback, responseData) {
-                console.log("API response: ", responseData);
+                console.log("API response: ", apiRequest, responseData);
                 if (!responseData.Success) {
                     var err = responseData.Error || responseData.Message;
                     if (responseData.status == 401 || err.indexOf("expired") > -1 || err.indexOf("denied") > -1) {

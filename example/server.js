@@ -5,7 +5,7 @@ var BodyParser		= require('body-parser');
 var p4mEndpoint 	= require('./p4m_endpoints.js');
 
 
-var SITE_PORT = 8081;
+var SITE_PORT = process.env.port || 8080;
 
 
 //--- Helper middleware functions
