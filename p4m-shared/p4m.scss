@@ -631,6 +631,7 @@ a, a:visited {
 @decimal-format creditcard {
   grouping-separator: " ";
 }
+.italic {font-style:italic;}
 
 .font-weight-hairline {font-weight: 100;}
 .font-weight-light {font-weight: 200;}
@@ -990,12 +991,12 @@ p4m-checkout {
 		    background-color: rgba(255, 255, 255, 0.8);
 		    color: #2aa54f;
 		}
-		&.no {
-		    background-color: rgba(144, 68, 68, 1.0);
-		}
-		&.neutral {
-		    background-color: rgba(144, 144, 144, 1.0);
-		}
+		// &.no {
+		//     background-color: rgba(144, 68, 68, 1.0);
+		// }
+		// &.neutral {
+		//     background-color: rgba(144, 144, 144, 1.0);
+		// }
 	}
 	&.disabled {
         background-color: rgba(100, 100, 100, 1.0);
@@ -1055,6 +1056,16 @@ p4m-checkout {
 .toggle-button.chosen iron-icon {
     color: white;
 }
+
+
+// Modals 
+paper-dialog {
+    background: $p4m-green;
+    color: $white;
+    display: flex;
+    justify-content: center;
+}
+
 
 
 

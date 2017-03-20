@@ -20374,6 +20374,12 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/p4m-shared\/fonts.zip": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-shared\/fonts.zip",
+		"oF": 0
+		},
 	"\/p4m-shared\/fonts\/demo.html": {
 		"ft": 8192,
 		"oA": 2,

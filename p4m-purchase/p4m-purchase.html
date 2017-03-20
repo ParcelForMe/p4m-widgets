@@ -15,7 +15,8 @@
 
             <p4m-api id="localApi" is-local="true"></p4m-api>
 
-            <paper-tabs class="select-payment-type" selected="{{selectedTab}}" no-bar on-iron-activate="onSelectTab">
+            <!-- <paper-tabs class="select-payment-type" selected="{{selectedTab}}" no-bar on-iron-activate="onSelectTab" > -->
+            <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab" >
                 <paper-tab id="card" name="card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
                 <paper-tab id="paypal" name="paypal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
             </paper-tabs>
