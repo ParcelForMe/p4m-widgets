@@ -9,6 +9,12 @@
 	],
 "creatorBuild": "25704",
 "files": {
+	"\/.gitignore": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/.gitignore",
+		"oF": 0
+		},
 	"\/address-lookup-field\/address-lookup-field.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -4588,6 +4594,124 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/bower_components\/iron-pages\/test\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/.bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/.bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/iron-range-behavior\/.github\/ISSUE_TEMPLATE.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/.github\/ISSUE_TEMPLATE.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/iron-range-behavior\/.gitignore": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/.gitignore",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/.travis.yml": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/.travis.yml",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/iron-range-behavior\/CONTRIBUTING.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/CONTRIBUTING.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/iron-range-behavior\/demo\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/demo\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/iron-range-behavior.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/iron-range-behavior.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/README.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/README.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/iron-range-behavior\/test\/basic.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/test\/basic.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/test\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/test\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/iron-range-behavior\/test\/x-progressbar.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/iron-range-behavior\/test\/x-progressbar.html",
 		"oF": 0
 		},
 	"\/bower_components\/iron-resizable-behavior\/.bower.json": {
@@ -13984,6 +14108,128 @@
 		"oAP": "\/bower_components\/paper-menu\/test\/paper-submenu.html",
 		"oF": 0
 		},
+	"\/bower_components\/paper-progress\/.bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/.bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/paper-progress\/.github\/ISSUE_TEMPLATE.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/.github\/ISSUE_TEMPLATE.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/paper-progress\/.gitignore": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/.gitignore",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/.travis.yml": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/.travis.yml",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/paper-progress\/CONTRIBUTING.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/CONTRIBUTING.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/paper-progress\/demo\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/demo\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/hero.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/hero.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"\/bower_components\/paper-progress\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/index.html",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/paper-progress.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/paper-progress.html",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/README.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/README.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/paper-progress\/test\/basic.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/test\/basic.html",
+		"oF": 0
+		},
+	"\/bower_components\/paper-progress\/test\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/paper-progress\/test\/index.html",
+		"oF": 0
+		},
 	"\/bower_components\/paper-ripple\/.bower.json": {
 		"ft": 524288,
 		"oA": 2,
@@ -19465,6 +19711,12 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/example\/.gitignore": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/example\/.gitignore",
+		"oF": 0
+		},
 	"\/example\/index.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -19476,6 +19728,15 @@
 		"oA": 2,
 		"oAP": "\/build\/example\/node_modules",
 		"oF": 0
+		},
+	"\/example\/p4m_endpoints-min.js": {
+		"ft": 64,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/example\/p4m_endpoints-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
 		},
 	"\/example\/p4m_endpoints.js": {
 		"ft": 64,
@@ -19493,6 +19754,15 @@
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
+		},
+	"\/example\/profile.jpg": {
+		"ft": 16384,
+		"iS": 7414,
+		"oA": 0,
+		"oAP": "\/example\/profile.jpg",
+		"oF": 0,
+		"opt": 0,
+		"q": 100
 		},
 	"\/example\/profile.png": {
 		"ft": 32768,
@@ -19530,6 +19800,12 @@
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
+		},
+	"\/example\/static_api\/p4m\/getP4MCart": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/example\/static_api\/p4m\/getP4MCart",
+		"oF": 0
 		},
 	"\/example\/static_api\/p4m\/isLocallyLoggedIn": {
 		"ft": 8192,
@@ -19574,6 +19850,12 @@
 		"oAP": "\/gfs-checkout-widget\/css\/custom-min.css",
 		"oF": 0,
 		"oS": 0
+		},
+	"\/gfs-checkout-widget\/gfs-checkout-widget.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/gfs-checkout-widget\/gfs-checkout-widget.html",
+		"oF": 0
 		},
 	"\/gfs-checkout-widget\/images\/back_button.png": {
 		"ft": 32768,
@@ -19901,6 +20183,12 @@
 		"oAP": "\/gfs-droppoint\/gfs-droppoint-text.html",
 		"oF": 0
 		},
+	"\/gfs-droppoint\/gfs-droppoint.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/gfs-droppoint\/gfs-droppoint.html",
+		"oF": 0
+		},
 	"\/gfs-droppoint\/gfs-location-button.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20047,12 +20335,6 @@
 		"oAP": "\/build\/node_modules",
 		"oF": 0
 		},
-	"\/npm-debug.log": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/npm-debug.log",
-		"oF": 0
-		},
 	"\/p4m-address-list\/p4m-address-list.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20185,6 +20467,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-cart\/p4m-cart.html",
+		"oF": 0
+		},
+	"\/p4m-checkout\/p4m-checkout.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-checkout\/p4m-checkout.html",
 		"oF": 0
 		},
 	"\/p4m-country-select\/p4m-country-select.html": {
@@ -20777,6 +21065,12 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
+		},
+	"\/p4m-spinner\/p4m-spinner.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-spinner\/p4m-spinner.html",
+		"oF": 0
 		},
 	"\/p4m-wish\/p4m-wish.html": {
 		"ft": 8192,

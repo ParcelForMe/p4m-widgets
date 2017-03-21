@@ -762,6 +762,58 @@ a, a:visited {
 // END - Pulse Animation
 
 
+// Progress indicator
+p4m-spinner[species='progress'] {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    #container {
+        padding-bottom: 0;
+        #progressContainer {
+            background: transparent;
+            height: 3px;
+            #secondaryProgress {
+                background: #37a553;
+            }
+            #primaryProgress {
+                background: #37a553;
+                &:after {
+                    // background: #5fba76;
+                    background: #37a553;
+                    height: 3px;
+                }
+            }
+        }
+    }
+}
+#pageStandard {
+    position: relative;
+    p4m-spinner[species='progress'] {
+        position: absolute;
+        bottom: initial;
+        top: 50%;
+        left: 50%;
+        /* left: calc(50% - 100px); */
+        margin-left: -100px;
+        #progressContainer {
+            background: #eee;
+            height: 3px;
+            #secondaryProgress {
+                background: #37a553;
+            }
+            #primaryProgress {
+                background: #37a553;
+                &:after {
+                    // background: #5fba76;
+                    background: #37a553;
+                    height: 3px;
+                }
+            }
+        }
+    }
+}
+
+// END Progress indicator
 
 
 // Payment Method Icons

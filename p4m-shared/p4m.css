@@ -623,6 +623,9 @@ a, a:visited {
 @decimal-format creditcard {
   grouping-separator: " "; }
 
+.italic {
+  font-style: italic; }
+
 .font-weight-hairline {
   font-weight: 100; }
 
@@ -681,6 +684,43 @@ a, a:visited {
     background-color: #7bc78f; }
   100% {
     background-color: white; } }
+
+p4m-spinner[species='progress'] {
+  position: absolute;
+  bottom: 0;
+  left: 0; }
+  p4m-spinner[species='progress'] #container {
+    padding-bottom: 0; }
+    p4m-spinner[species='progress'] #container #progressContainer {
+      background: transparent;
+      height: 3px; }
+      p4m-spinner[species='progress'] #container #progressContainer #secondaryProgress {
+        background: #37a553; }
+      p4m-spinner[species='progress'] #container #progressContainer #primaryProgress {
+        background: #37a553; }
+        p4m-spinner[species='progress'] #container #progressContainer #primaryProgress:after {
+          background: #37a553;
+          height: 3px; }
+
+#pageStandard {
+  position: relative; }
+  #pageStandard p4m-spinner[species='progress'] {
+    position: absolute;
+    bottom: initial;
+    top: 50%;
+    left: 50%;
+    /* left: calc(50% - 100px); */
+    margin-left: -100px; }
+    #pageStandard p4m-spinner[species='progress'] #progressContainer {
+      background: #eee;
+      height: 3px; }
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+        background: #37a553; }
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+        background: #37a553; }
+        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+          background: #37a553;
+          height: 3px; }
 
 .Visa .payment-method-logo, .payment-method-logo.visa {
   background-image: url("../p4m-card/assets/visa.png"); }
@@ -920,10 +960,6 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
     .p4m-button.p4m-button-active:active {
       background-color: rgba(255, 255, 255, 0.8);
       color: #2aa54f; }
-    .p4m-button.p4m-button-active.no {
-      background-color: #904444; }
-    .p4m-button.p4m-button-active.neutral {
-      background-color: #909090; }
   .p4m-button.disabled {
     background-color: #646464; }
   .p4m-button.white {
@@ -969,6 +1005,12 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
 
 .toggle-button.chosen iron-icon {
   color: white; }
+
+paper-dialog {
+  background: #37a553;
+  color: #fff;
+  display: flex;
+  justify-content: center; }
 
 .p4m-label {
   color: darkgreen; }

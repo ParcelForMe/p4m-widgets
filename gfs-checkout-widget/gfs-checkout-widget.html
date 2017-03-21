@@ -33,19 +33,19 @@
 
 		<div id="widgetContainer">          
             <paper-tabs selected="{{selectedTab}}" no-bar>           
-                <paper-tab>{{calendarDeliveryTitle}}</paper-tab>
-                <paper-tab>Click and Collect</paper-tab>
-                <paper-tab>{{standardDeliveryTitle}}</paper-tab>
+                <paper-tab>{{calendarDeliveryTitle}}<p4m-spinner species="progress" id="calendar_spinner"></p4m-spinner></paper-tab>
+                <paper-tab>Click and Collect<p4m-spinner species="progress" id="clickandcollect_spinner"></p4m-spinner></paper-tab>
+                <paper-tab>{{standardDeliveryTitle}}<p4m-spinner species="progress" id="standarddelivery_spinner"></p4m-spinner></paper-tab>
             </paper-tabs>
             <iron-pages id="pages" selected="{{selectedTab}}"  on-iron-select="onSelectTab">           
                 <iron-page id="pageCalendar">
                     <div id="calendar-loading" class="loading">
-                        <p4m-spinner species="shuffler" id="calendar-spinner"></p4m-spinner>
+                        <p4m-spinner species="progress" id="calendar-spinner"></p4m-spinner>
                     </div>
                     <div class="pageContent horizontal layout">
                         <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
- 
+                </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="mapTools" class="pageContent">
                         <!-- <div class="header" style="display:none">
@@ -118,7 +118,8 @@
                             <div id="mainMapArea">
                                 <div id="gfsMapCanvas">
                                     <div class="loading">
-                                        <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner>
+                                        <!-- <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner> -->
+                                        <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
                                     </div>
                                 </div>
 
@@ -133,7 +134,8 @@
 
                             <div class="cardList">
                                 <div id="list-loading" class="loading">
-                                    <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner>
+                                    <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
+                                    <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
                                 </div>
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
@@ -149,7 +151,10 @@
 
                 </iron-page>
                 <iron-page id="pageStandard">
-                    <div id="standard-loading" class="loading"><p4m-spinner species="shuffler" id="standard-spinner"></p4m-spinner></div>
+                    <div id="standard-loading" class="loading">
+                        <!-- <p4m-spinner species="shuffler" id="standard-spinner"></p4m-spinner> -->
+                        <p4m-spinner species="progress" id="standard-spinner"></p4m-spinner>
+                    </div>
                     <ul class="separated">
                         <template id="standardRatesTemplate" is="dom-repeat" items="{{standardRates}}">
                             <li class="gfsStd horizontal layout center">
@@ -169,7 +174,16 @@
         <input type="text" value="{{_selectedDropPoint.droppointId}}" id="dropPointRadio" class="hidden" />
         <paper-toast id="errorNotification" class="fit-bottom"></paper-toast>
 
-        <style include="p4m-shared"></style>
+        <style include="p4m-shared">
+            paper-tab {
+                /*border-left: 1px solid rgba(116, 175, 131, 0.15);*/
+                border-left: 1px solid rgba(255, 255, 255, .8);
+                padding: 0;
+            }
+            paper-tab:first-of-type {
+                border-left: none;
+            }
+        </style>
 
     </template>
 

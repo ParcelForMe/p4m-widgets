@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../paper-progress/paper-progress.html" />
 
 <dom-module id="p4m-spinner">
 
@@ -13,6 +14,9 @@
             </template>
             <template is="dom-if" if="{{_shuffler}}">
                 <div class="shuffler spinner"></div>
+            </template>
+            <template is="dom-if" if="{{_progress}}">
+                <paper-progress indeterminate class="slow"></paper-progress>
             </template>
         </div>
     </template>
@@ -94,6 +98,26 @@
         }
 
 
+        /* ---- Progress */
+
+        p4m-spinner[species="progress"] {
+          position: absolute;
+          bottom: 0;
+        }
+        p4m-spinner[species="progress"] #container {
+          padding-bottom: 0;
+        }
+        p4m-spinner[species="progress"] #container #progressContainer {
+          background: rgba(255,255,255,0.25);
+        }
+        p4m-spinner[species="progress"] #container #progressContainer #secondaryProgress {
+          background: transparent;
+        }
+        p4m-spinner[species="progress"] #container #progressContainer #primaryProgress {
+            background: #37a553;
+        }
+
+
     </style>
 
     <script>
@@ -119,6 +143,10 @@
                 _shuffler: {
                     type: Object,
                     value: false
+                },
+                _progress: {
+                    type: Object,
+                    value: false
                 }
             },
 
@@ -131,6 +159,7 @@
             changeSpecies: function() {
                 this._ellipsis = (this.species.toLowerCase() == "ellipsis");
                 this._shuffler = (this.species.toLowerCase() == "shuffler");
+                this._progress = (this.species.toLowerCase() == "progress");
             },
 
             renderMe: function() {

@@ -26,7 +26,7 @@ exports.getP4MAccessToken = function(req, res) {
 	var data = {
 		grant_type		: "authorization_code",
 		code			: req.query.code,
-		redirect_uri	: "http://localhost:8081/p4m/getP4MAccessToken",
+		redirect_uri	: "http://localhost:8080/p4m/getP4MAccessToken",
 		client_id		: "10006"
 	}
 
@@ -62,7 +62,7 @@ exports.localLogin = function(req, res) {
 	// see these cookies that are used by the other p4m widgets
 	var now = new Date();
 	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-	cookies.set('p4mAvatarUrl', 		'http://localhost:8081/profile.png', cookieConf);
+	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
 	cookies.set('p4mGivenName', 		'Guest', cookieConf);
 	cookies.set('p4mDefaultPostCode', 	'4000', cookieConf);
 	cookies.set('p4mDefaultCountryCode', 'AU', cookieConf);
