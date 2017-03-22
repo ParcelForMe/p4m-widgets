@@ -1049,6 +1049,10 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   .add-new i {
     color: #aaa; }
 
+i.link {
+  font-size: 24px;
+  color: #c5c5c5; }
+
 paper-dialog {
   background: #37a553;
   color: #fff;
@@ -1662,6 +1666,11 @@ p4m-checkout {
     color: #aaa; }
   p4m-checkout .delivery-place {
     font-size: 12px; }
+    p4m-checkout .delivery-place label {
+      margin-bottom: 0;
+      width: 100%; }
+      p4m-checkout .delivery-place label .gfsmethodname {
+        line-height: 13px; }
   p4m-checkout .gm-style-iw .dpProviderName {
     justify-content: space-between; }
   p4m-checkout iron-page#pageDroppoints {
@@ -1717,12 +1726,8 @@ p4m-checkout {
     margin-bottom: 10px; }
   p4m-checkout ul.carrier-list:last-child {
     margin-bottom: 5px; }
-  p4m-checkout li.delivery-place label {
-    margin-bottom: 0; }
   p4m-checkout #calendarPanel {
     padding: 15px; }
-  p4m-checkout span.gfsmethodname {
-    margin: 3px 0 0; }
   p4m-checkout .toggle-content {
     margin-top: 0;
     /*padding: 10px 0 0 18px;

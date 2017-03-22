@@ -16,8 +16,6 @@
 			}
 
 			ul {
-				padding: 0 20px 0 0 !important;
-				margin: 0;
 			}
 
 			li {
@@ -283,10 +281,6 @@
             }
 
             label {
-                display: block;
-                margin-top: 4px;
-                padding-top: 2px;
-                padding-left: 4px;
             }
 
 
@@ -337,7 +331,9 @@
 
             span.gfsmethodname {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
+				justify-content: flex-start;
+				margin: 6px 0;
             }
 
             #dp-body {
@@ -415,18 +411,25 @@
 									<ul>
 										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
 											<li class="delivery-place">
-												<input type="radio"
-													name="shipping_method_{{_id}}"
-													checked="{{item.selected}}"
-													value="{{item.service.id}}"
-													id="dp-{{item.service.id}}"
-													on-click="onClickOption"
-													class="radio droppoint-delivery-selection" />
 
 												<label for$="dp-{{item.service.id}}">
 													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
 													<span class="daterange">{{item.deliveryDateRange}}</span>
 												</label>
+
+												<i name="shipping_method" 
+													on-click="onClickOption" 
+													value="shipping_method_{{_id}}" 
+													id="dp-{{item.service.id}}" 
+													class$="p4micon-check-circle link droppoint-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
+												<!-- <input type="radio"
+													name="shipping_method_{{_id}}"
+													checked="{{item.selected}}"
+													value="{{item.service.id}}"
+													id="dp-{{item.service.id}}"
+													on-click="onClickOption"
+													class="radio droppoint-delivery-selection" /> -->
+
 											</li>
 										</template>
 									</ul>

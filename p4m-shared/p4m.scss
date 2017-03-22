@@ -1213,6 +1213,12 @@ p4m-checkout {
 }
 
 
+i.link {
+    font-size: 24px;
+    color:$grey-h2;
+}
+
+
 // Modals 
 paper-dialog {
     background: $p4m-green;
@@ -2035,6 +2041,13 @@ p4m-checkout {
     }
     .delivery-place {
     	font-size: 12px;
+        label {
+            margin-bottom: 0;
+            width: 100%;
+            .gfsmethodname {
+                line-height: 13px;
+            }
+        }   
     }
 
     .gm-style-iw {
@@ -2113,17 +2126,8 @@ p4m-checkout {
     ul.carrier-list:last-child {
         margin-bottom: 5px;
     }
-    // li.gfsStd label, li.delivery-place label {
-    //     margin-top: 3px;
-    // }
-    li.delivery-place label {
-        margin-bottom: 0;
-    }
     #calendarPanel {
         padding: 15px;
-    }
-    span.gfsmethodname {
-        margin: 3px 0 0;
     }
     .toggle-content {
         margin-top: 0;
