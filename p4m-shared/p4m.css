@@ -1742,7 +1742,7 @@ p4m-checkout {
         margin: 0; }
       p4m-checkout footer p4m-order-text span {
         font-weight: 600; }
-        p4m-checkout footer p4m-order-text span.p4m-lael {
+        p4m-checkout footer p4m-order-text span.p4m-label {
           color: #777; }
     p4m-checkout footer p4m-purchase {
       flex: 1; }
