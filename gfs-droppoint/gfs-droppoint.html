@@ -16,7 +16,7 @@
 			}
 
 			ul {
-				padding: 0 20px 2px 0 !important;
+				padding: 0 20px 0 0 !important;
 				margin: 0;
 			}
 
@@ -29,15 +29,12 @@
 				line-height: 0.6em;
 			}
 			td {
-				padding: 2px 0;
+				padding: 0 0 1px 0;
 			}
 
 			.content-container {
 				cursor: pointer;
-				padding: 0 0 1em 0;
 				flex: 1;
-				margin: .65em 1em;
-				border-bottom: 2px solid #eaeaea;
 				position: relative;
 			}
 
@@ -193,7 +190,7 @@
 			}
 
 			.dp-opening-hours table {
-				margin-top: 6px;
+				margin-top: 4px;
 				width: 100%;
 			}
 
@@ -299,7 +296,10 @@
 			}
 
 			.dp-day-name, .dp-day-time-slot {
-				font-size: 13px;
+				font-size: 12px;
+				line-height: 13px;
+				padding-top: 0;
+				padding-bottom: 0;
 			}
 
 			.multi-times {
@@ -388,7 +388,8 @@
 							<div id="dp-minor-info">
 								<div class="dp-opening-hours">
 
-									<div class="font-weight-600 title"><a href="#" on-click="_openingHoursLinkClick">Opening Hours</a></div>
+									<!-- <div class="font-weight-600 title"><a href="#" on-click="_openingHoursLinkClick">Opening Hours</a></div> -->
+									<div class="font-weight-600 title">Opening Hours</div>
 									<table>
 										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
 											<tr>

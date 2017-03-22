@@ -702,23 +702,27 @@ p4m-spinner[species='progress'] {
           background: #37a553;
           height: 3px; }
 
-#pageStandard {
+#pageStandard, #pageCalendar {
   position: relative; }
-  #pageStandard p4m-spinner[species='progress'] {
+  #pageStandard p4m-spinner[species='progress'], #pageCalendar p4m-spinner[species='progress'] {
     position: absolute;
     bottom: initial;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     /* left: calc(50% - 100px); */
-    margin-left: -100px; }
-    #pageStandard p4m-spinner[species='progress'] #progressContainer {
+    margin-left: 0;
+    z-index: 99;
+    width: 100%; }
+    #pageStandard p4m-spinner[species='progress'] paper-progress, #pageCalendar p4m-spinner[species='progress'] paper-progress {
+      width: 100%; }
+    #pageStandard p4m-spinner[species='progress'] #progressContainer, #pageCalendar p4m-spinner[species='progress'] #progressContainer {
       background: #eee;
       height: 3px; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
         background: #37a553; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress {
         background: #37a553; }
-        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
           background: #37a553;
           height: 3px; }
 
@@ -1266,7 +1270,7 @@ p4m-checkout {
       margin-left: 5px; }
   p4m-checkout #panelContainer {
     display: flex;
-    border-radius: 5px;
+    border-radius: 0;
     background-color: white; }
     p4m-checkout #panelContainer > div {
       -webkit-transition: all 0.15s ease-in-out 0s;
@@ -1289,6 +1293,8 @@ p4m-checkout {
             overflow-y: auto; }
             p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints {
               overflow-y: hidden; }
+              p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints .page {
+                padding: 4px 10px; }
               p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints iron-pages > iron-page {
                 height: 327px;
                 display: block;
@@ -1411,11 +1417,31 @@ p4m-checkout {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap; }
+    p4m-checkout #mainDropPointListArea #dropPointList .content-container {
+      padding: 0 0 1em 0;
+      margin: .65em 1em;
+      border-bottom: 2px solid #eaeaea; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints #dropPointList {
     width: 60%;
     float: left;
     display: flex;
     flex-direction: column; }
+    p4m-checkout #mainDropPointListArea.showPreferredDroppoints #dropPointList .content-container {
+      padding: 0 0 1em 0;
+      margin: .65em 1em;
+      border-bottom: 2px solid #eaeaea; }
+  p4m-checkout #selectedDropPointPanel .content-container {
+    /* border-radius: 5px; */
+    /* border: 2px solid #37a553; */
+    padding: 15px 12px;
+    /* border-left: 2px solid #cacaca; */
+    height: 100%; }
+  p4m-checkout #mainDropPointListArea #dropPointList .content-container {
+    padding: 15px;
+    margin: 0;
+    border-bottom: none; }
+  p4m-checkout #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
+    background: #f8f8f8; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
     width: 37%;
     float: right;
@@ -1565,11 +1591,13 @@ p4m-checkout {
     p4m-checkout #dp-distance i {
       font-size: 16px;
       margin-left: 4px; }
-  p4m-checkout td.dp-day-name {
+  p4m-checkout .dp-day-name {
     font-weight: 600; }
   p4m-checkout .dp-opening-hours .title {
-    font-size: 13px;
-    margin-top: 8px; }
+    font-size: 12px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: #aaa; }
   p4m-checkout #opening-hours-link {
     display: flex;
     align-items: center; }
@@ -1591,8 +1619,10 @@ p4m-checkout {
   p4m-checkout .toggle-content {
     padding-left: 2px; }
   p4m-checkout .shippingOptions .font-weight-600.title {
-    font-size: 13px;
-    margin-top: 8px; }
+    font-size: 12px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: #aaa; }
   p4m-checkout .delivery-place {
     font-size: 12px; }
   p4m-checkout .gm-style-iw .dpProviderName {
@@ -1606,12 +1636,16 @@ p4m-checkout {
     height: 327px; }
   p4m-checkout #mapContainer {
     display: flex;
-    flex: 2; }
+    flex: 3; }
   p4m-checkout #dropPointListContainer {
     display: flex;
-    flex: 1;
+    flex: 3;
     height: 100%;
-    overflow: scroll; }
+    overflow: auto;
+    overflow-x: hidden; }
+  p4m-checkout #selectedDropPointPanel {
+    display: flex;
+    flex: 2; }
   p4m-checkout div.dark .open-late {
     -webkit-filter: invert(1);
     filter: invert(1); }

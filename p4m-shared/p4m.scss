@@ -786,15 +786,20 @@ p4m-spinner[species='progress'] {
         }
     }
 }
-#pageStandard {
+#pageStandard, #pageCalendar {
     position: relative;
     p4m-spinner[species='progress'] {
         position: absolute;
         bottom: initial;
-        top: 50%;
-        left: 50%;
+        top: 0;
+        left: 0;
         /* left: calc(50% - 100px); */
-        margin-left: -100px;
+        margin-left: 0;
+        z-index: 99;
+        width: 100%;
+        paper-progress {
+            width: 100%;
+        }
         #progressContainer {
             background: #eee;
             height: 3px;
@@ -1414,7 +1419,12 @@ p4m-checkout {
     paper-tab.gfs-checkout {
     	padding: 0 0;
     }
-    
+
+    // #gfsCheckoutWidget paper-tabs, 
+    // #gfsCheckoutWidget paper-tab {
+    //     height: 36px;
+    // }
+
     .topPanel {
         display: flex;
         flex: 1;
@@ -1453,7 +1463,7 @@ p4m-checkout {
 
     #panelContainer {
         display: flex;
-        border-radius: 5px;
+        border-radius: 0;
         background-color: white;
         > div {
             @include transition();
@@ -1473,6 +1483,9 @@ p4m-checkout {
                         overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
                         &#pageDroppoints {
                             overflow-y: hidden;
+                            .page {
+                                padding: 4px 10px;
+                            }
                             iron-pages > iron-page {
                                 height: 327px;
                                 display: block;
@@ -1659,7 +1672,7 @@ p4m-checkout {
     }
     /* By default, show two columns of cards and no preferred droppoints zone*/
     #mainDropPointListArea .preferredDroppoints {
-       display: none;          
+       display: none;    
     }
     #mainDropPointListArea gfs-droppoint {
 		// height: 100%; 
@@ -1670,15 +1683,45 @@ p4m-checkout {
     #mainDropPointListArea #dropPointList {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;        
+        flex-wrap: wrap;
+        .content-container {
+            padding: 0 0 1em 0;
+            margin: .65em 1em;
+            border-bottom: 2px solid #eaeaea;
+        }
     }
     /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
     #mainDropPointListArea.showPreferredDroppoints #dropPointList {
         width: 60%;
         float: left;    
         display: flex;
-        flex-direction: column;         
+        flex-direction: column;
+        .content-container {
+            padding: 0 0 1em 0;
+            margin: .65em 1em;
+            border-bottom: 2px solid #eaeaea;
+        }
     }
+    #selectedDropPointPanel .content-container {
+        // background: #f8f8f8;
+        /* border-radius: 5px; */
+        /* border: 2px solid #37a553; */
+        padding: 15px 12px;
+        /* border-left: 2px solid #cacaca; */
+        height: 100%;
+    }
+
+    #mainDropPointListArea #dropPointList .content-container {
+        padding: 15px;
+        margin: 0;
+        border-bottom: none;
+    }
+
+    #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
+        background: #f8f8f8;
+    }
+
+
     // #dropPointList {
     // 	display: flex;
     // 	flex-direction: column;
@@ -1901,13 +1944,15 @@ p4m-checkout {
 			margin-left: 4px;
 		}
 	}
-	td.dp-day-name {
+	.dp-day-name {
 	    font-weight: 600;
 	}
 	.dp-opening-hours {
 		.title {
-			font-size: 13px;
-			margin-top: 8px;
+            font-size: 12px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            color: #aaa;
 		}
 	}
 	#opening-hours-link {
@@ -1937,8 +1982,10 @@ p4m-checkout {
         padding-left: 2px;
     }
     .shippingOptions .font-weight-600.title {
-    	font-size: 13px;
-    	margin-top: 8px;
+        font-size: 12px;
+        margin-top: 8px;
+        text-transform: uppercase;
+        color: #aaa;
     }
     .delivery-place {
     	font-size: 12px;
@@ -1961,13 +2008,18 @@ p4m-checkout {
     }
     #mapContainer {
     	display: flex;
-    	flex: 2;
+    	flex: 3;
     }
     #dropPointListContainer {
     	display: flex;
-    	flex: 1;
+    	flex: 3;
 		height: 100%;
-		overflow: scroll;
+		overflow: auto;
+        overflow-x: hidden;
+    }
+    #selectedDropPointPanel {
+        display: flex;
+        flex: 2;
     }
     div.dark .open-late {
         -webkit-filter: invert(1);
