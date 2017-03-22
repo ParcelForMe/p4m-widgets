@@ -1297,6 +1297,28 @@ p4m-checkout {
         background: #7bc78f;
         color: #fff;
         font-weight: 600; }
+        p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab {
+          font-family: 'Lato', sans-serif;
+          font-weight: 600 !important;
+          font-size: 14px;
+          transform: initial !important;
+          -webkit-transform: initial !important;
+          -webkit-font-smoothing: antialiased !important;
+          -webkit-animation: initial !important;
+          -moz-animation: initial !important;
+          -ms-animation: initial !important;
+          animation: initial !important; }
+          p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
+            font-family: 'Lato', sans-serif;
+            font-weight: 600 !important;
+            font-size: 14px;
+            transform: initial !important;
+            -webkit-transform: initial !important;
+            -webkit-font-smoothing: antialiased !important;
+            -webkit-animation: initial !important;
+            -moz-animation: initial !important;
+            -ms-animation: initial !important;
+            animation: initial !important; }
     p4m-checkout #panelContainer gfs-checkout#gfsCheckoutWidget paper-tabs {
       background: #f8f8f8;
       color: #444; }
@@ -1720,6 +1742,8 @@ p4m-checkout {
         margin: 0; }
       p4m-checkout footer p4m-order-text span {
         font-weight: 600; }
+        p4m-checkout footer p4m-order-text span.p4m-label {
+          color: #777; }
     p4m-checkout footer p4m-purchase {
       flex: 1; }
   p4m-checkout p4m-order-summary {
