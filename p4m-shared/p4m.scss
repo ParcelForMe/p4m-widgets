@@ -786,7 +786,39 @@ p4m-spinner[species='progress'] {
         }
     }
 }
-#pageStandard, #pageCalendar {
+#pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+    position: relative;
+    padding: 4px 10px;
+    p4m-spinner[species='progress'] {
+        position: absolute;
+        bottom: initial;
+        top: 0;
+        left: 0;
+        /* left: calc(50% - 100px); */
+        margin-left: 0;
+        z-index: 99;
+        width: 100%;
+        paper-progress {
+            width: 100%;
+        }
+        #progressContainer {
+            background: #eee;
+            height: 3px;
+            #secondaryProgress {
+                background: #37a553;
+            }
+            #primaryProgress {
+                background: #37a553;
+                &:after {
+                    // background: #5fba76;
+                    background: #37a553;
+                    height: 3px;
+                }
+            }
+        }
+    }
+}
+#calendar-loading, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
     position: relative;
     p4m-spinner[species='progress'] {
         position: absolute;
@@ -1483,9 +1515,6 @@ p4m-checkout {
                         overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
                         &#pageDroppoints {
                             overflow-y: hidden;
-                            .page {
-                                padding: 4px 10px;
-                            }
                             iron-pages > iron-page {
                                 height: 327px;
                                 display: block;
@@ -2027,8 +2056,8 @@ p4m-checkout {
     }
     div#gfsMapCanvas .loading {
         margin: auto;
-        width: 100px;
-        padding-top: 120px;
+        width: 100%;
+        padding-top: 0;
     }
     paper-spinner#map-spinner {
         width: 100px;
@@ -2036,8 +2065,8 @@ p4m-checkout {
     }
     div.cardList .loading {
         margin: auto;
-        width: 100px;
-        padding-top: 50px;
+        width: 100%;
+        padding-top: 0;
     }
     paper-spinner#list-spinner {
         width: 100px;
@@ -2443,6 +2472,7 @@ p4m-checkout {
 	.gfsStd {
 		box-sizing: border-box;
 		padding: 0 15px;
+        margin-bottom: 5px;
 		p {
 			font-weight: 600;
 			margin: 3px 0;

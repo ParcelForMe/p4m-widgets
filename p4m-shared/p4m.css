@@ -702,9 +702,10 @@ p4m-spinner[species='progress'] {
           background: #37a553;
           height: 3px; }
 
-#pageStandard, #pageCalendar {
-  position: relative; }
-  #pageStandard p4m-spinner[species='progress'], #pageCalendar p4m-spinner[species='progress'] {
+#pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+  position: relative;
+  padding: 4px 10px; }
+  #pageStandard p4m-spinner[species='progress'], #pageCalendar p4m-spinner[species='progress'], #pageDroppoints p4m-spinner[species='progress'], #mapContainer p4m-spinner[species='progress'], #dropPointListContainer p4m-spinner[species='progress'], #selectedDropPointPanel p4m-spinner[species='progress'] {
     position: absolute;
     bottom: initial;
     top: 0;
@@ -713,16 +714,40 @@ p4m-spinner[species='progress'] {
     margin-left: 0;
     z-index: 99;
     width: 100%; }
-    #pageStandard p4m-spinner[species='progress'] paper-progress, #pageCalendar p4m-spinner[species='progress'] paper-progress {
+    #pageStandard p4m-spinner[species='progress'] paper-progress, #pageCalendar p4m-spinner[species='progress'] paper-progress, #pageDroppoints p4m-spinner[species='progress'] paper-progress, #mapContainer p4m-spinner[species='progress'] paper-progress, #dropPointListContainer p4m-spinner[species='progress'] paper-progress, #selectedDropPointPanel p4m-spinner[species='progress'] paper-progress {
       width: 100%; }
-    #pageStandard p4m-spinner[species='progress'] #progressContainer, #pageCalendar p4m-spinner[species='progress'] #progressContainer {
+    #pageStandard p4m-spinner[species='progress'] #progressContainer, #pageCalendar p4m-spinner[species='progress'] #progressContainer, #pageDroppoints p4m-spinner[species='progress'] #progressContainer, #mapContainer p4m-spinner[species='progress'] #progressContainer, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer {
       background: #eee;
       height: 3px; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
         background: #37a553; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #primaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress {
         background: #37a553; }
-        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+          background: #37a553;
+          height: 3px; }
+
+#calendar-loading, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+  position: relative; }
+  #calendar-loading p4m-spinner[species='progress'], #mapContainer p4m-spinner[species='progress'], #dropPointListContainer p4m-spinner[species='progress'], #selectedDropPointPanel p4m-spinner[species='progress'] {
+    position: absolute;
+    bottom: initial;
+    top: 0;
+    left: 0;
+    /* left: calc(50% - 100px); */
+    margin-left: 0;
+    z-index: 99;
+    width: 100%; }
+    #calendar-loading p4m-spinner[species='progress'] paper-progress, #mapContainer p4m-spinner[species='progress'] paper-progress, #dropPointListContainer p4m-spinner[species='progress'] paper-progress, #selectedDropPointPanel p4m-spinner[species='progress'] paper-progress {
+      width: 100%; }
+    #calendar-loading p4m-spinner[species='progress'] #progressContainer, #mapContainer p4m-spinner[species='progress'] #progressContainer, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer {
+      background: #eee;
+      height: 3px; }
+      #calendar-loading p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+        background: #37a553; }
+      #calendar-loading p4m-spinner[species='progress'] #progressContainer #primaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+        background: #37a553; }
+        #calendar-loading p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
           background: #37a553;
           height: 3px; }
 
@@ -1293,8 +1318,6 @@ p4m-checkout {
             overflow-y: auto; }
             p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints {
               overflow-y: hidden; }
-              p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints .page {
-                padding: 4px 10px; }
               p4m-checkout #panelContainer .p4m-panel #p4mPages > iron-page#deliveryPage iron-pages > iron-page#pageDroppoints iron-pages > iron-page {
                 height: 327px;
                 display: block;
@@ -1651,15 +1674,15 @@ p4m-checkout {
     filter: invert(1); }
   p4m-checkout div#gfsMapCanvas .loading {
     margin: auto;
-    width: 100px;
-    padding-top: 120px; }
+    width: 100%;
+    padding-top: 0; }
   p4m-checkout paper-spinner#map-spinner {
     width: 100px;
     height: 100px; }
   p4m-checkout div.cardList .loading {
     margin: auto;
-    width: 100px;
-    padding-top: 50px; }
+    width: 100%;
+    padding-top: 0; }
   p4m-checkout paper-spinner#list-spinner {
     width: 100px;
     height: 100px; }
@@ -1941,7 +1964,8 @@ p4m-checkout {
 
 .gfs-checkout .gfsStd {
   box-sizing: border-box;
-  padding: 0 15px; }
+  padding: 0 15px;
+  margin-bottom: 5px; }
   .gfs-checkout .gfsStd p {
     font-weight: 600;
     margin: 3px 0; }

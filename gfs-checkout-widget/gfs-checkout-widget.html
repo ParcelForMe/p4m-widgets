@@ -101,12 +101,18 @@
 								   </paper-listbox>
 								</paper-dropdown-menu>
 							</div>
-                      </div>
-                      <div class="page" id="pageDroppoints">
+                        </div>
 
 
+                        <div id="list-loading" class="loading">
+                            <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
+                            <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
+                        </div>
 
-                      <div id="mapContainer">
+
+                        <div class="page" id="pageDroppoints">
+
+                        <div id="mapContainer">
 
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">Selected
@@ -130,10 +136,7 @@
                         <div id="dropPointListContainer" class="hidden">
 
                             <div class="cardList">
-                                <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
-                                <!-- <div id="list-loading" class="loading">
-                                    <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner>
-                                </div> -->
+                                
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
