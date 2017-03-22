@@ -1035,6 +1035,21 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
 .toggle-button.chosen iron-icon {
   color: white; }
 
+.add-new {
+  box-sizing: border-box;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #aaa;
+  font-size: 14px;
+  padding: 10px; }
+  .add-new span {
+    margin-right: 5px; }
+  .add-new i {
+    margin: 6px 15px 0 0;
+    color: #aaa; }
+
 paper-dialog {
   background: #37a553;
   color: #fff;
@@ -2014,13 +2029,6 @@ gfs-calendar .gfs-calendar {
 #p4m-address-list > #container.p4m-address-list, p4m-address-list > #container.p4m-address-list {
   height: 327px;
   display: block; }
-
-#p4m-address-list .add-address, p4m-address-list .add-address {
-  padding: 5px;
-  box-sizing: border-box; }
-  #p4m-address-list .add-address i, p4m-address-list .add-address i {
-    margin: 6px 15px 0 0;
-    color: #aaa; }
 
 p4m-address #container {
   display: flex;

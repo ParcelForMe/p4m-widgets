@@ -7,7 +7,9 @@
 
     <template>
         <div id="container">
-            <p><a id="addNewCardLink" href="#" on-tap="addNewCard">Add a new card</a></p>
+            <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
+            <span>Add New</span><i class="p4micon-add-circle link" id="addNewAddress" on-tap="addNewCard"></i>
+            </div>
 
             <iron-collapse id="newCardCollapse">
                 <p4m-new-card id="newCard" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>

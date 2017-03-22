@@ -19831,12 +19831,6 @@
 		"oAP": "\/example\/static_api\/templates\/checkout.html",
 		"oF": 0
 		},
-	"\/gfs-calendar\/gfs-calendar.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-calendar\/gfs-calendar.html",
-		"oF": 0
-		},
 	"\/gfs-checkout-widget\/css\/custom-min.css": {
 		"aP": 1,
 		"bl": 0,

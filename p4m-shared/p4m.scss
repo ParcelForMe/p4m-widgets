@@ -1195,6 +1195,24 @@ p4m-checkout {
     color: white;
 }
 
+.add-new {
+    box-sizing: border-box;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
+    span {
+        margin-right: 5px;
+    }
+    i {
+        margin: 6px 15px 0 0;
+        color: $grey-hb;
+    }
+}
+
 
 // Modals 
 paper-dialog {
@@ -2564,14 +2582,6 @@ gfs-calendar {
     > #container.p4m-address-list {
         height: 327px;
         display: block;
-    }
-	.add-address {
-    	padding: 5px;
-    	box-sizing: border-box;
-    	i {
-    		margin: 6px 15px 0 0;
-    		color: $grey-hb;
-    	}
     }
 }
 p4m-address {
