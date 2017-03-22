@@ -75,7 +75,7 @@
             },
 
             onClick: function() {
-                this.fire('buy');
+                this.fire('buy', {paymentType: this._paymentType});
             },
 
 

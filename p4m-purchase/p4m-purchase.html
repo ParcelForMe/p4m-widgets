@@ -222,8 +222,19 @@
                 //this.updateUi();
             },
 
-            buyNow: function () {
+            buyNow: function (e) {
+                console.log(e);
                 this.errorMsg = "";
+                if (e.detail && e.detail.paymentType && e.detail.paymentType == "paypal") {
+                    this.buyViaPaypal();
+                }
+                else {
+                    this.buyViaCard();
+                }
+
+            },
+
+            buyViaCard: function() {
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE) {
                     this._state = States.PURCHASING;
                     if (this.beforePurchase) {
@@ -241,6 +252,7 @@
             buyViaPaypal: function () {
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || this._state === States.CVV_NEEDED) {
                     this._state = States.PURCHASING;
+                    debugger;
                     this.$.localApi.call('paypalSetup', { cartId: this.cartData.Id, cartTotal: this.cartData.Total }, null, this.onPaypalSetup.bind(this));
                 }
             },
@@ -280,6 +292,7 @@
             paypalUrl: "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&useraction=commit&token=",
 
             onPaypalSetup: function (err, result) {
+                debugger;
                 if (err) {
                     this.errorMsg = this.msgFailedPayment;
                     var card = this.$$('#card');
