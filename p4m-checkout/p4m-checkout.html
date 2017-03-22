@@ -388,9 +388,9 @@
                     }
                     //selection = null;
                 }
-                this._showAsLoadingShipping(true);
+                this.toggleLoading(true);
                 this.$.gfsCheckoutWidget.init(gfsPostConfig, selection, function(err) {
-                    self._showAsLoadingShipping(false);
+                    self.toggleLoading(false);
                     callback(err);
                 });
 
