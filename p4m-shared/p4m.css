@@ -1047,7 +1047,6 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   .add-new span {
     margin-right: 5px; }
   .add-new i {
-    margin: 6px 15px 0 0;
     color: #aaa; }
 
 paper-dialog {
@@ -1903,9 +1902,6 @@ p4m-checkout {
     overflow-y: auto;
     overflow-x: hidden;
     height: 423px;
-    box-sizing: border-box;
-    margin-left: 0;
-    padding: 10px;
     box-sizing: border-box;
     align-content: flex-start; }
   p4m-checkout #cardPage #cardList .cardList {

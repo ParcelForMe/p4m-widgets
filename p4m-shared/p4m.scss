@@ -1201,14 +1201,13 @@ p4m-checkout {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    color: #aaa;
+    color: $grey-hb;
     font-size: 14px;
     padding: 10px;
     span {
         margin-right: 5px;
     }
     i {
-        margin: 6px 15px 0 0;
         color: $grey-hb;
     }
 }
@@ -2373,9 +2372,6 @@ p4m-checkout {
                 overflow-y: auto;
                 overflow-x: hidden;
                 height: 423px;
-                box-sizing: border-box;
-                margin-left: 0;
-                padding: 10px;
                 box-sizing: border-box;
                 align-content: flex-start;
             }
