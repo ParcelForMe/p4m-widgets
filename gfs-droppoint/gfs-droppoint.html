@@ -359,109 +359,89 @@
 
 				<div class="dp-details">
 
-                    <div class="dp-icon">
-                        <template is="dom-if" if="{{droppointData.providerName}}">
-                            <local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
-                        </template>
-                    </div>
-                    <div class="content">
-                        <div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}">
-                            <div class$="b-tick {{buttonClass}}"></div>
-                        </template></div>
-                        
-                        <div id="dp-address">
-                            <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
-                                <template is="dom-if" if="{{item}}">
-                                	{{item}}
-                                	<br />
-                                </template>
-                            </template>
-                            {{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
+					<div class="dp-icon">
+						<template is="dom-if" if="{{droppointData.providerName}}">
+							<local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
+						</template>
+					</div>
+					<div class="content">
+						<div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>
+						</div>
 
-                        </div>
-                        <template is="dom-if" if="{{showDistance}}">
-                            <div id="dp-distance">
-                                <div class="font-weight-600">Distance:</div>
-                                <i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
-                            </div>
-                        </template>
+						<div id="dp-address">
+							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
+								<template is="dom-if" if="{{item}}">
+									{{item}}
+									<br />
+								</template>
+							</template>
+							{{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
+						</div>
+						<template is="dom-if" if="{{showDistance}}">
+							<div id="dp-distance">
+								<div class="font-weight-600">Distance:</div>
+								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
+							</div>
+						</template>
 
-        
+						<div id="dp-body">
+							<div id="dp-minor-info">
+								<div class="dp-opening-hours">
 
-                    <div id="dp-body">
-                        <div id="dp-minor-info">
+									<div class="font-weight-600 title"><a href="#" on-click="_openingHoursLinkClick">Opening Hours</a></div>
+									<table>
+										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
+											<tr>
+												<td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
+												<td class="dp-day-time-slots">
+													<ul class="testMe">
+														<template is="dom-repeat" items={{item.timeSlots}}>
+															<li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
+														</template>
+													</ul>
+												</td>
+											</tr>
+										</template>
+									</table>
+								</div>
+							</div>
+						</div>
 
+						<template is="dom-if" if="{{showShippingOptions}}">
+							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
+								<div class="shippingOptions">
+									<div class="font-weight-600 title">Collection Options</div>
+									<ul>
+										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
+											<li class="delivery-place">
+												<input type="radio"
+													name="shipping_method_{{_id}}"
+													checked="{{item.selected}}"
+													value="{{item.service.id}}"
+													id="dp-{{item.service.id}}"
+													on-click="onClickOption"
+													class="radio droppoint-delivery-selection" />
 
-	                                <div class="dp-opening-hours">
-	                                    <div class="font-weight-600 title"><a href="#">Opening Hours</a></div>
-	                                    <table>
-	                                        <template is="dom-repeat" items="{{_weekCollection}}">
-	                                            <tr>
-	                                                <td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
-	                                                <td class="dp-day-time-slots">
-	                                                    <ul class="testMe">
-	                                                        <template is="dom-repeat" items={{item.timeSlots}}>
-	                                                            <li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
-	                                                        </template>
-	                                                    </ul>
-	                                                </td>
-	                                            </tr>
-	                                        </template>
-	                                    </table>
-	                                </div>
-
-
-                        </div>
-
-                    </div>
-
-
-
-
-            <template is="dom-if" if="{{showShippingOptions}}">
-                <template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
-                    <div class="shippingOptions">
-                       <div class="font-weight-600 title">Collection Options</div>
-                        <ul>
-                            <template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
-                                <li class="delivery-place">
-
-                                    <input type="radio"
-                                            name="shipping_method_{{_id}}"
-                                            checked="{{item.selected}}"
-                                            value="{{item.service.id}}"
-                                            id="dp-{{item.service.id}}"
-                                            on-click="onClickOption"
-                                            class="radio droppoint-delivery-selection" />
-
-                                    <label for$="dp-{{item.service.id}}">
-                                        <span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>&nbsp;{{item.service.methodTitle}}</span>
-                                        <div>{{item.deliveryDateRange}}</div>
-                                    </label>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                </template>
-
-            </template>
+												<label for$="dp-{{item.service.id}}">
+													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>&nbsp;{{item.service.methodTitle}}</span>
+													<div>{{item.deliveryDateRange}}</div>
+												</label>
+											</li>
+										</template>
+									</ul>
+								</div>
+							</template>
+						</template>
 
 						<div class="actions">
 							<template is="dom-if" if="{{isStandardButton}}">
 								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
 							</template>
 						</div>
-
-                </div>
-
-
-
-
-
-            </div>
-            
+					</div>
+				</div>
+			</div>
 		</div>
-
 	</template>
 
 	<script>
@@ -574,12 +554,17 @@
 				}
 
                 //Build a nice week view of delivery methods
+                this.buildWeekCollection();
+
+			},
+
+			buildWeekCollection: function() {
 			    if (this.droppointData.collectionSlots) { // && this.droppointData.collectionSlots) {
 			        this.droppointData.distanceInKm = (Math.round(this.droppointData.distanceInMeters / 100)) / 10;
 
 					var dayCount = 0;
 					var self = this;
-					var buildWeekCollection = [];
+					var weekCollection = [];
 					this.droppointData.weekCollectionSlots = [];
 					if (!this.droppointData.collectionSlots) this.droppointData.collectionSlots = [];
 
@@ -596,23 +581,25 @@
 							});
 								
 							if (collectionSlot.timeSlots.length > 0) {;
-							    buildWeekCollection.push(collectionSlot);
+							    weekCollection.push(collectionSlot);
 							}
 
 						}
 					});
 
-					this.set('_weekCollection', buildWeekCollection);
+					this.set('_weekCollection', weekCollection);
 					//this.$.weekCollectionTemplate.render();
 				}
 			},
 
 			select: function() {
 			    this.set('droppointData.selected', true);
+			    this.buildWeekCollection();
 			    //this.autoSelectMethod();
                 
 			    //this.fire('droppoint-selected', this.droppointData);
 			},
+
 
 			unselect: function () {
 			    this.set('droppointData.selected', false);
@@ -727,7 +714,7 @@
 			},
 
 			_openingHoursLinkClick: function (e) {
-			    this.fire('opening-hours-link-click', e);
+
 			},
 
 			_onClick: function () {
