@@ -333,12 +333,16 @@
 
             _getConsumer: function (callback) {
                 var self = this;
+                if (!callback)
+                    callback = function () { };
+
+
                 self.$.p4mCheckoutApi.call('consumer', null, null, function (err, data) {
                     if (!data.Success) {
                         callback(data.Error);
                     }
                     else {
-                        self.consumerData = data.Consumer;
+                        self.set('consumerData', data.Consumer);
                         callback(err, data);
                     }
                 });
@@ -366,7 +370,7 @@
                     recipientLastName: this.consumerData.GivenName,
                     recipientTitle: this.consumerData.Title || "",
                     favDropPoints: self._getPreferredDropPoints() || [],
-                    favAddresses: self._getPreferredAddresses(3) || [],
+                    favAddresses: self._getPreferredAddresses() || [],
                     defaultAddress: p4mAddressToGfsAddress(self.getAddressById(this.consumerData.PrefDeliveryAddressId)),
                     cartValue: orderValue,
                     addressPreferences: this.consumerData.DeliveryPreferences.split(','),
@@ -438,6 +442,7 @@
                     }
 
                     //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
+                    self._showAsLoadingShipping(true);
 
                     self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                         //console.log("Called local api itemQtyChanged");
@@ -446,6 +451,7 @@
                         self.updCartTotals(newCartTotals, function (err) {
                             self.cartData.Discounts = newCartTotals.Discounts;
                             self.updateP4mCart();
+                            self._showAsLoadingShipping(false);
                         });
 
                     });
@@ -472,8 +478,13 @@
             },
 
             _showAsLoadingShipping: function(loading) {
-                 this.$.delivery_spinner.active = loading;
+                this.$.delivery_spinner.active = loading;
             },
+            
+            _toggleAddressesLoading: function(loading) {
+                this.$.addresses_spinner.active = loading;  
+            },
+
 
             toggleLoading: function (loading) {
                 if (loading) {
@@ -513,7 +524,7 @@
                     this.toggleLoading(true);
                     this.$.p4mCheckoutApi.call('postCart', null, cartMessage, function (err, data) {
                         if (err) {
-                            callback(err);
+                            callback(null); //TODO: Fix double-post error causing 404 in P4M back end, so we can stop suppressing errors here
                         }
                         else {
                             self.updating = false;
@@ -772,12 +783,13 @@
                     item.Description = "Deleted";
                     this.cartData.Tax = e.detail.Tax;
                     this.updateP4mCart();
-                    this.$.localApi.call('removeDiscountCode', {"discountCode": code}, null, null);
+                    this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
+
                 }
             },
 
             onGotNewCard: function(){
-                this.$.p4mCheckoutApi.call('consumer', null, null, this.onConsumerData.bind(this));
+                 this._getConsumer();
             },
 
             onSelectAddressFromList: function (e) {
@@ -864,24 +876,26 @@
                         function _postAddress(callback) {
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
+                                address.Id = result.Address.Id;
+
                                 callback(err);
                             });
+                        },
+
+                        /*
+                        function _updateP4m(callback) {
+                            self.updateP4mCart(callback);
+                        },*/
+                        function _getConsumer(callback) {
+                            callback(null, result)
                         },
                         function _selectAddress(callback) {
                             self.selectDeliveryAddress(result.Address.Id, true, function(err, data) {
                                 //  result = data;
                                 callback(err);
                             });
-                        },
-                        /*
-                        function _updateP4m(callback) {
-                            self.updateP4mCart(callback);
-                        },*/
-                        function _getConsumer(callback) {
-                            self._getConsumer(function (err) {
-                                callback(null, result)
-                            });
                         }
+
 
                     ],
                     function(err) {
@@ -892,16 +906,19 @@
 
             onUpdateAddress: function (addressElement) {
                 // here we're adding or updating an address only, not setting a default value on the consumer at this stage
-                this.$.addressList.showAsLoading();
+
+                this._toggleAddressesLoading(true);
+
                 var self = this;
                 this.saveAddress(addressElement.detail.addressData, function (err, result) {
                     if (err) {
+                        self._toggleAddressesLoading(false);
                         throw err;
                     }
                     else {
                         addressElement.detail.addressData.Id = result.Address.Id;
-                        //addressElement.detail.mode = "view";
-                        self.$.addressList.showAsLoaded();
+                        self._toggleAddressesLoading(false);
+
                     }
                 });
 
@@ -958,7 +975,7 @@
                 return this.consumerData.Addresses
                     .filter(function (item, i) { return (item.AddressType == "Address") }) //Only addresses, not droppoints
                     .sort(function (a, b) { if (a.Id == preferredAddressId) { return -1; } else { return 1 } })
-                    .filter(function (item, i) { return (i < (maxItems || 5)) }) //Up to 3 addresses                   
+                    .filter(function (item, i) { return (i < (maxItems || 99)) }) //Up to 99 addresses                   
                     .map(p4mAddressToGfsAddress);
             },
 
