@@ -415,10 +415,9 @@
 													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
 													<span class="daterange">{{item.deliveryDateRange}}</span>
 												</label>
-
 												<i name="shipping_method" 
 													on-click="onClickOption" 
-													value="shipping_method_{{_id}}" 
+													value="{{item.service.id}}" 
 													id="dp-{{item.service.id}}" 
 													class$="p4micon-check-circle link droppoint-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
 												<!-- <input type="radio"
@@ -642,6 +641,7 @@
 			},
 
 			onClickOption: function (e) {
+				debugger;
 			    this.selectMethod(e.target.value);
 			},
 
