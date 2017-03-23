@@ -388,7 +388,7 @@
 							<div id="dp-minor-info">
 								<div class="dp-opening-hours">
 
-									<div class="font-weight-600 title"><a href="#" on-click="_openingHoursLinkClick">Opening Hours</a></div>
+									<div class="font-weight-600 title">Opening Hours</div>
 									<table>
 										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
 											<tr>
@@ -464,14 +464,6 @@
                     value: "content-container"
                 },
 
-                showOpeningHours: {
-                    type: Object,
-                    value: false
-                },
-                showOpeningHoursLink: {
-                    type: Object,
-                    value: false
-                },
                 showDistance: {
                     type: Object,
                     value: true
@@ -711,10 +703,6 @@
 				var hours = d.getHours() > 12 ? (d.getHours() % 12).toString() : d.getHours().toString();
 				var ampm = d.getHours() >= 12 ? 'pm' : 'am';
 				return hours + ':' + minutes + ampm;
-			},
-
-			_openingHoursLinkClick: function (e) {
-
 			},
 
 			_onClick: function () {
