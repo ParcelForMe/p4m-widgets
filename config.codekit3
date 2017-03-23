@@ -19813,6 +19813,12 @@
 		"oAP": "\/example\/static_api\/p4m\/isLocallyLoggedIn",
 		"oF": 0
 		},
+	"\/example\/static_api\/p4m\/paypalSetup": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/example\/static_api\/p4m\/paypalSetup",
+		"oF": 0
+		},
 	"\/example\/static_api\/p4m\/restoreLastCart": {
 		"ft": 8192,
 		"oA": 2,
@@ -19823,12 +19829,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/example\/static_api\/templates\/checkout.html",
-		"oF": 0
-		},
-	"\/gfs-calendar\/gfs-calendar.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-calendar\/gfs-calendar.html",
 		"oF": 0
 		},
 	"\/gfs-checkout-widget\/css\/custom-min.css": {
@@ -20467,6 +20467,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-cart\/p4m-cart.html",
+		"oF": 0
+		},
+	"\/p4m-checkout\/p4m-checkout.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/p4m-checkout\/p4m-checkout.html",
 		"oF": 0
 		},
 	"\/p4m-country-select\/p4m-country-select.html": {

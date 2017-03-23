@@ -16,8 +16,6 @@
 			}
 
 			ul {
-				padding: 0 20px 2px 0 !important;
-				margin: 0;
 			}
 
 			li {
@@ -29,15 +27,12 @@
 				line-height: 0.6em;
 			}
 			td {
-				padding: 2px 0;
+				padding: 0 0 1px 0;
 			}
 
 			.content-container {
 				cursor: pointer;
-				padding: 0 0 1em 0;
 				flex: 1;
-				margin: .65em 1em;
-				border-bottom: 2px solid #eaeaea;
 				position: relative;
 			}
 
@@ -193,7 +188,7 @@
 			}
 
 			.dp-opening-hours table {
-				margin-top: 6px;
+				margin-top: 4px;
 				width: 100%;
 			}
 
@@ -286,10 +281,6 @@
             }
 
             label {
-                display: block;
-                margin-top: 4px;
-                padding-top: 2px;
-                padding-left: 4px;
             }
 
 
@@ -299,7 +290,10 @@
 			}
 
 			.dp-day-name, .dp-day-time-slot {
-				font-size: 13px;
+				font-size: 12px;
+				line-height: 13px;
+				padding-top: 0;
+				padding-bottom: 0;
 			}
 
 			.multi-times {
@@ -337,7 +331,9 @@
 
             span.gfsmethodname {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
+				justify-content: flex-start;
+				margin: 6px 0;
             }
 
             #dp-body {
@@ -414,18 +410,25 @@
 									<ul>
 										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
 											<li class="delivery-place">
-												<input type="radio"
+
+												<label for$="dp-{{item.service.id}}">
+													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
+													<span class="daterange">{{item.deliveryDateRange}}</span>
+												</label>
+
+												<i name="shipping_method" 
+													on-click="onClickOption" 
+													value="shipping_method_{{_id}}" 
+													id="dp-{{item.service.id}}" 
+													class$="p4micon-check-circle link droppoint-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
+												<!-- <input type="radio"
 													name="shipping_method_{{_id}}"
 													checked="{{item.selected}}"
 													value="{{item.service.id}}"
 													id="dp-{{item.service.id}}"
 													on-click="onClickOption"
-													class="radio droppoint-delivery-selection" />
+													class="radio droppoint-delivery-selection" /> -->
 
-												<label for$="dp-{{item.service.id}}">
-													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>&nbsp;{{item.service.methodTitle}}</span>
-													<div>{{item.deliveryDateRange}}</div>
-												</label>
 											</li>
 										</template>
 									</ul>

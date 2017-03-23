@@ -702,23 +702,52 @@ p4m-spinner[species='progress'] {
           background: #37a553;
           height: 3px; }
 
-#pageStandard {
-  position: relative; }
-  #pageStandard p4m-spinner[species='progress'] {
+#pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+  position: relative;
+  padding: 10px; }
+  #pageStandard p4m-spinner[species='progress'], #pageCalendar p4m-spinner[species='progress'], #pageDroppoints p4m-spinner[species='progress'], #mapContainer p4m-spinner[species='progress'], #dropPointListContainer p4m-spinner[species='progress'], #selectedDropPointPanel p4m-spinner[species='progress'] {
     position: absolute;
     bottom: initial;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     /* left: calc(50% - 100px); */
-    margin-left: -100px; }
-    #pageStandard p4m-spinner[species='progress'] #progressContainer {
+    margin-left: 0;
+    z-index: 99;
+    width: 100%; }
+    #pageStandard p4m-spinner[species='progress'] paper-progress, #pageCalendar p4m-spinner[species='progress'] paper-progress, #pageDroppoints p4m-spinner[species='progress'] paper-progress, #mapContainer p4m-spinner[species='progress'] paper-progress, #dropPointListContainer p4m-spinner[species='progress'] paper-progress, #selectedDropPointPanel p4m-spinner[species='progress'] paper-progress {
+      width: 100%; }
+    #pageStandard p4m-spinner[species='progress'] #progressContainer, #pageCalendar p4m-spinner[species='progress'] #progressContainer, #pageDroppoints p4m-spinner[species='progress'] #progressContainer, #mapContainer p4m-spinner[species='progress'] #progressContainer, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer {
       background: #eee;
       height: 3px; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
         background: #37a553; }
-      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+      #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #primaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress {
         background: #37a553; }
-        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+        #pageStandard p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageCalendar p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #pageDroppoints p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
+          background: #37a553;
+          height: 3px; }
+
+#calendar-loading, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+  position: relative; }
+  #calendar-loading p4m-spinner[species='progress'], #mapContainer p4m-spinner[species='progress'], #dropPointListContainer p4m-spinner[species='progress'], #selectedDropPointPanel p4m-spinner[species='progress'] {
+    position: absolute;
+    bottom: initial;
+    top: 0;
+    left: 0;
+    /* left: calc(50% - 100px); */
+    margin-left: 0;
+    z-index: 99;
+    width: 100%; }
+    #calendar-loading p4m-spinner[species='progress'] paper-progress, #mapContainer p4m-spinner[species='progress'] paper-progress, #dropPointListContainer p4m-spinner[species='progress'] paper-progress, #selectedDropPointPanel p4m-spinner[species='progress'] paper-progress {
+      width: 100%; }
+    #calendar-loading p4m-spinner[species='progress'] #progressContainer, #mapContainer p4m-spinner[species='progress'] #progressContainer, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer {
+      background: #eee;
+      height: 3px; }
+      #calendar-loading p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #secondaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #secondaryProgress {
+        background: #37a553; }
+      #calendar-loading p4m-spinner[species='progress'] #progressContainer #primaryProgress, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress {
+        background: #37a553; }
+        #calendar-loading p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #mapContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #dropPointListContainer p4m-spinner[species='progress'] #progressContainer #primaryProgress:after, #selectedDropPointPanel p4m-spinner[species='progress'] #progressContainer #primaryProgress:after {
           background: #37a553;
           height: 3px; }
 
@@ -1006,6 +1035,24 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
 .toggle-button.chosen iron-icon {
   color: white; }
 
+.add-new {
+  box-sizing: border-box;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #aaa;
+  font-size: 14px;
+  padding: 10px; }
+  .add-new span {
+    margin-right: 5px; }
+  .add-new i {
+    color: #aaa; }
+
+i.link {
+  font-size: 24px;
+  color: #c5c5c5; }
+
 paper-dialog {
   background: #37a553;
   color: #fff;
@@ -1266,7 +1313,7 @@ p4m-checkout {
       margin-left: 5px; }
   p4m-checkout #panelContainer {
     display: flex;
-    border-radius: 5px;
+    border-radius: 0;
     background-color: white; }
     p4m-checkout #panelContainer > div {
       -webkit-transition: all 0.15s ease-in-out 0s;
@@ -1354,7 +1401,7 @@ p4m-checkout {
   p4m-checkout input[type=radio] {
     margin-right: 4px; }
   p4m-checkout ul {
-    padding: 5px;
+    padding: 0;
     margin: 0; }
     p4m-checkout ul li {
       display: flex; }
@@ -1411,11 +1458,31 @@ p4m-checkout {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap; }
+    p4m-checkout #mainDropPointListArea #dropPointList .content-container {
+      padding: 0 0 1em 0;
+      margin: .65em 1em;
+      border-bottom: 2px solid #eaeaea; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints #dropPointList {
     width: 60%;
     float: left;
     display: flex;
     flex-direction: column; }
+    p4m-checkout #mainDropPointListArea.showPreferredDroppoints #dropPointList .content-container {
+      padding: 0 0 1em 0;
+      margin: .65em 1em;
+      border-bottom: 2px solid #eaeaea; }
+  p4m-checkout #selectedDropPointPanel .content-container {
+    /* border-radius: 5px; */
+    /* border: 2px solid #37a553; */
+    padding: 10px;
+    /* border-left: 2px solid #cacaca; */
+    height: 100%; }
+  p4m-checkout #mainDropPointListArea #dropPointList .content-container {
+    padding: 15px;
+    margin: 0;
+    border-bottom: none; }
+  p4m-checkout #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
+    background: #f8f8f8; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
     width: 37%;
     float: right;
@@ -1565,11 +1632,13 @@ p4m-checkout {
     p4m-checkout #dp-distance i {
       font-size: 16px;
       margin-left: 4px; }
-  p4m-checkout td.dp-day-name {
+  p4m-checkout .dp-day-name {
     font-weight: 600; }
   p4m-checkout .dp-opening-hours .title {
-    font-size: 13px;
-    margin-top: 8px; }
+    font-size: 12px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: #aaa; }
   p4m-checkout #opening-hours-link {
     display: flex;
     align-items: center; }
@@ -1591,41 +1660,58 @@ p4m-checkout {
   p4m-checkout .toggle-content {
     padding-left: 2px; }
   p4m-checkout .shippingOptions .font-weight-600.title {
-    font-size: 13px;
-    margin-top: 8px; }
+    font-size: 12px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: #aaa; }
   p4m-checkout .delivery-place {
     font-size: 12px; }
+    p4m-checkout .delivery-place label {
+      margin-bottom: 0;
+      width: 100%; }
+      p4m-checkout .delivery-place label .gfsmethodname {
+        line-height: 13px; }
   p4m-checkout .gm-style-iw .dpProviderName {
     justify-content: space-between; }
   p4m-checkout iron-page#pageDroppoints {
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    padding: 0; }
+    p4m-checkout iron-page#pageDroppoints .page {
+      padding: 0 10px; }
   p4m-checkout iron-page#pageDroppoints > #pageDroppoints {
     display: flex;
     flex-direction: row;
     height: 327px; }
   p4m-checkout #mapContainer {
     display: flex;
-    flex: 2; }
+    flex: 3;
+    padding: 0; }
   p4m-checkout #dropPointListContainer {
     display: flex;
-    flex: 1;
+    flex: 3;
     height: 100%;
-    overflow: scroll; }
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 0; }
+  p4m-checkout #selectedDropPointPanel {
+    display: flex;
+    flex: 2;
+    padding-top: 0; }
   p4m-checkout div.dark .open-late {
     -webkit-filter: invert(1);
     filter: invert(1); }
   p4m-checkout div#gfsMapCanvas .loading {
     margin: auto;
-    width: 100px;
-    padding-top: 120px; }
+    width: 100%;
+    padding-top: 0; }
   p4m-checkout paper-spinner#map-spinner {
     width: 100px;
     height: 100px; }
   p4m-checkout div.cardList .loading {
     margin: auto;
-    width: 100px;
-    padding-top: 50px; }
+    width: 100%;
+    padding-top: 0; }
   p4m-checkout paper-spinner#list-spinner {
     width: 100px;
     height: 100px; }
@@ -1640,12 +1726,8 @@ p4m-checkout {
     margin-bottom: 10px; }
   p4m-checkout ul.carrier-list:last-child {
     margin-bottom: 5px; }
-  p4m-checkout li.delivery-place label {
-    margin-bottom: 0; }
   p4m-checkout #calendarPanel {
     padding: 15px; }
-  p4m-checkout span.gfsmethodname {
-    margin: 3px 0 0; }
   p4m-checkout .toggle-content {
     margin-top: 0;
     /*padding: 10px 0 0 18px;
@@ -1826,9 +1908,6 @@ p4m-checkout {
     overflow-x: hidden;
     height: 423px;
     box-sizing: border-box;
-    margin-left: 0;
-    padding: 10px;
-    box-sizing: border-box;
     align-content: flex-start; }
   p4m-checkout #cardPage #cardList .cardList {
     display: flex;
@@ -1907,7 +1986,8 @@ p4m-checkout {
 
 .gfs-checkout .gfsStd {
   box-sizing: border-box;
-  padding: 0 15px; }
+  padding: 0 15px;
+  margin-bottom: 5px; }
   .gfs-checkout .gfsStd p {
     font-weight: 600;
     margin: 3px 0; }
@@ -1951,16 +2031,13 @@ gfs-calendar .gfs-calendar {
   height: 327px;
   display: block; }
 
-#p4m-address-list .add-address, p4m-address-list .add-address {
-  padding: 5px;
-  box-sizing: border-box; }
-  #p4m-address-list .add-address i, p4m-address-list .add-address i {
-    margin: 6px 15px 0 0;
-    color: #aaa; }
-
 p4m-address #container {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  padding-bottom: 0; }
+  p4m-address #container ul {
+    padding: 0;
+    margin: 0 10px 5px 10px; }
 
 p4m-address .side-action {
   float: right; }

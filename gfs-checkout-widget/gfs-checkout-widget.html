@@ -101,12 +101,18 @@
 								   </paper-listbox>
 								</paper-dropdown-menu>
 							</div>
-                      </div>
-                      <div class="page" id="pageDroppoints">
+                        </div>
 
 
+                        <div id="list-loading" class="loading">
+                            <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
+                            <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
+                        </div>
 
-                      <div id="mapContainer">
+
+                        <div class="page" id="pageDroppoints">
+
+                        <div id="mapContainer">
 
                             <div class="hidden">
                                 <div id="droppoint_info" class="noscroll">Selected
@@ -126,27 +132,27 @@
                             </div>
                         </div>
 
-                        <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                        </div>
                         <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
 
                             <div class="cardList">
-                                <div id="list-loading" class="loading">
-                                    <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
-                                    <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
-                                </div>
+                                
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            <!-- <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint> -->
+                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                         </template>
                                     </div>
                                 </div>
 
                             </div>
                         </div>
+
+                        <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                        </div>
+                        
                     </div>
 
                 </iron-page>
@@ -182,6 +188,11 @@
             }
             paper-tab:first-of-type {
                 border-left: none;
+            }
+            #dropPointList .content-container {
+                padding: 0 0 1em 0;
+                margin: .65em 1em;
+                border-bottom: 2px solid #eaeaea;
             }
         </style>
 
