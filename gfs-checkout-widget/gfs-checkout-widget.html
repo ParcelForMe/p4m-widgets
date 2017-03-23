@@ -874,6 +874,7 @@
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
                             self.postGfsData(function(err) {
                                 if (err) {
+                                    console.error("postGfsData() returned", err);
                                     finalCallback(err);
                                 }
                                 else
@@ -911,7 +912,6 @@
             //preferSoonest: true/false
             //
             autoSelectDeliveryMethod: function (callback) {
-
                 //If the address chosen is a droppoint,
                 //   Get the delivery methods on the droppoint
                 //   Choose the most preferred
@@ -919,10 +919,11 @@
                 //   Choose the most preferred standard delivery
                 if (!this.standardRates.length) {
                     callback(null); //No delivery methods available yet
+                    
                 }
                 else {
                     if (this.config.deliveryPreferences) {
-                        //var sortFunction = this._getDeliveryMethodSortFunction();
+                        var sortFunction = this._getDeliveryMethodSortFunction();
                         if (this._selectedDropPoint) {
                             //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
                             //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
@@ -932,13 +933,14 @@
                             this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
                         }
                         else {
-                            
+                            this.standardRates = this.standardRates.sort(sortFunction);
                             this.setDeliveryMethod(this.standardRates[0].id);
                             
                         }
                         callback(null);
                     }
                     else {
+                        console.warn("No delivery preferences - autoselecting without them");
                         if (this._selectedDropPoint) {
                             this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
                         }
