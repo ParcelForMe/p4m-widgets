@@ -1069,7 +1069,7 @@
                         newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
-                    if (newMethod.serviceType.type == "dmStandardDropPoint") {
+                    if (newMethod.serviceType.type == "dmStandardDropPoint" && this._selectedDropPoint) {
                         newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
                         newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
                         newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
@@ -1296,7 +1296,6 @@
                         return item;
                     }
                 );
-                console.log(this._dropPoints);
             },
 
             _processFavDroppoints: function()
