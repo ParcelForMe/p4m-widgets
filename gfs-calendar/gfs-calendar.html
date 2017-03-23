@@ -173,6 +173,10 @@
                     value: 1,
                     notify: true
                 },
+                _rectifiedDayList: {
+                    type: Array,
+                    value: []
+                },
                 _buckets: {
                     type: Array,
                     value: []
@@ -193,7 +197,7 @@
                 }
             },
             observers: [
-                 "onDataChange(dayDefiniteData.*)",
+                 "onDataChange(dayDefiniteData)",
                  "onWeekChange(selectedWeek)"
             ],
             listeners: {
@@ -248,22 +252,45 @@
 
             _prepare: function() {
                 //Scan several days ahead, finding the day with the most delivery times. This will be the template.
-
+                //debugger;
                 var self = this;
                 var maxDeliveryTimes = 0;
                 var bucketTemplate;
-                var i = 0;
+                this._rectifiedDayList = [];
+                
 
                 if (!this.dayDefiniteData || !this.dayDefiniteData.length) return;
-                this.dayDefiniteData.forEach(function (dayData) {
-                    dayData._rates = dayData.rates.filter(function (item) { return item.serviceType.type !== "dmStandardDropPoint" });
 
-                    // dayData.endTimes = [];
+                var earliestDay = this.dayDefiniteData.reduce(function(winner, current) {
+                    return (!winner || (current.deliveryDate < winner.deliveryDate))?current:winner;
+                }, null);
+                var lastDay = this.dayDefiniteData.reduce(function(winner, current) {
+                    return (!winner || (current.deliveryDate > winner.deliveryDate))?current:winner;
+                }, null);
+
+                //== Rectify the data, so that non-delivery days still appear in the calendar
+                //Iterate through each day in the range,
+                for (var j=0, day = new Date(earliestDay.deliveryDate); j < this.dayDefiniteData.length && day < new Date(lastDay.deliveryDate); day = day.addDays(1)) {
+                     var item = this.dayDefiniteData[j];
+                     if (new Date(item.deliveryDate).getDate() != day.getDate()) {
+                        this._rectifiedDayList.push(
+                        {
+                            deliveryDate : day,
+                            rates: []
+                        });
+                     }
+                     else {
+                        this._rectifiedDayList.push(item)
+                        j ++;
+                     }
+                }
+
+                this._rectifiedDayList.forEach(function (dayData) {
+                    dayData._rates = dayData.rates.filter(function (item) { return item.serviceType.type !== "dmStandardDropPoint" });
                     if (dayData._rates.length > maxDeliveryTimes) {
                         maxDeliveryTimes = dayData._rates.length;
                         bucketTemplate = dayData._rates;
                     }
-
                 });
 
                 //Make buckets  
@@ -275,15 +302,16 @@
                 
                 //Fill buckets
                 this._calendar = [];
-                this.dayDefiniteData.forEach(function (dayData) {
+                var dayIndex = 0;
+                this._rectifiedDayList.forEach(function (dayData) {
                     var today = {
-                        dayIndex: i,
+                        dayIndex: dayIndex,
                         data: dayData,
-                        deliveryDowLabel: getDowLabel(new Date(dayData.deliveryDate)),
-                        deliveryDateLabel: getDateLabel(new Date(dayData.deliveryDate)),
+                        deliveryDowLabel: dayIndex?getDowLabel(new Date(dayData.deliveryDate)):"Next",
+                        deliveryDateLabel: dayIndex?getDateLabel(new Date(dayData.deliveryDate)):"Day",
                         slots: Array.apply(null, Array(self._buckets.length))//.map(function (item) { return {price: "---"}}); //empty array of rate slots
                     };
-                    i++;
+                    dayIndex++;
                     dayData._rates.forEach(function (rateData) {
                         rateData.deliveryDate = dayData.deliveryDate;
                         rateData.dayIndex = today.dayIndex;
@@ -439,6 +467,12 @@
             var lastNumeral = Number(domStr[domStr.length-1]);
             var suffix = suffixes[Math.min(lastNumeral, suffixes.length-1)];
             return domStr + suffix;
+        }
+
+        Date.prototype.addDays = function(days) {
+          var dat = new Date(this.valueOf());
+          dat.setDate(dat.getDate() + days);
+          return dat;
         }
 
 
