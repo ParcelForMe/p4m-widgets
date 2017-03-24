@@ -383,8 +383,6 @@
 						<div id="dp-body">
 							<div id="dp-minor-info">
 								<div class="dp-opening-hours">
-
-									<div class="font-weight-600 title">Opening Hours</div>
 									<table>
 										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
 											<tr>
@@ -406,7 +404,6 @@
 						<template is="dom-if" if="{{showShippingOptions}}">
 							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
 								<div class="shippingOptions">
-									<div class="font-weight-600 title">Collection Options</div>
 									<ul>
 										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
 											<li class="delivery-place">
@@ -607,6 +604,7 @@
 			onOtherDroppointSelected: function (e) {
 			    
 			    var dp = e.detail;
+			    if (!this.droppointData) return;
 
                 //If the droppoint selected was this one, make sure this "selected" value reflects the other one
 			    if (dp.droppointId == this.droppointData.droppointId) {
