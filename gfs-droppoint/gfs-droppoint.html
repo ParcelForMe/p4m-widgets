@@ -416,7 +416,14 @@
 													on-click="onClickOption" 
 													value="{{item.service.id}}" 
 													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle link droppoint-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
+													class$="p4micon-check-circle link droppoint-delivery-selection _{{item._originalMethodObject.selected}}"
+													></i>
+												<!-- <i name="shipping_method" 
+													on-click="onClickOption" 
+													value="shipping_method_{{_id}}" 
+													id="dp-{{item.service.id}}" 
+													class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
+													></i> -->
 												<!-- <input type="radio"
 													name="shipping_method_{{_id}}"
 													checked="{{item.selected}}"
