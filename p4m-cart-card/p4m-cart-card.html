@@ -27,14 +27,6 @@
                 </template>
             </div>
 
-<!--             <template is="dom-if" if="{{notWish}}">
-                <a href="#"><div id="p4mWishBtn" on-click="makeWish">Move to my <span class="p4m-label">Parcel for Me</span> wish list</div></a>
-            </template>
-
-            <template is="dom-if" if="{{isWish}}">
-                <a href="#"><div id="p4mWishBtn">Moving to wish list...</div></a>
-            </template> -->
-
             <div id="quantity" class="card-panel horizontal layout center">
                 <i on-tap="removeQty" class="p4micon-subtract-circle link"></i>
                 <input label="Qty" _is="iron-input" prevent-invalid-input allowed-pattern="[0-9]" type="text" id="qty" bind-value="{{cartItemData.Qty}}" value="{{cartItemData.Qty}}" />
@@ -43,7 +35,7 @@
             </div>
 
             <div id="delete">
-            <i on-tap="remove" class="p4micon-delete-circle link"></i>
+                <i on-tap="remove" class="p4micon-delete-circle link"></i>
             </div>
             
             
@@ -173,6 +165,10 @@
                 },
                 _priceStr: {
                     type: String
+                },
+                allowEditing: {
+                    type: Object,
+                    value: true
                 }
             },
 
@@ -189,8 +185,10 @@
             },
 
             onQtyChange: function() {
-                if (this.cartItemData.Qty === "") {
-                    this.set('cartItemData.Qty', 0);
+                if (this.allowEditing) {
+                    if (this.cartItemData.Qty === "") {
+                        this.set('cartItemData.Qty', 0);
+                    }
                 }
             },
 
@@ -200,12 +198,15 @@
             },
 
             addQty: function(e) {
-                this.set('cartItemData.Qty', this.cartItemData.Qty + 1);
-
+                if (this.allowEditing) {
+                    this.set('cartItemData.Qty', this.cartItemData.Qty + 1);
+                }              
             },
 
             removeQty: function(e) {
-                this.set('cartItemData.Qty', this.cartItemData.Qty - 1);
+                if (this.allowEditing) {
+                    this.set('cartItemData.Qty', this.cartItemData.Qty - 1);
+                }              
             },
 
 

@@ -445,7 +445,8 @@
                     }
 
                     //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
-                    self._showAsLoadingShipping(true);
+                    //self._showAsLoadingShipping(true);
+                    self.toggleLoading(true);
 
                     self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                         //console.log("Called local api itemQtyChanged");
@@ -454,7 +455,7 @@
                         self.updCartTotals(newCartTotals, function (err) {
                             self.cartData.Discounts = newCartTotals.Discounts;
                             self.updateP4mCart();
-                            self._showAsLoadingShipping(false);
+                            self.toggleLoading(false);
                         });
 
                     });
@@ -493,14 +494,22 @@
                 if (loading) {
                     this.$.orderSummary.showAsLoading();
                     this._showAsLoadingShipping(true);
+                    this._toggleCartEditing(false);
 
                     //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
                     this.$.orderSummary.showAsLoaded();
                     this._showAsLoadingShipping(false);
+                    this._toggleCartEditing(true);
                     //this.$.p4mPurchase.setLoadingState(false);
                 }
+
+            },
+
+            _toggleCartEditing: function(allowEditing) {
+                //zzzzzz
+                this.$.cart.toggleEditing(allowEditing);
 
             },
 
