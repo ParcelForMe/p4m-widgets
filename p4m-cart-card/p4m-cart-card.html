@@ -18,13 +18,13 @@
             </div>
 
             <div id="wishlist">
-                <template is="dom-if" if="{{Wish}}">
-                <div id="p4mWishBtn" on-click="makeWish"><i class="p4micon-heart link"></i></div>
-                </template>
+                <!--template is="dom-if" if="{{isWish}}"-->
+                <div id="p4mWishBtn" on-click="makeWish"><i id="wishIcon" class="p4micon-heart link"></i></div>
+                <!--/template-->
                 <!-- show a heart icon for wish list -->
-                <template is="dom-if" if="{{notWish}}">
-                <div id="p4mWishBtn" on-click="unmakeWish"><i class="p4micon-heart-fill link"></i></div>
-                </template>
+                <!--template is="dom-if" if="{{notWish}}"-->
+                <!--div id="p4mWishBtn" on-click="unmakeWish"><i class="p4micon-heart-fill link"></i></div-->
+                <!--/template-->
             </div>
 
             <div id="quantity" class="card-panel horizontal layout center">
@@ -167,6 +167,14 @@
                     type: String
                 },
                 allowEditing: {
+                    type: Object,
+                    value: true
+                },
+                wish: {
+                    type: Object,
+                    value: false
+                },
+                notWish: {
                     type: Object,
                     value: true
                 }
