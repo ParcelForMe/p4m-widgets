@@ -1060,10 +1060,15 @@
             //TODO: Refactor?
             setDeliveryMethod: function (methodId, dateOverride) {
 
-                if (!methodId) return;
+                if (!methodId) {
+                    debugger;
+                    return;
+                }
+
 
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
+                    debugger;
                     console.error("Method not available");
                     this.fire('noservice');
                     return;
@@ -1076,6 +1081,9 @@
                     }
 
                     newMethod.selected = true;
+                    if (!newMethod.price) {
+                        debugger;
+                    }
 
                     var newSelectedServiceDetails = {
                         _originalMethodObject: newMethod,
@@ -1805,13 +1813,16 @@
 
             //==== Make this droppoint the 'selected' one
             //If no method chosen, auto-choose one
-            _completeDropPointSelection(droppointId, methodId, callback) {
+            _completeDropPointSelection: function(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
 
                 var self = this;
                 if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
-                    callback(null);  
-                }  
+                    
+                    //this.setDeliveryMethod(methodId); //?
+                    callback(null); 
+                } 
+                //if (false) {} 
                 else {
 
                     var dp = this._droppointById(null, droppointId)            
@@ -2321,8 +2332,9 @@
             this.content.style.height = this.height_ + "px";
             this.content.style.top = (posY) + "px";
             this.content.style.display = 'block';
-            this.content.style.position = 'relative';*/
-            //this.content.style['z-index'] = 99;
+            this.content.style.position = 'relative';
+            */
+            this.content.style['z-index'] = 99;
         };
 
         InfoBox.prototype.createElement = function () {
