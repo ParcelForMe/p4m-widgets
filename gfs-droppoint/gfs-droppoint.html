@@ -412,11 +412,12 @@
 													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
 													<span class="daterange">{{item.deliveryDateRange}}</span>
 												</label>
+
 												<i name="shipping_method" 
 													on-click="onClickOption" 
 													value="{{item.service.id}}" 
 													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle link droppoint-delivery-selection _{{item._originalMethodObject.selected}}"
+													class$="p4micon-check-circle link droppoint-delivery-selection {{item.className}}"
 													></i>
 												<!-- <i name="shipping_method" 
 													on-click="onClickOption" 
@@ -424,7 +425,7 @@
 													id="dp-{{item.service.id}}" 
 													class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
 													></i> -->
-												<!-- <input type="radio"
+												<!--<input type="radio"
 													name="shipping_method_{{_id}}"
 													checked="{{item.selected}}"
 													value="{{item.service.id}}"
@@ -646,7 +647,6 @@
 			},
 
 			onClickOption: function (e) {
-				debugger;
 			    this.selectMethod(e.target.value);
 			},
 
@@ -657,8 +657,16 @@
 			    this.select();
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
+			        if (this.droppointData.deliveries[i].service.id == shippingOptionId) { //IMPORTANT: Don't use === here
+			        	this.set("droppointData.deliveries." + i + ".selected", true);
+			        	this.set("droppointData.deliveries." + i + ".className", "selected");
+			        }
+			        else {
+			        	this.set("droppointData.deliveries." + i + ".selected", false);
+			        	this.set("droppointData.deliveries." + i + ".className", "unchosen");
+			        }
+			        //this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
 
-			        this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
 
 			    }
 			    var method = this.getSelectedMethod();
