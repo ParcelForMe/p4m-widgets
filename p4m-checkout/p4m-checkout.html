@@ -452,10 +452,14 @@
                         //console.log("Called local api itemQtyChanged");
                         console.log("sendCartItemChanges(): itemQtyChanged: new cart totals", newCartTotals);
                         self.$.cart.clearChanges();
-                        self.updCartTotals(newCartTotals, function (err) {
-                            self.cartData.Discounts = newCartTotals.Discounts;
-                            self.updateP4mCart();
+                        self.updCartTotals(newCartTotals, function (err) { //This will trigger GFS to trigger updateP4mCart, so no need to call it in the callback here. Commented out.
                             self.toggleLoading(false);
+                            self.cartData.Discounts = newCartTotals.Discounts;
+                            /*self.updateP4mCart(function(err) {
+                                self.toggleLoading(false);
+                                //callback(err);
+                            });*/
+                            
                         });
 
                     });
@@ -514,7 +518,7 @@
             },
 
             updateP4mCart: function (callback) {
-                //console.log("updateP4mCart():", new Error().stack);
+                console.log("updateP4mCart():", new Error().stack);
                 //Send changes to P4M
                 if (!callback) callback = function () { };
                 /*if (this.updating) {
