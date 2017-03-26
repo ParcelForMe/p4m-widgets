@@ -193,6 +193,10 @@
                 _changeIndicatorClass: {
                     type: String,
                     value: "not_changed"
+                },
+                _loadingStack: {
+                    type: Number,
+                    value: 0
                 }
                 
             },
@@ -495,7 +499,16 @@
 
 
             toggleLoading: function (loading) {
+                var showAsLoading;
                 if (loading) {
+                    this._loadingStack ++;
+                }
+                else {
+                    this._loadingStack --;
+                }
+                showAsLoading = (this._loadingStack > 0);
+
+                if (showAsLoading) {
                     this.$.orderSummary.showAsLoading();
                     this._showAsLoadingShipping(true);
                     this._toggleCartEditing(false);
@@ -503,6 +516,7 @@
                     //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
+                    console.log("toggle loading off", new Error().stack);
                     this.$.orderSummary.showAsLoaded();
                     this._showAsLoadingShipping(false);
                     this._toggleCartEditing(true);
@@ -518,7 +532,7 @@
             },
 
             updateP4mCart: function (callback) {
-                console.log("updateP4mCart():", new Error().stack);
+                //console.log("updateP4mCart():", new Error().stack);
                 //Send changes to P4M
                 if (!callback) callback = function () { };
                 /*if (this.updating) {
