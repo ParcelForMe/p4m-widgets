@@ -115,7 +115,7 @@
                         <div id="mapContainer">
 
                             <div class="hidden" id="hiddenElements">
-                                <!--div id="droppoint_info" class="noscroll">Selected</div>-->
+                                <div id="droppoint_info" class="noscroll">Selected</div>
                                 <div id="inspectingDropPointPanel">
                                     <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                                 </div>
@@ -1333,10 +1333,11 @@
                 var self = this;
 
                 var home = null;
-
-                /*self._infoWindow = new google.maps.InfoWindow({
-                    content: self.$.droppoint_info
-                });*/
+                console.log("Infowindow = ", self.$.droppoint_info);
+                self._infoWindow = new google.maps.InfoWindow({
+                    //TIP: To use dynamic content here, use "droppoint_info" as shown in comment below. Then place a droppoint widget or similar into the droppoint_info element.
+                    content: "Selected" //self.$.droppoint_info
+                });
                 var position = new google.maps.LatLng(37, 0);
 
                 // map options
@@ -1679,8 +1680,9 @@
                     this.$.mapContainer.classList.remove('hidden');
                     //this._makeMap();
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
-                    this._resetMap(this._map);
-                    this._openSelectedDropPointInfoWindow();
+                    this._resetMap(this._map, function() {
+                        self._openSelectedDropPointInfoWindow();
+                    });
                     //this.panToDefaultLocation();
 
                 }
@@ -1693,11 +1695,12 @@
 
             },
 
-            _resetMap: function (map) {
+            _resetMap: function (map, callback) {
                 var self = this;
                 if (map) {
                     window.setTimeout(function () {
                         google.maps.event.trigger(map, 'resize');
+                        if (callback) callback();
                         
                     }, 100);
                 }           
@@ -1762,7 +1765,7 @@
                     this.$.dropPointRadio.setAttribute('checked', 'true');
                     this._map.panTo(this._currentMarker.getPosition());
                     var self = this;
-                    //this._infoWindow.open(self._map, self._currentMarker);
+                    this._infoWindow.open(self._map, self._currentMarker);
 
                 }
             },
