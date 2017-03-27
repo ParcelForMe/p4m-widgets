@@ -1483,6 +1483,11 @@ p4m-checkout {
       padding: 0 0 1em 0;
       margin: .65em 1em;
       border-bottom: 2px solid #eaeaea; }
+  p4m-checkout #inspectingDropPointPanel .dp-day-name, p4m-checkout #inspectingDropPointPanel .dp-day-time-slot {
+    font-size: 11px;
+    line-height: 11px;
+    padding-top: 0;
+    padding-bottom: 0; }
   p4m-checkout #selectedDropPointPanel .content-container {
     /* border-radius: 5px; */
     /* border: 2px solid #37a553; */

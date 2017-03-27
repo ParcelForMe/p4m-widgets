@@ -194,9 +194,17 @@
                 border-bottom: 2px solid #eaeaea;
             }
             #inspectingDropPointPanel {
-                background-color: white;
-                padding: 4px;
-                width: 240px;
+                /*position: absolute;
+                top: 327px !important;
+                margin-top: -150px;
+                left: 0;
+                width: 100% !important;
+                height: 150px !important;
+                z-index: 9999;*/
+
+                background: rgba(255,255,255,0.9) !important;
+                padding: 15px !important;
+                box-sizing: border-box;
             }
         </style>
 
@@ -2292,7 +2300,7 @@
             this.offsetVertical_ = -195;
             this.offsetHorizontal_ = 5;
             //this.height_ = 165;
-            this.width_ = 266;
+            this.width_ = 240;
 
             this.setMap(this.map_);
         }
@@ -2322,13 +2330,13 @@
             var posY = pixPosition.y + this.offsetVertical_ + 85;//- (this.height_/2);
 
             // Now position our DIV based on the DIV coordinates of our bounds
-            /*this.content.style.width = this.width_ + "px";
-            this.content.style.left = (posX) + "px";
+            this.content.style.width = this.width_ + "px";
+            this.content.style.left = (posX - 32) + "px";
             this.content.style.height = this.height_ + "px";
-            this.content.style.top = (posY) + "px";
+            this.content.style.top = (posY + 70) + "px";
             this.content.style.display = 'block';
             this.content.style.position = 'relative';
-            */
+            
             this.content.style['z-index'] = 99;
         };
 

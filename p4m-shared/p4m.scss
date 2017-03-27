@@ -1767,6 +1767,14 @@ p4m-checkout {
             border-bottom: 2px solid #eaeaea;
         }
     }
+
+    #inspectingDropPointPanel .dp-day-name, #inspectingDropPointPanel .dp-day-time-slot {
+      font-size: 11px;
+      line-height: 11px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    
     #selectedDropPointPanel .content-container {
         // background: #f8f8f8;
         /* border-radius: 5px; */
