@@ -1882,6 +1882,7 @@
                     this.$.inspectedDropPoint.buildWeekCollection();
                     this._hideDropPointInspector();
 
+
                     this._customInfoBox = new InfoBox({
                         latlng: marker.getPosition(),
                         map: this._map,
@@ -2304,6 +2305,7 @@
             if (this.content) {
                 this.contentOrigin.appendChild(this.content);
             }
+            this.setMap(null);
         };
         /* Redraw the Bar based on the current projection and zoom level
          */
