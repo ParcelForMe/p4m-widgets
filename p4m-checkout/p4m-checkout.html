@@ -365,7 +365,7 @@
                 this.cartData.Items.forEach(function (item) {
                     orderValue += item.Qty * item.Price;
                 });
-
+                var addrPrefs = this.consumerData.DeliveryPreferences ? this.consumerData.DeliveryPreferences.split(',') : null;
                 var gfsPostConfig = {
                     countryCode: null,
                     town: "London",
@@ -380,7 +380,7 @@
                     favAddresses: self._getPreferredAddresses() || [],
                     defaultAddress: p4mAddressToGfsAddress(self.getAddressById(this.consumerData.PrefDeliveryAddressId)),
                     cartValue: orderValue,
-                    addressPreferences: this.consumerData.DeliveryPreferences.split(','),
+                    addressPreferences: addrPrefs,
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.PreferSoonestDelivery
                     }
