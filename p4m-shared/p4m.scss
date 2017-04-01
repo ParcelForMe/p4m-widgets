@@ -883,6 +883,7 @@ i.payment-method-logo {height: 32px; width: 130px;display: flex;}
 p4m-register, p4m-login, p4m-checkout {
 	font-family: $p4m-font;
 	font-size: 16px;
+  line-height: normal;
 	color: $grey-b4;
 }
 
@@ -1774,7 +1775,7 @@ p4m-checkout {
       padding-top: 0;
       padding-bottom: 0;
     }
-    
+
     #selectedDropPointPanel .content-container {
         // background: #f8f8f8;
         /* border-radius: 5px; */
@@ -2035,7 +2036,8 @@ p4m-checkout {
     .dpProviderName {
 	    display: flex;
 	    font-weight: 600;
-	    line-height: 15px;
+      font-size: 16px;
+	    line-height: 16px;
 	    align-items: center;
 	    .dpProviderLogo {
 	    	width: 24px;
@@ -2428,23 +2430,25 @@ p4m-checkout {
     }
 
     .select-payment-type {
-        height: 48px;
+        height: 42px;
         #tabsContainer {
             overflow: visible;
         }
         paper-tab {
             color: $grey-b4;
             background: $white;
-            margin: 2px 12px 5px 0;
+            margin: 0 12px 0 0;
             border-radius: 5px;
             width: 92px;
-            height: 36px !important;
+            height: 42px !important;
+            box-sizing: border-box;
             padding: 0;
             flex: initial;
             border: 2px solid #fff;
             @include transition();
             * {
                 font-size: 36px;
+                height: 36px;
             }
             &:hover {
                 box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -2468,7 +2472,7 @@ p4m-checkout {
 		}
 		p4m-cart-card {
 			#container {
-				padding: .5rem;
+				padding: 10px;
 				box-sizing: border-box;
 				position: relative;
 				&:after {
@@ -2492,7 +2496,7 @@ p4m-checkout {
 			max-width: 64px;
 		}
 		#details {
-			padding: .5rem;
+			padding: 10px;
             flex-direction: column;
 			> div {
 				margin-bottom: 3px;
