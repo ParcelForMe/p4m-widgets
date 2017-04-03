@@ -1990,7 +1990,7 @@ p4m-checkout {
     p4m-checkout p4m-cart p4m-cart-card #container #quantity input {
       width: 40px;
       text-align: right; }
-  p4m-checkout p4m-cart #image img {
+  p4m-checkout p4m-cart img#image {
     max-width: 64px; }
   p4m-checkout p4m-cart #details {
     padding: 10px;
