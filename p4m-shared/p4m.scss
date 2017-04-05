@@ -772,6 +772,7 @@ a, a:visited {
 // END - Pulse Animation
 
 
+
 // Progress indicator
 p4m-spinner[species='progress'] {
     position: absolute;
@@ -796,6 +797,144 @@ p4m-spinner[species='progress'] {
         }
     }
 }
+
+
+
+// Error Messages & Instruction Messages
+
+.instruction, .error {
+    position: absolute;
+    font-style: italic;
+    font-weight: 300;
+    background: #37a553;
+    /* background: #de5a5a; */
+    padding: 8px 12px;
+    border-radius: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #37a553;
+    /* border: 2px solid #de5a5a; */
+    /* border: 2px solid rgba(255, 255, 255, 0.5); */
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.3em;
+    width: calc(100% - 30px);
+    width: 100%;
+    box-shadow: 0 3px 12px rgba(80,80,80,0.7);
+    z-index: 1;
+    bottom: 64px;
+    left: 0px;
+    &:before {
+      content: 'v';
+      width: 6px;
+      height: 6px;
+      /* border-left: 6px solid transparent; */
+      /* border-right: 6px solid transparent; */
+      /* border-top: 15px solid #37a553; */
+      /* border-top: 15px solid #de5a5a; */
+      position: absolute;
+      font-style: normal;
+      bottom: 0px;
+      left: 25px;
+      box-shadow: none;
+      z-index: 1;
+      text-shadow: 0 6px 6px rgba(0,0,0,0.8);
+  }
+  &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 15px solid #37a553;
+      /* border-top: 15px solid #de5a5a; */
+      position: absolute;
+      bottom: -15px;
+      left: 22px;
+      box-shadow: none;
+      z-index: 2;
+  }
+}
+
+
+
+
+
+// Tooltips
+[data-tooltip] {
+  position: relative;
+  &:before,
+  &:after {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0;
+  }
+  /* Show tooltip content on hover - Centred bove content by default */
+  &:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    margin-bottom: -8px;
+    padding: 5px 7px;
+    @include border-radius (0px);
+    background-color: #000;
+    background-color: rgba(80,80,80, 0.9);
+    color: #fff;
+    text-align: center;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.2;
+    white-space: nowrap;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1;
+  }
+  &.tooltip-topleft:before {
+    transform: translateX(-90%) translateY(0);
+  }
+  &.tooltip-topright:before {
+    transform: translateX(-10%) translateY(0);
+  }
+  /* Show tooltip content on hover */
+  &:after {
+    position: absolute;
+    transition: all 0.2s ease 0s;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -5px;
+    margin-bottom: -13px;
+    width: 0;
+    border-top: 4px solid #000;
+    border-top: 4px solid rgba(80,80,80, 0.9);
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+  }
+  /* Float up animation & quick hide animation when mouseout */
+  &:hover:before, 
+  &:hover:after {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease 1s;
+  }
+  &:hover:before {
+    margin-bottom: -5px;
+  }
+  &:hover:after {
+    margin-bottom: -9px !important;
+  }
+}
+
+//---------------------------------------------
+
+
+
 #pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
     position: relative;
     padding: 10px;
@@ -1100,7 +1239,8 @@ p4m-checkout {
 	    transition-duration: 0.5s;
 	}
 	&.disabled {
-	    background-color: rgba(200, 200, 200, 0.5);
+	    // background-color: rgba(200, 200, 200, 0.5);
+      opacity:.5;
 	    cursor: not-allowed;
 	}
 	&.gfs-mini-button {
@@ -1148,7 +1288,9 @@ p4m-checkout {
 		// }
 	}
 	&.disabled {
-        background-color: rgba(100, 100, 100, 1.0);
+      // background-color: rgba(100, 100, 100, 1.0);
+      opacity:.5;
+      cursor: not-allowed;
 	}
     &.white {
         background-color: $p4m-green;
@@ -1247,10 +1389,10 @@ paper-dialog {
 .p4m-label { color: darkgreen }
 // used in the p4m-register widget 
 .corners-5px {
-	@include border-radius( 5px );
+    @include border-radius( 5px );
 }
 .corners-24px {
-	@include border-radius( 24px );
+    @include border-radius( 24px );
 }
 .corners-top-5px {
     @include border-radius-separate( 5px, 5px, 0, 0 );
@@ -2432,7 +2574,7 @@ p4m-checkout {
     .select-payment-type {
         height: 42px;
         #tabsContainer {
-            overflow: visible;
+            overflow: visible !important;
         }
         paper-tab {
             color: $grey-b4;
@@ -2446,6 +2588,7 @@ p4m-checkout {
             flex: initial;
             border: 2px solid #fff;
             @include transition();
+            overflow: visible;
             * {
                 font-size: 36px;
                 height: 36px;
@@ -2739,8 +2882,7 @@ p4m-address {
 footer.p4m-checkout {
     p4m-purchase-btn#p4mPurchaseBtn {
         display: flex;
-        flex: initial;
-        width: 240px;
+        flex: 1;
         #p4mPurchaseBtnContainer {
             display: flex;
             flex: 1;
@@ -2770,7 +2912,7 @@ footer.p4m-checkout {
                     align-items: center;
                     @include transition();
                 }
-                &.payWith_card {
+                &.payWith_, &.payWith_card {
                     &:after {
                         content: '\e920';
                         font-family: 'p4m' !important;
@@ -2798,6 +2940,17 @@ footer.p4m-checkout {
                         background-position: center center;
                     }
                 }
+            }
+            &.invalid {
+              button, button:hover {
+                &:not(.payWith_paypal) {
+                  // background: #aaa;
+                  // border-color: #aaa;
+                  // color: #eaeaea;
+                  opacity:.5;
+                  cursor: not-allowed;
+                }
+              }
             }
         }
     }
