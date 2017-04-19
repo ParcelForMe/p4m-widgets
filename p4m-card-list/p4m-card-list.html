@@ -8,7 +8,10 @@
     <template>
         <div id="container">
             <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
-            <span>Add New</span><i class="p4micon-add-circle link" id="addNewCardLink" on-tap="addNewCard"></i>
+            <div class="link add" id="addNewCardLink" id="addNewCardText" on-tap="addNewCard">
+                <span>Add a New Card</span>
+                <i class="p4micon-add-circle link"></i>
+            </div>
             </div>
 
             <iron-collapse id="newCardCollapse">
@@ -70,17 +73,28 @@
                 var lbl = this.$.addNewCardLink;
                 if (!ctrl.opened) {
                     this.$.newCard.loadRealexForm();
-                    lbl.innerText = "Cancel";
+                    lbl.firstElementChild.innerText = "Cancel";
+                    lbl.classList.add("cancel");
+                    lbl.classList.remove("add");
+                    
+                    // lbl.innerHTML = 'Cancel<i class="p4micon-delete-circle link" onclick="addRow()"></i>';
                 }
                 else {
-                    lbl.innerText = "Add a new card";
+                    lbl.firstElementChild.innerText = "Add a New Card";
+                    lbl.classList.add("add");
+                    lbl.classList.remove("cancel");
+                    // lbl.innerHTML = 'ADD<i class="p4micon-add-circle link" onclick="addRow()"></i>';
                 }
                 ctrl.toggle();
+
             },
+
 
             onGotNewCard: function () {
                 this.addNewCard();
             },
+
+
 
             onConsumerDataChange: function () {
                 if (false && !this.selectedCardId && this.consumerData) {
