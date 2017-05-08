@@ -547,7 +547,7 @@
                     var cartMessage =
                     {
                         "SessionId": this.sessionId,
-                        "ClearItems": this.cartData.Id === null, //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
+                        "ClearItems": (!this.cartData.Id), //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
                         "Cart": this.cartData
                     };
 
@@ -661,7 +661,9 @@
                         callback(null);                       
                     }
                     else {
-                        var shippingDetails = { 'Service': data.service, 'Amount': data.shipping, 'DueDate': data.expDeliveryDate };
+                        var addr = this.consumerData.Addresses.find(a => a.Id === this.cartData.AddressId);
+                        console.log("update shipping addr: ", addr);
+                        var shippingDetails = { 'Service': data.service, 'Amount': data.shipping, 'DueDate': data.expDeliveryDate, 'Address': addr };
                         // got new shipping details so we need to get updated tax from the host
                         this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
                             if (err) {
