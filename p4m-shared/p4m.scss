@@ -796,6 +796,35 @@ p4m-spinner[species='progress'] {
             }
         }
     }
+    // &#newcard-spinner {
+    //   bottom: initial;
+    //   top: 38px;
+    //   width: 100%;
+    //   left: 0;
+    //   padding: 0 20px;
+    //   box-sizing: border-box;
+    //   paper-progress.p4m-spinner {
+    //       width: 100%;
+    //   }
+    // }
+    &#newcard-spinner {
+      bottom: initial;
+      top: 100px;
+      // width: 100%;
+      left: 50%;
+      margin-left: -100px;
+      // padding: 0 20px;
+      // box-sizing: border-box;
+
+      bottom: initial;
+      top: 180px;
+      left: 50%;
+      margin-left: -100px;
+      z-index: 0;
+      paper-progress.p4m-spinner {
+          // width: 100%;
+      }
+    }
 }
 
 
@@ -1450,6 +1479,7 @@ p.new-card-notice {
 }
 #paymentIframe {
   border: none;
+  z-index: 1;
   // max-width: calc(100% - 20px);
 }
 #container.p4m-new-card {

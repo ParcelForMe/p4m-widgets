@@ -12,7 +12,8 @@
             <a href="#"><span>Read more</span></a>
             <img src="https://hpp.sandbox.realexpayments.com/resources/images/icons/realex-grey.png" />
             </p>
-            <paper-spinner id="spinner" active="true"></paper-spinner>
+            <!-- <paper-spinner id="spinner" active="true"></paper-spinner> -->
+            <p4m-spinner species="progress" id="newcard-spinner" active="true"></p4m-spinner>
             <iframe id="paymentIframe" name="realexIFrame" on-load="onFrameLoaded" height="609"></iframe>
             <form id="realexForm" method="POST" action="https://hpp.sandbox.realexpayments.com/pay" target="realexIFrame">
                 <input type="hidden" name="TIMESTAMP" value="{{cardTimestamp}}" />
