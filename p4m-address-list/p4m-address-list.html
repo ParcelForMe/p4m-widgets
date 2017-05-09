@@ -15,7 +15,7 @@
                         <i class="p4micon-add-circle link"></i>
                     </div>
                 </div>
-                <!-- BAZ - please add the cancel function into div.add-new above - to create the same add/cancel UX as in p4m-card list -->
+                <!-- help BAZ! - please add the cancel function into div.add-new above - to create the same add/cancel UX as in p4m-card list -->
                 <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
                     <p4m-address address-data="{{item}}" on-canceledit="cancelAdd" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
                 </template>

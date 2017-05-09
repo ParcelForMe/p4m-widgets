@@ -17,11 +17,14 @@
             <iron-collapse id="newCardCollapse">
                 <p4m-new-card id="newCard" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>
             </iron-collapse>
+
+            <!-- <iron-collapse id="cardListCollapse">  help BAZ! -->
             <div class="cardList">
                 <template is="dom-repeat" items="{{consumerData.PaymentMethods}}">
                     <p4m-card card-data="{{item}}" on-selected="onCardSelected" show-cvv="false" container-class="card-list-item" selected-card-id="{{selectedCardId}}"></p4m-card>
                 </template>
             </div>
+            <!-- </iron-collapse> -->
 
         </div>
 

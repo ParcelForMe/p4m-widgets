@@ -531,6 +531,9 @@ body.fullbleed {
 .p4micon-map-marker-selected-fill:before {
   content: "\e929"; }
 
+.p4micon-save:before {
+  content: "\e92a"; }
+
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BlaIta-webfont.eot");
@@ -1209,14 +1212,34 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
       -o-transition: rotate, 0.2s;
       transition: rotate, 0.2s; }
     .add-new div.cancel i {
-      -webkit-transform: rotate(90deg);
-      -khtml-transform: rotate(90deg);
-      -moz-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-      -o-transform: rotate(90deg);
-      transform: rotate(90deg);
+      -webkit-transform: rotate(45deg);
+      -khtml-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
       filter: progid:DXImageTransform.Microsoft.Matrix( M11=0, M12=0, M21=0, M22=0, sizingMethod='auto expand');
       zoom: 1; }
+
+p.new-card-notice {
+  font-size: 14px;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  p.new-card-notice a {
+    color: #37a553;
+    display: flex;
+    align-items: center; }
+
+#paymentIframe {
+  border: none; }
+
+#container.p4m-new-card {
+  padding: 10px;
+  margin: 0; }
 
 i.link {
   font-size: 24px;
@@ -1230,6 +1253,10 @@ paper-dialog {
   color: #fff;
   display: flex;
   justify-content: center; }
+
+div.pac-container.pac-logo {
+  min-width: 200px;
+  width: 200px !important; }
 
 .p4m-label {
   color: darkgreen; }
@@ -1595,7 +1622,10 @@ p4m-checkout {
   p4m-checkout #mapTools {
     height: 48px;
     display: flex;
-    align-items: center; }
+    align-items: center;
+    background: #f8f8f8;
+    border-top: 1px solid #fff;
+    box-sizing: border-box; }
   p4m-checkout #mapContainer {
     display: block;
     position: relative; }
@@ -1707,6 +1737,9 @@ p4m-checkout {
     width: 80%; }
   p4m-checkout #droppoint-delivery-options {
     clear: both; }
+  p4m-checkout .toggleDropPointsViewControls {
+    display: flex;
+    flex-direction: row; }
   p4m-checkout #mapTools, p4m-checkout #listTools {
     display: flex;
     flex-direction: row; }
@@ -1717,6 +1750,9 @@ p4m-checkout {
     width: 48px;
     justify-content: center;
     align-items: center; }
+    p4m-checkout a#viewAsList.active, p4m-checkout a#viewAsMap.active {
+      background: #ffffff;
+      color: #444; }
   p4m-checkout paper-menu-button iron-dropdown {
     margin-bottom: 8px;
     margin-top: 8px; }
@@ -1729,8 +1765,9 @@ p4m-checkout {
     margin-top: 0 !important; }
   p4m-checkout #contentWrapper .dropdown-content {
     margin-bottom: 0 !important;
-    margin-top: -10px;
-    top: 10px; }
+    top: 10px;
+    padding: 0;
+    min-width: 200px; }
   p4m-checkout .adjoiner {
     display: flex;
     height: 48px;
@@ -1970,7 +2007,12 @@ p4m-checkout {
     right: 4px;
     left: initial;
     top: 6px;
-    color: #ccc; }
+    color: #ccc;
+    background: white;
+    box-shadow: 0 0 3px 3px white; }
+  p4m-checkout paper-input iron-icon {
+    background: white;
+    box-shadow: 0 0 3px 3px white; }
   p4m-checkout .consumer-addresses {
     display: flex;
     flex-direction: row; }
