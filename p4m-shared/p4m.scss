@@ -1589,6 +1589,7 @@ i.p4micon-cart-empty {
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
     #profileImage {
         height: 44px;
         border-radius: 44px;
@@ -1608,11 +1609,11 @@ i.p4micon-cart-empty {
         display: none;
     }
     #spinner {
-        width: 44px;
-        height: 44px;
-        position: absolute;
-        top: 0;
-        left: 4px;
+      width: 42px;
+      height: 42px;
+      position: absolute;
+      top: 1px;
+      left: 4px;
     }
 }
 

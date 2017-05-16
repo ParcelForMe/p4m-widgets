@@ -1328,7 +1328,8 @@ i.p4micon-cart-empty {
 #p4m-profile-container {
   display: flex;
   flex-direction: row;
-  align-items: center; }
+  align-items: center;
+  position: relative; }
   #p4m-profile-container #profileImage {
     height: 44px;
     border-radius: 44px;
@@ -1344,10 +1345,10 @@ i.p4micon-cart-empty {
   #p4m-profile-container #profileName.hide-name {
     display: none; }
   #p4m-profile-container #spinner {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     position: absolute;
-    top: 0;
+    top: 1px;
     left: 4px; }
 
 #p4mRegisterContainer {
