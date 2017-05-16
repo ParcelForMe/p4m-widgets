@@ -966,9 +966,6 @@ ul.separated li {
 paper-input .underline {
   display: none !important; }
 
-iron-overlay-backdrop.iron-overlay-backdrop-0.opened {
-  z-index: 98 !important; }
-
 .iron-overlay-backdrop-0.opened {
   z-index: 98 !important; }
 

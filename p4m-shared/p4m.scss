@@ -1173,12 +1173,9 @@ paper-input .underline {
 	display: none !important;
 }
 
-iron-overlay-backdrop.iron-overlay-backdrop-0.opened {
-  z-index: 98 !important;
-}
-.iron-overlay-backdrop-0.opened {
-  z-index: 98 !important;
-}
+// Quick Fix for easytees iron-overlay-background placing infront of modal dialog instead of behind
+.iron-overlay-backdrop-0.opened {z-index: 98 !important;}
+// END Quick fix
 
 // Credit Card Instances
 p4m-card {
