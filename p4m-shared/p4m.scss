@@ -715,74 +715,74 @@ a, a:visited {
 	transition: .15s ease-in-out;
 }
 
-// Pulse Animation
+// Pulse Animation 
 @-webkit-keyframes greenPulse {
-  from { border-color: #749a02; box-shadow: 0 0 0 0 rgba(55, 165, 83, 0); }
-  15% { border-color: #749a02; box-shadow: 0 0 0 2px rgba(55, 165, 83, 0.4); }
-  to { border-color: #749a02; box-shadow: 0 0 20px 20px rgba(55, 165, 83, 0); }
+  from { border-color: #37a553; box-shadow: 0 0 0 0 rgba(55, 165, 83, 0.5); background: rgba(55, 165, 83, 0.2); }
+  // 15% { border-color: #37a553; box-shadow: 0 0 0 2px rgba(55, 165, 83, 0.4); }
+  to { border-color: #37a553; box-shadow: 0 0 10px 10px rgba(55, 165, 83, 0); background: rgba(55, 165, 83, 0); }
 }
 
-input[placeholder="CVV"] {
+.changed {
   animation-name: greenPulse;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
 }
 
 
 
-// Pulse Animation
-.change {
-  -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  -moz-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  -ms-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-}
+// Pulse Animation TEST VERSION
+// .change {
+//   -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   -moz-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   -ms-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+// }
 
-@-webkit-keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $translucent-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
-@-moz-keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
-@-ms-keyframes change {
-  0% {
-    background-color: white;
-  }
-  2% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
-@keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
+// @-webkit-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $translucent-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @-moz-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @-ms-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   2% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
 // END - Pulse Animation
 
 
