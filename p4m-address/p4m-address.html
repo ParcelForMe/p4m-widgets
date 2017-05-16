@@ -40,9 +40,11 @@
                 <iron-page>
                     <div class="card-panel">
                         <div class="card-body card-edit">
-                            <div class="vertical layout end cancel-button">
-                            <a class="" href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
-                            </div>
+                            <template is="dom-if" if="{{showCancel}}">
+                                <div class="vertical layout end cancel-button">
+                                    <a class="" href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                                </div>
+                            </template>
                             <div class="address-form">
                                 <input is="iron-input" type="text" id="address-label" bind-value="{{addressData.Label}}" placeholder="Label, e.g. 'Home'" />
                                 <input is="iron-input" type="text" id="address-street-1" bind-value="{{addressData.Street1}}" placeholder="Street address" />
@@ -124,6 +126,10 @@
                 selectedMode: {
                     type: Number,
                     value: 0
+                },
+                showCancel: {
+                    type: Object,
+                    value: true
                 },
               
                 isBilling: {
