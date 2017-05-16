@@ -19866,12 +19866,6 @@
 		"oF": 0,
 		"oS": 0
 		},
-	"\/gfs-checkout-widget\/gfs-checkout-widget.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-checkout-widget\/gfs-checkout-widget.html",
-		"oF": 0
-		},
 	"\/gfs-checkout-widget\/images\/back_button.png": {
 		"ft": 32768,
 		"iS": 424,
@@ -20403,34 +20397,16 @@
 		"oAP": "\/build\/node_modules",
 		"oF": 0
 		},
-	"\/p4m-address-list\/p4m-address-list.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-address-list\/p4m-address-list.html",
-		"oF": 0
-		},
 	"\/p4m-address\/p4m-address-text.html": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-address\/p4m-address-text.html",
 		"oF": 0
 		},
-	"\/p4m-address\/p4m-address.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-address\/p4m-address.html",
-		"oF": 0
-		},
 	"\/p4m-api\/p4m-api.html": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-api\/p4m-api.html",
-		"oF": 0
-		},
-	"\/p4m-card-list\/p4m-card-list.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-card-list\/p4m-card-list.html",
 		"oF": 0
 		},
 	"\/p4m-card\/assets\/amex.png": {
