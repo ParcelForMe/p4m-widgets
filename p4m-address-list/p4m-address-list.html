@@ -11,7 +11,7 @@
             <div class="address-section">
                 <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
                     <div class="link add" id="toggleAddressMode" on-tap="toggleAddressMode">
-                        <span>Add a New Address</span>
+                        <span>{{_addressModePrompt}}</span>
                         <i class="p4micon-add-circle link"></i>
                     </div>
                 </div>
@@ -79,6 +79,11 @@
                     value: {},
                     notify: true
                 },
+                _addressModePrompt: {
+                    type: String,
+                    value: "Add a New Address"
+
+                },
                 _addedNewAddress: {
                     type: Object,
                     value: false
@@ -103,6 +108,7 @@
                     this.$.addressSelectionPages.select(1);
                     this.$.toggleAddressMode.classList.add("add");
                     this.$.toggleAddressMode.classList.remove("cancel");
+                    this.set("_addressModePrompt", "Add a New Address");
                     this.cancelAdd();
 
                 }
@@ -110,6 +116,7 @@
                     this.$.addressSelectionPages.select(0);
                     this.$.toggleAddressMode.classList.add("cancel");
                     this.$.toggleAddressMode.classList.remove("add");
+                    this.set("_addressModePrompt", "Cancel");
                     //if (this.addressListData && !this._addedNewAddress) {
                         this._addedNewAddress = true;
                         //Add empty object to handle adding a new address
