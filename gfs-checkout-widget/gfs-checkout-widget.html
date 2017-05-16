@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true">HELLO</gfs-droppoint>
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                         </div>
                         
                     </div>
@@ -1136,7 +1136,8 @@
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
 
                     this.$.standardRatesTemplate.render();
-                    this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    //this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    this._updateUi();
                     return this.selectedServiceDetails;
                 }
             },
