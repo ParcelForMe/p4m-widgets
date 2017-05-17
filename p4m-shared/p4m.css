@@ -674,35 +674,27 @@ a, a:visited {
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out; }
 
-p4m-spinner[species='progress'] #container paper-progress
 p4m-spinner[species='progress'] {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%; }
-  p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container {
+  p4m-spinner[species='progress'] #container {
     padding-bottom: 0;
     background-color: transparent; }
-    p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container paper-progress {
+    p4m-spinner[species='progress'] #container paper-progress {
       width: 100%; }
-      p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container paper-progress #progressContainer {
+      p4m-spinner[species='progress'] #container paper-progress #progressContainer {
         background: transparent;
         height: 3px; }
-        p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container paper-progress #progressContainer #secondaryProgress {
+        p4m-spinner[species='progress'] #container paper-progress #progressContainer #secondaryProgress {
           background: #37a553; }
-        p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress {
+        p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress {
           background: #37a553; }
-          p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress:after {
+          p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress:after {
             background: #37a553;
             height: 3px; }
-  p4m-spinner[species='progress'] #container paper-progress
-p4m-spinner[species='progress']#newcard-spinner {
+  p4m-spinner[species='progress']#newcard-spinner {
     bottom: initial;
     top: 100px;
     left: 50%;
