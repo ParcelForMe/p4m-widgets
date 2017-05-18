@@ -1366,7 +1366,7 @@ i.p4micon-cart-empty {
     top: 1px;
     left: 4px; }
 
-p4m-login #p4m-profile-container {
+p4m-login .loginWidget {
   background: #37a553;
   width: initial;
   height: 40px;
@@ -1375,46 +1375,51 @@ p4m-login #p4m-profile-container {
   display: inline-flex;
   align-items: center;
   border-radius: 3px;
-  padding-right: 15px; }
-  p4m-login #p4m-profile-container #p4m-logo {
+  padding-right: 0; }
+  p4m-login .loginWidget #p4m-profile-container {
+    flex-direction: row-reverse; }
+  p4m-login .loginWidget #p4m-logo {
     width: 24px;
     height: 24px;
     margin-right: 4px;
     margin-left: 12px; }
-    p4m-login #p4m-profile-container #p4m-logo svg {
+    p4m-login .loginWidget #p4m-logo svg {
       fill: #fff; }
-  p4m-login #p4m-profile-container #profileImage {
+  p4m-login .loginWidget #profileImage {
     display: none;
-    width: 40px;
-    height: 40px;
-    margin-right: 0; }
-  p4m-login #p4m-profile-container #loggingInMessage {
-    display: none;
-    justify-content: center;
-    width: 156px; }
-  p4m-login #p4m-profile-container #loginMessage {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 0;
+    margin-left: 8px;
+    border-radius: 0 3px 3px 0 !important; }
+  p4m-login .loginWidget #loginMessage {
     display: flex;
     justify-content: center;
-    width: 156px; }
-  p4m-login #p4m-profile-container #profileName {
+    width: 156px;
+    margin-right: 12px; }
+  p4m-login .loginWidget #loggingInMessage {
+    display: none;
+    justify-content: center;
+    width: 156px;
+    margin-right: 12px; }
+  p4m-login .loginWidget #profileName {
     display: none; }
-  p4m-login #p4m-profile-container.loggingIn #loggingInMessage {
+  p4m-login .loginWidget.loggingIn #loggingInMessage {
     display: flex;
     flex: 1;
     justify-content: center; }
-  p4m-login #p4m-profile-container.loggingIn #loginMessage {
+  p4m-login .loginWidget.loggingIn #loginMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #loggingInMessage {
+  p4m-login .loginWidget.loggedIn #loggingInMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #loginMessage {
+  p4m-login .loginWidget.loggedIn #loginMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #profileName {
+  p4m-login .loginWidget.loggedIn #profileName {
     display: flex;
     flex: 1;
     justify-content: center; }
-  p4m-login #p4m-profile-container.loggedIn #profileImage {
-    display: flex;
-    border-radius: 3px 0 0 3px; }
+  p4m-login .loginWidget.loggedIn #profileImage {
+    display: flex; }
 
 #p4mRegisterContainer {
   display: flex;

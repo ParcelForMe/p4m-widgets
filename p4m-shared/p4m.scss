@@ -1643,7 +1643,7 @@ i.p4micon-cart-empty {
 p4m-login {
 
 // Logged out
-  #p4m-profile-container {
+  .loginWidget {
     background: #37a553;
     width: initial;
     height: 40px;
@@ -1652,7 +1652,10 @@ p4m-login {
     display: inline-flex;
     align-items: center;
     border-radius: 3px;
-    padding-right: 15px;
+    padding-right: 0;
+    #p4m-profile-container {
+      flex-direction: row-reverse;
+    }
     #p4m-logo {
       width: 24px;
       height: 24px;
@@ -1664,19 +1667,23 @@ p4m-login {
     }
     #profileImage {
       display: none;
-      width: 40px;
-      height: 40px;
+      width: 40px !important;
+      height: 40px !important;
       margin-right: 0;
-    }
-    #loggingInMessage {
-      display: none;
-      justify-content: center;
-      width: 156px;
+      margin-left: 8px;
+      border-radius: 0 3px 3px 0 !important;
     }
     #loginMessage {
       display: flex;
       justify-content: center;
       width: 156px;
+      margin-right: 12px;
+    }
+    #loggingInMessage {
+      display: none;
+      justify-content: center;
+      width: 156px;
+      margin-right: 12px;
     }
     #profileName {
       display: none;
@@ -1709,7 +1716,6 @@ p4m-login {
       }
       #profileImage {
         display: flex;
-        border-radius: 3px 0 0 3px;
       }
     }
   }

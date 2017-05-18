@@ -19840,12 +19840,6 @@
 		"oAP": "\/example\/static_api\/templates\/checkout.html",
 		"oF": 0
 		},
-	"\/gfs-calendar\/gfs-calendar.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/gfs-calendar\/gfs-calendar.html",
-		"oF": 0
-		},
 	"\/gfs-checkout-widget\/css\/custom-min.css": {
 		"aP": 1,
 		"bl": 0,
@@ -20587,12 +20581,6 @@
 		"oAP": "\/p4m-imports\/p4m-imports.html",
 		"oF": 0
 		},
-	"\/p4m-login\/p4m-login.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-login\/p4m-login.html",
-		"oF": 0
-		},
 	"\/p4m-order-summary\/p4m-order-summary.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20669,12 +20657,6 @@
 		"opt": 0,
 		"plM": 3758088159,
 		"prP": 0
-		},
-	"\/p4m-profile\/p4m-profile.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-profile\/p4m-profile.html",
-		"oF": 0
 		},
 	"\/p4m-profile\/peli-logo-green.png": {
 		"ft": 32768,
