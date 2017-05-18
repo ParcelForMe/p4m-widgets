@@ -677,19 +677,23 @@ a, a:visited {
 p4m-spinner[species='progress'] {
   position: absolute;
   bottom: 0;
-  left: 0; }
+  left: 0;
+  width: 100%; }
   p4m-spinner[species='progress'] #container {
-    padding-bottom: 0; }
-    p4m-spinner[species='progress'] #container #progressContainer {
-      background: transparent;
-      height: 3px; }
-      p4m-spinner[species='progress'] #container #progressContainer #secondaryProgress {
-        background: #37a553; }
-      p4m-spinner[species='progress'] #container #progressContainer #primaryProgress {
-        background: #37a553; }
-        p4m-spinner[species='progress'] #container #progressContainer #primaryProgress:after {
-          background: #37a553;
-          height: 3px; }
+    padding-bottom: 0;
+    background-color: transparent; }
+    p4m-spinner[species='progress'] #container paper-progress {
+      width: 100%; }
+      p4m-spinner[species='progress'] #container paper-progress #progressContainer {
+        background: transparent;
+        height: 3px; }
+        p4m-spinner[species='progress'] #container paper-progress #progressContainer #secondaryProgress {
+          background: #37a553; }
+        p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress {
+          background: #37a553; }
+          p4m-spinner[species='progress'] #container paper-progress #progressContainer #primaryProgress:after {
+            background: #37a553;
+            height: 3px; }
   p4m-spinner[species='progress']#newcard-spinner {
     bottom: initial;
     top: 100px;
@@ -923,6 +927,7 @@ p4m-register, p4m-login, p4m-checkout {
   color: #555; }
 
 p4m-register h1, p4m-register h2, p4m-register h3, p4m-register h4, p4m-register h5, p4m-register h6, p4m-login h1, p4m-login h2, p4m-login h3, p4m-login h4, p4m-login h5, p4m-login h6, p4m-checkout h1, p4m-checkout h2, p4m-checkout h3, p4m-checkout h4, p4m-checkout h5, p4m-checkout h6 {
+  font-family: "Lato", sans-serif !important;
   font-weight: 600 !important;
   text-rendering: optimizeLegibility;
   letter-spacing: -.02em; }
@@ -968,6 +973,13 @@ paper-input .underline {
 
 .iron-overlay-backdrop-0.opened {
   z-index: 98 !important; }
+
+p4m-checkout > #container {
+  background-color: #fff !important;
+  box-shadow: none !important; }
+  p4m-checkout > #container #container {
+    background-color: transparent !important;
+    box-shadow: none !important; }
 
 p4m-card {
   display: flex;
@@ -1454,10 +1466,13 @@ i.p4micon-cart-empty {
       #p4mRegisterContainer .p4m-register-text-link a:hover {
         border-bottom: 2px solid #fff; }
   #p4mRegisterContainer .p4m-button.p4m-register-button {
-    font-weight: 400;
-    font-size: 14px;
-    padding: 10px 15px;
-    display: flex; }
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    padding: 10px 15px !important;
+    display: flex !important;
+    line-height: normal !important;
+    margin: 0 !important;
+    letter-spacing: normal !important; }
 
 p4m-checkout {
   /* Material Design color palette for P4M products */
@@ -2034,6 +2049,9 @@ p4m-checkout {
       font-size: 16px;
       line-height: 20px;
       color: #777; }
+      p4m-checkout footer p4m-order-text #container {
+        background-color: transparent !important;
+        box-shadow: none !important; }
       p4m-checkout footer p4m-order-text p {
         font-size: 16px;
         margin: 0; }
@@ -2170,11 +2188,14 @@ p4m-checkout {
     overflow-y: auto;
     overflow-x: hidden;
     height: 260px;
-    box-sizing: border-box; }
+    box-sizing: border-box;
+    background-color: #fff !important;
+    box-shadow: none !important; }
   p4m-checkout p4m-cart p4m-cart-card #container {
     padding: 10px;
     box-sizing: border-box;
-    position: relative; }
+    position: relative;
+    background-color: #fff !important; }
     p4m-checkout p4m-cart p4m-cart-card #container:after {
       content: '';
       width: calc(100% - 1rem);

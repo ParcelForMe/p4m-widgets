@@ -792,23 +792,28 @@ p4m-spinner[species='progress'] {
     position: absolute;
     bottom: 0;
     left: 0;
+    width: 100%;
     #container {
-        padding-bottom: 0;
+      padding-bottom: 0;
+      background-color: transparent;
+      paper-progress {
+        width: 100%;
         #progressContainer {
-            background: transparent;
-            height: 3px;
-            #secondaryProgress {
-                background: #37a553;
+          background: transparent;
+          height: 3px;
+          #secondaryProgress {
+            background: #37a553;
+          }
+          #primaryProgress {
+            background: #37a553;
+            &:after {
+              // background: #5fba76;
+              background: #37a553;
+              height: 3px;
             }
-            #primaryProgress {
-                background: #37a553;
-                &:after {
-                    // background: #5fba76;
-                    background: #37a553;
-                    height: 3px;
-                }
-            }
+          }
         }
+      }
     }
     // &#newcard-spinner {
     //   bottom: initial;
@@ -1125,6 +1130,7 @@ p4m-register, p4m-login, p4m-checkout {
 
 p4m-register, p4m-login, p4m-checkout {
     h1, h2, h3, h4, h5, h6 {
+      font-family: $p4m-font !important;
     	font-weight: 600 !important;
     	text-rendering: optimizeLegibility;
     	letter-spacing: -.02em;
@@ -1173,9 +1179,20 @@ paper-input .underline {
 	display: none !important;
 }
 
-// Quick Fix for easytees iron-overlay-background placing infront of modal dialog instead of behind
+// HACK FIX easytees iron-overlay-background placing infront of modal dialog instead of behind
 .iron-overlay-backdrop-0.opened {z-index: 98 !important;}
-// END Quick fix
+p4m-checkout {
+  > #container {
+    background-color: #fff !important;  // HACK FIX easytees container class conflict
+    box-shadow: none !important;  // HACK FIX easytees container class conflict
+    #container {
+      background-color: transparent !important;  // HACK FIX easytees container class conflict
+      box-shadow: none !important;  // HACK FIX easytees container class conflict
+    }
+  }
+}
+
+// END HACK FIX
 
 // Credit Card Instances
 p4m-card {
@@ -1736,11 +1753,15 @@ i.p4micon-cart-empty {
             }
         }
     }
-    .p4m-button.p4m-register-button {
-        font-weight: 400;
-        font-size: 14px;
-        padding: 10px 15px;
-        display: flex;
+    .p4m-button.p4m-register-button { 
+        // HACK FIX easytees - !importants used to override styles conflicts
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        padding: 10px 15px !important;
+        display: flex !important;
+        line-height: normal !important;
+        margin: 0 !important;
+        letter-spacing: normal !important;
     }
 }
 
@@ -2571,19 +2592,23 @@ p4m-checkout {
 
     	p4m-order-text {
     		flex: 2;
+        font-size: 16px;
+        line-height: 20px;
+        color: $grey-b2;
+        #container {
+          background-color: transparent !important;  // HACK FIX easytees container class conflict
+          box-shadow: none !important;  // HACK FIX easytees container class conflict
+        }
+        p {
             font-size: 16px;
-            line-height: 20px;
-            color: $grey-b2;
-            p {
-                font-size: 16px;
-                margin: 0;
+            margin: 0;
+        }
+        span {
+            font-weight: 600;
+            &.p4m-label {
+                color: #777;
             }
-            span {
-                font-weight: 600;
-                &.p4m-label {
-                    color: #777;
-                }
-            }
+        }
     	}
     	p4m-purchase {
     		flex: 1;
@@ -2772,16 +2797,19 @@ p4m-checkout {
     
 	p4m-cart {
 		> #container {
-            overflow-y: auto;
-            overflow-x: hidden;
-            height: 260px;
-            box-sizing: border-box;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 260px;
+        box-sizing: border-box;
+        background-color: #fff !important;  // HACK FIX easytees container class conflict
+        box-shadow: none !important;  // HACK FIX easytees container class conflict
 		}
 		p4m-cart-card {
 			#container {
 				padding: 10px;
 				box-sizing: border-box;
 				position: relative;
+        background-color: #fff !important;  // HACK FIX easytees container class conflict
 				&:after {
 					content: '';
 					width: calc(100% - 1rem);
