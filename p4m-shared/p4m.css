@@ -1366,6 +1366,56 @@ i.p4micon-cart-empty {
     top: 1px;
     left: 4px; }
 
+p4m-login #p4m-profile-container {
+  background: #37a553;
+  width: initial;
+  height: 40px;
+  color: #fff;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 3px;
+  padding-right: 15px; }
+  p4m-login #p4m-profile-container #p4m-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    margin-left: 12px; }
+    p4m-login #p4m-profile-container #p4m-logo svg {
+      fill: #fff; }
+  p4m-login #p4m-profile-container #profileImage {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin-right: 0; }
+  p4m-login #p4m-profile-container #loggingInMessage {
+    display: none;
+    justify-content: center;
+    width: 156px; }
+  p4m-login #p4m-profile-container #loginMessage {
+    display: flex;
+    justify-content: center;
+    width: 156px; }
+  p4m-login #p4m-profile-container #profileName {
+    display: none; }
+  p4m-login #p4m-profile-container.loggingIn #loggingInMessage {
+    display: flex;
+    flex: 1;
+    justify-content: center; }
+  p4m-login #p4m-profile-container.loggingIn #loginMessage {
+    display: none; }
+  p4m-login #p4m-profile-container.loggedIn #loggingInMessage {
+    display: none; }
+  p4m-login #p4m-profile-container.loggedIn #loginMessage {
+    display: none; }
+  p4m-login #p4m-profile-container.loggedIn #profileName {
+    display: flex;
+    flex: 1;
+    justify-content: center; }
+  p4m-login #p4m-profile-container.loggedIn #profileImage {
+    display: flex;
+    border-radius: 3px 0 0 3px; }
+
 #p4mRegisterContainer {
   display: flex;
   position: relative;

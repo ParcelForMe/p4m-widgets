@@ -1640,6 +1640,86 @@ i.p4micon-cart-empty {
 
 
 
+p4m-login {
+
+// Logged out
+  #p4m-profile-container {
+    background: #37a553;
+    width: initial;
+    height: 40px;
+    color: #fff;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    padding-right: 15px;
+    #p4m-logo {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+      margin-left: 12px;
+      svg {
+        fill: #fff;
+      }
+    }
+    #profileImage {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin-right: 0;
+    }
+    #loggingInMessage {
+      display: none;
+      justify-content: center;
+      width: 156px;
+    }
+    #loginMessage {
+      display: flex;
+      justify-content: center;
+      width: 156px;
+    }
+    #profileName {
+      display: none;
+    }
+
+// Logging in
+    &.loggingIn {
+      #loggingInMessage {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+      }
+      #loginMessage {
+        display: none;
+      }
+    }
+
+// Logged in
+    &.loggedIn {
+      #loggingInMessage {
+        display: none;
+      }
+      #loginMessage {
+        display: none;
+      }
+      #profileName {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+      }
+      #profileImage {
+        display: flex;
+        border-radius: 3px 0 0 3px;
+      }
+    }
+  }
+}
+
+
+
+
+
+
 
 //////////////////////////////////////////////////
 // Registration Widget

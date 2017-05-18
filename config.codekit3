@@ -20617,6 +20617,59 @@
 		"oAP": "\/p4m-overlay\/p4m-overlay.html",
 		"oF": 0
 		},
+	"\/p4m-profile\/blank-128.png": {
+		"ft": 32768,
+		"iS": 183,
+		"oA": 0,
+		"oAP": "\/p4m-profile\/blank-128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/p4m-profile\/guest-profile.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/p4m-profile\/guest-profile.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"\/p4m-profile\/p4m-logo-green-128.png": {
+		"ft": 32768,
+		"iS": 1227,
+		"oA": 0,
+		"oAP": "\/p4m-profile\/p4m-logo-green-128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/p4m-profile\/p4m-logo-white-128.png": {
+		"ft": 32768,
+		"iS": 1227,
+		"oA": 0,
+		"oAP": "\/p4m-profile\/p4m-logo-white-128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/p4m-profile\/p4m-logo.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/p4m-profile\/p4m-logo.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
 	"\/p4m-profile\/p4m-profile.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20639,6 +20692,17 @@
 		"iS": 2861,
 		"oA": 0,
 		"oAP": "\/p4m-profile\/peli-logo-grey.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/p4m-profile\/profile-test-image.png": {
+		"ft": 32768,
+		"iS": 3621,
+		"oA": 0,
+		"oAP": "\/p4m-profile\/profile-test-image.png",
 		"oF": 0,
 		"oIPL": 0,
 		"opt": 0,
