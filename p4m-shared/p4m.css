@@ -1367,6 +1367,7 @@ i.p4micon-cart-empty {
     left: 4px; }
 
 p4m-login .loginWidget {
+  cursor: pointer;
   background: #37a553;
   width: initial;
   height: 40px;
