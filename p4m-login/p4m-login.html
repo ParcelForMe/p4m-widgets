@@ -13,9 +13,9 @@
 <dom-module id="p4m-login">
 
     <template> 
-        <div class="loginWidget"> 
+        <div id="loginWidget" class="loginWidget hidden" on-click="launchPopup"> 
 
-            <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
+            <p4m-profile id="p4mProfile" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
 
             <div id="p4m-logo">
                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -198,6 +198,7 @@
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
+                    this.showAsLoggedIn();
                     // if the P4M Consumer is logged in, then check if they are logged in locally
                     var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
                     if (!localLogin || localLogin === "") {
@@ -222,6 +223,7 @@
                     }
                 }
                 else {
+                    this._showAsLoggedOut();
                     this.clearCookies();
                 	var locale = this.$.p4mLocaleCookie.readCookie();
                     if (!locale || locale === "") {
@@ -454,8 +456,25 @@
 
             onRequestForLogin: function () {
                 //If we hear a global event calling for a login
+                this.showAsLoggingIn();
                 this.launchPopup();
 
+            },
+
+            showAsLoggingIn: function() {
+                this.profileWidget.classList.add("hidden");
+                this.loginWidget.classList.add("loggingIn");
+            },
+
+            showAsLoggedIn: function() {
+                this.profileWidget.classList.remove("hidden");
+                this.loginWidget.classList.add("loggedIn");
+            },
+
+
+            showAsLoggedOut: function() {
+                this.profileWidget.classList.add("hidden");
+                this.loginWidget.classList.add("loggedOut");
             }
         });
     </script>
