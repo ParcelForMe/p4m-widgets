@@ -19772,17 +19772,6 @@
 		"opt": 0,
 		"q": 100
 		},
-	"\/example\/profile.png": {
-		"ft": 32768,
-		"iS": 15324,
-		"oA": 0,
-		"oAP": "\/example\/profile.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
 	"\/example\/README.md": {
 		"cS": 0,
 		"eF": 1,
@@ -20391,6 +20380,17 @@
 		"oAP": "\/local-image\/local-image.html",
 		"oF": 0
 		},
+	"\/local-image\/profile.png": {
+		"ft": 32768,
+		"iS": 2329,
+		"oA": 0,
+		"oAP": "\/local-image\/profile.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"\/map-region-manager\/map-region-manager.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20703,6 +20703,17 @@
 		"iS": 3621,
 		"oA": 0,
 		"oAP": "\/p4m-profile\/profile-test-image.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/p4m-profile\/profile.png": {
+		"ft": 32768,
+		"iS": 2329,
+		"oA": 0,
+		"oAP": "\/p4m-profile\/profile.png",
 		"oF": 0,
 		"oIPL": 0,
 		"opt": 0,
@@ -21156,8 +21167,8 @@
 		"oA": 0,
 		"oAP": "\/p4m-shared\/img\/profile.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},

@@ -1340,6 +1340,11 @@ i.p4micon-cart-empty {
     -o-border-radius: 50%;
     border-radius: 50%; }
 
+p4m-profile #profileImage img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; }
+
 #p4m-profile-container {
   display: flex;
   flex-direction: row;
@@ -1366,7 +1371,8 @@ i.p4micon-cart-empty {
     top: 1px;
     left: 4px; }
 
-p4m-login #p4m-profile-container {
+#loginWidget {
+  cursor: pointer;
   background: #37a553;
   width: initial;
   height: 40px;
@@ -1374,47 +1380,60 @@ p4m-login #p4m-profile-container {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  border-radius: 3px;
-  padding-right: 15px; }
-  p4m-login #p4m-profile-container #p4m-logo {
+  border-radius: 3px; }
+  #loginWidget #p4m-logo {
     width: 24px;
     height: 24px;
     margin-right: 4px;
     margin-left: 12px; }
-    p4m-login #p4m-profile-container #p4m-logo svg {
+    #loginWidget #p4m-logo svg {
       fill: #fff; }
-  p4m-login #p4m-profile-container #profileImage {
+  #loginWidget #p4m-profile-container {
+    display: flex;
+    flex-direction: row-reverse; }
+  #loginWidget #profileImage {
     display: none;
     width: 40px;
     height: 40px;
-    margin-right: 0; }
-  p4m-login #p4m-profile-container #loggingInMessage {
+    margin-right: 0;
+    margin-left: 12px; }
+    #loginWidget #profileImage #profileImg {
+      display: flex;
+      width: 40px;
+      height: 40px;
+      border-radius: 0 3px 3px 0; }
+    #loginWidget #profileImage svg {
+      display: none; }
+  #loginWidget #loggingInMessage {
     display: none;
     justify-content: center;
-    width: 156px; }
-  p4m-login #p4m-profile-container #loginMessage {
+    width: 156px;
+    margin-right: 8px; }
+  #loginWidget #loginMessage {
     display: flex;
     justify-content: center;
-    width: 156px; }
-  p4m-login #p4m-profile-container #profileName {
+    width: 156px;
+    margin-right: 8px; }
+  #loginWidget #profileName {
     display: none; }
-  p4m-login #p4m-profile-container.loggingIn #loggingInMessage {
+  #loginWidget.loggingIn #loggingInMessage {
     display: flex;
     flex: 1;
     justify-content: center; }
-  p4m-login #p4m-profile-container.loggingIn #loginMessage {
+  #loginWidget.loggingIn #loginMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #loggingInMessage {
+  #loginWidget.loggedIn #loggingInMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #loginMessage {
+  #loginWidget.loggedIn #loginMessage {
     display: none; }
-  p4m-login #p4m-profile-container.loggedIn #profileName {
+  #loginWidget.loggedIn #profileName {
     display: flex;
     flex: 1;
-    justify-content: center; }
-  p4m-login #p4m-profile-container.loggedIn #profileImage {
-    display: flex;
-    border-radius: 3px 0 0 3px; }
+    max-width: 100px;
+    overflow: hidden;
+    justify-content: flex-start; }
+  #loginWidget.loggedIn #profileImage {
+    display: flex; }
 
 #p4mRegisterContainer {
   display: flex;
