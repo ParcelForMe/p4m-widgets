@@ -1136,8 +1136,8 @@
                     //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
 
                     this.$.standardRatesTemplate.render();
-                    //this.fire('selectedservicechanged', this.selectedServiceDetails);
-                    //this._updateUi();
+                    this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    this._updateUi();
                     return this.selectedServiceDetails;
                 }
             },
