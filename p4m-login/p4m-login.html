@@ -13,7 +13,7 @@
 <dom-module id="p4m-login">
 
     <template> 
-        <div id="loginWidget" class="loginWidget hidden" on-click="launchPopup"> 
+        <div id="loginWidget" class="loginWidget" on-click="launchPopup"> 
 
             <p4m-profile id="p4mProfile" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
 
@@ -464,19 +464,19 @@
             },
 
             showAsLoggingIn: function() {
-                this.profileWidget.classList.add("hidden");
-                this.loginWidget.classList.add("loggingIn");
+                this.$.p4mProfile.classList.add("hidden");
+                this.$.loginWidget.classList.add("loggingIn");
             },
 
             showAsLoggedIn: function() {
-                this.profileWidget.classList.remove("hidden");
-                this.loginWidget.classList.add("loggedIn");
+                this.$.p4mProfile.classList.remove("hidden");
+                this.$.loginWidget.classList.add("loggedIn");
             },
 
 
             showAsLoggedOut: function() {
-                this.profileWidget.classList.add("hidden");
-                this.loginWidget.classList.add("loggedOut");
+                this.$.p4mProfile.classList.add("hidden");
+                this.$.loginWidget.classList.add("loggedOut");
             }
         });
     </script>
