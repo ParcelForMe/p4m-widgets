@@ -102,6 +102,9 @@
                 //      this.$.profileImg.classList.add("hidden");
                 //     this.$.profileBlank.classList.remove("hidden");                  
                 // }
+                if (!this._profilePicUrl) {
+                    this._profilePicUrl = this.resolveUrl("profile.png");
+                }
                 /*
                     if (this._loggedIn) {
                         this._profilePicUrl = this.resolveUrl("profile-test-image.png");
