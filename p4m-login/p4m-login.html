@@ -195,6 +195,7 @@
 
             ready: function () {
                 window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
@@ -231,6 +232,9 @@
                     	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
+
+                //Move dialog out into the body
+                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
             },
 
             _onGotLocale: function (err, data) {
@@ -446,6 +450,7 @@
             },
 
             showMenu: function(){
+
                 this.$['p4m-menu-wrapper'].classList.remove('hidden');
             },
 
