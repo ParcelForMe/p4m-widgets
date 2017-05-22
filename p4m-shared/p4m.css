@@ -1374,6 +1374,10 @@ p4m-profile #profileImage img {
     top: 1px;
     left: 4px; }
 
+p4m-login #loginWidget, p4m-login #p4m-menu-wrapper {
+  text-transform: none;
+  letter-spacing: normal; }
+
 #loginWidget {
   cursor: pointer;
   background: #37a553;
@@ -1384,7 +1388,9 @@ p4m-profile #profileImage img {
   display: inline-flex;
   align-items: center;
   border-radius: 3px;
-  position: relative; }
+  position: relative;
+  text-transform: none;
+  letter-spacing: normal; }
   #loginWidget #p4m-logo {
     width: 24px;
     height: 24px;
@@ -1444,6 +1450,36 @@ p4m-profile #profileImage img {
     justify-content: flex-start; }
   #loginWidget.loggedIn #profileImage {
     display: flex; }
+  #loginWidget.med {
+    height: 32px; }
+    #loginWidget.med #p4m-logo {
+      width: 21px;
+      height: 21px; }
+    #loginWidget.med #profileImage {
+      width: 32px;
+      height: 32px; }
+      #loginWidget.med #profileImage #profileImg {
+        width: 32px;
+        height: 32px; }
+    #loginWidget.med #loggingInMessage, #loginWidget.med #loginMessage {
+      width: 146px; }
+    #loginWidget.med #loginMessage, #loginWidget.med #loggingInMessage, #loginWidget.med #profileName {
+      font-size: 14px; }
+  #loginWidget.sml {
+    height: 24px; }
+    #loginWidget.sml #p4m-logo {
+      width: 18px;
+      height: 18px; }
+    #loginWidget.sml #profileImage {
+      width: 24px;
+      height: 24px; }
+      #loginWidget.sml #profileImage #profileImg {
+        width: 24px;
+        height: 24px; }
+    #loginWidget.sml #loggingInMessage, #loginWidget.sml #loginMessage {
+      width: 136px; }
+    #loginWidget.sml #loginMessage, #loginWidget.sml #loggingInMessage, #loginWidget.sml #profileName {
+      font-size: 12px; }
 
 #p4mRegisterContainer {
   display: flex;
