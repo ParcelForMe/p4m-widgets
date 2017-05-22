@@ -1,5 +1,4 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
 
 <dom-module id="p4m-profile">
 
@@ -13,7 +12,7 @@
             </div>
             
             <div id="profileName">{{_profileName}}</div>
-            <paper-spinner id="spinner"></paper-spinner>
+
         </div>
     </template>
 
@@ -122,15 +121,6 @@
                 this.show();
             },
 
-            hideSpinner: function () {
-                this.$.spinner.active = false;
-                this.$.spinner.classList.add('hidden');
-            },
-
-            showSpinner: function () {
-                this.$.spinner.active = true;
-                this.$.spinner.classList.remove('hidden');
-            }
         });
     </script>
 </dom-module>

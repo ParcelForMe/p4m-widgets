@@ -2,7 +2,7 @@
 <link rel="import" href="../../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../../paper-dialog/paper-dialog.html" />
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../../paper-menu/paper-menu.html" />
 <link rel="import" href="../../paper-item/paper-item.html" />
 <link rel="import" href="../p4m-profile/p4m-profile.html" />
@@ -32,7 +32,7 @@
             <div id="loginMessage">Use 1 Click Checkout</div>
             <div id="loggingInMessage">Logging in ...</div>
             <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
-
+            <p4m-spinner id="spinner" species="progress" class="login_widget_spinner"></p4m-spinner>
         </div>
         
 
@@ -198,7 +198,7 @@
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
-                    this.showAsLoggedIn();
+                    this._showAsLoggedIn();
                     // if the P4M Consumer is logged in, then check if they are logged in locally
                     var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
                     if (!localLogin || localLogin === "") {
@@ -257,6 +257,7 @@
 			
             showPopup: function(){
                     //Make AuthUrl
+                    this._showAsLoggingIn();
                     this._makeState();
                     this._makeAuthUrl();
                     this.popupCenter(this._authUrl, "Login", 450, 500);
@@ -377,13 +378,13 @@
 
             _onAuthCompletion: function () {
                 var currentPage = { "currentPage": window.location.href };
-                this.$.p4mProfile.showSpinner();
+                this._showAsLoggingIn();
                 this.$.localApi.call('localLogin', currentPage, null, this._onLocalLogin.bind(this));
             },
 
             _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
-                this.$.p4mProfile.hideSpinner();
+                this._showAsLoggedIn();
                 if (data.RedirectUrl) {
                     window.location.href = data.RedirectUrl;
                 }
@@ -465,23 +466,25 @@
 
             onRequestForLogin: function () {
                 //If we hear a global event calling for a login
-                this.showAsLoggingIn();
+                this._showAsLoggingIn();
                 this.launchPopup();
 
             },
 
-            showAsLoggingIn: function() {
+            _showAsLoggingIn: function() {
                 this.$.p4mProfile.classList.add("hidden");
                 this.$.loginWidget.classList.add("loggingIn");
+                this.$.spinner.active = true;
             },
 
-            showAsLoggedIn: function() {
+            _showAsLoggedIn: function() {
                 this.$.p4mProfile.classList.remove("hidden");
                 this.$.loginWidget.classList.add("loggedIn");
+                this.$.spinner.active = false;
             },
 
 
-            showAsLoggedOut: function() {
+            _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
                 this.$.loginWidget.classList.add("loggedOut");
             }

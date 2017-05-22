@@ -704,6 +704,9 @@ p4m-spinner[species='progress'] {
     left: 50%;
     margin-left: -100px;
     z-index: 0; }
+  p4m-spinner[species='progress'].login_widget_spinner {
+    background: white;
+    opacity: .65; }
 
 [data-tooltip] {
   position: relative;
@@ -1380,7 +1383,8 @@ p4m-profile #profileImage img {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  border-radius: 3px; }
+  border-radius: 3px;
+  position: relative; }
   #loginWidget #p4m-logo {
     width: 24px;
     height: 24px;
@@ -1388,9 +1392,15 @@ p4m-profile #profileImage img {
     margin-left: 12px; }
     #loginWidget #p4m-logo svg {
       fill: #fff; }
+  #loginWidget p4m-profile {
+    display: flex;
+    flex: 1;
+    min-width: 100px; }
   #loginWidget #p4m-profile-container {
     display: flex;
-    flex-direction: row-reverse; }
+    flex: 1;
+    flex-direction: row-reverse;
+    min-width: 100px; }
   #loginWidget #profileImage {
     display: none;
     width: 40px;
