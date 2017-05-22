@@ -844,6 +844,10 @@ p4m-spinner[species='progress'] {
           // width: 100%;
       }
     }
+    &.login_widget_spinner {
+      background: rgba(255,255,255,1);
+      opacity: .65;
+    }
 }
 
 
@@ -1652,7 +1656,12 @@ p4m-profile {
 
 
 
-
+p4m-login {
+  #loginWidget, #p4m-menu-wrapper {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
 // Logged out
 #loginWidget {
   cursor: pointer;
@@ -1664,6 +1673,9 @@ p4m-profile {
   display: inline-flex;
   align-items: center;
   border-radius: 3px;
+  position: relative;
+  text-transform: none;
+  letter-spacing: normal;
   #p4m-logo {
     width: 24px;
     height: 24px;
@@ -1673,9 +1685,16 @@ p4m-profile {
       fill: #fff;
     }
   }
+  p4m-profile {
+    display: flex;
+    flex: 1;
+    min-width: 100px;
+  }
   #p4m-profile-container {
     display: flex;
+    flex: 1;
     flex-direction: row-reverse;
+    min-width: 100px;
   }
   #profileImage {
     display: none;
@@ -1740,8 +1759,72 @@ p4m-profile {
       display: flex;
     }
   }
-}
 
+
+  // Sizes
+
+  // Medium - 32px
+  &.med {
+    height: 32px;
+    #p4m-logo {
+      width: 21px;
+      height: 21px;
+    }
+    #profileImage {
+      width: 32px;
+      height: 32px;
+      #profileImg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+    #loggingInMessage, #loginMessage {
+      width: 146px;
+    }
+    #loginMessage, #loggingInMessage, #profileName {
+      font-size: 14px;
+    }
+  }
+
+  // Small - 24px
+  &.sml {
+    height: 24px;
+    #p4m-logo {
+      width: 18px;
+      height: 18px;
+    }
+    #profileImage {
+      width: 24px;
+      height: 24px;
+      #profileImg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    #loggingInMessage, #loginMessage {
+      width: 136px;
+    }
+    #loginMessage, #loggingInMessage, #profileName {
+      font-size: 12px;
+    }
+  }
+
+  // Colours
+
+  // White
+  &.white {
+    background: #fff;
+    color: #37a553;
+    #p4m-logo svg {
+      fill: #37a553;
+    }
+    #loginMessage, #loggingInMessage, #profileName {
+      color: #37a553;
+    }
+  }
+
+
+}
 
 
 
