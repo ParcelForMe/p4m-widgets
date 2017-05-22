@@ -1809,6 +1809,20 @@ p4m-login {
     }
   }
 
+  // Colours
+
+  // White
+  &.white {
+    background: #fff;
+    color: #37a553;
+    #p4m-logo svg {
+      fill: #37a553;
+    }
+    #loginMessage, #loggingInMessage, #profileName {
+      color: #37a553;
+    }
+  }
+
 
 }
 
