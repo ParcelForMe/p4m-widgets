@@ -516,7 +516,6 @@
                     //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
-                    console.log("toggle loading off", new Error().stack);
                     this.$.orderSummary.showAsLoaded();
                     this._showAsLoadingShipping(false);
                     this._toggleCartEditing(true);
@@ -680,7 +679,7 @@
                                 self.set('cartData.ExpDeliveryDate', data.expDeliveryDate);
                                 self.set('cartData.Tax', cartTotals.Tax);
                                 self.set('cartData.Total', cartTotals.Total);
-
+                                debugger;
                                 if (data.collectionPoint) {
                                     self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function (err) {
                                         self.updateP4mCart(function (err) {
@@ -744,6 +743,9 @@
 
                     };
                     self.saveAddress(address, function (err, result) {
+                        debugger;
+                        self.set('cartData.AddressId', result.Id);
+                        self.notifyPath('cartData');
                         callback(err);
                     });
                             
@@ -863,7 +865,7 @@
             //TODO: Take an extra parameter: send to GFS
             //This allows two-way binding without feedback loop
             selectDeliveryAddress: function (addressId, sendToGfs, callback) {
-
+                var self = this;
                 var address = this.getAddressById(addressId);
                 if (!address) {
                     callback("No such address");
@@ -876,7 +878,10 @@
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
                         //alert('TODO: Ask GFS Checkout for new details');
-                        this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, callback);
+                        this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
+                            self.set('cartData.AddressId', addressId); //This allows the address UI to update
+                            callback(null, address);
+                        });
                     }
                     else {
                         this.set('cartData.AddressId', addressId); //This allows the address UI to update
@@ -919,7 +924,6 @@
                                 callback(err);
                             });
                         },
-
                         /*
                         function _updateP4m(callback) {
                             self.updateP4mCart(callback);
