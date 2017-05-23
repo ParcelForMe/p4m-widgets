@@ -80,6 +80,7 @@
                     this._profilePicUrl = null;
                 else
                     this._profilePicUrl = unescape(picUrl);
+
                 this._profileName = this.$.p4mGivenNameCookie.readCookie();
 
                 //Check to see if the user is logged in
@@ -104,6 +105,7 @@
                 if (!this._profilePicUrl) {
                     this._profilePicUrl = this.resolveUrl("profile.png");
                 }
+
                 /*
                     if (this._loggedIn) {
                         this._profilePicUrl = this.resolveUrl("profile-test-image.png");
@@ -115,9 +117,15 @@
             },
 
             onProfileData: function (e) {
-                this.p4mData = e.detail;
-                this._profilePicUrl = this.p4mData.Consumer.ProfilePicUrl;
-                this._profileName = this.p4mData.Consumer.GivenName;
+
+                //this.p4mData = e.detail;
+                if (!this._profilePicUrl) {
+                    this._profilePicUrl = this.p4mData.Consumer.ProfilePicUrl;
+                }
+                if (!this._profileName) {
+                    this._profileName = this.p4mData.Consumer.GivenName;
+                }
+
                 this.show();
             },
 
