@@ -20545,12 +20545,6 @@
 		"oAP": "\/p4m-cart\/p4m-cart.html",
 		"oF": 0
 		},
-	"\/p4m-checkout\/p4m-checkout.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-checkout\/p4m-checkout.html",
-		"oF": 0
-		},
 	"\/p4m-country-select\/p4m-country-select.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -20603,12 +20597,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/p4m-order-text\/p4m-order-glance.html",
-		"oF": 0
-		},
-	"\/p4m-order-text\/p4m-order-text.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/p4m-order-text\/p4m-order-text.html",
 		"oF": 0
 		},
 	"\/p4m-overlay\/p4m-overlay.html": {
