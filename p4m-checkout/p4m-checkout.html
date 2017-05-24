@@ -60,7 +60,7 @@
                             <p4m-address-list id="addressList" address-list-data="{{consumerData.Addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                            <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                             <template is="dom-if" if="{{_notUseGfsCheckout}}">
                                 <p4m-delivery></p4m-delivery>
                             </template>
@@ -181,6 +181,9 @@
                 initialCountryCode: {
                     type: String,
                     value: "GB"
+                },
+                onSessionExpiry: {
+                    type: String
                 },
                 _notUseGfsCheckout: {
                     type: Object,
@@ -679,7 +682,7 @@
                                 self.set('cartData.ExpDeliveryDate', data.expDeliveryDate);
                                 self.set('cartData.Tax', cartTotals.Tax);
                                 self.set('cartData.Total', cartTotals.Total);
-                                debugger;
+                                //debugger;
                                 if (data.collectionPoint) {
                                     self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function (err) {
                                         self.updateP4mCart(function (err) {
@@ -743,9 +746,9 @@
 
                     };
                     self.saveAddress(address, function (err, result) {
-                        debugger;
-                        self.set('cartData.AddressId', result.Id);
-                        self.notifyPath('cartData');
+                        //debugger;
+                        self.set('cartData.AddressId', result.Address.Id);
+                        self.notifyPath('cartData.AddressId');
                         callback(err);
                     });
                             
@@ -753,6 +756,7 @@
                 else {
                     //TODO: Replace with selectDeliveryAddress?
                     this.set('cartData.AddressId', existingDropPoint.Id); //collectPointAddress.Id;
+                    this.notifyPath('cartData.AddressId');
                     result = existingDropPoint;
                     callback(null);
                 }
@@ -880,11 +884,13 @@
                         //alert('TODO: Ask GFS Checkout for new details');
                         this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                             self.set('cartData.AddressId', addressId); //This allows the address UI to update
+                            self.notifyPath('cartData.AddressId');
                             callback(null, address);
                         });
                     }
                     else {
                         this.set('cartData.AddressId', addressId); //This allows the address UI to update
+                        this.notifyPath('cartData.AddressId');
                         callback(null, address);
                     }
                     //callback(null, address);                
@@ -913,6 +919,10 @@
                 };
                 var self = this;
                 var result = null
+
+                var existingAddress = this.getAddressById(address.Id);
+                if (existingAddress) existingAddress.Id = "";
+                this.push('consumerData.Addresses', address);
 
                 async.series(
                     [
@@ -1051,6 +1061,18 @@
                 console.error('No GFS service');
             },
 
+            onGfsSessionExpiry: function (e) {
+                console.log("GFS Checkout session expired");
+                if (this.onSessionExpiry) {
+                    window[this.onSessionExpiry]();
+                }
+                else
+                {
+                    window.reload();
+                }
+                
+            },
+
             getAddressById: function(id) {
                 if (!this.consumerData) {
                     return null;
@@ -1137,6 +1159,7 @@
         }
 
         function hashThis(value) {
+            //return Math.random().toString();
             return value.split("").reverse().join("")
         }
     </script>
