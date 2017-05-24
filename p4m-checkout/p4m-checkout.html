@@ -679,7 +679,6 @@
                                 self.set('cartData.ExpDeliveryDate', data.expDeliveryDate);
                                 self.set('cartData.Tax', cartTotals.Tax);
                                 self.set('cartData.Total', cartTotals.Total);
-                                debugger;
                                 if (data.collectionPoint) {
                                     self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function (err) {
                                         self.updateP4mCart(function (err) {

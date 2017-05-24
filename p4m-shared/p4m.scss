@@ -1867,10 +1867,10 @@ p4m-login {
   .restoreCartStatusMessage {
     display: none !important;
   }
-  .p4m-register-logo.p4m-login {
+  .p4m-register-logo {
     min-width: initial;
     height: auto;
-    width: 128px !important;
+    width: 160px !important;
     padding: 0 !important;
     align-self: center;
     margin-bottom: 25px;
@@ -3334,6 +3334,7 @@ footer.p4m-checkout {
             justify-content: flex-end;
             align-items: center;
             button {
+                cursor: pointer;
                 height: 42px;
                 display: flex;
                 align-items: center;
