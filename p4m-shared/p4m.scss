@@ -1828,6 +1828,61 @@ p4m-login {
 
 
 
+// Restore last Cart Dialog 
+
+#lastCartDlg {
+  background: #37a553;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 35px;
+  width: 430px;
+  max-width: 90%;
+  > * {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+  }
+  > h2 {
+    font-size: 28px;
+    line-height: 36px;
+    font-family: "Lato", sans-serif;
+    text-transform: none;
+    padding: 0;
+    margin: 0;
+  }
+  > p {
+    font-style: italic;
+    font-size: 15px;
+    text-align: center;
+    margin: .5em 0;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  .buttons {
+    margin: 20px 0 0 0 !important;
+    padding: 0 !important;
+  }
+  .restoreCartStatusMessage {
+    display: none !important;
+  }
+  .p4m-register-logo {
+    min-width: initial;
+    height: auto;
+    width: 128px !important;
+    padding: 0 !important;
+    align-self: center;
+    margin-bottom: 25px;
+    box-sizing: border-box;
+  }
+  .restoreCartMessage {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+
 
 
 
