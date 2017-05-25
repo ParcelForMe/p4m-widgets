@@ -1,0 +1,47 @@
+.portfolio-realex {
+  background: transparent;
+  max-width: 100%; }
+
+#rxp-header .rxp-title {
+  padding: .5em 20px 0 20px;
+  margin: 0;
+  font-size: 1.3em;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  font-weight: 600; }
+
+#another-card-section {
+  background: #f8f8f8;
+  border: none;
+  border-radius: 0; }
+
+.form-control {
+  border-radius: 0; }
+
+.input-group-addon:last-child {
+  border-radius: 0; }
+
+.btn {
+  border-radius: 0; }
+
+.btn-hpp-a {
+  background-color: #37a553;
+  color: #FFF;
+  padding: 15px;
+  box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+  border: 0;
+  -webkit-appearance: none;
+  font-size: 18px;
+  line-height: 1em;
+  height: auto;
+  font-weight: 500;
+  text-transform: none;
+  border-radius: 0; }
+
+.btn-hpp-a:hover, .btn-hpp-a:active {
+  background-color: #37a553;
+  color: #FFF;
+  box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+  border: 0;
+  font-weight: 500;
+  text-transform: none; }

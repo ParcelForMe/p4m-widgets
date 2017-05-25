@@ -699,6 +699,7 @@ p4m-spinner[species='progress'] {
     top: 100px;
     left: 50%;
     margin-left: -100px;
+    width: 200px;
     bottom: initial;
     top: 180px;
     left: 50%;
