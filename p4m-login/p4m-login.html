@@ -201,14 +201,14 @@
 
             _onGotLocale: function (err, data) {
                 //console.log(JSON.stringify(data));
-                if (data && !data.Success) {
+                if (data && !data.success) {
                     err = data.message;
                 }
                 if (err) {
                     throw err;
                 }
                 else {
-                    document.cookie = "p4mLocale=" + data.Token + "; path=/";
+                    document.cookie = "p4mLocale=" + data.token + "; path=/";
                 }
             },
 

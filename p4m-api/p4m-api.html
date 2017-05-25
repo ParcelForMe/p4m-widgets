@@ -185,10 +185,6 @@
                     type: String,
                     value: "dev-api" //local, dev, test, live
                 },
-                port: {
-                    type: Number,
-                    value: 44321
-                },
                 version: {
                     type: String,
                     value: "v2"
@@ -224,7 +220,7 @@
                     return "//" + window.location.host + "/p4m/";                   
                 }
                 else {
-                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "." + this.hostBaseDomain + ":" + this.port + "/api/" + this.version + "/";
+                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "-api." + this.hostBaseDomain +  "/api/" + this.version + "/";
                 }               
             },
 
