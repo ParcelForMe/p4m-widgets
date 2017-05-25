@@ -206,6 +206,7 @@
             observers: [
                 //"onCartDiscountChange(cartData.Discounts.*)"
                "onCartItemsChange(cartData.Items.*)"
+               //"onConsumerAddressChange(consumerData.Addresses.*)"
             ],
 
             ready: function()
@@ -749,6 +750,7 @@
                         //debugger;
                         self.set('cartData.AddressId', result.Address.Id);
                         self.notifyPath('cartData.AddressId');
+                        self.notifyPath('consumerData.Addresses');
                         callback(err);
                     });
                             
@@ -881,7 +883,9 @@
 
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
+                        
                         //alert('TODO: Ask GFS Checkout for new details');
+                        
                         this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                             self.set('cartData.AddressId', addressId); //This allows the address UI to update
                             self.notifyPath('cartData.AddressId');
@@ -921,7 +925,7 @@
                 var result = null
 
                 var existingAddress = this.getAddressById(address.Id);
-                if (existingAddress) existingAddress.Id = "";
+                if (existingAddress) existingAddress.Id = ""; //TODO: Remove this item, or replace it
                 this.push('consumerData.Addresses', address);
 
                 async.series(
@@ -930,17 +934,15 @@
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
                                 address.Id = result.Address.Id;
+                                self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses())
 
                                 callback(err);
                             });
                         },
-                        /*
-                        function _updateP4m(callback) {
-                            self.updateP4mCart(callback);
-                        },*/
-                        function _getConsumer(callback) {
-                            callback(null, result)
-                        },
+                        
+                        //function _getConsumer(callback) {
+                        //    callback(null, result)
+                        //},
                         function _selectAddress(callback) {
                             self.selectDeliveryAddress(result.Address.Id, true, function(err, data) {
                                 //  result = data;

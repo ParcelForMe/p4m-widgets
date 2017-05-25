@@ -197,6 +197,8 @@
             },
 
             save: function () {
+                this.addressData.AddressType = "Address";
+                this.notifyPath('addressData');
                 this.fire('save', this);
                 this.mode = "view";
             },
