@@ -36,13 +36,22 @@ exports.getP4MAccessToken = function(req, res) {
 			"Authorization": "Basic " + new Buffer("10006:secret").toString('base64'),
 			"Content-Type": "application/x-www-form-urlencoded"
 		},
-		form : data
+		port: 443,
+
+		form : data,
+	
+		rejectUnauthorized : false
+
 	}
 
 
+	function isEmptyObject(obj) {
+		return !Object.keys(obj).length;
+	}
+
 	request.post(options, function(error, response, body) {
 
-		if (error) {
+		if (error && !isEmptyObject(error)) {
 			res.status(500).send(error);
 		}
 
