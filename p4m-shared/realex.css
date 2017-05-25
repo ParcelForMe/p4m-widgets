@@ -27,6 +27,10 @@
 .input-group-addon:last-child {
     border-radius: 0;
 }
+div#info-box-footer {
+    padding: 0;
+    margin: 1em 0;
+}
 .btn {
 	border-radius: 0;
 }
