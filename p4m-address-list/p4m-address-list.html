@@ -15,7 +15,6 @@
                         <i class="p4micon-add-circle link"></i>
                     </div>
                 </div>
-                <!-- help BAZ! - please add the cancel function into div.add-new above - to create the same add/cancel UX as in p4m-card list -->
                 <iron-pages id="addressSelectionPages" selected="1"> 
                     <iron-page>
                         <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
@@ -94,7 +93,10 @@
                 "onCartAddressDataChange(cartData.BillingAddressId)",
                 "onCartAddressDataChange(cartData.AddressId)",
                 "onCartAddressDataChange(addressListData)"
+            
+                //"onCartAddressDataChange(addressListData.*)"
             ],
+                
 
             ready: function()
             {
@@ -145,15 +147,20 @@
 
             onSaveNewAddress: function(addressElement) {
                 this.fire('add', addressElement.detail);
+                this.notifyPath('addressListData');
+                this.$.oldAddresses.render();
+                this.toggleAddressMode();
             },
 
             onUpdateAddress: function (addressElement) {
                 this.fire('update', addressElement.detail);
+                this.$.oldAddresses.render();
             },
 
             onSelectAddress: function (e) {
                 console.log("*** Selected address");
                 this.fire('select', e.detail);
+
             },
 
             onCartAddressDataChange: function (e) {
@@ -172,11 +179,13 @@
             },
 
             filterNewOnly: function (e) {
-                return (typeof(e.Label) === "undefined");
+                return (e && typeof(e.Label) === "undefined");
             },
 
             filterOldOnly: function (e) {
-                return (typeof (e.Label) === "string" && e.AddressType == "Address");
+                //return true;
+                //return false;
+                return (e && typeof (e.Label) === "string" && e.AddressType == "Address");
             },
 
             showAsLoaded: function () {
