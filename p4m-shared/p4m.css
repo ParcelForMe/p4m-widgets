@@ -699,6 +699,7 @@ p4m-spinner[species='progress'] {
     top: 100px;
     left: 50%;
     margin-left: -100px;
+    width: 200px;
     bottom: initial;
     top: 180px;
     left: 50%;
@@ -1520,10 +1521,10 @@ p4m-login #loginWidget, p4m-login #p4m-menu-wrapper {
     padding: 0 !important; }
   #lastCartDlg .restoreCartStatusMessage {
     display: none !important; }
-  #lastCartDlg .p4m-register-logo.p4m-login {
+  #lastCartDlg .p4m-register-logo {
     min-width: initial;
     height: auto;
-    width: 128px !important;
+    width: 160px !important;
     padding: 0 !important;
     align-self: center;
     margin-bottom: 25px;
@@ -2556,6 +2557,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
     justify-content: flex-end;
     align-items: center; }
     footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button {
+      cursor: pointer;
       height: 42px;
       display: flex;
       align-items: center;
