@@ -90,8 +90,8 @@
             },
 
             observers: [
-                "onCartAddressDataChange(cartData.BillingAddressId)",
-                "onCartAddressDataChange(cartData.AddressId)",
+                "onCartAddressDataChange(cartData.billingAddressId)",
+                "onCartAddressDataChange(cartData.addressId)",
                 "onCartAddressDataChange(addressListData)"
             
                 //"onCartAddressDataChange(addressListData.*)"
@@ -179,13 +179,13 @@
             },
 
             filterNewOnly: function (e) {
-                return (e && typeof(e.Label) === "undefined");
+                return (e && typeof(e.label) === "undefined");
             },
 
             filterOldOnly: function (e) {
                 //return true;
                 //return false;
-                return (e && typeof (e.Label) === "string" && e.AddressType == "Address");
+                return (e && typeof (e.label) === "string" && e.addressType == "Address");
             },
 
             showAsLoaded: function () {
@@ -201,7 +201,7 @@
             },
 
             getDropPointById: function (dropPointId) {
-                return (this.addressListData.find(function (item) { return item.DropPointId == dropPointId }));
+                return (this.addressListData.find(function (item) { return item.dropPointId == dropPointId }));
             }
 
         });
