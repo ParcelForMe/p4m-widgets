@@ -18,11 +18,14 @@
                 <iron-pages id="addressSelectionPages" selected="1"> 
                     <iron-page>
                         <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
+
                             <p4m-address show-cancel="false" address-data="{{item}}" on-canceledit="toggleAddressMode" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
+                            
                         </template>
                     </iron-page>
                     <iron-page>
                         <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOnly">
+                        
                             <p4m-address show-cancel="true" address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" mode="view" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
                         </template>
                     </iron-page>
@@ -92,9 +95,9 @@
             observers: [
                 "onCartAddressDataChange(cartData.BillingAddressId)",
                 "onCartAddressDataChange(cartData.AddressId)",
-                "onCartAddressDataChange(addressListData)",
+                "onCartAddressDataChange(addressListData)"
             
-                "onCartAddressDataChange(addressListData.*)"
+                //"onCartAddressDataChange(addressListData.*)"
             ],
                 
 
@@ -165,6 +168,7 @@
 
             onCartAddressDataChange: function (e) {
                 var i = 0;
+
                 this.$.oldAddresses.render();
                 /*
                 console.log("*** Changed delivery or billing address", e);
