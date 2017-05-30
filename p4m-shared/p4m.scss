@@ -2597,6 +2597,12 @@ p4m-checkout {
             text-transform: uppercase;
             color: #aaa;
 		}
+    table, tr, td {
+      border: none !important;
+    }
+    td li {
+      line-height: 14px;
+    }
 	}
 	#opening-hours-link {
 		display: flex;

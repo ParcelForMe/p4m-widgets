@@ -2033,6 +2033,10 @@ p4m-checkout {
     margin-top: 8px;
     text-transform: uppercase;
     color: #aaa; }
+  p4m-checkout .dp-opening-hours table, p4m-checkout .dp-opening-hours tr, p4m-checkout .dp-opening-hours td {
+    border: none !important; }
+  p4m-checkout .dp-opening-hours td li {
+    line-height: 14px; }
   p4m-checkout #opening-hours-link {
     display: flex;
     align-items: center; }
