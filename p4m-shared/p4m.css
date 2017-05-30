@@ -674,6 +674,46 @@ a, a:visited {
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out; }
 
+@-webkit-keyframes attnRightBounce {
+  from {
+    transform: translate(100%, 0); }
+  50% {
+    transform: translate(102%, 0); }
+  to {
+    transform: translate(100%, 0); } }
+
+@-webkit-keyframes attnRightBounceAfter {
+  from {
+    right: -7px; }
+  50% {
+    right: -12px; }
+  to {
+    right: -7px; } }
+
+[data-tooltip].attnRight:before {
+  visibility: visible !important;
+  opacity: 1;
+  background: #e83e3e !important;
+  font-size: 14px;
+  padding: 2px 8px;
+  animation-name: attnRightBounce;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite !important;
+  animation-timing-function: ease-in-out;
+  box-shadow: 0 3px 5px rgba(100, 100, 100, 0.4); }
+
+[data-tooltip].attnRight:after {
+  visibility: visible !important;
+  border-right-color: #e83e3e !important;
+  opacity: 1;
+  animation-name: attnRightBounceAfter !important;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out; }
+
+[data-tooltip].attnRight input#cvvField, [data-tooltip].attnRight input#cvvField:focus {
+  border-color: #e83e3e !important; }
+
 p4m-spinner[species='progress'] {
   position: absolute;
   bottom: 0;
