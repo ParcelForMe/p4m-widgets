@@ -1299,7 +1299,7 @@ p4m-card {
         border: 2px solid $grey-h6;
         &:focus {
             outline: none;
-            border-color: $p4m-green;
+            border-color: $p4m-green !important;
         }
     }
 }

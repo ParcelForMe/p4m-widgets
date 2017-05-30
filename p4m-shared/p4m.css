@@ -1070,7 +1070,7 @@ p4m-card {
     border: 2px solid #e0e0e0; }
     p4m-card .show-cvv #cvvField:focus {
       outline: none;
-      border-color: #37a553; }
+      border-color: #37a553 !important; }
 
 p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
   display: block;
