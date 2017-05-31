@@ -791,15 +791,18 @@ a, a:visited {
 //   50% { transform: translate(10px, 0); }
 //   to { transform: translate(0, 0); }
 // }
-@-webkit-keyframes attnRightBounce {
-  from { transform: translate(100%, 0); }
-  50% { transform: translate(102%, 0); }
-  to { transform: translate(100%, 0); }
+@keyframes attnRightBounce {
+  from { transform: translate(100%, 0); animation-timing-function: ease-out;}
+  50% { transform: translate(102%, 0); animation-timing-function: ease-in;}
+  to { transform: translate(100%, 0); animation-timing-function: ease-out;}
 }
-@-webkit-keyframes attnRightBounceAfter {
-  from { right: -7px; }
-  50% { right: -12px; }
-  to { right: -7px; }
+@keyframes attnRightBounceAfter {
+  // from { right: -7px; }
+  // 50% { right: -12px; }
+  // to { right: -7px; }
+  from { transform: translate(15%, 0); animation-timing-function: ease-out;}
+  50% { transform: translate(150%, 0); animation-timing-function: ease-in;}
+  to { transform: translate(15%, 0); animation-timing-function: ease-out;}
 }
 
 // [data-tooltip][class*="attn"]:before {
@@ -820,7 +823,6 @@ a, a:visited {
   animation-name: attnRightBounce;
   animation-duration: 1.2s;
   animation-iteration-count: infinite !important;
-  animation-timing-function: ease-in-out;
   box-shadow: 0 3px 5px rgba(100,100,100,0.4);
 }
 
@@ -831,7 +833,6 @@ a, a:visited {
   animation-name: attnRightBounceAfter !important;
   animation-duration: 1.2s;
   animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
 }
 [data-tooltip].attnRight input#cvvField, [data-tooltip].attnRight input#cvvField:focus {
       border-color: #e83e3e !important;

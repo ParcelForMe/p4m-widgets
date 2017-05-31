@@ -674,21 +674,27 @@ a, a:visited {
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out; }
 
-@-webkit-keyframes attnRightBounce {
+@keyframes attnRightBounce {
   from {
-    transform: translate(100%, 0); }
+    transform: translate(100%, 0);
+    animation-timing-function: ease-out; }
   50% {
-    transform: translate(102%, 0); }
+    transform: translate(102%, 0);
+    animation-timing-function: ease-in; }
   to {
-    transform: translate(100%, 0); } }
+    transform: translate(100%, 0);
+    animation-timing-function: ease-out; } }
 
-@-webkit-keyframes attnRightBounceAfter {
+@keyframes attnRightBounceAfter {
   from {
-    right: -7px; }
+    transform: translate(15%, 0);
+    animation-timing-function: ease-out; }
   50% {
-    right: -12px; }
+    transform: translate(150%, 0);
+    animation-timing-function: ease-in; }
   to {
-    right: -7px; } }
+    transform: translate(15%, 0);
+    animation-timing-function: ease-out; } }
 
 [data-tooltip].attnRight:before {
   visibility: visible !important;
@@ -699,7 +705,6 @@ a, a:visited {
   animation-name: attnRightBounce;
   animation-duration: 1.2s;
   animation-iteration-count: infinite !important;
-  animation-timing-function: ease-in-out;
   box-shadow: 0 3px 5px rgba(100, 100, 100, 0.4); }
 
 [data-tooltip].attnRight:after {
@@ -708,8 +713,7 @@ a, a:visited {
   opacity: 1;
   animation-name: attnRightBounceAfter !important;
   animation-duration: 1.2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out; }
+  animation-iteration-count: infinite; }
 
 [data-tooltip].attnRight input#cvvField, [data-tooltip].attnRight input#cvvField:focus {
   border-color: #e83e3e !important; }
