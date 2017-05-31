@@ -676,41 +676,50 @@ a, a:visited {
 
 @keyframes attnRightBounce {
   from {
-    transform: translate(100%, 0);
+    transform: translate(0, 0);
     animation-timing-function: ease-out; }
   50% {
-    transform: translate(102%, 0);
+    transform: translate(5px, 0);
     animation-timing-function: ease-in; }
   to {
-    transform: translate(100%, 0);
+    transform: translate(0, 0);
     animation-timing-function: ease-out; } }
 
 @keyframes attnRightBounceAfter {
   from {
-    transform: translate(15%, 0);
+    transform: translate(1px, 0);
     animation-timing-function: ease-out; }
   50% {
-    transform: translate(150%, 0);
+    transform: translate(6px, 0);
     animation-timing-function: ease-in; }
   to {
-    transform: translate(15%, 0);
+    transform: translate(1px, 0);
     animation-timing-function: ease-out; } }
 
-[data-tooltip].attnRight:before {
+[data-tooltip].tooltip-right.attnRight:before {
   visibility: visible !important;
   opacity: 1;
   background: #e83e3e !important;
   font-size: 14px;
   padding: 2px 8px;
+  transform: translate(0, 0);
+  left: 100%;
+  right: initial !important;
+  margin-left: 5px;
   animation-name: attnRightBounce;
+  transform-origin: center left;
   animation-duration: 1.2s;
   animation-iteration-count: infinite !important;
   box-shadow: 0 3px 5px rgba(100, 100, 100, 0.4); }
 
-[data-tooltip].attnRight:after {
+[data-tooltip].tooltip-right.attnRight:after {
   visibility: visible !important;
   border-right-color: #e83e3e !important;
   opacity: 1;
+  left: 100%;
+  right: initial !important;
+  margin-left: 1px;
+  transform-origin: center left;
   animation-name: attnRightBounceAfter !important;
   animation-duration: 1.2s;
   animation-iteration-count: infinite; }
@@ -881,11 +890,13 @@ p4m-spinner[species='progress'] {
     transition: all 0.2s ease 1s; }
   [data-tooltip].instruction.tooltip-right:after {
     border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
     border-bottom: 4px solid transparent;
     border-right-color: #37a553;
     border-left: none; }
   [data-tooltip].instruction.tooltip-left:after {
     border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
     border-bottom: 4px solid transparent;
     border-left-color: #37a553;
     border-right: none; }
