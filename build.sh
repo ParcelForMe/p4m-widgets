@@ -1,0 +1,1 @@
+polymer build --entrypoint index.html -v --js-compile=true --js-minify=true --css-minify=true --html-minify=true --bundle --extra-dependencies gfs-checkout-widget/images/GB/* p4m-shared/fonts/* p4m-shared/img/* p4m-card/assets/* gfs-droppoint/images/*
