@@ -19,16 +19,15 @@
     "paper-dialog": "^1.1.0",
     "paper-menu": "^1.2.2",
     "paper-item": "^1.2.1",
-    "polymer": "~1.6.0",
+    "polymer": "^1.6.0",
     "polymer-cookie": "^1.0.3",
     "vaadin-combo-box": "latest",
     "paper-listbox": "^1.1.2",
     "paper-dropdown-menu": "^1.5.0",
     "paper-progress": "^1.0.11",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.24"
   },
-  "devDependencies": {
-  },
+  "devDependencies": { },
   "main": "p4m-checkout/p4m-checkout.html",
   "repository": {
     "type": "git",
