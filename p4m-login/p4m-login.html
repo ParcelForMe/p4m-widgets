@@ -133,6 +133,9 @@
                 p4mToken: {
                     type: String
                 },
+                class: {
+                  reflectToAttribute: true
+                },
                 _restoreCartMessage: {
                     type: String,
                     value: "There is a shopping cart available from your previous visit. Would you like to use it?"
@@ -440,20 +443,20 @@
 
             _showAsLoggingIn: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.$.loginWidget.classList.add("loggingIn");
+                this.set("class", "loggingIn");
                 this.$.spinner.active = true;
             },
 
             _showAsLoggedIn: function() {
                 this.$.p4mProfile.classList.remove("hidden");
-                this.$.loginWidget.classList.add("loggedIn");
+                this.set("class", "loggedIn");
                 this.$.spinner.active = false;
             },
 
 
             _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.$.loginWidget.classList.add("loggedOut");
+                this.set("class", "loggedOut");
             }
         });
     </script>
