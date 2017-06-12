@@ -288,22 +288,6 @@
 
                         async.series(
                         [
-                            /*
-                            function _newCart(callback) {
-                                console.log('_newCart()');
-                                //If this is a new cart, preselect as much as possible.
-                                //Otherwise, the user has already selected their options.
-
-                                //self.isNew = true;
-                                if (!self.cartData.AddressId) {
-                                    self.preselectAddress(callback);
-                                    
-                                    callback(null);
-                                }
-                                else {
-                                    callback(null);
-                                }
-                            },*/
 
                             //Send info from cart and consumer to GFS
                             function _gfs(callback) {
@@ -340,6 +324,7 @@
                         })
                     }
                 )
+                this.$.p4mPurchase.beforePurchase = this.$.gfsCheckoutWidget._closeReq;
             },
 
             _getConsumer: function (callback) {
@@ -371,11 +356,11 @@
                 });
                 var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
                 var gfsPostConfig = {
-                    countryCode: null,
+                    countryCode: "GB",
                     town: "London",
                     Town: "London",
-                    postCode: null,
-                    addressLines: [],
+                    postCode: "SW1A 0AA",
+                    addressLines: ["House of Commons", "Houses of Parliament"],
                     contactEmail: "nocontact@nocontact.com",
                     recipientFirstName: this.consumerData.familyName,
                     recipientLastName: this.consumerData.givenName,
@@ -388,13 +373,11 @@
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.preferSoonestDelivery
                     }
-
-
                 };
 
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
-                if (!this.isNew) {
+                if (!this.isNew && self.cartData.addressId) {
                     selection = {
                         dropPointId: self.getAddressById(self.cartData.addressId).dropPointId,
                         deliveryMethodId: self.cartData.serviceId,
@@ -549,9 +532,9 @@
                     var self = this;
                     var cartMessage =
                     {
-                        "SessionId": this.sessionId,
-                        "ClearItems": (!this.cartData.id), //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
-                        "Cart": this.cartData
+                        "sessionId": this.sessionId,
+                        "clearItems": (!this.cartData.id), //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
+                        "cart": this.cartData
                     };
 
                     this.toggleLoading(true);
@@ -1124,39 +1107,43 @@
         }
 
         function p4mAddressToGfsDroppoint(item, defaultCountryCode) {
-            var gfsAddress = {
-                geoLocation: {
-                    postCode: item.postCode,
-                    addressLines: [item.street1],
-                    town: item.city,
-                    coordinates: {
-                        latitude: item.latitude,
-                        longitude: item.longitude
+            if (!item) return false
+            else {
+                var gfsAddress = {
+                    geoLocation: {
+                        postCode: item.postCode,
+                        addressLines: [item.street1],
+                        town: item.city,
+                        coordinates: {
+                            latitude: item.latitude,
+                            longitude: item.longitude
+                        },
+                        countryCode: item.countryCode || defaultCountryCode || 'GB',
+                        county: "",
+                        directions: ""
                     },
-                    countryCode: item.countryCode || defaultCountryCode || 'GB',
-                    county: "",
-                    directions: ""
-                },
-                providerName: item.Label
-            };
-            return gfsAddress;
-
+                    providerName: item.Label
+                };
+                return gfsAddress;
+            }
         }
 
         function p4mAddressToGfsAddress(item) {
-            var gfsAddress = {
-                id: item.id,
-                countryCode: {
-                    Code: item.countryCode || "GB",
-                    Encoding: "ccISO_3166_1_Alpha2"
-                },
-                postcode: item.postCode || "",// "SO40 7JF", //ViewBag.InitialPostCode,
-                town: item.city,
-                addressLineCollection: [item.street1],
-                name: item.label
-            };
-            return gfsAddress;
-
+            if (!item) return false
+            else {
+                var gfsAddress = {
+                    id: item.id,
+                    CountryCode: {
+                        Code: item.countryCode || "GB",
+                        Encoding: "ccISO_3166_1_Alpha2"
+                    },
+                    Postcode: item.postCode || "",// "SO40 7JF", //ViewBag.InitialPostCode,
+                    town: item.city,
+                    addressLineCollection: [item.street1],
+                    name: item.label
+                };
+                return gfsAddress;
+            }
         }
 
         function hashThis(value) {

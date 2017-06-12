@@ -231,10 +231,16 @@
                 console.log(e);
                 this.errorMsg = "";
                 if (e.detail && e.detail.paymentType && e.detail.paymentType == "paypal") {
-                    this.buyViaPaypal();
+                    if (this.beforePurchase) {
+                        this.beforePurchase(this.buyViaPaypal.bind(this));
+                    }
+                    else this.buyViaPaypal();
                 }
                 else {
-                    this.buyViaCard();
+                    if (this.buyViaCard) {
+                        this.buyViaCard(this.buyViaPaypal.bind(this));
+                    }
+                    else this.buyViaCard();
                 }
 
             },
@@ -242,9 +248,7 @@
             buyViaCard: function() {
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE) {
                     this._state = States.PURCHASING;
-                    if (this.beforePurchase) {
-                        this.beforePurchase()
-                    }
+
                     var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total };
                     /*postData.newDropPoint = null;
                     if (this.newDropPoint) {

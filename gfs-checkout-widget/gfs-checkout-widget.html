@@ -558,7 +558,8 @@
                                     callback(null, httpRequest.responseText);
                                 }
                                 else {
-                                    debugger;
+                                    //debugger;
+                                    console.error(httpRequest.responseText);
                                     console.log("GFS error. Re-starting session.");    
                                     this.postGfsData(callback);                     
                                     //callback(httpRequest.status, httpRequest.responseText);
@@ -645,16 +646,17 @@
             _closeReq: function (callback) {
                 var data = {
                     closeSession: true,
-                    selectedService: this.selectedServiceDetails.serviceId,
-                    selectedDroppoint: this.selectedServiceDetails.collectionPoint
+                    selectedService: {
+                        id: this.selectedServiceDetails.serviceId
+                    },
+                    selectedDroppoint: {
+                        id: this.selectedServiceDetails.collectionPoint
+                    }
                 };
-                callback(null);
+                
+                var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession', (function (err, data) {
 
-                //Commenting out the below until we know the correct API call
-                /*
-                var request = this._makeRequest('POST', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession', (function (err, data) {
-
-                    console.log("GFS Checkout Patch response", new Date().getTime());
+                    //console.log("GFS Checkout Patch response", new Date().getTime());
 
                     if (err) {
                         callback(err);
@@ -669,14 +671,37 @@
                         }
                     }
                 }).bind(this));
-                request.send(JSON.stringify(data));*/
+                request.send(JSON.stringify(data));
             },
+
+            _getPatchData: function() {
+                // build selectedService
+                if (dropPoint) {
+                    patchData = {
+                        closeSession: true,
+                        selectedDroppoint: {
+                            id: selectedDroppointId
+                        }
+                    }
+                }
+                else {
+                    patchData = {
+                        closeSession: true,
+                        selectedService: {
+                            id: selectedId
+                        }
+                    } 
+                }
+
+                return patchData;
+             },
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
                 var self = this;
                 var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
                 var request = this._makeRequest('GET', url, (function (err, data) {
-                    var result = JSON.parse(data);
+
+                    var result = data?(JSON.parse(data)):{};
                     if (err || result.message) {
                         callback(err || result.message)
                     }
@@ -706,12 +731,18 @@
                 if (typeof (callback) !== "function") {
                     callback = function(){};
                 }
-                console.log('setGfsAddress(' + JSON.stringify(address) + ')');
-                this._postData.Request.Order.Transit.Recipient.Location = address;
+                if (!address) {
+                    callback("No address");
+                }
+                else {
+                    console.log('setGfsAddress(' + JSON.stringify(address) + ')');
+                    this._postData.Request.Order.Transit.Recipient.Location = address;
                 if (autoSelectDelivery) {
                     this.autoSelectDeliveryMethod(callback);
                 }
                 else callback(null);
+                }
+
             },
 
             getDeliveryAddress: function() {
@@ -789,14 +820,14 @@
                     'recipientLastName',
                     'recipientTitle',
                     'cartValue',
-                    'addressPreferences',
+                    //'addressPreferences',
                     'deliveryPreferences',
                     'favDropPoints',
                     'favAddresses',
                     'defaultAddress'
                 ];
                 var missingFields = requiredFields.filter(function (f) {
-                    return (typeof (config[f]) == "undefined");
+                    return (typeof (config[f]) == "undefined" || (config[f] == null));
                 });
                 if (missingFields.length) {
                     throw ("Missing fields: " + missingFields.toString());
