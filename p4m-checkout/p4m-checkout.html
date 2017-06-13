@@ -258,7 +258,11 @@
                                         callback(err)
                                     }
                                     else {
-                                        self.updateP4mCart(callback);
+                                        console.log('init: First updateP4mCart() start');
+                                        self.updateP4mCart(function(err) {
+                                            console.log('init: First updateP4mCart() finished');
+                                            callback(err);
+                                        });
                                     }
                                 });
                             }
@@ -304,12 +308,12 @@
                             function _p4mCart(callback) {
                                 //self.initialising = true;
                                 
-                                console.log('_p4mCart():self.updateP4mCart() start');
+                                console.log('init: Second updateP4mCart() start');
                                 //self.preselectDeliveryMethod();
 
                                 self.updateP4mCart(function(err) {//This will set IsNew to false
                                     //self._updateGfs(callback); //Try to fill out delivery method
-                                    console.log('_p4mCart():self.updateP4mCart() complete');
+                                    console.log('init: Second updateP4mCart() complete');
                                     callback(err);
                                 }); 
                             }
@@ -324,7 +328,7 @@
                         })
                     }
                 )
-                this.$.p4mPurchase.beforePurchase = this.$.gfsCheckoutWidget._closeReq;
+                this.$.p4mPurchase.beforePurchase = this.$.gfsCheckoutWidget._closeReq.bind(this.$.gfsCheckoutWidget);
             },
 
             _getConsumer: function (callback) {
@@ -464,9 +468,9 @@
 
             //Send new total to shipping module and ask for new shipping price etc
             updCartTotals: function (newCartTotals, callback) {
-                this.cartData.tax = newCartTotals.tax;
-                this.cartData.shippingAmt = newCartTotals.shipping;
-                this.cartData.total = newCartTotals.total;
+                this.cartData.tax = newCartTotals.tax || 0;
+                this.cartData.shippingAmt = newCartTotals.shipping || 0;
+                this.cartData.total = newCartTotals.total || 0;
 
                 if (this.$.gfsCheckoutWidget) {
                     this._updateGfs(callback);              
@@ -520,12 +524,16 @@
             updateP4mCart: function (callback) {
                 //console.log("updateP4mCart():", new Error().stack);
                 //Send changes to P4M
-                if (!callback) callback = function () { };
+                if (!callback) {
+                    console.warn('updateP4mCart: no callback');
+                    callback = function () { };
+                } 
                 /*if (this.updating) {
                     callback(null);
                     return;
                 }*/
                 console.log('updateP4mCart()');
+                console.trace();
                 this.updating = true;
                 try {
                    
@@ -664,8 +672,8 @@
                                 self.set('cartData.serviceId', data.serviceId);
                                 self.set('cartData.dropPointId', data.collectionPoint);
                                 self.set('cartData.expDeliveryDate', data.expDeliveryDate);
-                                self.set('cartData.tax', cartTotals.tax);
-                                self.set('cartData.total', cartTotals.total);
+                                self.set('cartData.tax', cartTotals.tax || 0);
+                                self.set('cartData.total', cartTotals.total || 0);
                                 if (data.collectionPoint) {
                                     self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, function (err) {
                                         self.updateP4mCart(function (err) {
@@ -675,12 +683,15 @@
                                     });
                                 }
                                 else {
-                                    self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
-                                        self.updateP4mCart(function (err) {
-                                            self.updatingShipping = false;
-                                            callback(err);
-                                        })
-                                    });
+                                    if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
+                                        self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
+                                            self.updateP4mCart(function (err) {
+                                                self.updatingShipping = false;
+                                                callback(err);
+                                            })
+                                        });
+                                    }
+
                                 }
                             }
                         });
@@ -776,7 +787,7 @@
             //},
 
             onDiscount: function (e) {
-                this.set('cartData.tax', Number(e.detail.tax));
+                this.set('cartData.tax', Number(e.detail.tax || 0));
                 var cartDiscount = this.cartData.discounts.find((element, index, arr) => element.code === e.detail.code); //TODO: Change to bound function; arrow functions may not work in older browsers
                 if (cartDiscount) {
                     //console.log("Added existing discount")
@@ -785,9 +796,9 @@
                         cartDiscount.code !== e.detail.code)
                     {
                         cartDiscount.description = e.detail.description;
-                        cartDiscount.amount = e.detail.amount;
+                        cartDiscount.amount = e.detail.amount || 0;
                         cartDiscount.code = e.detail.code;
-                        this.cartData.tax = e.detail.tax;
+                        this.cartData.tax = e.detail.tax || 0;
                         this.updateP4mCart();
                     }
                 }
@@ -798,7 +809,7 @@
                         amount: e.detail.amount,
                         code: e.detail.code
                     });
-                    this.cartData.tax = e.detail.tax;
+                    this.cartData.tax = e.detail.tax || 0;
                     this.updateP4mCart();
                 }
             },
@@ -809,7 +820,7 @@
                 if (item) {
                     item.amount = 0;
                     item.description = "Deleted";
-                    this.cartData.tax = e.detail.tax;
+                    this.cartData.tax = e.detail.tax || 0;
                     this.updateP4mCart();
                     this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
 
