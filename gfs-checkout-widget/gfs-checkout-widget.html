@@ -646,15 +646,17 @@
             _closeReq: function (callback) {
                 var data = {
                     closeSession: true,
-                    selectedService: {
+                    selectedDeliveryOptionID: this.selectedServiceDetails.serviceId,
+                    selectedDroppointId: this.selectedServiceDetails.collectionPoint
+                    /*selectedService: {
                         id: this.selectedServiceDetails.serviceId
                     },
                     selectedDroppoint: {
                         id: this.selectedServiceDetails.collectionPoint
-                    }
+                    }*/
                 };
                 
-                var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession', (function (err, data) {
+                var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
 
                     //console.log("GFS Checkout Patch response", new Date().getTime());
 
@@ -673,28 +675,6 @@
                 }).bind(this));
                 request.send(JSON.stringify(data));
             },
-
-            _getPatchData: function() {
-                // build selectedService
-                if (dropPoint) {
-                    patchData = {
-                        closeSession: true,
-                        selectedDroppoint: {
-                            id: selectedDroppointId
-                        }
-                    }
-                }
-                else {
-                    patchData = {
-                        closeSession: true,
-                        selectedService: {
-                            id: selectedId
-                        }
-                    } 
-                }
-
-                return patchData;
-             },
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
                 var self = this;
