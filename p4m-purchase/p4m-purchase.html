@@ -237,8 +237,8 @@
                     else this.buyViaPaypal();
                 }
                 else {
-                    if (this.buyViaCard) {
-                        this.buyViaCard(this.buyViaPaypal.bind(this));
+                    if (this.beforePurchase) {
+                        this.beforePurchase(this.buyViaCard.bind(this));
                     }
                     else this.buyViaCard();
                 }
