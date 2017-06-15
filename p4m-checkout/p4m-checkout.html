@@ -60,10 +60,14 @@
                             <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
                         <iron-page id="deliveryPage">
-                            <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
-                            <template is="dom-if" if="{{_notUseGfsCheckout}}">
-                                <p4m-delivery></p4m-delivery>
-                            </template>
+                            <div id="shippingSelector" class="hidden">
+
+                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                            </div>
+                            <div id="noShippingWarning">
+                                Please enter an address to continue.
+                            </div>
+
                             <template is="dom-if" if="{{useGfsCheckout}}">
                             </template>
                         </iron-page>
@@ -205,7 +209,8 @@
             },
             observers: [
                 //"onCartDiscountChange(cartData.discounts.*)"
-               "onCartItemsChange(cartData.items.*)"
+               "onCartItemsChange(cartData.items.*)",
+               "onCartAddressSelect(cartData.addressId)"
                //"onConsumerAddressChange(consumerData.addresses.*)"
             ],
 
@@ -297,12 +302,8 @@
                             function _gfs(callback) {
                                 self.initialising = false;
                                 console.log('_gfs()');
-                                if (self.$.gfsCheckoutWidget) {
-                                    self._updateGfs(callback);
-                                }
-                                else {
-                                    callback(null);
-                                }
+                                self._updateGfs(callback);
+
                             },
 
                             function _p4mCart(callback) {
@@ -351,6 +352,15 @@
 
             //Send all cart information to shipping plugin
             _updateGfs: function (callback) {
+
+                if (!callback) {
+                    callback = function(){};
+                }
+
+                if (!this._readyForShippingSelector()) {
+                    callback();
+                    return;
+                }
 
                 var self = this;
 
@@ -471,13 +481,9 @@
                 this.cartData.tax = newCartTotals.tax || 0;
                 this.cartData.shippingAmt = newCartTotals.shipping || 0;
                 this.cartData.total = newCartTotals.total || 0;
+                this._updateGfs(callback);              
 
-                if (this.$.gfsCheckoutWidget) {
-                    this._updateGfs(callback);              
-                }
-                else {
-                    callback(null);
-                }
+
             },
 
             _showAsLoadingShipping: function(loading) {
@@ -627,6 +633,22 @@
                 {
                     console.log("onCartItemsChange: No cart changes");
                 }
+            },
+
+            onCartAddressSelect: function(e) {
+                if (this._readyForShippingSelector()) {
+                    this.$.noShippingWarning.classList.add('hidden');
+                    this.$.shippingSelector.classList.remove('hidden');
+                    this._updateGfs();
+                }
+                else {
+                    this.$.noShippingWarning.classList.remove('hidden');
+                    this.$.shippingSelector.classList.add('hidden');
+                }
+            },
+
+            _readyForShippingSelector: function() {
+                return (this.consumerData.addresses.length);
             },
 
             //Take data from shipping selector representing selected shipping options
@@ -876,14 +898,31 @@
 
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
+
+                        if (!this._readyForShippingSelector) {
+                            callback();
+                            return;
+                        }
                         
-                        //alert('TODO: Ask GFS Checkout for new details');
+                        if (!this.$.gfsCheckoutWidget.initialised) {
+                            this._updateGfs(function(callback) {
+
+                                self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
+                                    self.set('cartData.addressId', addressId); //This allows the address UI to update
+                                    self.notifyPath('cartData.addressId');
+                                    callback(null, address);
+                                });
+                            })
+                        }
+                        else {
+                            this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
+                                self.set('cartData.addressId', addressId); //This allows the address UI to update
+                                self.notifyPath('cartData.addressId');
+                                callback(null, address);
+                            });
+                        }
                         
-                        this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
-                            self.set('cartData.addressId', addressId); //This allows the address UI to update
-                            self.notifyPath('cartData.addressId');
-                            callback(null, address);
-                        });
+
                     }
                     else {
                         this.set('cartData.addressId', addressId); //This allows the address UI to update

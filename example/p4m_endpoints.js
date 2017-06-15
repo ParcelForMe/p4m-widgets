@@ -105,17 +105,19 @@ exports.checkout = function(req, res) {
 		var options = {
 			url: url,
 			headers: {
-				"Authorization": "Basic " + new Buffer("parcel_4_me:needmoreparcels").toString('base64'),
+				"Authorization": "Basic " + Buffer.from("parcel_4_me:needmoreparcels").toString('base64'),
+				//"Authorization": "Basic " + Buffer.from("michael.strong@justshoutgfs.com:MScheckout!").toString('base64'),
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
 			form : data
 		}
 
 		request.post(options, function(error, response, body) {
-
+			console.log(body);
+			var data = JSON.parse(body);
 			var now = new Date();
 			var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-			var base64Token = new Buffer(JSON.parse(body).access_token).toString('base64');
+			var base64Token = Buffer.from(data.access_token).toString('base64');
 			cookies.set('gfsCheckoutToken', base64Token, cookieConf);
 
 			returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);

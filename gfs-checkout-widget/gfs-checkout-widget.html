@@ -225,6 +225,12 @@
 
             properties: {
                 //=== Element attributes ===//
+
+                initialised: {
+                    type: Boolean,
+                    value: false
+                },
+                
                 accessToken: {
                     type: String
                 },
@@ -646,7 +652,7 @@
             _closeReq: function (callback) {
                 var data = {
                     closeSession: true,
-                    selectedDeliveryOptionID: this.selectedServiceDetails.serviceId,
+                    selectedDeliveryOptionID: this.selectedServiceDetails.serviceCode,
                     selectedDroppointId: this.selectedServiceDetails.collectionPoint
                     /*selectedService: {
                         id: this.selectedServiceDetails.serviceId
@@ -915,6 +921,7 @@
                     }                 
         
                 }
+                this.initialised = true;
             },
 
             //TODO
