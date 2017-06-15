@@ -302,22 +302,21 @@
                             function _gfs(callback) {
                                 self.initialising = false;
                                 console.log('_gfs()');
-                                self._updateGfs(callback);
+                                self._runGFS_IfReady(callback);
 
                             },
 
-                            function _p4mCart(callback) {
-                                //self.initialising = true;
+                            //function _p4mCart(callback) {
+                            //    //self.initialising = true;
                                 
-                                console.log('init: Second updateP4mCart() start');
-                                //self.preselectDeliveryMethod();
+                            //    console.log('init: Second updateP4mCart() start - still required??');
+                            //    //self.preselectDeliveryMethod();
 
-                                self.updateP4mCart(function(err) {//This will set IsNew to false
-                                    //self._updateGfs(callback); //Try to fill out delivery method
-                                    console.log('init: Second updateP4mCart() complete');
-                                    callback(err);
-                                }); 
-                            }
+                            //    self.updateP4mCart(function(err) {//This will set IsNew to false
+                            //        console.log('init: Second updateP4mCart() complete');
+                            //        callback(err);
+                            //    }); 
+                            //}
                         ],
                         function (err) {
                             if (err) {
