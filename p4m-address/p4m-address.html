@@ -176,7 +176,6 @@
             },
 
             markAsDelivery: function () {
-                debugger;
                 if (this.cartData.addressId !== this.addressData.id) {
                     this.isDelivery = true;
                     this.fire('select-address', { 'isDelivery': true, 'id': this.addressData.id });
