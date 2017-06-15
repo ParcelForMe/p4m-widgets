@@ -688,7 +688,6 @@
                     }
                     else {
                         var addr = this.consumerData.addresses.find(a => a.id === this.cartData.addressId);
-                        console.log("update shipping addr: ", addr);
                         var shippingDetails = { 'service': data.service, 'amount': data.shipping, 'dueDate': data.expDeliveryDate, 'address': addr };
                         // got new shipping details so we need to get updated tax from the host
                         this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
@@ -714,16 +713,22 @@
                                         });
                                     });
                                 }
+                                else if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
+                                    console.log("update shipping addr: ", addr);
+                                    self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
+                                        self.updateP4mCart(function (err) {
+                                            self.updatingShipping = false;
+                                            callback(err);
+                                        })
+                                    });
+                                }
                                 else {
-                                    if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
-                                        self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
-                                            self.updateP4mCart(function (err) {
-                                                self.updatingShipping = false;
-                                                callback(err);
-                                            })
-                                        });
-                                    }
-
+                                    // something has changed on the cart so we need to update it
+                                    console.log("updating cart because service or address has changed");
+                                    self.updateP4mCart(function (err) {
+                                        self.updatingShipping = false;
+                                        callback(err);
+                                    })
                                 }
                             }
                         });
