@@ -393,10 +393,12 @@
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
                 if (!this.isNew && self.cartData.addressId) {
+                    var addr = self.getAddressById(self.cartData.addressId);
+                    var dropPointId = addr ? addr.dropPointId : null;
                     selection = {
-                        dropPointId: self.getAddressById(self.cartData.addressId).dropPointId,
+                        dropPointId: dropPointId,
                         deliveryMethodId: self.cartData.serviceId,
-                        address: p4mAddressToGfsAddress(self.getAddressById(self.cartData.addressId)) || null,
+                        address: p4mAddressToGfsAddress(addr) || null,
                         deliveryDate: new Date(self.cartData.expDeliveryDate)
                     }
                     //selection = null;
