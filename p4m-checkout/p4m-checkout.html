@@ -350,18 +350,20 @@
 
 
             //Send all cart information to shipping plugin
+            _gfsCurrentAddrId: "",
             _updateGfs: function (callback) {
 
                 if (!callback) {
                     callback = function(){};
                 }
 
-                if (!this._readyForShippingSelector()) {
-                    callback();
-                    return;
-                }
+                //if (!this._readyForShippingSelector()) {
+                //    callback();
+                //    return;
+                //}
 
                 var self = this;
+                this._gfsCurrentAddrId = this.consumerData.prefDeliveryAddressId;
 
                 var orderValue = 0.0;
                 this.cartData.items.forEach(function (item) {
@@ -634,11 +636,15 @@
                 }
             },
 
-            onCartAddressSelect: function(e) {
+            onConsumerAddressChange: function (e) {
+                this._runGFS_IfReady();
+            },
+
+            _runGFS_IfReady: function(callback) {
                 if (this._readyForShippingSelector()) {
                     this.$.noShippingWarning.classList.add('hidden');
                     this.$.shippingSelector.classList.remove('hidden');
-                    this._updateGfs();
+                    this._updateGfs(callback);
                 }
                 else {
                     this.$.noShippingWarning.classList.remove('hidden');
@@ -646,8 +652,11 @@
                 }
             },
 
-            _readyForShippingSelector: function() {
-                return (this.consumerData.addresses.length);
+            _readyForShippingSelector: function () {
+                if (this.cartData && this.consumerData.prefDeliveryAddressId && this._gfsCurrentAddrId != this.consumerData.prefDeliveryAddressId) {
+                    return this.getAddressById(this.consumerData.prefDeliveryAddressId);
+                }
+                return false;
             },
 
             //Take data from shipping selector representing selected shipping options
@@ -898,10 +907,10 @@
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
 
-                        if (!this._readyForShippingSelector) {
-                            callback();
-                            return;
-                        }
+                        //if (!this._readyForShippingSelector) {
+                        //    callback();
+                        //    return;
+                        //}
                         
                         if (!this.$.gfsCheckoutWidget.initialised) {
                             this._updateGfs(function(callback) {
