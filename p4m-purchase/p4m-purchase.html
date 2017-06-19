@@ -230,25 +230,29 @@
             buyNow: function (e) {
                 console.log(e);
                 this.errorMsg = "";
-                if (e.detail && e.detail.paymentType && e.detail.paymentType == "paypal") {
-                    if (this.beforePurchase) {
-                        this.beforePurchase(this.buyViaPaypal.bind(this));
+                var usePaypal = e.detail && e.detail.paymentType && e.detail.paymentType === "paypal";
+                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || (usePaypal && this._state === States.CVV_NEEDED)) {
+                    this._state = States.PURCHASING;
+                    if (usePaypal) {
+                        if (this.beforePurchase) {
+                            this.beforePurchase(this.buyViaPaypal.bind(this));
+                        }
+                        else this.buyViaPaypal();
                     }
-                    else this.buyViaPaypal();
-                }
-                else {
-                    if (this.beforePurchase) {
-                        this.beforePurchase(this.buyViaCard.bind(this));
+                    else {
+                        if (this.beforePurchase) {
+                            this.beforePurchase(this.buyViaCard.bind(this));
+                        }
+                        else this.buyViaCard();
                     }
-                    else this.buyViaCard();
                 }
-
             },
 
             buyViaCard: function(err, carrierName) {
-                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE) {
-                    this._state = States.PURCHASING;
+                if (err) {
 
+                }
+                else {
                     var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total, carrier: carrierName };
                     /*postData.newDropPoint = null;
                     if (this.newDropPoint) {
@@ -259,8 +263,10 @@
             },
 
             buyViaPaypal: function (err, carrierName) {
-                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || this._state === States.CVV_NEEDED) {
-                    this._state = States.PURCHASING;
+                if (err) {
+
+                }
+                else {
                     this.$.localApi.call('paypalSetup', { cartId: this.cartData.id, cartTotal: this.cartData.total, carrier: carrierName }, null, this.onPaypalSetup.bind(this));
                 }
             },
