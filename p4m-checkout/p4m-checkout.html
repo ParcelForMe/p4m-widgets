@@ -352,15 +352,14 @@
             //Send all cart information to shipping plugin
             _gfsCurrentAddrId: "",
             _updateGfs: function (callback) {
-
                 if (!callback) {
                     callback = function(){};
                 }
 
-                //if (!this._readyForShippingSelector()) {
-                //    callback();
-                //    return;
-                //}
+                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+                    callback();
+                    return;
+                }
 
                 var self = this;
                 this._gfsCurrentAddrId = this.consumerData.prefDeliveryAddressId;
@@ -369,6 +368,11 @@
                 this.cartData.items.forEach(function (item) {
                     orderValue += item.qty * item.price;
                 });
+                if (orderValue <= 0.0) {
+                    callback();
+                    return;
+                }
+
                 var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
                 var gfsPostConfig = {
                     countryCode: "GB",
@@ -484,9 +488,10 @@
                 this.cartData.tax = newCartTotals.tax || 0;
                 this.cartData.shippingAmt = newCartTotals.shipping || 0;
                 this.cartData.total = newCartTotals.total || 0;
-                this._updateGfs(callback);              
-
-
+                if (this.cartData.total > 0)
+                    this._updateGfs(callback);
+                else 
+                    this.updateP4mCart(callback);
             },
 
             _showAsLoadingShipping: function(loading) {
@@ -510,7 +515,7 @@
 
                 if (showAsLoading) {
                     this.$.orderSummary.showAsLoading();
-                    this._showAsLoadingShipping(true);
+                    this._showAsLoadingShipping(this.cartData && this.cartData.total > 0);
                     this._toggleCartEditing(false);
 
                     //this.$.p4mPurchase.setLoadingState(true);
