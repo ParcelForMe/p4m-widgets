@@ -650,14 +650,17 @@
                 var data = {
                     closeSession: true,
                     selectedDeliveryOptionID: this.selectedServiceDetails.serviceCode,
-                    selectedDroppointId: this.selectedServiceDetails.collectionPoint
-                    /*selectedService: {
-                        id: this.selectedServiceDetails.serviceId
-                    },
-                    selectedDroppoint: {
-                        id: this.selectedServiceDetails.collectionPoint
-                    }*/
+                    selectedDroppointID: this.selectedServiceDetails.collectionPoint
                 };
+
+                /* curl -X PATCH --header 'Content-Type: application/json' --header 'Accept: application/json' -d 
+                    {
+                      "closeSession": true,
+                      "selectedDeliveryOptionID": "D0S0"
+                    }
+                    http://rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=ba1212fd-ec56-4824-85fa-54fd223ee6eb'
+
+                */
                 
                 var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
 
@@ -668,8 +671,8 @@
                     }
                     else {
                         var result = JSON.parse(data);
-                        if (result.message) {
-                            callback(result.message);
+                        if (result.selectedService && result.selectedService.carrierName) {
+                            callback(null, result.selectedService.carrierName);
                         }
                         else {
                             callback(null);
@@ -1108,7 +1111,7 @@
                         _originalMethodObject: newMethod,
                         serviceId: methodId,
                         service: newMethod.methodTitle,
-                        serviceCode: newMethod.carrierCode,
+                        serviceCode: newMethod.deliveryOptionId,
                         carrier: newMethod.carrierName,
                         shipping: newMethod.price,
                         currencySymbol: this.currencySymbol

@@ -245,11 +245,11 @@
 
             },
 
-            buyViaCard: function() {
+            buyViaCard: function(err, carrierName) {
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE) {
                     this._state = States.PURCHASING;
 
-                    var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total };
+                    var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total, carrier: carrierName };
                     /*postData.newDropPoint = null;
                     if (this.newDropPoint) {
                         postData.newDropPoint = this.newDropPoint;
@@ -258,11 +258,10 @@
                 }
             },
 
-            buyViaPaypal: function () {
+            buyViaPaypal: function (err, carrierName) {
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || this._state === States.CVV_NEEDED) {
                     this._state = States.PURCHASING;
-                    debugger;
-                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.id, cartTotal: this.cartData.total }, null, this.onPaypalSetup.bind(this));
+                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.id, cartTotal: this.cartData.total, carrier: carrierName }, null, this.onPaypalSetup.bind(this));
                 }
             },
 

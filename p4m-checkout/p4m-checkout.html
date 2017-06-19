@@ -642,11 +642,18 @@
                 this._runGFS_IfReady();
             },
 
-            _runGFS_IfReady: function(callback) {
-                if (this._readyForShippingSelector()) {
+            _runGFS_IfReady: function (callback) {
+                var shouldShow = this._readyForShippingSelector();
+                this._ensureShippingVisible(shouldShow);
+                if (shouldShow) {
+                    this._updateGfs(callback);
+                }
+            },
+
+            _ensureShippingVisible: function (show) {
+                if (show) {
                     this.$.noShippingWarning.classList.add('hidden');
                     this.$.shippingSelector.classList.remove('hidden');
-                    this._updateGfs(callback);
                 }
                 else {
                     this.$.noShippingWarning.classList.remove('hidden');
@@ -796,14 +803,8 @@
             },
 
             onPaymentComplete: function (e) {
-                if (this.$.gfsCheckoutWidget) {
-                    this.$.gfsCheckoutWidget._closeReq(function (err) {
-                        if (!err) {
-                            if (e && e.detail.redirectUrl) {
-                                window.location = e.detail.redirectUrl;
-                            }
-                        }
-                    });
+                if (e && e.detail.redirectUrl) {
+                    window.location = e.detail.redirectUrl;
                 }
             },
             
@@ -920,12 +921,14 @@
                         //}
                         
                         if (!this.$.gfsCheckoutWidget.initialised) {
-                            this._updateGfs(function(callback) {
+                            this._updateGfs(function(err) {
 
                                 self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                     self.set('cartData.addressId', addressId); //This allows the address UI to update
                                     self.notifyPath('cartData.addressId');
-                                    callback(null, address);
+                                    if (callback) {
+                                        callback(null, address);
+                                    }
                                 });
                             })
                         }
@@ -933,7 +936,9 @@
                             this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
-                                callback(null, address);
+                                if (callback) {
+                                    callback(null, address);
+                                }
                             });
                         }
                         
@@ -965,8 +970,8 @@
                 var self = this;
                 var result = null
 
-                var hasAnAddress = this.consumerData.addresses.length;
-                var existingAddress = hasAnAddress && this.getAddressById(address.id);
+                var hasAnAddress = this.consumerData.addresses.length && this.consumerData.addresses.some(function (address) { return address.id && address.id != ""; });
+                var existingAddress = hasAnAddress && address.id && address.id != "" && this.getAddressById(address.id);
                 var postData =
                 {
                     "Address": address,
@@ -979,10 +984,10 @@
                         function _postAddress(callback) {
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
-                                if (!existingAddress)
-                                    this.push('consumerData.addresses', result.address);
-                                else
-                                    address.id = result.address.id;
+                                address.id = result.address.id;
+                                if (!existingAddress) {
+                                    self.push('consumerData.addresses', result.address);
+                                }
                                 self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses())
 
                                 callback(err);
@@ -994,8 +999,6 @@
                                 callback(err);
                             });
                         }
-
-
                     ],
                     function(err) {
                         finalCallback(err, result);
@@ -1017,7 +1020,7 @@
                     else {
                         addressElement.detail.addressData.id = result.address.id;
                         self._toggleAddressesLoading(false);
-
+                        self._ensureShippingVisible(true);
                     }
                 });
 
