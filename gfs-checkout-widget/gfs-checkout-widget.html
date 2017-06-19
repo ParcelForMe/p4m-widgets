@@ -1174,11 +1174,12 @@
                 }
             },
 
-            selectNearestDropPoint: function(callback) {
+            selectNearestDropPoint: function (callback) {
+                self = this;
                 this.requestDropPointsByAddress(this.config.defaultAddress.Street1, this.config.defaultAddress.PostCode, null, function (dropPoints) {
                     if (dropPoints && dropPoints.length) {
                         var dropPoint = dropPoints[0];
-                        this._selectDropPoint(dropPoint.droppointId, callback);
+                        self._selectDropPoint(dropPoint.droppointId, callback);
                     }
                     else {
                         callback("No supported drop-points found");
