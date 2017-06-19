@@ -645,7 +645,7 @@
             _runGFS_IfReady: function (callback) {
                 var shouldShow = this._readyForShippingSelector();
                 this._ensureShippingVisible(shouldShow);
-                if (shouldShow) {
+                if (shouldShow && this._gfsCurrentAddrId != this.consumerData.prefDeliveryAddressId) {
                     this._updateGfs(callback);
                 }
             },
@@ -662,7 +662,7 @@
             },
 
             _readyForShippingSelector: function () {
-                if (this.cartData && this.consumerData.prefDeliveryAddressId && this._gfsCurrentAddrId != this.consumerData.prefDeliveryAddressId) {
+                if (this.cartData && this.consumerData.prefDeliveryAddressId) {
                     return this.getAddressById(this.consumerData.prefDeliveryAddressId);
                 }
                 return false;
@@ -909,9 +909,9 @@
                     //return false;
                 }
                 else {
+                    if (this.consumerData.prefDeliveryAddressId === null)
+                        this.consumerData.prefDeliveryAddressId = addressId;
                     //Send to GFS Checkout and await shipping event
-                   
-
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
 
