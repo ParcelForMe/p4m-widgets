@@ -302,22 +302,21 @@
                             function _gfs(callback) {
                                 self.initialising = false;
                                 console.log('_gfs()');
-                                self._updateGfs(callback);
+                                self._runGFS_IfReady(callback);
 
                             },
 
-                            function _p4mCart(callback) {
-                                //self.initialising = true;
+                            //function _p4mCart(callback) {
+                            //    //self.initialising = true;
                                 
-                                console.log('init: Second updateP4mCart() start');
-                                //self.preselectDeliveryMethod();
+                            //    console.log('init: Second updateP4mCart() start - still required??');
+                            //    //self.preselectDeliveryMethod();
 
-                                self.updateP4mCart(function(err) {//This will set IsNew to false
-                                    //self._updateGfs(callback); //Try to fill out delivery method
-                                    console.log('init: Second updateP4mCart() complete');
-                                    callback(err);
-                                }); 
-                            }
+                            //    self.updateP4mCart(function(err) {//This will set IsNew to false
+                            //        console.log('init: Second updateP4mCart() complete');
+                            //        callback(err);
+                            //    }); 
+                            //}
                         ],
                         function (err) {
                             if (err) {
@@ -351,23 +350,29 @@
 
 
             //Send all cart information to shipping plugin
+            _gfsCurrentAddrId: "",
             _updateGfs: function (callback) {
-
                 if (!callback) {
                     callback = function(){};
                 }
 
-                if (!this._readyForShippingSelector()) {
+                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
                     callback();
                     return;
                 }
 
                 var self = this;
+                this._gfsCurrentAddrId = this.consumerData.prefDeliveryAddressId;
 
                 var orderValue = 0.0;
                 this.cartData.items.forEach(function (item) {
                     orderValue += item.qty * item.price;
                 });
+                if (orderValue <= 0.0) {
+                    callback();
+                    return;
+                }
+
                 var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
                 var gfsPostConfig = {
                     countryCode: "GB",
@@ -392,10 +397,12 @@
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
                 var selection = null;
                 if (!this.isNew && self.cartData.addressId) {
+                    var addr = self.getAddressById(self.cartData.addressId);
+                    var dropPointId = addr ? addr.dropPointId : null;
                     selection = {
-                        dropPointId: self.getAddressById(self.cartData.addressId).dropPointId,
+                        dropPointId: dropPointId,
                         deliveryMethodId: self.cartData.serviceId,
-                        address: p4mAddressToGfsAddress(self.getAddressById(self.cartData.addressId)) || null,
+                        address: p4mAddressToGfsAddress(addr) || null,
                         deliveryDate: new Date(self.cartData.expDeliveryDate)
                     }
                     //selection = null;
@@ -481,9 +488,10 @@
                 this.cartData.tax = newCartTotals.tax || 0;
                 this.cartData.shippingAmt = newCartTotals.shipping || 0;
                 this.cartData.total = newCartTotals.total || 0;
-                this._updateGfs(callback);              
-
-
+                if (this.cartData.total > 0)
+                    this._updateGfs(callback);
+                else 
+                    this.updateP4mCart(callback);
             },
 
             _showAsLoadingShipping: function(loading) {
@@ -507,7 +515,7 @@
 
                 if (showAsLoading) {
                     this.$.orderSummary.showAsLoading();
-                    this._showAsLoadingShipping(true);
+                    this._showAsLoadingShipping(this.cartData && this.cartData.total > 0);
                     this._toggleCartEditing(false);
 
                     //this.$.p4mPurchase.setLoadingState(true);
@@ -635,11 +643,22 @@
                 }
             },
 
-            onConsumerAddressChange: function(e) {
-                if (this._readyForShippingSelector()) {
+            onConsumerAddressChange: function (e) {
+                this._runGFS_IfReady();
+            },
+
+            _runGFS_IfReady: function (callback) {
+                var shouldShow = this._readyForShippingSelector();
+                this._ensureShippingVisible(shouldShow);
+                if (shouldShow && this._gfsCurrentAddrId != this.consumerData.prefDeliveryAddressId) {
+                    this._updateGfs(callback);
+                }
+            },
+
+            _ensureShippingVisible: function (show) {
+                if (show) {
                     this.$.noShippingWarning.classList.add('hidden');
                     this.$.shippingSelector.classList.remove('hidden');
-                    this._updateGfs();
                 }
                 else {
                     this.$.noShippingWarning.classList.remove('hidden');
@@ -647,8 +666,11 @@
                 }
             },
 
-            _readyForShippingSelector: function() {
-                return (this.consumerData.addresses.length);
+            _readyForShippingSelector: function () {
+                if (this.cartData && this.consumerData.prefDeliveryAddressId) {
+                    return this.getAddressById(this.consumerData.prefDeliveryAddressId);
+                }
+                return false;
             },
 
             //Take data from shipping selector representing selected shipping options
@@ -678,7 +700,6 @@
                     }
                     else {
                         var addr = this.consumerData.addresses.find(a => a.id === this.cartData.addressId);
-                        console.log("update shipping addr: ", addr);
                         var shippingDetails = { 'service': data.service, 'amount': data.shipping, 'dueDate': data.expDeliveryDate, 'address': addr };
                         // got new shipping details so we need to get updated tax from the host
                         this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
@@ -704,16 +725,22 @@
                                         });
                                     });
                                 }
+                                else if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
+                                    console.log("update shipping addr: ", addr);
+                                    self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
+                                        self.updateP4mCart(function (err) {
+                                            self.updatingShipping = false;
+                                            callback(err);
+                                        })
+                                    });
+                                }
                                 else {
-                                    if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
-                                        self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
-                                            self.updateP4mCart(function (err) {
-                                                self.updatingShipping = false;
-                                                callback(err);
-                                            })
-                                        });
-                                    }
-
+                                    // something has changed on the cart so we need to update it
+                                    console.log("updating cart because service or address has changed");
+                                    self.updateP4mCart(function (err) {
+                                        self.updatingShipping = false;
+                                        callback(err);
+                                    })
                                 }
                             }
                         });
@@ -755,7 +782,7 @@
                             "phone": collectPointAddress.phone,
                             "latitude": collectPointAddress.coordinates.latitude,
                             "longitude": collectPointAddress.coordinates.longitude,
-                            "dropPointProviderId": providerId,              
+                            "dropPointProviderId": providerName,              
                             "dropPointId": collectPointId,
                             "collectPrefOrder": prefOrder,
                             "unsaved": true
@@ -781,14 +808,8 @@
             },
 
             onPaymentComplete: function (e) {
-                if (this.$.gfsCheckoutWidget) {
-                    this.$.gfsCheckoutWidget._closeReq(function (err) {
-                        if (!err) {
-                            if (e && e.detail.redirectUrl) {
-                                window.location = e.detail.redirectUrl;
-                            }
-                        }
-                    });
+                if (e && e.detail.redirectUrl) {
+                    window.location = e.detail.redirectUrl;
                 }
             },
             
@@ -893,24 +914,26 @@
                     //return false;
                 }
                 else {
+                    if (this.consumerData.prefDeliveryAddressId === null)
+                        this.consumerData.prefDeliveryAddressId = addressId;
                     //Send to GFS Checkout and await shipping event
-                   
-
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
 
-                        if (!this._readyForShippingSelector) {
-                            callback();
-                            return;
-                        }
+                        //if (!this._readyForShippingSelector) {
+                        //    callback();
+                        //    return;
+                        //}
                         
                         if (!this.$.gfsCheckoutWidget.initialised) {
-                            this._updateGfs(function(callback) {
+                            this._updateGfs(function(err) {
 
                                 self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                     self.set('cartData.addressId', addressId); //This allows the address UI to update
                                     self.notifyPath('cartData.addressId');
-                                    callback(null, address);
+                                    if (callback) {
+                                        callback(null, address);
+                                    }
                                 });
                             })
                         }
@@ -918,7 +941,9 @@
                             this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
-                                callback(null, address);
+                                if (callback) {
+                                    callback(null, address);
+                                }
                             });
                         }
                         
@@ -947,18 +972,17 @@
                 if (!address.addressType) {
                     address.addressType = 'Address';
                 }
-                var postData =
-                {
-                    "Address": address,
-                    "isPrefDeliveryAddr": false,
-                    "isBillingAddr": false
-                };
                 var self = this;
                 var result = null
 
-                var existingAddress = this.getAddressById(address.id);
-                if (existingAddress) existingAddress.id = ""; //TODO: Remove this item, or replace it
-                this.push('consumerData.addresses', address);
+                var hasAnAddress = this.consumerData.addresses.length && this.consumerData.addresses.some(function (address) { return address.id && address.id != ""; });
+                var existingAddress = hasAnAddress && address.id && address.id != "" && this.getAddressById(address.id);
+                var postData =
+                {
+                    "Address": address,
+                    "isPrefDeliveryAddr": !hasAnAddress,
+                    "isBillingAddr": !hasAnAddress
+                };
 
                 async.series(
                     [
@@ -966,23 +990,20 @@
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
                                 address.id = result.address.id;
+                                if (!existingAddress) {
+                                    self.push('consumerData.addresses', result.address);
+                                }
                                 self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses())
 
                                 callback(err);
                             });
                         },
-                        
-                        //function _getConsumer(callback) {
-                        //    callback(null, result)
-                        //},
                         function _selectAddress(callback) {
                             self.selectDeliveryAddress(result.address.id, true, function(err, data) {
                                 //  result = data;
                                 callback(err);
                             });
                         }
-
-
                     ],
                     function(err) {
                         finalCallback(err, result);
@@ -1004,7 +1025,7 @@
                     else {
                         addressElement.detail.addressData.id = result.address.id;
                         self._toggleAddressesLoading(false);
-
+                        self._ensureShippingVisible(true);
                     }
                 });
 

@@ -219,6 +219,9 @@
                 if (this.isLocal) {                   
                     return "//" + window.location.host + "/p4m/";                   
                 }
+                else if (this.hostType === 'local') {
+                    return "http://localhost:8088/api/" + this.version + "/";
+                }
                 else {
                     return (this.ssl ? "https" : "http") + "://" + this.hostType + "-api." + this.hostBaseDomain +  "/api/" + this.version + "/";
                 }               
@@ -365,7 +368,7 @@
                         loginWidget.logoutThisSite();
                     }
                     else {
-                        console.error(responseData);
+                        console.log(responseData);
                         
                     }
                     finalCallback(err, responseData);

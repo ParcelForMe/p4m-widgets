@@ -1,10 +1,7 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../iron-list/iron-list.html" />
 
-<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html" />
 <link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../../paper-toast/paper-toast.html" />
-<link rel="import" href="../../paper-button/paper-button.html" />
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
 <link rel="import" href="../../iron-icons/iron-icons.html" />
@@ -653,14 +650,17 @@
                 var data = {
                     closeSession: true,
                     selectedDeliveryOptionID: this.selectedServiceDetails.serviceCode,
-                    selectedDroppointId: this.selectedServiceDetails.collectionPoint
-                    /*selectedService: {
-                        id: this.selectedServiceDetails.serviceId
-                    },
-                    selectedDroppoint: {
-                        id: this.selectedServiceDetails.collectionPoint
-                    }*/
+                    //selectedDroppointID: this.selectedServiceDetails.collectionPoint
                 };
+
+                /* curl -X PATCH --header 'Content-Type: application/json' --header 'Accept: application/json' -d 
+                    {
+                      "closeSession": true,
+                      "selectedDeliveryOptionID": "D0S0"
+                    }
+                    http://rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=ba1212fd-ec56-4824-85fa-54fd223ee6eb'
+
+                */
                 
                 var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
 
@@ -671,8 +671,8 @@
                     }
                     else {
                         var result = JSON.parse(data);
-                        if (result.message) {
-                            callback(result.message);
+                        if (result.selectedService && result.selectedService.carrierName) {
+                            callback(null, result.selectedService.carrierName);
                         }
                         else {
                             callback(null);
@@ -1103,15 +1103,14 @@
                     }
 
                     newMethod.selected = true;
-                    if (!newMethod.price) {
-                        debugger;
-                    }
+                    //if (!newMethod.price) {
+                    //}
 
                     var newSelectedServiceDetails = {
                         _originalMethodObject: newMethod,
                         serviceId: methodId,
                         service: newMethod.methodTitle,
-                        serviceCode: newMethod.carrierCode,
+                        serviceCode: newMethod.deliveryOptionId,
                         carrier: newMethod.carrierName,
                         shipping: newMethod.price,
                         currencySymbol: this.currencySymbol
@@ -1174,11 +1173,12 @@
                 }
             },
 
-            selectNearestDropPoint: function(callback) {
+            selectNearestDropPoint: function (callback) {
+                self = this;
                 this.requestDropPointsByAddress(this.config.defaultAddress.Street1, this.config.defaultAddress.PostCode, null, function (dropPoints) {
                     if (dropPoints && dropPoints.length) {
                         var dropPoint = dropPoints[0];
-                        this._selectDropPoint(dropPoint.droppointId, callback);
+                        self._selectDropPoint(dropPoint.droppointId, callback);
                     }
                     else {
                         callback("No supported drop-points found");
