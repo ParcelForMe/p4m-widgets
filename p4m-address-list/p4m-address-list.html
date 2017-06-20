@@ -120,24 +120,18 @@
                     this.$.toggleAddressMode.classList.add("cancel");
                     this.$.toggleAddressMode.classList.remove("add");
                     this.set("_addressModePrompt", "Cancel");
-                    //if (this.addressListData && !this._addedNewAddress) {
-                        this._addedNewAddress = true;
-                        //Add empty object to handle adding a new address
-                        this.push('addressListData', this.newAddress);
-                    //}   
+                    this._addedNewAddress = true;
+                    //Add empty object to handle adding a new address
+                    this.push('addressListData', this.newAddress);
+  
                 }
-               
-          
-
             },
 
             cancelAdd: function(e) {
                 console.log("Cancel add address");
                 this._addedNewAddress = false;
+                this.newAddress = {};
                 this.pop('addressListData');
-
-
-                //this.$.newAddressCollapse.opened = false;
             },
 
             cancelEdit: function (e) {
