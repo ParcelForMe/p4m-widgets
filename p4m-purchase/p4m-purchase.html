@@ -106,7 +106,8 @@
             NOT_PURCHASED: 1,
             PURCHASING: 2,
             FAILED_PURCHASE: 3,
-            PURCHASED: 4
+            PURCHASED: 4,
+            INVALID: -1
         };
 
         var PaymentTypes = {
@@ -197,7 +198,7 @@
             ready: function ()
             {
                 this.selectedPaymentType = PaymentTypes.CARD;
-                window.addEventListener('buy', this.buyNow.bind(this), false);
+                window.addEventListener('buy', this.buyNow.bind(this), false); //From button
                 this.load();
             },
 
@@ -276,6 +277,11 @@
                 var token = this.$.p4mTokenCookie.readCookie();
                 this._loggedIn = token !== "";
                 this._state = States.CVV_NEEDED;                    
+            },
+
+            setEnabled: function(enabled) {
+
+                this.set('_enabled', enabled);
             },
 
             onPurchase: function (err, data) {
@@ -375,7 +381,7 @@
                     this._noCardSelected = true;
                 }
         
-                if (!this._loggedIn || !this.cartData) {                    
+                if (!this._loggedIn || !this.cartData || !this.cartData.addressId || !this.cartData.serviceId) {                    
                     this.showAsNotValid();
                 }
                 else if (this._state == States.CVV_NEEDED) {
@@ -394,6 +400,7 @@
                 else if (this._state == States.FAILED_PURCHASE) {
                     this.showAsFailed();
                 }
+
                 this.fire('p4mPaymentState', this._state);
                 
             },
@@ -430,6 +437,7 @@
                 this.$.p4mPaypalButton.classList.remove('p4m-button-active');
                 this.$.p4mPaypalButton.classList.add('disabled');*/
                 this.setLoadingState(false);
+                this._state = States.INVALID;
                 this.topClass = "invalid";
             },
 

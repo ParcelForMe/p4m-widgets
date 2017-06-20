@@ -15,7 +15,8 @@
             NOT_PURCHASED: 1,
             PURCHASING: 2,
             FAILED_PURCHASE: 3,
-            PURCHASED: 4
+            PURCHASED: 4,
+            INVALID: -1
         }
     //
         Polymer({
@@ -41,7 +42,7 @@
                 },
                 btnMsgNotValid: {
                     type: String,
-                    value: "Cart empty"
+                    value: "Buy now"
                 },
                 btnMsgFailed: {
                     type: String,
@@ -115,6 +116,10 @@
                 else if (this._state == States.FAILED_PURCHASE) {
                     this.showAsFailed();
                 }
+                else if (this._state == States.INVALID) {
+                    this.showAsNotValid();
+                }
+
             },
 
 
