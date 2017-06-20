@@ -210,8 +210,8 @@
             observers: [
                 //"onCartDiscountChange(cartData.discounts.*)"
                "onCartItemsChange(cartData.items.*)",
-               "onCartAddressSelect(cartData.addressId)"
-               //"onConsumerAddressChange(consumerData.addresses.*)"
+               //"onCartAddressSelect(cartData.addressId)"
+               "onConsumerAddressChange(consumerData.addresses.*)"
             ],
 
             ready: function()
@@ -635,7 +635,7 @@
                 }
             },
 
-            onCartAddressSelect: function(e) {
+            onConsumerAddressChange: function(e) {
                 if (this._readyForShippingSelector()) {
                     this.$.noShippingWarning.classList.add('hidden');
                     this.$.shippingSelector.classList.remove('hidden');
