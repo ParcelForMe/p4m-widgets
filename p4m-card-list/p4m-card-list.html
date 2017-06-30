@@ -14,9 +14,8 @@
                 </div>
             </div>
             <iron-pages id="cardSelectionPages" selected="1"> 
-
                 <iron-page id="newCardPage">
-                    <p4m-new-card id="newCard" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>
+                    <p4m-new-card id="newCard" responseUrl="https://{{platform}}-api.parcelfor.me/realex/v2/cardTokenResponse" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>
                 </iron-page>
 
                 <iron-page id="cardListPage"> 
@@ -57,6 +56,9 @@
                 selectedCardId: {
                     type: String,
                     notify: true
+                },
+                platform: {
+                    type: String
                 },
                 labelText: {
                     type: String,
