@@ -45,7 +45,7 @@
                 this.calcUrl();
             },
             calcUrl: function() {
-                this._localSrc = this.resolveUrl("../" + this.localFolder + "/" + this.imgSrc);
+                this._localSrc = this.resolveUrl("../" + this.localFolder + "/" + this.imgSrc.toLowerCase());
             },
             ready: function()
             {
