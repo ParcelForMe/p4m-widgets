@@ -319,6 +319,15 @@ flex: 12;
 }
 
 
+
+// Widths
+.width-20 {width:20% !important;}
+.width-50 {width:50% !important;}
+.width-100 {width:100% !important;}
+.width-33 {width:33% !important;}
+.width-25 {width:25% !important;}
+
+
 /* iron-positioning */
 
 .block {
@@ -1036,6 +1045,74 @@ p4m-spinner[species='progress'] {
 
   }
 }
+
+// Non-Tooltip Error messages 
+.input-validation-error + span.alert:after, 
+.invalid + span.alert:after {
+  content: '!';
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: initial;
+  left: 15px;   
+  width: 18px !important;
+  height: 18px !important;
+  background: #da343a;
+  color: #fff;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 0;
+  margin-top: -52px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+div#errorMessage {
+    background: transparent;
+    padding: 0 18px;
+    box-sizing: border-box;
+    height: 48px;
+    display: flex;
+    color: #da343a;
+    font-style: italic;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: initial;
+    &:before {
+      content: '!';
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: initial;
+      left: 15px;
+      width: 18px !important;
+      height: 18px !important;
+      background: #da343a;
+      color: #fff;
+      font-style: normal;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 0;
+      margin-top: -52px;
+      border-radius: 50%;
+      border: 3px solid #f8f8f8;
+      position: relative;
+      left: initial;
+      top: initial;
+      margin-top: initial;
+      margin-right: 5px;
+      border: none;
+  }
+}
+
+
+
 
 //---------------------------------------------
 
@@ -3229,7 +3306,7 @@ p4m-address {
         box-sizing: border-box;
         ul {
             padding: 0;
-            margin: 0 10px 5px 10px;
+            margin: 0 10px 0 10px;
         }
     }
     .side-action {
@@ -3318,7 +3395,7 @@ p4m-address {
     }
     .address-form {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
     }
     .address-form input {
@@ -3336,7 +3413,7 @@ p4m-address {
 	    flex-direction: column;
 	    background: #f8f8f8;
 	    box-sizing: border-box;
-	    padding: 15px;
+	    padding: 15px 15px 8px 15px;
     }
     .buttons {
         display: flex;
