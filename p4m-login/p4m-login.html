@@ -443,20 +443,26 @@
 
             _showAsLoggingIn: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.set("class", "loggingIn");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loggingIn", true);
                 this.$.spinner.active = true;
             },
 
             _showAsLoggedIn: function() {
                 this.$.p4mProfile.classList.remove("hidden");
-                this.set("class", "loggedIn");
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedIn", true);
                 this.$.spinner.active = false;
             },
 
 
             _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.set("class", "loggedOut");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedOut", true);
             }
         });
     </script>
