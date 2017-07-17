@@ -2551,7 +2551,7 @@ p4m-address #container {
   box-sizing: border-box; }
   p4m-address #container ul {
     padding: 0;
-    margin: 0 10px 5px 10px; }
+    margin: 0 10px 0 10px; }
 
 p4m-address .side-action {
   float: right; }
@@ -2644,7 +2644,7 @@ p4m-address .card-body.card-edit {
   flex-direction: column;
   background: #f8f8f8;
   box-sizing: border-box;
-  padding: 15px; }
+  padding: 15px 15px 8px 15px; }
 
 p4m-address .buttons {
   display: flex;
