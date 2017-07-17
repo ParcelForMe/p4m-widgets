@@ -1,0 +1,93 @@
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html" />
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
+
+<dom-module id="p4m-general-fault">
+    <style>
+        paper-spinner {
+            width: 200px;
+            height: 200px;
+        }
+        iron-overlay-backdrop.opened {
+            opacity: 0.95;
+            background-color: green;
+        }
+        h1, p {
+            color: white;
+        }
+    </style>
+
+    <template>
+        <content>
+            <div class="checking">
+
+                <h1>Something went wrong</h1>
+                <p>Your computer is having trouble getting through to our shipping service.</p>
+                <div class="buttons">
+                    <button on-click="tryAgain">Try again</button>
+                    <button on-click="basicCheckout">Use basic checkout</button>
+                    <button on-click="backHome">Back home</button>
+                </div>
+                <!--p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner-->
+
+            </div>
+        </content> 
+       
+    </template>
+    <style>
+        .generalFault {
+            width: 320px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #p4m-logo {
+            width: 24px;
+            height: 24px;
+        }
+        #p4m-logo svg {
+            fill: #fff;
+        }
+        .generalFault h3 {
+            color: #fff;
+            font-weight: 200 !important;
+            font-size: 18px;
+            height: 24px;
+            padding: 0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-end;
+        }
+        .generalFault p4m-spinner {
+            background: rgba(255,255,255,0.3);
+            position: relative;
+            top: initial;
+            bottom: initial;
+            margin-bottom: 12px;
+        }
+    </style>
+
+    <script>
+
+        Polymer({
+            is: "p4m-general-fault",
+            behaviors: [Polymer.IronOverlayBehavior],
+
+            properties: {
+            },
+
+            ready: function()
+            {
+                this.positionTarget = document.body;
+            },
+
+            tryAgain: function() {
+                window.location.reload();
+            },
+
+            backHome: function() {
+                window.location.href= "/";
+            }
+        });
+    </script>
+</dom-module>
