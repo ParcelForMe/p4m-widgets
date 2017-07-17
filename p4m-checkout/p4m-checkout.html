@@ -17,12 +17,14 @@
 <link rel="import" href="../p4m-card-list/p4m-card-list.html" />
 <link rel="import" href="../p4m-delivery/p4m-delivery.html" />
 <link rel="import" href="../p4m-order-text/p4m-order-text.html" />
+<link rel="import" href="../p4m-overlay/p4m-general-fault.html" />
 
 <link rel="import" href="../p4m-discount-input/p4m-discount-input.html" />
 <link rel="import" href="../p4m-discount-list/p4m-discount-list.html" />
 
 <link rel="import" href="../gfs-checkout-widget/gfs-checkout-widget.html" />
 <link rel="import" href="../address-lookup-field/address-lookup-field.html" />  
+
 
 <link rel="import" href="../p4m-imports/p4m-imports.html" />  
  
@@ -31,6 +33,7 @@
 <dom-module id="p4m-checkout">
 
     <template>
+
         <p4m-api id="p4mCheckoutApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
         <div id="container" class$="{{_changeIndicatorClass}}">
@@ -91,8 +94,10 @@
             </footer>
 
         </div>
+        <p4m-general-fault id="generalFault" no-cancel-on-outside-click with-backdrop></p4m-general-fault>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
+
         <!--             
         <polymer-cookie id="p4mDefaultPostCode" name="p4mDefaultPostCode"></polymer-cookie>
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
@@ -1114,6 +1119,7 @@
             onGfsNoService: function (e) {
                 // this.preselectDeliveryMethod();
                 console.error('No GFS service');
+                this.showGeneralFault();
             },
 
             onGfsSessionExpiry: function (e) {
@@ -1149,7 +1155,15 @@
             _onSelectTab: function (tab) {
                 //Tab changed
                 //console.log(tab);
-            }
+            },
+
+            showGeneralFault: function() {
+                this.$.generalFault.open();
+            },
+
+            hideGeneralFault: function () {
+                this.$.generalFault.close();
+            },
         });
 
         function p4mDroppointToGfsDroppoint(item) {
