@@ -141,10 +141,13 @@
             },
 
             onSaveNewAddress: function(addressElement) {
+
                 this.fire('add', addressElement.detail);
                 this.notifyPath('addressListData');
                 this.$.oldAddresses.render();
                 this.toggleAddressMode();
+
+
             },
 
             onUpdateAddress: function (addressElement) {
@@ -191,9 +194,20 @@
             },
 
             showAsLoading: function () {
+
                 this.$.spinner.active = true;
                 this.$.spinner.classList.remove('hidden');
                 this.$.container.classList.add('loading');
+            },
+
+            showError: function (err) {   
+                if (err) {
+                     this.$.container.classList.add('error');
+                     this.$.error = err;
+                }
+                else {
+                    this.$.container.classList.remove('error');
+                }           
             },
 
             getDropPointById: function (dropPointId) {
