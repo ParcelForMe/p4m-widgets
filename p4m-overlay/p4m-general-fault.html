@@ -25,7 +25,9 @@
                 <p>Your computer is having trouble getting through to our shipping service.</p>
                 <div class="buttons">
                     <button on-click="tryAgain">Try again</button>
-                    <button on-click="basicCheckout">Use basic checkout</button>
+                    <template is="dom-if" if="shared-mode">
+                        <button on-click="basicCheckout">Use basic checkout</button>
+                    </template>
                     <button on-click="backHome">Back home</button>
                 </div>
                 <!--p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner-->
@@ -72,8 +74,15 @@
         Polymer({
             is: "p4m-general-fault",
             behaviors: [Polymer.IronOverlayBehavior],
-
             properties: {
+                sharedMode: {
+                    type: Object,
+                    value: false
+                },
+                basicCheckoutUrl: {
+                    type: String,
+                    value: "/"
+                }
             },
 
             ready: function()
@@ -85,8 +94,12 @@
                 window.location.reload();
             },
 
+            basicCheckout: function() {
+                window.location.href =  this.basicCheckoutUrl;
+            },
+
             backHome: function() {
-                window.location.href= "/";
+                window.location.href = "/";
             }
         });
     </script>
