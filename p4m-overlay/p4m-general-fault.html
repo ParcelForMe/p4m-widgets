@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html" />
-<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
+<link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 
 <dom-module id="p4m-general-fault">
     <style>
@@ -28,13 +28,13 @@
                     <template is="dom-if" if="shared-mode">
                         <button on-click="basicCheckout">Use basic checkout</button>
                     </template>
-                    <button on-click="backHome">Back home</button>
+                    <button on-click="signInAgain">Sign in again</button>
                 </div>
-                <!--p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner-->
-
             </div>
         </content> 
-       
+        <polymer-cookie id="p4mToken" name="p4mToken"></polymer-cookie>
+        <polymer-cookie id="gfsCheckoutToken" name="gfsCheckoutToken"></polymer-cookie>
+
     </template>
     <style>
         .generalFault {
@@ -98,8 +98,15 @@
                 window.location.href =  this.basicCheckoutUrl;
             },
 
-            backHome: function() {
+            signInAgain: function() {
+                this.$.p4mToken.eraseCookie();
+                this.$.gfsCheckoutToken.eraseCookie();
+
                 window.location.href = "/";
+            },
+
+            deleteCookie: function(name) {
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             }
         });
     </script>

@@ -306,12 +306,16 @@
                     }
                     httpRequest.setRequestHeader('Authorization', 'Bearer ' + this.consumerToken);
                     httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
                     httpRequest.onreadystatechange = (function () {
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             try {
                                 if (httpRequest.status === 401) {
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
                                     loginWidget.logoutThisSite();
+                                }
+                                else if (httpRequest.status === 0) { //Timeout
+                                    this.fire('noservice');
                                 }
                                 else {
                                     intermediateCallback(JSON.parse(httpRequest.responseText));
@@ -327,7 +331,8 @@
                                 //intermediateCallback(JSON.parse(httpRequest.responseText));
                             }
                         }
-                    });
+                        
+                    }).bind(this);
                     if (apiRequest.data) {
                         httpRequest.send(JSON.stringify(apiRequest.data));
                     }
