@@ -1,8 +1,31 @@
 <link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html" />
-<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
+<link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 
 <dom-module id="p4m-general-fault">
+
+    <template>
+        <content>
+            <div class="checking">
+            <img class="p4m-register-logo" src="../p4m-shared/img/p4m-logo-horizontal-white.png">
+                <h1>Hmm... Looks like something went wrong</h1>
+                <p>Your computer is having trouble getting through to our shipping service</p>
+                <div class="buttons">
+                    <button class="p4m-button inverse auto" on-click="tryAgain">Try again</button>
+                    <template is="dom-if" if="shared-mode">
+                        <button class="p4m-button secondary auto" on-click="basicCheckout">Use basic checkout</button>
+                    </template>
+                    <button class="p4m-button secondary auto" on-click="signInAgain">Try logging into Parcel For Me again</button> Your cart will not be lost.
+
+                </div>
+            </div>
+        </content> 
+
+        <polymer-cookie id="p4mToken" name="p4mToken"></polymer-cookie>
+        <polymer-cookie id="gfsCheckoutToken" name="gfsCheckoutToken"></polymer-cookie>
+
+    <template>
+
     <style>
         paper-spinner {
             width: 200px;
@@ -38,28 +61,6 @@
             width: 540px;
             max-width: 100%;
         }
-    </style>
-
-    <template>
-        <content>
-            <div class="checking">
-
-                <h1><span> :(</span><br>Hmm... Looks like something went wrong</h1>
-                <p>Your computer is having trouble getting through to our shipping service</p>
-                <div class="buttons">
-                    <button class="p4m-button inverse auto" on-click="tryAgain">Try again</button>
-                    <button class="p4m-button secondary auto" on-click="basicCheckout">Use basic checkout</button>
-                    <button class="p4m-button secondary auto" on-click="backHome">Refresh Parcel for Me on this site and return to homepage</button>
-                    <button class="p4m-button secondary auto" on-click="backHome">Logout of Parcel For Me and return to homepage</button>
-                    <button class="p4m-button secondary auto" on-click="backHome">Try logging into Parcel For Me again</button> Your zacart will not be lost.
-                </div>
-                <!--p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner-->
-
-            </div>
-        </content> 
-     
-    </template>
-    <style>
         #generalFault {
             width: 320px;
             margin: auto;
@@ -163,8 +164,15 @@
         Polymer({
             is: "p4m-general-fault",
             behaviors: [Polymer.IronOverlayBehavior],
-
             properties: {
+                sharedMode: {
+                    type: Object,
+                    value: false
+                },
+                basicCheckoutUrl: {
+                    type: String,
+                    value: "/"
+                }
             },
 
             ready: function()
@@ -176,8 +184,19 @@
                 window.location.reload();
             },
 
-            backHome: function() {
-                window.location.href= "/";
+            basicCheckout: function() {
+                window.location.href =  this.basicCheckoutUrl;
+            },
+
+            signInAgain: function() {
+                this.$.p4mToken.eraseCookie();
+                this.$.gfsCheckoutToken.eraseCookie();
+
+                window.location.href = "/";
+            },
+
+            deleteCookie: function(name) {
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             }
         });
     </script>

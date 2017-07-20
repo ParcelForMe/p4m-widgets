@@ -34,7 +34,7 @@
 
     <template>
 
-        <p4m-api id="p4mCheckoutApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
+        <p4m-api id="p4mCheckoutApi" ssl="true" on-noservice="onP4mNoService" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
         <div id="container" class$="{{_changeIndicatorClass}}">
 
@@ -1115,10 +1115,14 @@
                 this.updateShippingService(e.detail, function () { console.log("onGfsServicePreselect: updateShippingService complete") });
             },
 
-            //The selected service wasn't available, so choose a default
             onGfsNoService: function (e) {
                 // this.preselectDeliveryMethod();
                 console.error('No GFS service');
+                this.showGeneralFault();
+            },
+
+            onP4mNoService: function (e) {
+                console.error('No P4M service');
                 this.showGeneralFault();
             },
 
