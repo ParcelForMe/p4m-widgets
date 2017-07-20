@@ -399,6 +399,19 @@ body.fullbleed {
   bottom: 0;
   left: 0; }
 
+.shadow {
+  box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -khtml-transition: all 0.15s ease-in-out 0s;
+  -moz-transition: all 0.15s ease-in-out 0s;
+  -ms-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
+  transition: all 0.15s ease-in-out 0s; }
+
+iron-overlay-backdrop {
+  background-color: #37a553 !important;
+  opacity: .95 !important; }
+
 @font-face {
   font-family: 'p4m';
   src: url("fonts/p4m.eot?it9ffc");
@@ -2672,14 +2685,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
       font-weight: 600;
       letter-spacing: .02em;
       border-radius: 24px;
-      border: 2px solid #37a553;
-      box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
-      -webkit-transition: all 0.15s ease-in-out 0s;
-      -khtml-transition: all 0.15s ease-in-out 0s;
-      -moz-transition: all 0.15s ease-in-out 0s;
-      -ms-transition: all 0.15s ease-in-out 0s;
-      -o-transition: all 0.15s ease-in-out 0s;
-      transition: all 0.15s ease-in-out 0s; }
+      border: 2px solid #37a553; }
       footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button:after {
         content: '';
         display: flex;
