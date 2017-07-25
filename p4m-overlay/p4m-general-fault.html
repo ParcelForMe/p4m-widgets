@@ -7,24 +7,24 @@
     <template>
         <content>
             <div class="checking">
-            <img class="p4m-register-logo" src="../p4m-shared/img/p4m-logo-horizontal-white.png">
+            <img class="p4m-register-logo" src="../p4m-shared/img/p4m-logo-horizontal-white-tight.png">
                 <h1>Hmm... Looks like something went wrong</h1>
-                <p>Your computer is having trouble getting through to our shipping service</p>
-                <div class="buttons">
-                    <button class="p4m-button inverse auto" on-click="tryAgain">Try again</button>
+                <p>We're having trouble connecting to our shipping service</p>
+                <div class="layout horizontal center buttons">
+                    <button class="p4m-button inverse auto" on-click="tryAgain"><i class="p4micon-refresh"></i>Try again</button>
                     <template is="dom-if" if="shared-mode">
-                        <button class="p4m-button secondary auto" on-click="basicCheckout">Use basic checkout</button>
+                        <span>Or,</span> <a on-click="basicCheckout">Use basic checkout</a>
                     </template>
-                    <button class="p4m-button secondary auto" on-click="signInAgain">Try logging into Parcel For Me again</button> Your cart will not be lost.
-
+                </div>
+                <div class="layout horizontal center buttons" style="margin-top:2.4em;">
+                    <span>Still having trouble?</span> <a on-click="signInAgain">Try logging into Parcel For Me again</a>
                 </div>
             </div>
         </content> 
 
         <polymer-cookie id="p4mToken" name="p4mToken"></polymer-cookie>
         <polymer-cookie id="gfsCheckoutToken" name="gfsCheckoutToken"></polymer-cookie>
-
-    <template>
+     </template>
 
     <style>
         paper-spinner {
@@ -35,27 +35,53 @@
             opacity: 0.95;
             background-color: green;
         }
+        img.p4m-register-logo {
+            width: 300px;
+            max-width: 90%;
+        }
         h1 {
             color: #fff;
             font-size: 48px;
             line-height: 1em;
+            margin-bottom: .425em;
         }
         h1 span {
             line-height: 1.5em;
         }
         p {
-            color: white;
-            font-size: 24px;
+            color: #fff;
+            font-size: 20px;
             font-weight: 200;
             line-height: 1.3em;
         }
-        .buttons {
-            margin: 1.6em 0;
-            flex-direction: row;
-            display: flex;
+        i.p4micon-refresh {        
+            font-weight: normal;
+            font-size: 18px;
+            margin-right: 8px;
+            -webkit-font-smoothing: subpixel-antialiased;
         }
         .buttons button {
             margin-left: 0;
+        }
+        .buttons {
+            margin: 1em 0;
+            flex-direction: row;
+            display: flex;
+        }
+        .buttons a {
+            color: #fff;
+            padding: 4px 0;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(255,255,255,0);
+        }
+        .buttons a:hover {
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.65);
+        }
+        .buttons span {
+            color: rgba(255, 255, 255, 0.65);
+            padding: 4px 0 6px 0;
+            margin: 0 10px 0 0;
         }
         .checking {
             width: 540px;
