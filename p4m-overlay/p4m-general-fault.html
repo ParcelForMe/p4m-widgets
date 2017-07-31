@@ -26,24 +26,37 @@
         <polymer-cookie id="gfsCheckoutToken" name="gfsCheckoutToken"></polymer-cookie>
      </template>
 
+
+
     <style>
-        paper-spinner {
-            width: 200px;
-            height: 200px;
+        :host iron-overlay-backdrop.opened {
+            opacity: 0.95;
+            background-color: green;
         }
         iron-overlay-backdrop.opened {
             opacity: 0.95;
             background-color: green;
         }
+        paper-spinner {
+            width: 200px;
+            height: 200px;
+        }
         img.p4m-register-logo {
             width: 300px;
             max-width: 90%;
         }
-        h1 {
+/*        h1 {
             color: #fff;
             font-size: 48px;
             line-height: 1em;
             margin-bottom: .425em;
+        }*/
+        h1 {
+/*            border: var(--p4m-general-fault-border,5px solid green);*/
+            color: var(--p4m-general-fault-h1-border,#fff);
+            font-size: var(--p4m-general-fault-h1-font-size,48px);
+            line-height: var(--p4m-general-fault-h1-line-height,1em);
+            margin-bottom: var(--p4m-general-fault-h1-margin-bottom,.425em);
         }
         h1 span {
             line-height: 1.5em;

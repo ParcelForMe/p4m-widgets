@@ -408,13 +408,15 @@ left: 0;
   @include transition();
 }
 iron-overlay-backdrop {
-    background-color: #37a553 !important;
-    opacity:.95 !important;
+  border: none;
+    // background-color: #37a553 !important;
+    // opacity:.95 !important;
 }
 
 div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
-    background-color: #37a553 !important;
-    opacity:.95 !important;
+  border: none;
+    // background-color: #37a553 !important;
+    // opacity:.95 !important;
 }
 
 // END Universal Styles
