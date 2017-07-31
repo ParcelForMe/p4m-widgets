@@ -332,7 +332,8 @@
             _waitForAuthCompletion: function() {
                 if (!this._authCompletionInterval) {
                     this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
-                }             
+                }
+                window.addEventListener("message", this._showAsLoggedOut.bind(this));
             },
 
             _checkAuthIsComplete: function() {
@@ -463,6 +464,7 @@
                 this.toggleClass("loggedIn", false);
                 this.toggleClass("loggingIn", false);
                 this.toggleClass("loggedOut", true);
+                this.$.spinner.active = false;
             }
         });
     </script>
