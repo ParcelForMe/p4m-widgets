@@ -26,17 +26,20 @@
         <polymer-cookie id="gfsCheckoutToken" name="gfsCheckoutToken"></polymer-cookie>
      </template>
 
-
-
     <style>
-        :host iron-overlay-backdrop.opened {
+        :host {
+            --iron-overlay-backdrop-background-color: #37a553;
+            --iron-overlay-backdrop-opacity: 0.95;
+        }
+
+/*        iron-overlay-backdrop.opened {
             opacity: 0.95;
             background-color: green;
-        }
-        iron-overlay-backdrop.opened {
-            opacity: 0.95;
-            background-color: green;
-        }
+        }*/
+/*        iron-overlay-backdrop {
+            --iron-overlay-backdrop-background-color: #37a553;
+            --iron-overlay-backdrop-opacity: 0.95;
+        }*/
         paper-spinner {
             width: 200px;
             height: 200px;
@@ -52,7 +55,7 @@
             margin-bottom: .425em;
         }*/
         h1 {
-/*            border: var(--p4m-general-fault-border,5px solid green);*/
+/*          border: var(--p4m-general-fault-border,5px solid green);*/
             color: var(--p4m-general-fault-h1-border,#fff);
             font-size: var(--p4m-general-fault-h1-font-size,48px);
             line-height: var(--p4m-general-fault-h1-line-height,1em);

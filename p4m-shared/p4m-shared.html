@@ -22,6 +22,9 @@
             --paper-p4m-green-500: #37a553;
             --paper-p4m-green-700: #2f8e47;
             --paper-tabs-selection-bar-color: blue;
+
+            --iron-overlay-backdrop-opacity: 0.95;
+            --iron-overlay-backdrop-background-color: #37a553;
         }
         :host(:focus):before, .paper-item:focus:before {
 
@@ -32,6 +35,12 @@
 
             @apply(--paper-item-focused-before);
           }
+
+        iron-overlay-backdrop {
+            opacity: var(--iron-overlay-backdrop-opacity, 0.95);
+            background-color: var(--iron-overlay-backdrop-background-color, #37a553);
+        }
+
         paper-ripple {
         color: var(--paper-p4m-green-700);
         }
@@ -49,8 +58,8 @@
         @apply(--layout-flex-auto);
         @apply(--paper-tab-content);*/
       }
-
-
+      
     </style>
+
   </template>
 </dom-module>
