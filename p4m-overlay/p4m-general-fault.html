@@ -5,7 +5,7 @@
 <dom-module id="p4m-general-fault">
 
     <template>
-        <content class="p4m-general-fault">
+        <content id="p4m-general-fault-content" class="p4m-general-fault">
             <div class="checking">
             <img class="p4m-register-logo" src="../p4m-shared/img/p4m-logo-horizontal-white-tight.png">
                 <h1>Hmm... Looks like something went wrong</h1>
@@ -216,10 +216,16 @@
                     value: "/"
                 }
             },
+            listeners: {
+                "iron-overlay-opened": "onOpen"
+            },
 
             ready: function()
             {
-                this.positionTarget = document.body;
+                this.backdropElement.classList.add('p4m-general-fault');
+            },
+
+            onOpen: function(e) {
             },
 
             tryAgain: function() {
