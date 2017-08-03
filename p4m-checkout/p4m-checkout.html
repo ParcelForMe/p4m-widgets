@@ -1135,6 +1135,7 @@
 
             onP4mNoService: function (e) {
                 console.error('No P4M service');
+
                 this.showGeneralFault();
             },
 
@@ -1174,6 +1175,7 @@
             },
 
             showGeneralFault: function() {
+                this.fire('generalFault');
                 this.$.generalFault.open();
             },
 

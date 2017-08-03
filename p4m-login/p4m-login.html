@@ -202,6 +202,8 @@
                     	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
+                //Close down the dialog if there is a general fault
+                window.addEventListener('generalFault', this._useNewCart.bind(this));
 
                 //Move dialog out into the body
                 Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
