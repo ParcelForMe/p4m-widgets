@@ -260,7 +260,12 @@
                 var googleAddressComponents = e.detail.address_components; 
                 var googleAddress = googleAddressComponents.reduce(function(accumulator, item){
                     item.types.forEach(function(itemType) {
-                        accumulator[itemType] = item.long_name;
+                        if (itemType == 'country') {
+                            accumulator.country = item.short_name;
+                        }
+                        else {
+                            accumulator[itemType] = item.long_name;
+                        }
                     });
                     return accumulator;
                 }, {});
@@ -274,6 +279,8 @@
                 this.set('addressData.city', googleAddress.locality || googleAddress.postal_town||"");
                 this.set('addressData.postCode', googleAddress.postal_code||"");
                 this.set('addressData.state',  googleAddress.administrative_area_level_1 ||  googleAddress.sublocality_level_1|| e.detail.vicinity || googleAddress.sublocality_level_2 || "");
+                this.$.country.value = googleAddress.country;
+
                 
             },
 
