@@ -203,6 +203,10 @@
                     type: String,
                     value: "GB"
                 },
+                localCountries: {
+                    type: Array,
+                    value: []
+                },
                 onSessionExpiry: {
                     type: String
                 },
@@ -265,6 +269,13 @@
                 self.initialising = true;
                 console.log('Initialising...');
                 self.sessionAddressId = hashThis(this.sessionId);
+
+                //Set local countries -- this determins if Calendar and Click and Collect tabs are available
+                this.localCountries.push(this.initialCountryCode);
+                for (var i=0; i<this.localCountries.length; i++) {
+                    this.localCountries[i] = this.localCountries[i].toLowerCase();
+                }
+
                 async.series(
                     [
                         function _consumer(callback) {
@@ -380,6 +391,7 @@
 
                 var self = this;
                 this._gfsCurrentAddrId = this.consumerData.prefDeliveryAddressId;
+                this._updateUiForAddress(this.getAddressById(this._gfsCurrentAddrId));
 
                 var orderValue = 0.0;
                 this.cartData.items.forEach(function (item) {
@@ -926,13 +938,16 @@
             selectDeliveryAddress: function (addressId, sendToGfs, callback) {
                 var self = this;
                 var address = this.getAddressById(addressId);
+
+
                 if (!address) {
                     callback("No such address");
                     //return false;
                 }
                 else {
-                    if (this.consumerData.prefDeliveryAddressId === null)
-                        this.consumerData.prefDeliveryAddressId = addressId;
+                    if (this.consumerData.prefDeliveryAddressId === null) this.consumerData.prefDeliveryAddressId = addressId;
+                    self._updateUiForAddress(address);
+
                     //Send to GFS Checkout and await shipping event
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
@@ -941,6 +956,7 @@
                         //    callback();
                         //    return;
                         //}
+
                         
                         if (!this.$.gfsCheckoutWidget.initialised) {
                             this._updateGfs(function(err) {
@@ -1046,6 +1062,16 @@
                     }
                 });
 
+            },
+
+            _updateUiForAddress: function(address) {
+                    var localDelivery = this.localCountries && this.localCountries.constructor == Array && this.localCountries.length && (this.localCountries.indexOf(address.countryCode.toLowerCase()) > -1);
+
+                    this.$.gfsCheckoutWidget.enableClickAndCollect(localDelivery);
+                    this.$.gfsCheckoutWidget.enableCalendarDelivery(localDelivery);
+                    if (!localDelivery) {
+                        this.$.gfsCheckoutWidget.showPage_Standard(); //Show the standard tab, which is now the only available one.
+                    }
             },
             /*
             preselectDeliveryMethod: function () {
@@ -1175,6 +1201,7 @@
             },
 
             showGeneralFault: function() {
+                return; //Debug
                 this.fire('generalFault');
                 this.$.generalFault.open();
             },

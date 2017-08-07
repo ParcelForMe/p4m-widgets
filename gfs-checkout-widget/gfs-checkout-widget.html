@@ -29,9 +29,9 @@
 
 		<div id="widgetContainer">          
             <paper-tabs selected="{{selectedTab}}" no-bar>           
-                <paper-tab>{{calendarDeliveryTitle}}<p4m-spinner species="progress" id="calendar_spinner"></p4m-spinner></paper-tab>
-                <paper-tab>Click and Collect<p4m-spinner species="progress" id="clickandcollect_spinner"></p4m-spinner></paper-tab>
-                <paper-tab>{{standardDeliveryTitle}}<p4m-spinner species="progress" id="standarddelivery_spinner"></p4m-spinner></paper-tab>
+                <paper-tab id="calendardelivery_tab">{{calendarDeliveryTitle}}<p4m-spinner species="progress" id="calendar_spinner"></p4m-spinner></paper-tab>
+                <paper-tab id="clickandcollect_tab">Click and Collect<p4m-spinner species="progress" id="clickandcollect_spinner"></p4m-spinner></paper-tab>
+                <paper-tab id="standarddelivery_tab">{{standardDeliveryTitle}}<p4m-spinner species="progress" id="standarddelivery_spinner"></p4m-spinner></paper-tab>
             </paper-tabs>
             <iron-pages id="pages" selected="{{selectedTab}}"  on-iron-select="onSelectTab">           
                 <iron-page id="pageCalendar">
@@ -2307,7 +2307,26 @@
 
 			_panToPlace: function (e) {
 			    this._panToGeoLocation(e.detail.geometry.location);
-            }
+            },
+
+            enableClickAndCollect: function(enable) {
+                if (enable) {
+                    this.$.clickandcollect_tab.classList.remove('hidden');
+                }
+                else {
+                    this.$.clickandcollect_tab.classList.add('hidden');
+                }
+            },
+
+            enableCalendarDelivery: function(enable) {
+                if (enable) {
+                    this.$.calendardelivery_tab.classList.remove('hidden');
+                }
+                else {
+                    this.$.calendardelivery_tab.classList.add('hidden');
+                }
+            },
+
 
         });
 
