@@ -958,7 +958,7 @@
                         //}
 
                         
-                        if (!this.$.gfsCheckoutWidget.initialised) {
+                        //if (!this.$.gfsCheckoutWidget.initialised) {
                             this._updateGfs(function(err) {
 
                                 self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
@@ -969,8 +969,8 @@
                                     }
                                 });
                             })
-                        }
-                        else {
+                        //}
+                        /*else {
                             this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
@@ -978,7 +978,7 @@
                                     callback(null, address);
                                 }
                             });
-                        }
+                        }*/
                         
 
                     }
@@ -1201,7 +1201,7 @@
             },
 
             showGeneralFault: function() {
-                return; //Debug
+                //return; //Debug
                 this.fire('generalFault');
                 this.$.generalFault.open();
             },
