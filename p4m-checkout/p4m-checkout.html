@@ -378,7 +378,7 @@
 
 
             //Send all cart information to shipping plugin
-            _gfsCurrentAddrId: "",
+            _gfsCurrentAddrId: null,
             _updateGfs: function (callback) {
                 if (!callback) {
                     callback = function(){};
@@ -390,7 +390,8 @@
                 }
 
                 var self = this;
-                this._gfsCurrentAddrId = this.consumerData.prefDeliveryAddressId;
+                
+                this._gfsCurrentAddrId = this._gfsCurrentAddrId || this.cartData.addressId || this.consumerData.prefDeliveryAddressId;
                 this._updateUiForAddress(this.getAddressById(this._gfsCurrentAddrId));
 
                 var orderValue = 0.0;
@@ -559,9 +560,7 @@
             },
 
             _toggleCartEditing: function(allowEditing) {
-                //zzzzzz
                 this.$.cart.toggleEditing(allowEditing);
-
             },
 
             updateP4mCart: function (callback) {
@@ -938,15 +937,15 @@
             selectDeliveryAddress: function (addressId, sendToGfs, callback) {
                 var self = this;
                 var address = this.getAddressById(addressId);
-
+                if (!callback) callback = function(){};
 
                 if (!address) {
                     callback("No such address");
                     //return false;
                 }
                 else {
-                    if (this.consumerData.prefDeliveryAddressId === null) this.consumerData.prefDeliveryAddressId = addressId;
-                    self._updateUiForAddress(address);
+                    /*if (this.consumerData.prefDeliveryAddressId === null) */this.consumerData.prefDeliveryAddressId = addressId;
+                    //self._updateUiForAddress(address);
 
                     //Send to GFS Checkout and await shipping event
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
@@ -957,20 +956,28 @@
                         //    return;
                         //}
 
-                        
+
+                        //CURRENT BUG:
+                        //If this conditional line is not here,
+                        //  The available shipping options don't change when the address changes
+                        //If it is here,
+                        //  The newly selected address is not sent to GFS
+
                         //if (!this.$.gfsCheckoutWidget.initialised) {
-                            this._updateGfs(function(err) {
+                            //this._updateGfs(function(err) {
 
                                 self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
-                                    self.set('cartData.addressId', addressId); //This allows the address UI to update
-                                    self.notifyPath('cartData.addressId');
-                                    if (callback) {
-                                        callback(null, address);
+                                    if (!err) {
+                                        self._gfsCurrentAddrId = addressId;
+                                        self.set('cartData.addressId', addressId); //This allows the address UI to update
+                                        self.notifyPath('cartData.addressId');
+                                        self._updateGfs(callback);
                                     }
                                 });
-                            })
+                            //})
                         //}
-                        /*else {
+                        /*
+                        else {
                             this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
@@ -1201,7 +1208,7 @@
             },
 
             showGeneralFault: function() {
-                //return; //Debug
+                return; //Debug
                 this.fire('generalFault');
                 this.$.generalFault.open();
             },
