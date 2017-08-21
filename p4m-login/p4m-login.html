@@ -409,6 +409,13 @@
                     case 2: this.logoutThisDevice(); break;
                     case 3: this.logoutAllDevices(); break;
                     case 4: this._useLastCart(); break;
+                    case 5: break;
+                    case 6:
+                        if(this.idSrvUrl.indexOf('ids.') > 0) 
+                            window.open(this.idSrvUrl.replace('ids.', 'my.')); 
+                        else
+                            window.open(this.idSrvUrl.replace('8089', '8080')); 
+                        break;
                 }
             },
 
