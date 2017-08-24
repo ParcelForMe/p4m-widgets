@@ -1268,6 +1268,7 @@
         function p4mAddressToGfsAddress(item) {
             if (!item) return false
             else {
+
                 var gfsAddress = {
                     id: item.id,
                     CountryCode: {
@@ -1279,6 +1280,10 @@
                     addressLineCollection: [item.street1],
                     name: item.label
                 };
+                if (item.latitude && item.longitude) {
+                    gfsAddress.lat = item.latitude,
+                    gfsAddress.lng = item.longitude
+                }
                 return gfsAddress;
             }
         }

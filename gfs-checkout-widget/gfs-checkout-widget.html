@@ -68,8 +68,8 @@
                                             <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
                                         </paper-item>
 
-			                            <template is="dom-repeat" items="{{_favAddresses}}">
-                                            <paper-item label={{item.name}}>
+			                            <template is="dom-repeat" items="{{_favAddresses}}" filter="hasLatLng">
+                                            <paper-item label="{{item.name}}">
     			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
                                             </paper-item>
 			                            </template>                                    
@@ -762,6 +762,7 @@
                 });
                 if (foundItem) {
                     self._unselectDropPoint();
+                    console.log(">>>Setting address", foundItem);
                     
                     self.setGfsAddress(foundItem, autoSelectMethod, callback);
                     /*function (err) {
@@ -2326,6 +2327,14 @@
                     this.$.calendardelivery_tab.classList.add('hidden');
                 }
             },
+
+
+            hasLatLng: function (item) {
+                //return true;
+                return (item.lat && item.lng)
+            }
+
+
 
 
         });
