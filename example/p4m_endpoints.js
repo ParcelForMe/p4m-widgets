@@ -171,3 +171,27 @@ exports.updShippingService = function(req, res) {
     }
     res.status(200).json(result);
 }
+
+exports.applyDiscountCode = function(req, res) {
+	if (req.body.discountCode == "AAA") {
+		res.status(200).json(
+			{
+				"code": req.body.discountCode,
+				"valid": true,
+				"amount": 10.0,
+				"description": "Special discount",
+				"note": "Special discount"
+			}
+		);
+	}
+	else {
+		res.status(200).json(
+			{
+				"code": req.body.discountCode,
+				"valid": false,
+				"error": "Not a valid code"
+			}
+		);
+
+	}
+}

@@ -96,7 +96,7 @@
             },
             observers: [
                 "onCartDataModified(cartData.items.*)",
-                "onCartDataModified(cartData.discounts)",
+                "onCartDataModified(cartData.discounts.*)",
                 "onCartDataModified(cartData.total)",
 
             ],
@@ -117,6 +117,11 @@
 
             hasDiscount: function () {
                  return true;
+            },
+
+            onDiscount: function(data) {
+                console.log("Received new discount");
+                this.push("cartData.discounts", data.detail);
             },
 
             _updateItemCount: function() {
