@@ -96,6 +96,7 @@
         </div>
 
         <p4m-general-fault id="generalFault" no-cancel-on-outside-click with-backdrop></p4m-general-fault>
+        <p4m-overlay id="screenOverlay" no-cancel-on-outside-click with-backdrop></p4m-overlay>
 
         <polymer-cookie id="sessionCookie" name="CartId"></polymer-cookie>
 
@@ -470,6 +471,7 @@
 
             sendCartItemChanges: function () {          
                 //Send changes to local API, then to P4m
+
                 var self = this;
                 var changes = [];
 
@@ -544,6 +546,7 @@
                 showAsLoading = (this._loadingStack > 0);
 
                 if (showAsLoading) {
+                    this.$.screenOverlay.open();
                     this.$.orderSummary.showAsLoading();
                     this._showAsLoadingShipping(this.cartData && this.cartData.total > 0);
                     this._toggleCartEditing(false);
@@ -551,6 +554,7 @@
                     //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
+                    this.$.screenOverlay.close();
                     this.$.orderSummary.showAsLoaded();
                     this._showAsLoadingShipping(false);
                     this._toggleCartEditing(true);
