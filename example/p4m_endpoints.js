@@ -57,7 +57,7 @@ exports.getP4MAccessToken = function(req, res) {
 
 		var now = new Date();
 		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-
+console.log(body);
 		cookies.set('p4mToken', JSON.parse(body).access_token, cookieConf);
 
 		res.status(200).send('<script>window.close();</script>');

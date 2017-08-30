@@ -414,6 +414,52 @@ iron-overlay-backdrop {
 div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
   border: none; }
 
+.p4m-general-fault-0 .buttons.p4m-general-fault button.p4m-general-fault:not(:active) i {
+  margin: 20px;
+  width: 100px;
+  height: 100px;
+  background: #f00;
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 4000ms;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: spin;
+  -moz-animation-duration: 4000ms;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: spin;
+  -ms-animation-duration: 4000ms;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+  animation-name: spin;
+  animation-duration: 4000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; }
+
+@-ms-keyframes spin {
+  from {
+    -ms-transform: rotate(0deg); }
+  to {
+    -ms-transform: rotate(360deg); } }
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg); }
+  to {
+    -moz-transform: rotate(360deg); } }
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
 @font-face {
   font-family: 'p4m';
   src: url("fonts/p4m.eot?it9ffc");
@@ -1179,10 +1225,25 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   line-height: 32px;
   font-weight: 400;
   color: #0a0a0a;
-  transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+  transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none; }
+
+p4m-checkout input:focus {
+  border-color: #aaa;
+  outline: 0;
+  -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1); }
+
+p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
+  min-width: 290px; }
+
+p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='time'], p4m-checkout input#postCode {
+  min-width: 120px; }
+
+p4m-checkout input#cvvField {
+  min-width: 54px; }
 
 p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.search-button) {
   border-radius: 0;
