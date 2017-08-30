@@ -72,6 +72,8 @@
             ready: function()
             {
                 this.positionTarget = document.body;
+                window.addEventListener('generalFault', this.close.bind(this));
+
             }
         });
     </script>

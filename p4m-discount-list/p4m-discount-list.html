@@ -52,17 +52,30 @@
                     notify: true
                 }
             },
+            observers: {
+                'cartData': 'onCartData'
+            },
             listeners: {
-                'discount': 'addDiscount'
+                'discount': 'addDiscount',
+
             },
 
             ready: function()
             {
 
+                
+            },
+
+            onCartData: function() {
+                if (!this.cartData.discounts) {
+                    this.cartData.discounts = [];
+                }
+                window.addEventListener('discount', this.addDiscount.bind(this));
             },
 
             addDiscount: function (e) {
                 console.log("Heard discount", e);
+                this.push("cartData.discounts", e.detail);
             },
 
             deleteItem: function (e) {

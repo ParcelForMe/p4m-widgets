@@ -1,4 +1,5 @@
 ﻿<link rel="import" href="../p4m-card/p4m-card.html" />
+<link rel="import" href="../p4m-discount-list/p4m-discount-list.html" />
 <link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 
@@ -23,7 +24,9 @@
                 </div>
                 <div class="p4m-row horizontal layout" id="coupon">
                     <div class="p4m-cell detail-col flex-1 self-center">Coupon</div>
-                    <div class="p4m-cell cost-col flex-2 layout end-justified self-center"><p4m-discount-input on-discount="onDiscount"></p4m-discount-input>
+                    <div class="p4m-cell cost-col flex-2 layout end-justified self-center">
+                        <p4m-discount-input on-discount="onDiscount"></p4m-discount-input>
+                        <p4m-discount-list cart-data="{{cartData}}" on-discount="onDiscount"></p4m-discount-list>
                     </div>
                 </div>
                 <div class="p4m-row horizontal layout" id="discount">
