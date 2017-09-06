@@ -498,7 +498,7 @@
                         self.$.cart.clearChanges();
                         self.updCartTotals(newCartTotals, function (err) { //This will trigger GFS to trigger updateP4mCart, so no need to call it in the callback here. Commented out.
                             self.toggleLoading(false);
-                            self.cartData.discounts = newCartTotals.discounts;
+                            self.set("cartData.discounts", newCartTotals.discounts);
                             /*self.updateP4mCart(function(err) {
                                 self.toggleLoading(false);
                                 //callback(err);

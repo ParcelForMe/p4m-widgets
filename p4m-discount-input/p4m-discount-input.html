@@ -1,4 +1,4 @@
-﻿
+
 <link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-input/iron-input.html" />
 
@@ -10,12 +10,21 @@
             <div id="drawer" class="hidden">
                 <input is="iron-input" type="text" id="discountCode"  on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />   
             </div> 
-                <a href="#" id="prompt" class="icon" on-click="show"><i class="p4micon-add-circle"></i></a>
-                <a href="#" id="prompt" class="icon" on-click="hide"><i class="p4micon-delete-circle"></i></a>                    
+            <div id="couponButton" class="link add" on-tap="toggleNewDiscount">
+                <i class="p4micon-add-circle link"></i>
+            </div>                  
             <div id="p4mDiscountInputError" class="hidden">{{errorMsg}}</div>
         </div>
         <p4m-api id="localApi" is-local="true"></p4m-api>
     </template>
+    <style>
+        .discountValid {
+            background-color: green;
+        }
+        .discountInvalid {
+            background-color: red;
+        }
+    </style>
 
 
     <script>
@@ -38,15 +47,29 @@
             {
 
             },
+            toggleNewDiscount: function() {
+                if (this.$.couponButton.classList.contains("add")) {
+                    this.$.couponButton.classList.add("cancel");
+                    this.$.couponButton.classList.remove("add");
+                    this.show();
+
+                }
+                else {
+                    this.$.couponButton.classList.add("add");
+                    this.$.couponButton.classList.remove("cancel");
+                    this.hide();
+                }
+
+            },
+
             show: function() {
                 this.$.drawer.classList.remove("hidden");
-                this.$.prompt.classList.add("hidden");
                 this.showError("");
             },
 
+
             hide: function () {
                 this.$.drawer.classList.add("hidden");
-                //this.$.prompt.classList.remove("hidden");
             },
 
             _onKeyDown: function (e) {
@@ -80,16 +103,27 @@
                 else if (data) {
                     if (!data.valid) {
                         this.showError("This isn't a valid discount code", false);
+                        this.$.discountCode.classList.remove('discountValid');
+                        this.$.discountCode.classList.add('discountInvalid');
                     }
                     else {
-                        this.showError(data.note || "Discount applied", true);
-                        this.hide();
-                        this.fire('discount', data);
-                        this.discountCode = null;
+                        this.$.discountCode.classList.add('discountValid');
+                        this.$.discountCode.classList.remove('discountInvalid');
+                        //this.showError(data.note || "Discount applied", true);
+                        window.setTimeout((function(){
+                            this.fire('discount', data);
+                            this.discountCode = null;
+                            this.hide();
+
+                        }).bind(this), 500);
+                        
+                        
+
                     }
                 }
             },
             showError(msg, success) {
+                return;
                 if (msg) {
                     this.$.p4mDiscountInputError.classList.remove('hidden');
 
