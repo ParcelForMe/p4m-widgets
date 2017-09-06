@@ -7,8 +7,8 @@
 
     <template>
         <div id="content">
-            <div id="drawer" class="hidden">
-                <input is="iron-input" type="text" id="discountCode"  on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />   
+            <div id="drawer" class="hidden persist" data-tooltip="{{errorMsg}}">
+                <input is="iron-input" type="text" id="discountCode" class="tooltip-left" on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />   
             </div> 
             <div id="couponButton" class="link add" on-tap="toggleNewDiscount">
                 <i class="p4micon-add-circle link"></i>
@@ -29,6 +29,11 @@
 
     <script>
 
+        var Modes = {
+            ADDING: "adding",
+            VIEWING: "viewing"
+        };
+
         Polymer({
             is: "p4m-discount-input",
 
@@ -37,39 +42,58 @@
                     type: String
                 },
                 errorMsg: {
-                    type: String
+                    type: String,
+                    value: "Everything is normal"
+                },
+                _mode: {
+                    type: String,
+                    listener: "updateUi"
                 }
             },
-            listeners: {
+            observers: [
+               "updateUi(_mode)"
+               //"onErrorMsg(errorMsg)"
+            ],
 
-            },
             ready: function()
             {
-
+                this.set("_mode", Modes.VIEWING);
             },
-            toggleNewDiscount: function() {
-                if (this.$.couponButton.classList.contains("add")) {
+
+            updateUi: function() {
+                if (this._mode == Modes.ADDING) {
                     this.$.couponButton.classList.add("cancel");
                     this.$.couponButton.classList.remove("add");
                     this.show();
-
                 }
                 else {
                     this.$.couponButton.classList.add("add");
                     this.$.couponButton.classList.remove("cancel");
                     this.hide();
                 }
+                
+            },
 
+            toggleNewDiscount: function() {
+                if (this._mode == Modes.ADDING) {
+                    this.set("_mode", Modes.VIEWING);
+                }
+                else {
+                    this.set("_mode", Modes.ADDING);
+                }
+                
             },
 
             show: function() {
                 this.$.drawer.classList.remove("hidden");
-                this.showError("");
+                this.showError(null);
             },
 
 
             hide: function () {
                 this.$.drawer.classList.add("hidden");
+                this.$.couponButton.classList.remove("discountValid");
+                this.$.couponButton.classList.remove("discountInvalid");
             },
 
             _onKeyDown: function (e) {
@@ -123,7 +147,19 @@
                 }
             },
             showError(msg, success) {
-                return;
+                //<i class="p4micon-delete-sml"></i>
+                //<i class="p4micon-check"></i>
+                this.set("errorMsg", msg);
+                debugger;
+                if (this.errorMsg) {
+                    this.$.drawer.setAttribute('data-tooltip', this.errorMsg); //Hack to force update of data view
+                }
+                else {
+                    this.$.drawer.removeAttribute('data-tooltip');
+                }
+                /*
+
+
                 if (msg) {
                     this.$.p4mDiscountInputError.classList.remove('hidden');
 
@@ -140,9 +176,7 @@
                 }
                 else {
                     this.$.p4mDiscountInputError.classList.add('hidden');
-                }
-
-               this.errorMsg = msg;
+                }*/
             }
 
         });

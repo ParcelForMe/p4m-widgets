@@ -10,6 +10,7 @@
                          
                     <div class="p4m-cell discount-code">{{item.code}}</div>
                     <div class="p4m-cell discount-description">{{item.description}}</div>
+                    <div class="p4m-cell discount-amount">{{currencySymbol}}{{item.amount}}</div>
                     <a id="p4mDiscountListRemoveBtn" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
                 </div>
             </template>
@@ -51,14 +52,17 @@
                 cartData: {
                     type: Object,
                     notify: true
+                },
+                currencySymbol: {
+                    type: String,
+                    value: '£'
                 }
             },
             observers: {
                 'cartData': 'onCartData'
             },
             listeners: {
-                'discount': 'addDiscount',
-
+                'discount': 'addDiscount'
             },
 
             ready: function()

@@ -78,10 +78,10 @@
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
                         </iron-page>
 
-                    </iron-pages>                 
+                    </iron-pages>
                 </div>
                 <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
-                    <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>                     
+                    <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
                     <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
                 </div>
             </div> 
