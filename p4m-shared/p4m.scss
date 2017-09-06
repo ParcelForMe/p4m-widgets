@@ -722,6 +722,9 @@ a, a:visited {
 	&:hover {
 		color: $grey-b4;
 	}
+  &.icon {
+    text-decoration: none;
+  }
 }
 
 .flex {display: flex;}
@@ -1064,8 +1067,20 @@ p4m-spinner[species='progress'] {
         border-right: none;
       }
     }
-
   }
+
+
+  // Persistent Messages - not only hover state
+  &.persist {
+    &:before, 
+    &:after {
+      visibility: visible;
+      opacity: 1;
+      transition: all 0.2s ease 1s;
+    }
+  }
+  
+
 }
 
 // Non-Tooltip Error messages 
@@ -3103,6 +3118,10 @@ p4m-checkout {
 			            display: flex;
 			            flex-direction: row;
 			            align-items: center;
+                  justify-content: flex-end;
+                  .discount {
+                    justify-content: flex-end;
+                  }
 			        }
 			        #content #drawer {
 			            display: flex;
