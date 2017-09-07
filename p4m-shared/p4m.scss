@@ -583,6 +583,9 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 .p4micon-save:before {
   content: "\e92a";
 }
+.p4micon-coupon3:before {
+  content: "\e92b";
+}
 
 //////////////////////////////////////////////////
 // Typography
@@ -1103,7 +1106,7 @@ p4m-spinner[species='progress'] {
     font-size: 24px;
     line-height: 24px;
     text-align: center;
-    height: 36px;
+    height: 32px;
     width: 26px;
     display: flex;
     align-items: center;
@@ -1135,6 +1138,15 @@ p4m-spinner[species='progress'] {
   &:after {
     content: '\e917';
     color: #dc5345;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+[data-validate="coupon"] {
+  &:after {
+    content: '\e92b';
+    color: #37a553;
     visibility: visible;
     opacity: 1;
   }
@@ -3157,76 +3169,76 @@ p4m-checkout {
 	    .p4m-table {
 	        padding: 20px 20px 10px 20px;
 	        .p4m-row {
-				line-height: 1.2em;
-				align-items: center;
-				margin-bottom: 3px;
-				.p4m-cell {
-					display: flex;
-					flex-direction: row;
-			        text-overflow: ellipsis;
-			        white-space: normal;
-			        overflow: hidden;
-				}
-				.header-col {
+      				line-height: 1.2em;
+      				align-items: center;
+      				margin-bottom: 3px;
+  				.p4m-cell {
+              display: flex;
+              flex-direction: row;
+              text-overflow: ellipsis;
+              white-space: normal;
+              overflow: hidden;
+              &.heading {
+                align-self: flex-start;
+                line-height: 32px;
+              }
+  				}
+				  .header-col {
 			        color: #404040;
 			        width: 20%;
 			        display: none;
 			    }
 			    p4m-discount-input {
-            height: 32px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-				      #p4mDiscountListRemoveBtn, #couponButton {
-                margin-left: 6px;
+              height: 32px;
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+  			      #p4mDiscountListRemoveBtn, #couponButton {
+                  margin-left: 6px;
               }
               i.p4micon-add-circle {
-                color: $grey-hb;
-                @include transition(rotate, 0.2s);
-                display: block;
+                  color: $grey-hb;
+                  @include transition(rotate, 0.2s);
+                  display: block;
               }
               .cancel {
                 i.p4micon-add-circle  {
-                  @include rotate(45);
+                    @include rotate(45);
                 }
               }
-              .p4m-cell.heading {
-                align-self: flex-start;
-                line-height: 32px;
-              }
-			        #content {
-			            display: flex;
-			            flex-direction: row;
-			            align-items: center;
+  		        #content {
+  		            display: flex;
+  		            flex-direction: row;
+  		            align-items: center;
                   justify-content: flex-end;
                   .discount {
-                    justify-content: flex-end;
+                      justify-content: flex-end;
                   }
-			        }
-			        #content #drawer {
-			            display: flex;
-			            flex-direction: row;
+  		        }
+  		        #content #drawer {
+  		            display: flex;
+  		            flex-direction: row;
                   &:focus {
-                    outline: none;
+                      outline: none;
                   }
-			        }
-			        a.icon {
-    						display: flex;
-    						width: 24px;
-    						align-self: stretch;
-    						align-items: center;
-    						justify-content: center;
-    						font-size: 24px;
-    						margin-left: 2px;
-    						color: #999;
-    						text-decoration: none;
-			        }
+  		        }
+  		        a.icon {
+      						display: flex;
+      						width: 24px;
+      						align-self: stretch;
+      						align-items: center;
+      						justify-content: center;
+      						font-size: 24px;
+      						margin-left: 2px;
+      						color: #999;
+      						text-decoration: none;
+  		        }
 			    }
 			    &.total {
-			    	line-height: 32px;
-			    	font-size: 16px;
-			    	font-weight: 600;
-                    margin-bottom: 0;
+  			    	line-height: 32px;
+  			    	font-size: 16px;
+  			    	font-weight: 600;
+              margin-bottom: 0;
 			    }
 		    }
 	    }

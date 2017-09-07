@@ -564,6 +564,9 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 .p4micon-save:before {
   content: "\e92a"; }
 
+.p4micon-coupon3:before {
+  content: "\e92b"; }
+
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BlaIta-webfont.eot");
@@ -902,7 +905,7 @@ p4m-spinner[species='progress'] {
     font-size: 24px;
     line-height: 24px;
     text-align: center;
-    height: 36px;
+    height: 32px;
     width: 26px;
     display: flex;
     align-items: center;
@@ -928,6 +931,12 @@ p4m-spinner[species='progress'] {
 [data-validate="fail"]:after {
   content: '\e917';
   color: #dc5345;
+  visibility: visible;
+  opacity: 1; }
+
+[data-validate="coupon"]:after {
+  content: '\e92b';
+  color: #37a553;
   visibility: visible;
   opacity: 1; }
 
@@ -2464,6 +2473,9 @@ p4m-checkout {
           text-overflow: ellipsis;
           white-space: normal;
           overflow: hidden; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row .p4m-cell.heading {
+            align-self: flex-start;
+            line-height: 32px; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row .header-col {
           color: #404040;
           width: 20%;
@@ -2493,9 +2505,6 @@ p4m-checkout {
             transform: rotate(45deg);
             filter: progid:DXImageTransform.Microsoft.Matrix( M11=0, M12=0, M21=0, M22=0, sizingMethod='auto expand');
             zoom: 1; }
-          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input .p4m-cell.heading {
-            align-self: flex-start;
-            line-height: 32px; }
           p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
             display: flex;
             flex-direction: row;
