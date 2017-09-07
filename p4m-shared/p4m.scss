@@ -3215,13 +3215,21 @@ p4m-checkout {
                   .discount {
                       justify-content: flex-end;
                   }
-  		        }
-  		        #content #drawer {
-  		            display: flex;
-  		            flex-direction: row;
-                  &:focus {
-                      outline: none;
-                  }
+                  #drawer {
+                    display: flex;
+                    flex-direction: row;
+                    &:focus {
+                        outline: none;
+                    }
+                    a {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        display: block;
+                        height: 32px;
+                        width: 28px;
+                    }
+                }
   		        }
   		        a.icon {
       						display: flex;
