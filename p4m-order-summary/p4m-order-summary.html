@@ -124,16 +124,19 @@
             },
 
             onDiscount: function(data) {
-                console.log("Received new discount");
-                this.push("cartData.discounts", data.detail);
+                //console.log("Received new discount");
+                //this.push("cartData.discounts", data.detail);
             },
 
-            onDiscountDelete: function(data) {
-                debugger;
-                console.log("Received discount deletion request");
+            onDiscountDelete: function(e) {
+                //var discountCode = e.detail;
+                //console.log("Received discount deletion request");
+                /*
+                //Deleting this because it will be handled higher up in p4m-checkout
                 if (this.cartData && this.cartData.discounts) {
-                    this.set('cartData.discounts', this.cartData.discounts.filter(function(item){item.code != data.code}));
-                }
+
+                    this.set('cartData.discounts', this.cartData.discounts.filter(function(item){return item.code.toLowerCase() != discountCode.toLowerCase()}));
+                }*/
             },
 
             _updateItemCount: function() {

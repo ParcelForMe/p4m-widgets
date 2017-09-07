@@ -10,8 +10,10 @@
                          
                     <div class="p4m-cell discount-code">{{item.code}}</div>
                     <div class="p4m-cell discount-amount">{{currencySymbol}}{{item.amount}}</div>
+
                     <div class="p4m-cell discount-description">{{item.description}}</div>
-                    <a id="p4mDiscountListRemoveBtn" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
+                    <a id="p4mDiscountListRemoveBtn" name="{{item.code}}" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
+
                 </div>
             </template>
         </div>
@@ -111,8 +113,8 @@
             },
 
             deleteItem: function (e) {
-                console.log("Delete", e.target);
-                this.fire('discountdelete', e.target.getAttribute('name'));
+                console.log("Delete discount", e);
+                this.fire('discountdelete', e.target.parentElement.name);
             }
 
         });

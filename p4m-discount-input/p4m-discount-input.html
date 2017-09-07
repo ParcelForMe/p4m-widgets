@@ -68,8 +68,12 @@
                 else {
                     this.$.couponButton.classList.add("add");
                     this.$.couponButton.classList.remove("cancel");
-                    this.hide();
+                    this.$.drawer.classList.add("hidden");
+                    this.$.discountCode.classList.remove("discountValid");
+                    this.$.discountCode.classList.remove("discountInvalid");
                 }
+
+
                 
             },
 
@@ -86,13 +90,6 @@
             show: function() {
                 this.$.drawer.classList.remove("hidden");
                 this.showError(null);
-            },
-
-
-            hide: function () {
-                this.$.drawer.classList.add("hidden");
-                this.$.couponButton.classList.remove("discountValid");
-                this.$.couponButton.classList.remove("discountInvalid");
             },
 
             _onKeyDown: function (e) {
@@ -132,11 +129,11 @@
                     else {
                         this.$.discountCode.classList.add('discountValid');
                         this.$.discountCode.classList.remove('discountInvalid');
-                        //this.showError(data.note || "Discount applied", true);
+
                         window.setTimeout((function(){
                             this.fire('discount', data);
                             this.discountCode = null;
-                            this.hide();
+                            this.set('_mode', Modes.VIEWING);
 
                         }).bind(this), 500);
                         
@@ -146,36 +143,14 @@
                 }
             },
             showError(msg, success) {
-                //<i class="p4micon-delete-sml"></i>
-                //<i class="p4micon-check"></i>
+
                 this.set("errorMsg", msg);
-                debugger;
                 if (this.errorMsg) {
                     this.$.drawer.setAttribute('data-tooltip', this.errorMsg); //Hack to force update of data view
                 }
                 else {
                     this.$.drawer.removeAttribute('data-tooltip');
                 }
-                /*
-
-
-                if (msg) {
-                    this.$.p4mDiscountInputError.classList.remove('hidden');
-
-                    if (success) {
-                        this.$.p4mDiscountInputError.classList.remove('error');
-                        this.$.p4mDiscountInputError.classList.add('success');
-                    }
-                    else {
-                        this.$.p4mDiscountInputError.classList.remove('success');
-                        this.$.p4mDiscountInputError.classList.add('error');
-                        window.setTimeout(this.showError.bind(this, ""),2000);
-                    }
-
-                }
-                else {
-                    this.$.p4mDiscountInputError.classList.add('hidden');
-                }*/
             }
 
         });

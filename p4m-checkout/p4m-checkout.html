@@ -269,6 +269,9 @@
                 var self = this;
                 self.initialising = true;
                 console.log('Initialising...');
+                window.addEventListener('discount', this.onDiscount.bind(this));
+                window.addEventListener('discountdelete', this.onDiscountDelete.bind(this));
+
                 self.sessionAddressId = hashThis(this.sessionId);
 
                 //Set local countries -- this determins if Calendar and Click and Collect tabs are available
@@ -862,8 +865,9 @@
             //},
 
             onDiscount: function (e) {
-                this.set('cartData.tax', Number(e.detail.tax || 0));
-                var cartDiscount = this.cartData.discounts.find((element, index, arr) => element.code === e.detail.code); //TODO: Change to bound function; arrow functions may not work in older browsers
+                debugger;
+                //this.set('cartData.tax', Number(e.detail.tax || 0));
+                var cartDiscount = this.cartData.discounts.find(function(element, index, arr) { return element.code === e.detail.code; }); //TODO: Change to bound function; arrow functions may not work in older browsers
                 if (cartDiscount) {
                     //console.log("Added existing discount")
                     if (cartDiscount.description !== e.detail.description ||
@@ -873,29 +877,31 @@
                         cartDiscount.description = e.detail.description;
                         cartDiscount.amount = e.detail.amount || 0;
                         cartDiscount.code = e.detail.code;
-                        this.cartData.tax = e.detail.tax || 0;
+                        //this.cartData.tax = e.detail.tax || 0;
                         this.updateP4mCart();
                     }
                 }
                 else {
-                    this.push('cartData.discounts',
-                    {
-                        description: e.detail.description,
-                        amount: e.detail.amount,
-                        code: e.detail.code
-                    });
-                    this.cartData.tax = e.detail.tax || 0;
+                    this.push('cartData.discounts', e.detail);
+                    //this.cartData.tax = e.detail.tax || 0;
                     this.updateP4mCart();
                 }
             },
 
-            onDiscountDelete: function (e, code) {
+            onDiscountDelete: function (e) {
+                debugger;     
+                var code = e.detail;              
+                //this.set('cartData.discounts', this.cartData.discounts.filter(function(item){return item.code.toLowerCase() != code.toLowerCase()}));
 
-                var item = this.cartData.discounts.find((element, index, arr) => element.code === code);
+                this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
+                //this.updateP4mCart();
+                
+                var item = this.cartData.discounts.find(function(element, index, arr) { return (element.code === code) });
                 if (item) {
                     item.amount = 0;
                     item.description = "Deleted";
-                    this.cartData.tax = e.detail.tax || 0;
+
+                    //this.cartData.tax = e.detail.tax || 0;
                     this.updateP4mCart();
                     this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
 
