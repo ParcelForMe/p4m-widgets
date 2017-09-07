@@ -634,7 +634,7 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
   font-weight: 100;
   font-style: normal; }
 
-a, a:visited {
+a, a:visited, .link i {
   color: #aaa;
   cursor: pointer;
   -webkit-transition: all 0.15s ease-in-out 0s;
@@ -643,10 +643,23 @@ a, a:visited {
   -ms-transition: all 0.15s ease-in-out 0s;
   -o-transition: all 0.15s ease-in-out 0s;
   transition: all 0.15s ease-in-out 0s; }
-  a:hover, a:visited:hover {
+  a:hover, a:visited:hover, .link i:hover {
     color: #555; }
-  a.icon, a:visited.icon {
+  a.icon, a:visited.icon, .link i.icon {
     text-decoration: none; }
+
+i.link {
+  color: #aaa;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -khtml-transition: all 0.15s ease-in-out 0s;
+  -moz-transition: all 0.15s ease-in-out 0s;
+  -ms-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
+  transition: all 0.15s ease-in-out 0s; }
+  i.link:hover {
+    color: #555; }
 
 .flex {
   display: flex; }
@@ -881,6 +894,42 @@ p4m-spinner[species='progress'] {
     visibility: visible;
     opacity: 1;
     transition: all 0.2s ease 1s; }
+
+[data-validate] {
+  position: relative; }
+  [data-validate]:after {
+    font-family: p4m;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    height: 36px;
+    width: 26px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    color: transparent;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0;
+    visibility: hidden;
+    opacity: 0; }
+
+[data-validate="success"]:after {
+  content: '\e912';
+  color: #37a553;
+  visibility: visible;
+  opacity: 1; }
+
+[data-validate="fail"]:after {
+  content: '\e917';
+  color: #dc5345;
+  visibility: visible;
+  opacity: 1; }
 
 .input-validation-error + span.alert:after,
 .invalid + span.alert:after {
@@ -1173,13 +1222,13 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 36px;
+  height: 32px;
   margin: 0;
   padding: 0 0.5rem;
-  border: 1px solid #cacaca;
-  border-radius: 0;
+  border-radius: 3px;
+  border: 2px solid #e0e0e0;
   background-color: #fefefe;
-  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  box-shadow: none;
   font-family: inherit;
   font-size: 14px;
   line-height: 32px;
@@ -1189,6 +1238,9 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none; }
+  p4m-checkout [type='text']:focus, p4m-checkout [type='password']:focus, p4m-checkout [type='date']:focus, p4m-checkout [type='datetime']:focus, p4m-checkout [type='datetime-local']:focus, p4m-checkout [type='month']:focus, p4m-checkout [type='week']:focus, p4m-checkout [type='email']:focus, p4m-checkout [type='number']:focus, p4m-checkout [type='search']:focus, p4m-checkout [type='tel']:focus, p4m-checkout [type='time']:focus, p4m-checkout [type='url']:focus, p4m-checkout [type='color']:focus, p4m-checkout textarea:focus, p4m-checkout vaadin-combo-box-light input:focus {
+    outline: none;
+    border-color: #37a553; }
 
 p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.search-button) {
   border-radius: 0;
@@ -1913,6 +1965,8 @@ p4m-checkout {
         border-left: solid 1px #E0E0E0; }
       p4m-checkout #panelContainer #summaryPanel paper-tabs.select-payment-type {
         background: transparent; }
+      p4m-checkout #panelContainer #summaryPanel #p4mDiscountListRemoveBtn, p4m-checkout #panelContainer #summaryPanel #couponButton {
+        margin-left: 6px; }
   p4m-checkout h3 {
     margin-left: 0px;
     clear: left;
@@ -2430,6 +2484,8 @@ p4m-checkout {
         p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
           display: flex;
           flex-direction: row; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer:focus {
+            outline: none; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
           display: flex;
           width: 24px;

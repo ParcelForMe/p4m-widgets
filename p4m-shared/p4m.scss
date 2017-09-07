@@ -715,7 +715,7 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 // P4M Universal Styles
 //////////////////////////////////////////////////
 
-a, a:visited {
+a, a:visited, .link i {
 	color: $grey-hb;
     cursor: pointer;
 	@include transition();
@@ -724,6 +724,15 @@ a, a:visited {
 	}
   &.icon {
     text-decoration: none;
+  }
+}
+i.link {
+  color: $grey-hb;
+  cursor: pointer;
+  text-decoration: none;
+  @include transition();
+  &:hover {
+    color: $grey-b4;
   }
 }
 
@@ -1083,6 +1092,57 @@ p4m-spinner[species='progress'] {
 
 }
 
+
+
+
+// UI Confirmation signals - checks/crosses
+[data-validate] {
+  position: relative;
+  &:after {
+    font-family: p4m;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    height: 36px;
+    width: 26px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    color: transparent;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0;
+    
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+[data-validate="success"] {
+  &:after {
+    content: '\e912';
+    color: #37a553;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+[data-validate="fail"] {
+  &:after {
+    content: '\e917';
+    color: #dc5345;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+
+
+
 // Non-Tooltip Error messages 
 .input-validation-error + span.alert:after, 
 .invalid + span.alert:after {
@@ -1427,13 +1487,13 @@ p4m-checkout {
 	    display: block;
 	    box-sizing: border-box;
 	    width: 100%;
-	    height: 36px;
+	    height: 32px;
 	    margin: 0;
 	    padding: 0 0.5rem;
-	    border: 1px solid #cacaca;
-	    border-radius: 0;
+	    border-radius: 3px;
+      border: 2px solid #e0e0e0;
 	    background-color: #fefefe;
-	    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+	    box-shadow: none;
 	    font-family: inherit;
 	    font-size: 14px;
 	    line-height: 32px;
@@ -1443,6 +1503,10 @@ p4m-checkout {
 	    -webkit-appearance: none;
 	    -moz-appearance: none;
 	    appearance: none;
+      &:focus {
+        outline: none;
+        border-color: #37a553;
+      }
 	}
 	[type='submit']:not(.search-button), .button:not(.search-button) {
 	    // display: inline-block;
@@ -2397,6 +2461,13 @@ p4m-checkout {
             paper-tabs.select-payment-type {
                 background: transparent;
             }
+
+
+            // Coupons
+            #p4mDiscountListRemoveBtn, #couponButton {
+              margin-left: 6px;
+            }
+
         }
     } 
 
@@ -3126,17 +3197,20 @@ p4m-checkout {
 			        #content #drawer {
 			            display: flex;
 			            flex-direction: row;
+                  &:focus {
+                    outline: none;
+                  }
 			        }
 			        a.icon {
-						display: flex;
-						width: 24px;
-						align-self: stretch;
-						align-items: center;
-						justify-content: center;
-						font-size: 24px;
-						margin-left: 2px;
-						color: #999;
-						text-decoration: none;
+    						display: flex;
+    						width: 24px;
+    						align-self: stretch;
+    						align-items: center;
+    						justify-content: center;
+    						font-size: 24px;
+    						margin-left: 2px;
+    						color: #999;
+    						text-decoration: none;
 			        }
 			    }
 			    &.total {

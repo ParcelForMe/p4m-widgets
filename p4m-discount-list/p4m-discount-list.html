@@ -9,8 +9,8 @@
                 <div class="discount">
                          
                     <div class="p4m-cell discount-code">{{item.code}}</div>
-                    <div class="p4m-cell discount-description">{{item.description}}</div>
                     <div class="p4m-cell discount-amount">{{currencySymbol}}{{item.amount}}</div>
+                    <div class="p4m-cell discount-description">{{item.description}}</div>
                     <a id="p4mDiscountListRemoveBtn" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
                 </div>
             </template>
@@ -29,10 +29,35 @@
             justify-content: flex-end;
             align-items: center;
         }
+        .discount-description:after {
+            content: '\e912';
+            color: #37a553;
+            font-family: 'p4m' !important;
+            height: 32px;
+            justify-content: flex-end;
+            align-items: center;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            font-size: 32px;
+            width: 32px;
+
+            font-size: 24px;
+            line-height: 32px;
+            text-align: center;
+            height: 32px;
+            width: 26px;
+            /* -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale; */
+        }
 
         #content .discount .p4m-cell {
-            padding: 4px;
-            margin: 10px;
+            padding: 0 0 0 6px;
+            margin: 0;
+            align-items: center;
         }
 
         .discount-code {
