@@ -362,6 +362,11 @@
                     value: 2
                 },
 
+                apiHost: {
+                    type: String,
+                    value: "rest-checkout.justshoutgfs.com"
+                },
+
 
                 // PRIVATE PROPERTIES
                 //
@@ -597,7 +602,8 @@
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
                 }
-                var request = this._makeRequest('POST', "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession",
+                var request = this._makeRequest('POST', "///"+this.apiHost+"/api/CheckoutSession",
+                    ///rest-checkout.justshoutgfs.com/api/CheckoutSession/
                     (function (err, data) {
                         if (err) {
                             this.fire('noservice');
@@ -623,7 +629,7 @@
                     throw "No callback provided";
                 }
                 this._sessionId = resourceUrl.substring(resourceUrl.lastIndexOf("/") + 1).replace('"','');
-                var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession/" + this._sessionId;
+                var url = "///"+this.apiHost+"/api/CheckoutSession/" + this._sessionId;
                 var request = this._makeRequest('GET', url, (function (err, data) {
 
                     console.log("GFS Checkout GET response", new Date().getTime());
@@ -668,7 +674,7 @@
 
                 */
                 
-                var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
+                var request = this._makeRequest('PATCH', '///'+this.apiHost+'/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
 
                     //console.log("GFS Checkout Patch response", new Date().getTime());
 
@@ -690,7 +696,7 @@
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
                 var self = this;
-                var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
+                var url = "///"+this.apiHost+"/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
                 var request = this._makeRequest('GET', url, (function (err, data) {
 
                     var result = data?(JSON.parse(data)):{};
