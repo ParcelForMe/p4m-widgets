@@ -1703,7 +1703,7 @@ p4m-checkout {
         @include transition(rotate, 0.2s)
       }
       &.cancel {
-        i {
+        i.p4micon-add-circle  {
           @include rotate(45);
         }
       }
@@ -2462,12 +2462,6 @@ p4m-checkout {
                 background: transparent;
             }
 
-
-            // Coupons
-            #p4mDiscountListRemoveBtn, #couponButton {
-              margin-left: 6px;
-            }
-
         }
     } 
 
@@ -3179,12 +3173,27 @@ p4m-checkout {
 			        display: none;
 			    }
 			    p4m-discount-input {
-				    #p4mDiscountInputError {
-			            color: red;
-			        }  
-			        #p4mDiscountInputError.success {
-			            color: green;
-			        }
+            height: 32px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+				      #p4mDiscountListRemoveBtn, #couponButton {
+                margin-left: 6px;
+              }
+              i.p4micon-add-circle {
+                color: $grey-hb;
+                @include transition(rotate, 0.2s);
+                display: block;
+              }
+              .cancel {
+                i.p4micon-add-circle  {
+                  @include rotate(45);
+                }
+              }
+              .p4m-cell.heading {
+                align-self: flex-start;
+                line-height: 32px;
+              }
 			        #content {
 			            display: flex;
 			            flex-direction: row;

@@ -1368,7 +1368,7 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
       -ms-transition: rotate, 0.2s;
       -o-transition: rotate, 0.2s;
       transition: rotate, 0.2s; }
-    .add-new div.cancel i {
+    .add-new div.cancel i.p4micon-add-circle {
       -webkit-transform: rotate(45deg);
       -khtml-transform: rotate(45deg);
       -moz-transform: rotate(45deg);
@@ -1965,8 +1965,6 @@ p4m-checkout {
         border-left: solid 1px #E0E0E0; }
       p4m-checkout #panelContainer #summaryPanel paper-tabs.select-payment-type {
         background: transparent; }
-      p4m-checkout #panelContainer #summaryPanel #p4mDiscountListRemoveBtn, p4m-checkout #panelContainer #summaryPanel #couponButton {
-        margin-left: 6px; }
   p4m-checkout h3 {
     margin-left: 0px;
     clear: left;
@@ -2470,32 +2468,56 @@ p4m-checkout {
           color: #404040;
           width: 20%;
           display: none; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError {
-          color: red; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError.success {
-          color: green; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input {
+          height: 32px;
           display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-end; }
-          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content .discount {
+          justify-content: flex-end;
+          align-items: center; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountListRemoveBtn, p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #couponButton {
+            margin-left: 6px; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input i.p4micon-add-circle {
+            color: #aaa;
+            -webkit-transition: rotate, 0.2s;
+            -khtml-transition: rotate, 0.2s;
+            -moz-transition: rotate, 0.2s;
+            -ms-transition: rotate, 0.2s;
+            -o-transition: rotate, 0.2s;
+            transition: rotate, 0.2s;
+            display: block; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input .cancel i.p4micon-add-circle {
+            -webkit-transform: rotate(45deg);
+            -khtml-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+            filter: progid:DXImageTransform.Microsoft.Matrix( M11=0, M12=0, M21=0, M22=0, sizingMethod='auto expand');
+            zoom: 1; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input .p4m-cell.heading {
+            align-self: flex-start;
+            line-height: 32px; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             justify-content: flex-end; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
-          display: flex;
-          flex-direction: row; }
-          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer:focus {
-            outline: none; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
-          display: flex;
-          width: 24px;
-          align-self: stretch;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          margin-left: 2px;
-          color: #999;
-          text-decoration: none; }
+            p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content .discount {
+              justify-content: flex-end; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
+            display: flex;
+            flex-direction: row; }
+            p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer:focus {
+              outline: none; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
+            display: flex;
+            width: 24px;
+            align-self: stretch;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-left: 2px;
+            color: #999;
+            text-decoration: none; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row.total {
           line-height: 32px;
           font-size: 16px;
