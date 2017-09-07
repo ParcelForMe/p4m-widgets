@@ -938,7 +938,8 @@ p4m-spinner[species='progress'] {
   content: '\e92b';
   color: #37a553;
   visibility: visible;
-  opacity: 1; }
+  opacity: 1;
+  font-size: 22px; }
 
 .input-validation-error + span.alert:after,
 .invalid + span.alert:after {
