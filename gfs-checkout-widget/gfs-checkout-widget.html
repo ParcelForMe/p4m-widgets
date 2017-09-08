@@ -597,7 +597,7 @@
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
                 }
-                var request = this._makeRequest('POST', "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession",
+                var request = this._makeRequest('POST', "//rest-checkout.justshoutgfs.com/api/CheckoutSession",
                     (function (err, data) {
                         if (err) {
                             this.fire('noservice');
@@ -623,7 +623,8 @@
                     throw "No callback provided";
                 }
                 this._sessionId = resourceUrl.substring(resourceUrl.lastIndexOf("/") + 1).replace('"','');
-                var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession/" + this._sessionId;
+                var url = "//rest-checkout.justshoutgfs.com/api/CheckoutSession/" + this._sessionId;
+                //var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession/" + this._sessionId;
                 var request = this._makeRequest('GET', url, (function (err, data) {
 
                     console.log("GFS Checkout GET response", new Date().getTime());
@@ -664,11 +665,11 @@
                       "closeSession": true,
                       "selectedDeliveryOptionID": "D0S0"
                     }
-                    http://rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=ba1212fd-ec56-4824-85fa-54fd223ee6eb'
+                    http://rest-checkout.justshoutgfs.com/api/CheckoutSession?sessionId=ba1212fd-ec56-4824-85fa-54fd223ee6eb'
 
                 */
                 
-                var request = this._makeRequest('PATCH', '///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
+                var request = this._makeRequest('PATCH', '//rest-checkout.justshoutgfs.com/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
 
                     //console.log("GFS Checkout Patch response", new Date().getTime());
 
@@ -690,7 +691,7 @@
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
                 var self = this;
-                var url = "///rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
+                var url = "//rest-checkout.justshoutgfs.com/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
                 var request = this._makeRequest('GET', url, (function (err, data) {
 
                     var result = data?(JSON.parse(data)):{};
@@ -729,10 +730,10 @@
                 else {
                     console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                     this._postData.Request.Order.Transit.Recipient.Location = address;
-                if (autoSelectDelivery) {
-                    this.autoSelectDeliveryMethod(callback);
-                }
-                else callback(null);
+                    if (autoSelectDelivery) {
+                        this.autoSelectDeliveryMethod(callback);
+                    }
+                    else callback(null);
                 }
 
             },
