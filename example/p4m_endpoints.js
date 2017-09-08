@@ -173,7 +173,7 @@ exports.updShippingService = function(req, res) {
 }
 
 exports.applyDiscountCode = function(req, res) {
-	if (req.body.discountCode == "AAA") {
+	if (req.body.discountCode && req.body.discountCode.length && req.body.discountCode[0].toLowerCase() == "f") {
 		res.status(200).json(
 			{
 				"code": req.body.discountCode,

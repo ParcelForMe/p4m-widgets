@@ -24,9 +24,10 @@
                 </div>
                 <div class="p4m-row horizontal layout" id="coupon">
                     <div class="p4m-cell detail-col flex-1 self-center">Coupon</div>
-                    <div class="p4m-cell cost-col flex-2 layout end-justified self-center">
+                    <div class="cost-col flex-2 layout vertical end-justified self-center">
+                        <p4m-discount-list cart-data="{{cartData}}" currency-symbol="{{currencySymbol}}" on-discountdelete="onDiscountDelete"></p4m-discount-list>
                         <p4m-discount-input on-discount="onDiscount"></p4m-discount-input>
-                        <p4m-discount-list cart-data="{{cartData}}" on-discount="onDiscount"></p4m-discount-list>
+                        
                     </div>
                 </div>
                 <div class="p4m-row horizontal layout" id="discount">
@@ -123,8 +124,19 @@
             },
 
             onDiscount: function(data) {
-                console.log("Received new discount");
-                this.push("cartData.discounts", data.detail);
+                //console.log("Received new discount");
+                //this.push("cartData.discounts", data.detail);
+            },
+
+            onDiscountDelete: function(e) {
+                //var discountCode = e.detail;
+                //console.log("Received discount deletion request");
+                /*
+                //Deleting this because it will be handled higher up in p4m-checkout
+                if (this.cartData && this.cartData.discounts) {
+
+                    this.set('cartData.discounts', this.cartData.discounts.filter(function(item){return item.code.toLowerCase() != discountCode.toLowerCase()}));
+                }*/
             },
 
             _updateItemCount: function() {

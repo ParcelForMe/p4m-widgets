@@ -691,6 +691,8 @@ a, a:visited {
   transition: all 0.15s ease-in-out 0s; }
   a:hover, a:visited:hover {
     color: #555; }
+  a.icon, a:visited.icon {
+    text-decoration: none; }
 
 .flex {
   display: flex; }
@@ -921,6 +923,10 @@ p4m-spinner[species='progress'] {
     border-bottom: 4px solid transparent;
     border-left-color: #37a553;
     border-right: none; }
+  [data-tooltip].persist:before, [data-tooltip].persist:after {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease 1s; }
 
 .input-validation-error + span.alert:after,
 .invalid + span.alert:after {
@@ -2478,7 +2484,10 @@ p4m-checkout {
         p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
           display: flex;
           flex-direction: row;
-          align-items: center; }
+          align-items: center;
+          justify-content: flex-end; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content .discount {
+            justify-content: flex-end; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
           display: flex;
           flex-direction: row; }

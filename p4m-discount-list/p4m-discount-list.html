@@ -7,9 +7,11 @@
         <div id="content">
             <template is="dom-repeat" items="{{cartData.discounts}}">
                 <div class="discount">
-                    <div id="p4mDiscountListRemoveBtn" class="p4m-cell closeBtn p4m-button p4m-button-active neutral" on-click="deleteItem"><iron-icon  name$="{{item.code}}" icon="icons:close"></iron-icon></div>
+                         
                     <div class="p4m-cell discount-code">{{item.code}}</div>
-                    <div class="p4m-cell discount-description">{{item.description}}</div>                                   
+                    <div class="p4m-cell discount-description">{{item.description}}</div>
+                    <div class="p4m-cell discount-amount">{{currencySymbol}}{{item.amount}}</div>
+                    <a id="p4mDiscountListRemoveBtn" name="{{item.code}}" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
                 </div>
             </template>
         </div>
@@ -24,6 +26,8 @@
         #content .discount {
             display: flex;
             flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
         }
 
         #content .discount .p4m-cell {
@@ -50,14 +54,17 @@
                 cartData: {
                     type: Object,
                     notify: true
+                },
+                currencySymbol: {
+                    type: String,
+                    value: '£'
                 }
             },
             observers: {
                 'cartData': 'onCartData'
             },
             listeners: {
-                'discount': 'addDiscount',
-
+                'discount': 'addDiscount'
             },
 
             ready: function()
@@ -79,8 +86,8 @@
             },
 
             deleteItem: function (e) {
-                console.log("Delete", e.target);
-                this.fire('discountdelete', e.target.getAttribute('name'));
+                console.log("Delete discount", e);
+                this.fire('discountdelete', e.target.parentElement.name);
             }
 
         });
