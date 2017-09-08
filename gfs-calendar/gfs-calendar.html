@@ -295,11 +295,13 @@
 
                 //Make buckets  
                 this._buckets = [];
-                bucketTemplate.forEach(function (rateData) {
-                    self._buckets.push(dateToTimeMinutes(new Date(rateData.deliveryTimeTo)));
-                })
-                this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 }).filter((item, pos) => { return this._buckets.indexOf(item) == pos; }); //sort and remove dups
-                
+                if (bucketTemplate) {
+                    bucketTemplate.forEach(function (rateData) {
+                        self._buckets.push(dateToTimeMinutes(new Date(rateData.deliveryTimeTo)));
+                    })
+                    this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 }).filter((item, pos) => { return this._buckets.indexOf(item) == pos; }); //sort and remove dups
+                }
+
                 //Fill buckets
                 this._calendar = [];
                 var dayIndex = 0;
