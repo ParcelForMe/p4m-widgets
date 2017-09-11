@@ -485,8 +485,9 @@
 
         function getDateLabel(date) {
             var suffixes = ["th", "st", "nd", "rd", "th"];
-            var domStr = date.getDate().toString();
-            var lastNumeral = Number(domStr[domStr.length-1]);
+            var day = date.getDate();
+            var domStr = day.toString();
+            var lastNumeral = (day > 10 && day < 20) ? 0 : Number(domStr[domStr.length - 1]);
             var suffix = suffixes[Math.min(lastNumeral, suffixes.length-1)];
             return domStr + suffix;
         }
