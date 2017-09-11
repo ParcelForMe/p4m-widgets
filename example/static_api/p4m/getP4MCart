@@ -36,7 +36,7 @@
             {
                 "cartId"          : "00000001",
                 "code"            : "AAA",
-                "description"     : "Valid Discount Code",
+                "description"     : "Coupon applied",
                 "amount"          : 5.00
             }
         ]

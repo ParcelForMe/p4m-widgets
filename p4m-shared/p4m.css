@@ -610,6 +610,9 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 .p4micon-save:before {
   content: "\e92a"; }
 
+.p4micon-coupon3:before {
+  content: "\e92b"; }
+
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BlaIta-webfont.eot");
@@ -680,7 +683,7 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
   font-weight: 100;
   font-style: normal; }
 
-a, a:visited {
+a, a:visited, .link i {
   color: #aaa;
   cursor: pointer;
   -webkit-transition: all 0.15s ease-in-out 0s;
@@ -689,10 +692,23 @@ a, a:visited {
   -ms-transition: all 0.15s ease-in-out 0s;
   -o-transition: all 0.15s ease-in-out 0s;
   transition: all 0.15s ease-in-out 0s; }
-  a:hover, a:visited:hover {
+  a:hover, a:visited:hover, .link i:hover {
     color: #555; }
-  a.icon, a:visited.icon {
+  a.icon, a:visited.icon, .link i.icon {
     text-decoration: none; }
+
+i.link {
+  color: #aaa;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -khtml-transition: all 0.15s ease-in-out 0s;
+  -moz-transition: all 0.15s ease-in-out 0s;
+  -ms-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
+  transition: all 0.15s ease-in-out 0s; }
+  i.link:hover {
+    color: #555; }
 
 .flex {
   display: flex; }
@@ -927,6 +943,49 @@ p4m-spinner[species='progress'] {
     visibility: visible;
     opacity: 1;
     transition: all 0.2s ease 1s; }
+
+[data-validate] {
+  position: relative; }
+  [data-validate]:after {
+    font-family: p4m;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    height: 32px;
+    width: 26px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    color: transparent;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0;
+    visibility: hidden;
+    opacity: 0; }
+
+[data-validate="success"]:after {
+  content: '\e912';
+  color: #37a553;
+  visibility: visible;
+  opacity: 1; }
+
+[data-validate="fail"]:after {
+  content: '\e917';
+  color: #dc5345;
+  visibility: visible;
+  opacity: 1; }
+
+[data-validate="coupon"]:after {
+  content: '\e92b';
+  color: #37a553;
+  visibility: visible;
+  opacity: 1;
+  font-size: 22px; }
 
 .input-validation-error + span.alert:after,
 .invalid + span.alert:after {
@@ -1219,13 +1278,13 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 36px;
+  height: 32px;
   margin: 0;
   padding: 0 0.5rem;
-  border: 1px solid #cacaca;
-  border-radius: 0;
+  border-radius: 3px;
+  border: 2px solid #e0e0e0;
   background-color: #fefefe;
-  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  box-shadow: none;
   font-family: inherit;
   font-size: 14px;
   line-height: 32px;
@@ -1235,6 +1294,9 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none; }
+  p4m-checkout [type='text']:focus, p4m-checkout [type='password']:focus, p4m-checkout [type='date']:focus, p4m-checkout [type='datetime']:focus, p4m-checkout [type='datetime-local']:focus, p4m-checkout [type='month']:focus, p4m-checkout [type='week']:focus, p4m-checkout [type='email']:focus, p4m-checkout [type='number']:focus, p4m-checkout [type='search']:focus, p4m-checkout [type='tel']:focus, p4m-checkout [type='time']:focus, p4m-checkout [type='url']:focus, p4m-checkout [type='color']:focus, p4m-checkout textarea:focus, p4m-checkout vaadin-combo-box-light input:focus {
+    outline: none;
+    border-color: #37a553; }
 
 p4m-checkout input:focus {
   border-color: #aaa;
@@ -1377,7 +1439,7 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
       -ms-transition: rotate, 0.2s;
       -o-transition: rotate, 0.2s;
       transition: rotate, 0.2s; }
-    .add-new div.cancel i {
+    .add-new div.cancel i.p4micon-add-circle {
       -webkit-transform: rotate(45deg);
       -khtml-transform: rotate(45deg);
       -moz-transform: rotate(45deg);
@@ -2473,34 +2535,67 @@ p4m-checkout {
           text-overflow: ellipsis;
           white-space: normal;
           overflow: hidden; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row .p4m-cell.heading {
+            align-self: flex-start;
+            line-height: 32px; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row .header-col {
           color: #404040;
           width: 20%;
           display: none; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError {
-          color: red; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountInputError.success {
-          color: green; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
+        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input {
+          height: 32px;
           display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-end; }
-          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content .discount {
+          justify-content: flex-end;
+          align-items: center; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #p4mDiscountListRemoveBtn, p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #couponButton {
+            margin-left: 6px; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input i.p4micon-add-circle {
+            color: #aaa;
+            -webkit-transition: rotate, 0.2s;
+            -khtml-transition: rotate, 0.2s;
+            -moz-transition: rotate, 0.2s;
+            -ms-transition: rotate, 0.2s;
+            -o-transition: rotate, 0.2s;
+            transition: rotate, 0.2s;
+            display: block; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input .cancel i.p4micon-add-circle {
+            -webkit-transform: rotate(45deg);
+            -khtml-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+            filter: progid:DXImageTransform.Microsoft.Matrix( M11=0, M12=0, M21=0, M22=0, sizingMethod='auto expand');
+            zoom: 1; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             justify-content: flex-end; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
-          display: flex;
-          flex-direction: row; }
-        p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
-          display: flex;
-          width: 24px;
-          align-self: stretch;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          margin-left: 2px;
-          color: #999;
-          text-decoration: none; }
+            p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content .discount {
+              justify-content: flex-end; }
+            p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
+              display: flex;
+              flex-direction: row; }
+              p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer:focus {
+                outline: none; }
+              p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer a {
+                position: absolute;
+                right: 0;
+                top: 0;
+                display: block;
+                height: 32px;
+                width: 28px; }
+          p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input a.icon {
+            display: flex;
+            width: 24px;
+            align-self: stretch;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-left: 2px;
+            color: #999;
+            text-decoration: none; }
         p4m-checkout p4m-order-summary .p4m-table .p4m-row.total {
           line-height: 32px;
           font-size: 16px;
