@@ -735,10 +735,10 @@
                 else {
                     console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                     this._postData.Request.Order.Transit.Recipient.Location = address;
-                if (autoSelectDelivery) {
-                    this.autoSelectDeliveryMethod(callback);
-                }
-                else callback(null);
+                    if (autoSelectDelivery) 
+                        this.autoSelectDeliveryMethod(callback);
+                    else
+                        callback(null);
                 }
 
             },
@@ -902,13 +902,25 @@
                         //Post, then try to re-select the chosen method
                         this.postGfsData(function (err) {
                             if (!err) {
-
                                 if (selection.dropPointId) {
                                     self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                                 }
                                 else {
-                                    self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
-                                    finalCallback();
+                                    var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                                    if (res)
+                                        finalCallback();
+                                    else {
+                                        // the methodId could not be found in the new methods list so auto select something
+                                        self.runDeliveryAddressPreferences(self.config.addressPreferences, self.config.defaultAddress, function (err) {
+                                            if (err) {
+                                                console.error("postGfsData() returned", err);
+                                                finalCallback(err);
+                                            }
+                                            else {
+                                                self.autoSelectDeliveryMethod(finalCallback);
+                                            }
+                                        });
+                                    }
                                 }
                             }
                             else finalCallback(err);
@@ -966,8 +978,7 @@
                 //Else if the address chosen isn't a droppoint,
                 //   Choose the most preferred standard delivery
                 if (!this.standardRates.length) {
-                    callback(null); //No delivery methods available yet
-                    
+                    callback(null); //No delivery methods available yet                    
                 }
                 else {
                     if (this.config.deliveryPreferences) {
@@ -996,10 +1007,8 @@
                             this.setDeliveryMethod(this.standardRates[0].id);
                         }
                         callback(null);
-                    }
-                   
+                    }                   
                 }
-
             },
 
             //Assuming a delivery method has been chosen, choose a delivery address
@@ -1013,10 +1022,6 @@
                     //If it's a droppoint delivery method....?
                     //TODO
                 }
-
-
-
-               
             },
 
             //Select a delivery address based on the users preferences
@@ -1100,12 +1105,11 @@
                     return;
                 }
 
-
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
                     debugger;
                     console.error("Method not available");
-                    this.fire('noservice');
+                    //this.fire('noservice');
                     return;
                 }
 
