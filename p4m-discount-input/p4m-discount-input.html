@@ -6,8 +6,9 @@
 
     <template>
         <div id="content">
-            <div id="drawer" class="hidden persist" data-tooltip="{{errorMsg}}">
-                <input is="iron-input" type="text" id="discountCode" class="tooltip-left" on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />   
+            <div id="drawer" class="hidden persist" data-tooltip="{{errorMsg}}" data-validate="coupon">
+                <input is="iron-input" type="text" id="discountCode" class="tooltip-left" on-keydown="_onKeyDown" bind-value="{{discountCode}}" placeholder="Discount code" />
+                <a href="#"></a>
             </div> 
             <div id="couponButton" class="add" on-tap="toggleNewDiscount">
                 <i class="icon p4micon-add-circle link"></i>
@@ -59,6 +60,7 @@
 
             updateUi: function() {
                 if (this._mode == Modes.ADDING) {
+                    this.$.drawer.setAttribute("data-validate", "coupon");
                     this.$.couponButton.classList.add("cancel");
                     this.$.couponButton.classList.remove("add");
                     this.show();
@@ -119,24 +121,18 @@
                     }
                 }
                 else if (data) {
-                    if (!data.valid) {
+                    if (!data.success) {
                         this.showError("This isn't a valid discount code", false);
-                        this.$.discountCode.classList.remove('discountValid');
-                        this.$.discountCode.classList.add('discountInvalid');
+                        this.$.drawer.setAttribute('data-validate','fail');
                     }
                     else {
-                        this.$.discountCode.classList.add('discountValid');
-                        this.$.discountCode.classList.remove('discountInvalid');
-
+                        this.$.drawer.setAttribute('data-validate', 'success');
                         window.setTimeout((function(){
                             this.fire('discount', data);
                             this.discountCode = null;
                             this.set('_mode', Modes.VIEWING);
 
                         }).bind(this), 500);
-                        
-                        
-
                     }
                 }
             },

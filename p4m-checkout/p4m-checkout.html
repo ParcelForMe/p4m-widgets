@@ -519,11 +519,12 @@
             },
 
             //Send new total to shipping module and ask for new shipping price etc
-            updCartTotals: function (newCartTotals, callback) {
+            updCartTotals: function (newCartTotals, callback, updDiscount) {
+                // this gets called when an item qty is changed, or when a discount is changed
                 this.cartData.tax = newCartTotals.tax || 0;
                 this.cartData.shippingAmt = newCartTotals.shipping || 0;
                 this.cartData.total = newCartTotals.total || 0;
-                if (this.cartData.total > 0)
+                if (!updDiscount && this.cartData.total > 0)
                     this._updateGfs(callback);
                 else 
                     this.updateP4mCart(callback);
@@ -865,11 +866,8 @@
             //},
 
             onDiscount: function (e) {
-                debugger;
-                //this.set('cartData.tax', Number(e.detail.tax || 0));
-                var cartDiscount = this.cartData.discounts.find(function(element, index, arr) { return element.code === e.detail.code; }); //TODO: Change to bound function; arrow functions may not work in older browsers
+                var cartDiscount = this.cartData.discounts.find(function (element, index, arr) { return element.code === e.detail.code; }); //TODO: Change to bound function; arrow functions may not work in older browsers
                 if (cartDiscount) {
-                    //console.log("Added existing discount")
                     if (cartDiscount.description !== e.detail.description ||
                         cartDiscount.amount !== e.detail.amount ||
                         cartDiscount.code !== e.detail.code)
@@ -877,34 +875,26 @@
                         cartDiscount.description = e.detail.description;
                         cartDiscount.amount = e.detail.amount || 0;
                         cartDiscount.code = e.detail.code;
-                        //this.cartData.tax = e.detail.tax || 0;
-                        this.updateP4mCart();
+                        this.updCartTotals(e.detail, null, true);
                     }
                 }
                 else {
                     this.push('cartData.discounts', e.detail);
-                    //this.cartData.tax = e.detail.tax || 0;
-                    this.updateP4mCart();
+                    this.updCartTotals(e.detail, null, true);
                 }
             },
 
             onDiscountDelete: function (e) {
-                debugger;     
                 var code = e.detail;              
-                //this.set('cartData.discounts', this.cartData.discounts.filter(function(item){return item.code.toLowerCase() != code.toLowerCase()}));
-
-                this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
-                //this.updateP4mCart();
-                
                 var item = this.cartData.discounts.find(function(element, index, arr) { return (element.code === code) });
                 if (item) {
                     item.amount = 0;
                     item.description = "Deleted";
-
-                    //this.cartData.tax = e.detail.tax || 0;
-                    this.updateP4mCart();
-                    this.$.localApi.call('removeDiscountCode', null, {"discountCode": code}, null);
-
+                    var self = this;
+                    this.$.localApi.call('removeDiscountCode', null, { "discountCode": code }, function (err, response) {
+                        if (response && response.success)
+                            self.updCartTotals(response, null, true);   // this will upate the cart as well
+                    });
                 }
             },
 

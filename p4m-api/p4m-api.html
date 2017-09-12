@@ -376,11 +376,13 @@
                         console.log(responseData);
                         
                     }
-                    finalCallback(err, responseData);
+                    if (finalCallback)
+                        finalCallback(err, responseData);
                 }
                 else {
                     this.fire("p4m_" + apiRequest.endPoint.stub, responseData, true);
-                    finalCallback(null, responseData);
+                    if (finalCallback)
+                        finalCallback(null, responseData);
                 }                           
             }
 
