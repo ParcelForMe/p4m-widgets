@@ -1304,7 +1304,7 @@ p4m-checkout input:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1); }
 
-p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
+p4m-checkout p4m-cart [type='text'], p4m-checkout p4m-cart [type='password'], p4m-checkout p4m-cart [type='date'], p4m-checkout p4m-cart [type='datetime'], p4m-checkout p4m-cart [type='datetime-local'], p4m-checkout p4m-cart [type='month'], p4m-checkout p4m-cart [type='week'], p4m-checkout p4m-cart [type='email'], p4m-checkout p4m-cart [type='number'], p4m-checkout p4m-cart [type='search'], p4m-checkout p4m-cart [type='tel'], p4m-checkout p4m-cart [type='time'], p4m-checkout p4m-cart [type='url'], p4m-checkout p4m-cart [type='color'], p4m-checkout p4m-cart textarea, p4m-checkout p4m-cart vaadin-combo-box-light input {
   min-width: 290px; }
 
 p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='time'], p4m-checkout input#postCode {
@@ -2686,6 +2686,7 @@ p4m-checkout {
       bottom: 0; }
     p4m-checkout p4m-cart p4m-cart-card #container #quantity input {
       width: 40px;
+      min-width: 40px;
       text-align: right; }
   p4m-checkout p4m-cart img#image {
     max-width: 64px; }
