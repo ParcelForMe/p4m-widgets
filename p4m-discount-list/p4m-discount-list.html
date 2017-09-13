@@ -8,11 +8,9 @@
             <template is="dom-repeat" items="{{cartData.discounts}}">
                 <div class="discount">
                          
-                    <div class="p4m-cell discount-code">{{item.code}}</div>
-                    <div class="p4m-cell discount-amount">{{currencySymbol}}{{item.amount}}</div>
-
-                    <div class="p4m-cell discount-description">{{item.description}}</div>
-                    <a id="p4mDiscountListRemoveBtn" name="{{item.code}}" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
+                    <div class="p4m-cell discount-code" data-tooltip="{{item.description}}">{{item.code}}</div>
+                    <div class="p4m-cell discount-amount">{{currencySymbol}}{{formatAmt(item)}}</div>
+                    &nbsp;<a id="p4mDiscountListRemoveBtn" name="{{item.code}}" href="#" class="icon" on-click="deleteItem"><i class="p4micon-delete-circle"></i></a>
 
                 </div>
             </template>
@@ -98,6 +96,10 @@
             {
 
                 
+            },
+
+            formatAmt: function(item){
+                return Number(item.amount||0).toFixed(2);
             },
 
             onCartData: function() {
