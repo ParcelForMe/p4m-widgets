@@ -3280,6 +3280,7 @@ p4m-checkout {
                   #drawer {
                     display: flex;
                     flex-direction: row;
+                    position: relative;
                     &:focus {
                         outline: none;
                     }

@@ -2576,7 +2576,8 @@ p4m-checkout {
               justify-content: flex-end; }
             p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer {
               display: flex;
-              flex-direction: row; }
+              flex-direction: row;
+              position: relative; }
               p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer:focus {
                 outline: none; }
               p4m-checkout p4m-order-summary .p4m-table .p4m-row p4m-discount-input #content #drawer a {
