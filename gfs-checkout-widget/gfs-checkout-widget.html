@@ -2009,7 +2009,7 @@
             },
 
             _setGfsLocationToHere: function() {
-                var self = this;
+                /*var self = this;
                 this._locateMe(function(err, latlng) {
                     if (err) {
                         //zzzz
@@ -2020,18 +2020,18 @@
                          geocoder.geocode({'location': latlng}, function(results, status) {
                             console.log(result);
                             //Now extract the post code and country, set it the GFS address, and post it to GFS
-                /*
+                
                             self.setGfsAddress({
                                 location: {
                                     countryCode: "",
                                     postCode: ""
                                 }
                             });
-                           self.postGfsData();*/
+                           self.postGfsData();
                         });
 
                     }
-                });
+                });*/
             },
 
             setMapHome: function (location) {
@@ -2346,14 +2346,13 @@
             },
 
             enableClickAndCollect: function(enable) {
+                enable = true; //TODO: Forcing on for the time being. Remove this line when the travelling user UI is to be finished.
                 if (enable) {
                     this.$.availableDropPoints.classList.remove('hidden');
                     this.$.noDropPoints.classList.add('hidden');
-                    //this.$.clickandcollect_tab.classList.remove('hidden');
-                    //zzzzzz
+  
                 }
                 else {
-                    //this.$.clickandcollect_tab.classList.add('hidden');
                     this.$.availableDropPoints.classList.add('hidden');
                     this.$.noDropPoints.classList.remove('hidden');
                 }
