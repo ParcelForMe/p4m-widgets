@@ -1320,6 +1320,10 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   font-weight: 600;
   cursor: pointer; }
 
+p4m-checkout .button.search-button iron-icon {
+  width: 21px;
+  height: 21px; }
+
 .gfs-button {
   background-color: #c8c8c8;
   color: #000000;
@@ -2462,10 +2466,14 @@ p4m-checkout {
     top: 6px;
     color: #ccc;
     background: white;
-    box-shadow: 0 0 3px 3px white; }
+    box-shadow: 0 0 3px 3px white;
+    width: 21px;
+    height: 21px; }
   p4m-checkout paper-input iron-icon {
     background: white;
-    box-shadow: 0 0 3px 3px white; }
+    box-shadow: 0 0 3px 3px white;
+    width: 21px;
+    height: 21px; }
   p4m-checkout .consumer-addresses {
     display: flex;
     flex-direction: row; }

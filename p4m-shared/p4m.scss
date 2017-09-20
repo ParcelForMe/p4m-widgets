@@ -1600,6 +1600,10 @@ p4m-checkout {
 	    // background-color: #1d80a2;
 	    // color: #fefefe;
 	}
+  .button.search-button iron-icon {
+    width: 21px;
+    height: 21px;
+  }
 }
 
 
@@ -3146,10 +3150,14 @@ p4m-checkout {
   		color: #ccc;
       background: rgb(255,255,255);
       box-shadow: 0 0 3px 3px rgb(255,255,255);
+      width: 21px;
+      height: 21px;
     } 
     paper-input iron-icon {
       background: rgba(255,255,255,1);
       box-shadow: 0 0 3px 3px rgb(255,255,255);
+      width: 21px;
+      height: 21px;
     }            
     .consumer-addresses {
         display: flex;
