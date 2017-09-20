@@ -43,111 +43,120 @@
                     </div>
                 </iron-page>
                 <iron-page id="pageDroppoints">
-                    <div id="mapTools" class="pageContent">
-                        <!-- <div class="header" style="display:none">
-                            <h3>{{dropPointTitle}}</h3>
-                        </div> -->
+                    <div id="availableDropPoints">
+                        <div id="mapTools" class="pageContent">
 
-                        <div class="toggleDropPointsViewControls">
-                            <!-- <template is="dom-if" if="{{_showingDroppointsList}}"> -->
+                            <div class="toggleDropPointsViewControls">
                                 <a id="viewAsMap" on-tap="_toggleDroppointView">
-                                <i class="p4micon p4micon-map-with-marker"></i>
+                                    <i class="p4micon p4micon-map-with-marker"></i>
                                 </a>
-                            <!-- </template> -->
-                            <!-- <template is="dom-if" if="{{_showingDroppointsMap}}"> -->
-                                <a id="viewAsList" on-tap="_toggleDroppointView">
-                                <i class="p4micon p4micon-list"></i></a>
-                            <!-- </template> -->
-                        </div>
-					
-					
-                        <div class="location-points">
-							<paper-dropdown-menu label="My Locations" noink no-animations>
-								<paper-listbox class="dropdown-content">
-									    <paper-item >
-                                            <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
-                                        </paper-item>
 
-			                            <template is="dom-repeat" items="{{_favAddresses}}" filter="hasLatLng">
-                                            <paper-item label="{{item.name}}">
-    			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
+                                <a id="viewAsList" on-tap="_toggleDroppointView">
+                                    <i class="p4micon p4micon-list"></i>
+                                </a>
+                            </div>
+    					
+    					
+                            <div class="location-points">
+    							<paper-dropdown-menu label="My Locations" noink no-animations>
+    								<paper-listbox class="dropdown-content">
+    									    <paper-item >
+                                                <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
                                             </paper-item>
-			                            </template>                                    
-									
-								</paper-listbox>
-							</paper-dropdown-menu>
-							
+
+    			                            <template is="dom-repeat" items="{{_favAddresses}}" filter="hasLatLng">
+                                                <paper-item label="{{item.name}}">
+        			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
+                                                </paper-item>
+    			                            </template>                                    
+    									
+    								</paper-listbox>
+    							</paper-dropdown-menu>
+    							
+                            </div>
+    						<div class="adjoiner"><p>or</p></div>
+                          
+                            <div class="search-postcode-wrap">
+                                <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
+                                <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
+                            </div>
+
+    						<div class="adjoiner"><p>or</p></div>
+    							<div class="collection-points">
+    								<paper-dropdown-menu label="My Collection Points" noink no-animations>
+    									<paper-listbox class="dropdown-content">
+    									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
+    					                     <paper-item label="{{item.droppointDescription}}">
+        										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected = "_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+    	                            		 </paper-item>						
+    									  </template>
+    								   </paper-listbox>
+    								</paper-dropdown-menu>
+    							</div>
+                            </div>
+
+
+                            <div id="list-loading" class="loading">
+                                <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
+                                <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
+                            </div>
+
+
+                            <div class="page" id="pageDroppoints">
+
+                            <div id="mapContainer">
+
+
+                                <div class="hidden" id="hiddenElements">
+                                    <div id="droppoint_info" class="noscroll">Selected</div>
+                                    <div id="inspectingDropPointPanel">
+                                        <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                                    </div>
+                                </div>                          
+                                <!--
+                                   <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
+                                -->
+                                <div id="mainMapArea">
+                                    <div id="gfsMapCanvas">
+                                        <div class="loading">
+                                            <!-- <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner> -->
+                                            <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
+                            <div id="dropPointListContainer" class="hidden">
+                                <div class="cardList">                           
+                                    <div id="mainDropPointListArea">
+                                        <div id="dropPointList">
+                                            <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
+                                                <!-- <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint> -->
+                                                <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
+                                <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                            </div>
+                            
                         </div>
-						<div class="adjoiner"><p>or</p></div>
-                      
+                    </div>
+                    <div id="noDropPoints" class="pageContent hidden">
+                        <h2>Sorry</h2>
+                        <p>There are no drop points available in your region</p>
+                        <paper-item >
+                            <gfs-location-button address-name="Current location" on-click="_setGfsLocationToHere" >Use my current location</gfs-location-button>
+                        </paper-item>
                         <div class="search-postcode-wrap">
                             <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
-                            <div type="submit" class="search-button" on-click="_findPostcode"><iron-icon icon="icons:search"></iron-icon></div>
+                            <div type="submit" class="search-button" on-click="_setGfsLocationToPostcode"><iron-icon icon="icons:search"></iron-icon></div>
                         </div>
 
-						<div class="adjoiner"><p>or</p></div>
-							<div class="collection-points">
-								<paper-dropdown-menu label="My Collection Points" noink no-animations>
-									<paper-listbox class="dropdown-content">
-									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
-					                     <paper-item label="{{item.droppointDescription}}">
-    										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected = "_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-	                            		 </paper-item>						
-									  </template>
-								   </paper-listbox>
-								</paper-dropdown-menu>
-							</div>
-                        </div>
-
-
-                        <div id="list-loading" class="loading">
-                            <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
-                            <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
-                        </div>
-
-
-                        <div class="page" id="pageDroppoints">
-
-                        <div id="mapContainer">
-
-
-                            <div class="hidden" id="hiddenElements">
-                                <div id="droppoint_info" class="noscroll">Selected</div>
-                                <div id="inspectingDropPointPanel">
-                                    <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                                </div>
-                            </div>                          
-                            <!--
-                               <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
-                            -->
-                            <div id="mainMapArea">
-                                <div id="gfsMapCanvas">
-                                    <div class="loading">
-                                        <!-- <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner> -->
-                                        <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
-                        <div id="dropPointListContainer" class="hidden">
-                            <div class="cardList">                           
-                                <div id="mainDropPointListArea">
-                                    <div id="dropPointList">
-                                        <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
-                                            <!-- <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-shipping-options="true" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint> -->
-                                            <gfs-droppoint on-droppoint-selected="onDropPointSelectedEvent" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                        </div>
-                        
                     </div>
 
                 </iron-page>
@@ -530,8 +539,6 @@
                 }  */             
             },
 
-
-            //eeeeeee
             postGfsData: function (callback) {
                 this._postReq(this._postData, callback);             
             },
@@ -659,24 +666,14 @@
             },
 
             _closeReq: function (callback) {
+
                 var data = {
                     closeSession: true,
-                    selectedDeliveryOptionID: this.selectedServiceDetails.serviceCode,
-                    //selectedDroppointID: this.selectedServiceDetails.collectionPoint
+                    selectedDeliveryOptionId: this.selectedServiceDetails.serviceCode,
+                    selectedDroppointId: this.selectedServiceDetails.collectionPoint || null
                 };
-
-                /* curl -X PATCH --header 'Content-Type: application/json' --header 'Accept: application/json' -d 
-                    {
-                      "closeSession": true,
-                      "selectedDeliveryOptionID": "D0S0"
-                    }
-                    http://rest.test.api.checkout.justshoutgfs.com/api/CheckoutSession?sessionId=ba1212fd-ec56-4824-85fa-54fd223ee6eb'
-
-                */
-                
+              
                 var request = this._makeRequest('PATCH', '///'+this.apiHost+'/api/CheckoutSession?sessionId=' + this._sessionId, (function (err, data) {
-
-                    //console.log("GFS Checkout Patch response", new Date().getTime());
 
                     if (err) {
                         callback(err);
@@ -720,7 +717,6 @@
             setGfsOrderValue: function (value) {
                 console.log('setGfsOrderValue(' + value + ')');
                 this._postData.Request.Order.Value.Value = value;
-                //this.postGfsData(callback);
             },
 
             //Put the address value into the GFS post data
@@ -1986,7 +1982,7 @@
                 }
             },
 
-            _locateMe: function() {
+            _locateMe: function(callback) {
                 var self = this;
                 // Try HTML5 geolocation.
                 if (navigator.geolocation) {
@@ -1999,7 +1995,10 @@
                             self._panToGeoLocation(pos);
                         },
                         function(err) {
-                           console.error(JSON.stringify(err));
+                            if (callback) {
+                                callback(err, pos);
+                            }
+                            console.error(JSON.stringify(err));
                         }
                     );
                 } 
@@ -2007,6 +2006,32 @@
                     console.error("Browser does not support geolocation");
 
                 }
+            },
+
+            _setGfsLocationToHere: function() {
+                /*var self = this;
+                this._locateMe(function(err, latlng) {
+                    if (err) {
+                        //zzzz
+                    }
+                    else {
+                        //TODO: Reverse geolocate latlng to address, then pass the country and postcode
+                        var geocoder = new google.maps.Geocoder;
+                         geocoder.geocode({'location': latlng}, function(results, status) {
+                            console.log(result);
+                            //Now extract the post code and country, set it the GFS address, and post it to GFS
+                
+                            self.setGfsAddress({
+                                location: {
+                                    countryCode: "",
+                                    postCode: ""
+                                }
+                            });
+                           self.postGfsData();
+                        });
+
+                    }
+                });*/
             },
 
             setMapHome: function (location) {
@@ -2321,11 +2346,15 @@
             },
 
             enableClickAndCollect: function(enable) {
+                enable = true; //TODO: Forcing on for the time being. Remove this line when the travelling user UI is to be finished.
                 if (enable) {
-                    this.$.clickandcollect_tab.classList.remove('hidden');
+                    this.$.availableDropPoints.classList.remove('hidden');
+                    this.$.noDropPoints.classList.add('hidden');
+  
                 }
                 else {
-                    this.$.clickandcollect_tab.classList.add('hidden');
+                    this.$.availableDropPoints.classList.add('hidden');
+                    this.$.noDropPoints.classList.remove('hidden');
                 }
             },
 
