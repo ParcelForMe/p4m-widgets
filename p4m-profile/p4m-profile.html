@@ -61,10 +61,10 @@
             ready: function()
             {
                 if (this.mode == "basic") {
-                    this.hideImage = false;
-                    this.hideName = true;
+                    this.hideImage = true;
+                    this.hideName = false;
                 }
-                if (this.hideImage) this.topClass += " hide-image";
+                if (this.hideImage) this.$.profileImage.classList.add("hide-image");
                 if (this.hideName) this.topClass += " hide-name";
 
                 window.addEventListener('p4m_consumer', this.onProfileData.bind(this));
