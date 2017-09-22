@@ -37,7 +37,6 @@
             </div-->        
 
             <p class="p4m-error">{{errorMsg}}</p>   
-      
         </div>
         <p4m-overlay id="overlay" no-cancel-on-outside-click with-backdrop></p4m-overlay>
     </template>
@@ -194,6 +193,7 @@
 
             ready: function ()
             {
+                this._state = States.CVV_NEEDED;
                 this.selectedPaymentType = PaymentTypes.CARD;
                 window.addEventListener('buy', this.buyNow.bind(this), false); //From button
                 this.load();
@@ -205,9 +205,7 @@
                 this.updateUi();
             },
 
-            onCvv: function (e) {
-
-                
+            onCvv: function (e) {                
                 var card = e.target; //.this.$$('#card');
                 if (!card || !card.cvv || card.cvv === "" || e.detail === false) {
                     this._state = States.CVV_NEEDED;
