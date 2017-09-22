@@ -415,10 +415,6 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
   border: none; }
 
 .p4m-general-fault-0 .buttons.p4m-general-fault button.p4m-general-fault:not(:active) i {
-  margin: 20px;
-  width: 100px;
-  height: 100px;
-  background: #f00;
   -webkit-animation-name: spin;
   -webkit-animation-duration: 4000ms;
   -webkit-animation-iteration-count: infinite;
