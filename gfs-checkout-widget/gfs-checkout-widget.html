@@ -667,6 +667,12 @@
 
             _closeReq: function (callback) {
 
+                // temp hack to get around close session inconsistency
+                if (this.selectedServiceDetails.collectionPoint) {
+                    callback(null, "DPD"); // hard code the carrier to DPD for now
+                    return;
+                }
+
                 var data = {
                     closeSession: true,
                     selectedDeliveryOptionId: this.selectedServiceDetails.serviceCode,
@@ -786,12 +792,12 @@
             },
 
 
-            requestDropPointsByAddress: function (addressLine, postCode, countryCode, callback) {
+            requestDropPointsByAddress: function (address, callback) {
   
                 var self = this;
-                this._geoCodeAddress(addressLine, postCode, countryCode, function (err, data) {
+                this._geoCodeAddress(address, function (err, data) {
                     if (!err && data) {
-                        var box = [[data.lng() - 0.1, data.lat() - 0.1], [data.lng() + 0.1, data.lat() + 0.1]];
+                        var box = [[data.lng - 0.1, data.lat - 0.1], [data.lng + 0.1, data.lat + 0.1]];
                         self._requestDroppointsByGeoBoxes([box], callback);
                     }
                     else {
@@ -834,10 +840,6 @@
                     var now = new Date();
                     var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
                     
-
-
-
-
                     this._postData = {
                         "Request":
                         {
@@ -925,7 +927,6 @@
                     //Otherwise auto-select address and delivery method according to preferences (if any)
                     else {
                         //Set delivery address first. This will then trigger auto-setting of delivery method
-
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
                             self.postGfsData(function(err) {
                                 if (err) {
@@ -940,7 +941,6 @@
                             //finalCallback(err);
                         });
                     }                 
-        
                 }
                 this.initialised = true;
             },
@@ -1187,16 +1187,20 @@
             },
 
             selectNearestDropPoint: function (callback) {
-                self = this;
-                this.requestDropPointsByAddress(this.config.defaultAddress.Street1, this.config.defaultAddress.PostCode, null, function (dropPoints) {
-                    if (dropPoints && dropPoints.length) {
-                        var dropPoint = dropPoints[0];
-                        self._selectDropPoint(dropPoint.droppointId, callback);
-                    }
-                    else {
-                        callback("No supported drop-points found");
-                    }
-                });
+                if (this._sessionId) {
+                    self = this;
+                    this.requestDropPointsByAddress(this.config.defaultAddress, function (dropPoints) {
+                        if (dropPoints && dropPoints.length) {
+                            var dropPoint = dropPoints[0];
+                            self._selectDropPoint(dropPoint.droppointId, callback);
+                        }
+                        else {
+                            callback("No supported drop-points found");
+                        }
+                    });
+                }
+                else
+                    callback();
             },
 
             //This runs after the GFS requests have returned data
@@ -1536,7 +1540,8 @@
                     window.clearTimeout(this._searchTimeout);
                 }
                 var self = this;
-                var postcode = this.$.droppointAddress.value || this.postCode;
+                var pcode = this.$.droppointAddress.value || this.postCode;
+                if (!pcode) return;
                 //self.initialAddress = address;
                 //self.$$("#gfsMapCanvas-loading").classList.remove('hidden');
 
@@ -1544,7 +1549,7 @@
                 geocoder.geocode({
                     componentRestrictions: {
                         country: this.countryCode,
-                        postalCode: postcode
+                        postalCode: pcode
                     }
                 }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
@@ -1571,12 +1576,16 @@
             },
 
 
-            _geoCodeAddress: function (streetAddress, postCode, countryCode, callback) {
-                var addressStr = streetAddress + "," + postCode;
+            _geoCodeAddress: function (address, callback) {
+                if (address.lat && address.lng) {
+                    callback(null, { 'lat': address.lat, 'lng': address.lng });
+                    return;
+                }
+                var addressStr = address.addressLineCollection[0] + "," + address.Postcode;
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
-                        country: countryCode || this.countryCode
+                        country: address.CountryCode.Code || this.countryCode
                     },
                     address: addressStr
                 },
@@ -1584,7 +1593,7 @@
                     if (status == google.maps.GeocoderStatus.OK) {
                         if (results && results.length) {
                             var geoLocation = results[0].geometry.location;
-                            callback(null, geoLocation);
+                            callback(null, { 'lat': geoLocation.lat(), 'lng': geoLocation.lng() });
                         }
                     }
                     else {
@@ -2052,18 +2061,13 @@
                 var self = this;
                 if (this._postData.Request.Order.Transit.Recipient.Location) {
                     var location = this._postData.Request.Order.Transit.Recipient.Location;
-                    this._geoCodeAddress(location.addressLineCollection[0], location.Postcode, location.CountryCode.Code, function (err, data) {
+                    this._geoCodeAddress(location, function (err, data) {
                         if (err) {
                             console.error('panToDefaultLocation():', err);
                         }
                         else {
-                            var geoLocation = {
-                                lat: data.lat(),
-                                lng: data.lng()
-                            };
-
-                            self._panToGeoLocation(geoLocation);
-                            self.setMapHome(geoLocation);
+                            self._panToGeoLocation(data);
+                            //self.setMapHome(geoLocation);
                         }
 
                     });
