@@ -83,6 +83,9 @@
                 <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
                     <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
+                    <div id="downloadAppAd">
+                        <p class="p4m-info">View and track your purchases in the free P4M App! Get it from your app store now.</p>
+                    </div>
                 </div>
             </div> 
 
@@ -249,20 +252,6 @@
                 }
 
                 this.init();
-
-
-
-
-                /*
-                if (this.sessionId) {
-                    this.getLocalCart();
-                }
-
-                this.$.p4mCheckoutApi.call('consumer', null, null, function (data) {
-                    self.onConsumerData(data);
-                    self.preselectAddress();
-                    self.preselectDeliveryMethod();
-                });*/
             },
 
             init: function (finalCallback) {
@@ -375,6 +364,8 @@
                     }
                     else {
                         self.set('consumerData', data.consumer);
+                        if (data.consumer.hasInstalledApp)
+                            self.$.downloadAppAd.classList.add("hide");
                         callback(err, data);
                     }
                 });
@@ -944,7 +935,8 @@
                     //return false;
                 }
                 else {
-                    /*if (this.consumerData.prefDeliveryAddressId === null) */this.consumerData.prefDeliveryAddressId = addressId;
+                    /*if (this.consumerData.prefDeliveryAddressId === null) */
+                    this.consumerData.prefDeliveryAddressId = addressId;
                     //self._updateUiForAddress(address);
 
                     //Send to GFS Checkout and await shipping event
