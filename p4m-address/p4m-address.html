@@ -275,13 +275,11 @@
                     ((  googleAddress.premise?(googleAddress.premise + " "):"" ) + ( googleAddress.street_number?(googleAddress.street_number + " "):"") 
                     + (googleAddress.route||googleAddress.locality||""))||""
                 );
-                this.set('addressData.street2', googleAddress.neighbourhood || googleAddress.sublocality_level_2 || googleAddress.administrative_area_level_2||"");
+                this.set('addressData.street2', googleAddress.neighbourhood || googleAddress.sublocality_level_2 || "");
                 this.set('addressData.city', googleAddress.locality || googleAddress.postal_town||"");
                 this.set('addressData.postCode', googleAddress.postal_code||"");
-                this.set('addressData.state',  googleAddress.administrative_area_level_1 ||  googleAddress.sublocality_level_1|| e.detail.vicinity || googleAddress.sublocality_level_2 || "");
-                this.$.country.value = googleAddress.country;
-
-                
+                this.set('addressData.state',  googleAddress.administrative_area_level_2 || googleAddress.sublocality_level_1 || e.detail.vicinity || googleAddress.sublocality_level_2 || "");
+                this.$.country.value = googleAddress.country;                
             },
 
             validate: function() {
