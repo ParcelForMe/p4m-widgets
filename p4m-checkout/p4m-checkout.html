@@ -1197,6 +1197,13 @@
             _onSelectTab: function (tab) {
                 //Tab changed
                 //console.log(tab);
+                var page = tab.detail.item;
+                if (page.id === 'deliveryPage') {
+                    // refresh google map because it's been hidden
+                    var gfsCheckout = this.$.gfsCheckoutWidget;
+                    gfsCheckout.CheckMapIsReset();
+                }
+                console.log('page selected', page);
             },
 
             showGeneralFault: function() {
