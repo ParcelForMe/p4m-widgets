@@ -2684,13 +2684,32 @@ p4m-checkout {
       padding-bottom: 0;
     }
 
+    #selectedDropPointPanel {
+      // position: absolute;
+      // z-index: 1;
+      // right: 0;
+      // top: 0;
+      // background: rgba(255, 255, 255, 0.95);
+      // display: flex;
+      // flex: 2;
+      // box-sizing:  border-box;
+      // max-height: 327px;
+      // width: 33%;
+      // overflow-y: scroll;
+      // padding: 15px;
+
+      display: flex;
+      flex: 2;
+      overflow-y: scroll;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.95);
+
+    }
     #selectedDropPointPanel .content-container {
         // background: #f8f8f8;
         /* border-radius: 5px; */
         /* border: 2px solid #37a553; */
-        padding: 10px;
-        /* border-left: 2px solid #cacaca; */
-        height: 100%;
+        /* border-left: 2px solid #cacaca; */      
     }
 
     #mainDropPointListArea #dropPointList .content-container {
@@ -2918,52 +2937,52 @@ p4m-checkout {
     .dp-details.gfs-droppoint {
 	    display: flex;
 	    flex-direction: row;
-	}
-	.dp-icon.gfs-droppoint {
-	    margin: 0 0 5px;
-	    float: left;
-	    padding-right: 10px;
-	}
-	#dp-distance {
-		display: flex;
-		align-items: center;
-		line-height: 1em;
-		i {
-			font-size: 16px;
-			margin-left: 4px;
-		}
-	}
-	.dp-day-name {
-	    font-weight: 600;
-	}
-	.dp-opening-hours {
-		.title {
-            font-size: 12px;
-            margin-top: 8px;
-            text-transform: uppercase;
-            color: #aaa;
-		}
-	}
-	#opening-hours-link {
-		display: flex;
-		align-items: center;
-	}
-    .dpProviderName {
-	    display: flex;
-	    font-weight: 600;
-      font-size: 16px;
-	    line-height: 16px;
-	    align-items: center;
-	    .dpProviderLogo {
-	    	width: 24px;
-	    	margin-right: 5px;
-	    }
-	}
-	#dp-address {
-		margin: 2px 0;
-		line-height: 1.2em;
-		font-size: 14px;
-	}
+  	}
+  	.dp-icon.gfs-droppoint {
+  	    margin: 0 0 5px;
+  	    float: left;
+  	    padding-right: 10px;
+  	}
+  	#dp-distance {
+  		display: flex;
+  		align-items: center;
+  		line-height: 1em;
+  		i {
+  			font-size: 16px;
+  			margin-left: 4px;
+  		}
+  	}
+  	.dp-day-name {
+  	    font-weight: 600;
+  	}
+  	.dp-opening-hours {
+  		.title {
+              font-size: 12px;
+              margin-top: 8px;
+              text-transform: uppercase;
+              color: #aaa;
+  		}
+  	}
+  	#opening-hours-link {
+  		display: flex;
+  		align-items: center;
+  	}
+      .dpProviderName {
+  	    display: flex;
+  	    font-weight: 600;
+        font-size: 16px;
+  	    line-height: 16px;
+  	    align-items: center;
+  	    .dpProviderLogo {
+  	    	width: 24px;
+  	    	margin-right: 5px;
+  	    }
+  	}
+  	#dp-address {
+  		margin: 2px 0;
+  		line-height: 1.2em;
+  		font-size: 14px;
+  	}
     .highlight {
         color: #FFFFFF !important;
         background-color: #90dca7 !important;
@@ -3000,6 +3019,7 @@ p4m-checkout {
         padding: 0;
         .page {
             padding: 0 10px;
+            display: flex;
         }
     }
     iron-page#pageDroppoints > #pageDroppoints {
@@ -3015,15 +3035,10 @@ p4m-checkout {
     #dropPointListContainer {
     	display: flex;
     	flex: 3;
-		height: 100%;
-		overflow: auto;
+  	height: 100%;
+  	overflow: auto;
         overflow-x: hidden;
         padding: 0;
-    }
-    #selectedDropPointPanel {
-        display: flex;
-        flex: 2;
-        padding-top: 0;
     }
     div.dark .open-late {
         -webkit-filter: invert(1);
@@ -3211,12 +3226,12 @@ p4m-checkout {
             &.p4m-label {
                 color: #777;
             }
-        }
-    	}
-    	p4m-purchase {
-    		flex: 1;
-    	}
-    }
+          }
+      	}
+      	p4m-purchase {
+      		flex: 1;
+      	}
+      }
 
 
     // p4m-order-summary
