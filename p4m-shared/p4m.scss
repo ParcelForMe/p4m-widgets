@@ -3199,6 +3199,17 @@ p4m-checkout {
     	flex: 1;
     	flex-direction: column;
     	background: $grey-h10;
+      #downloadAppAd {
+        padding: 0 20px 15px 20px;
+        p.p4m-info {
+          display: flex;    
+          justify-content: center;
+          text-align: center;
+          padding: 0;
+          margin: 0;
+          color: #aaa;
+        }
+      }
     }
 
     footer {

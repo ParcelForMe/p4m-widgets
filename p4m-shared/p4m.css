@@ -2490,6 +2490,15 @@ p4m-checkout {
     flex: 1;
     flex-direction: column;
     background: #f8f8f8; }
+    p4m-checkout #summaryPanel #downloadAppAd {
+      padding: 0 20px 15px 20px; }
+      p4m-checkout #summaryPanel #downloadAppAd p.p4m-info {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        color: #aaa; }
   p4m-checkout footer {
     display: flex;
     flex: 1;
