@@ -368,7 +368,12 @@
 
                 selectedTab: {
                     type: Number,
-                    value: 2
+                    value: 0
+                },
+
+                mapIsReset: {
+                    type: Boolean,
+                    value: false
                 },
 
                 apiHost: {
@@ -986,11 +991,16 @@
                             
                             //Can I get away without selecting it via the droppoint widget?
                             this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
+                            this.showPage_Droppoints();
+                        }
+                        else if (this.config.deliveryPreferences.preferSoonest) {
+                            this.setDeliveryMethod(this._data.dayDefinite[0]);
+                            this.showPage_Calendar();
                         }
                         else {
                             this.standardRates = this.standardRates.sort(sortFunction);
                             this.setDeliveryMethod(this.standardRates[0].id);
-                            
+                            this.showPage_Standard();
                         }
                         callback(null);
                     }
@@ -1137,7 +1147,8 @@
                         newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
-                    if (newMethod.serviceType.type == "dmStandardDropPoint" && this._selectedDropPoint) {
+                    if (newMethod.serviceType.type == "dmStandardDropPoint" && this._selectedDropPoint)
+                    {
                         newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
                         newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
                         newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
@@ -1159,14 +1170,9 @@
                         }
                         newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
                     }
-                    this.set('selectedServiceDetails', newSelectedServiceDetails);
-                  
+                    this.set('selectedServiceDetails', newSelectedServiceDetails);                  
 
                     this.set('standardRates', this._getStandardServices());
-
-                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    //this.set('dayDefinite', JSON.parse(JSON.stringify(this.dayDefinite)));
-                    //this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
 
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
@@ -1694,9 +1700,7 @@
                     }
                     else {
                         console.log("Not requesting any regions");
-                    }
-
-                    
+                    }                    
                     this._resetMap(this._map);
                 }
             },
@@ -1760,6 +1764,13 @@
                     this.$.viewAsList.classList.add('active');
                 }
 
+            },
+
+            CheckMapIsReset: function () {
+                if (this._map && !this.mapIsReset) {
+                    this._resetMap(this._map);
+                    this.mapIsReset = true;
+                }
             },
 
             _resetMap: function (map, callback) {
@@ -1866,7 +1877,7 @@
             //If no method chosen, auto-choose one
             _completeDropPointSelection: function(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
-
+                this.showPage_Droppoints();
                 var self = this;
                 if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
                     
@@ -2189,9 +2200,6 @@
                 var results = [];
                 var services = {};
 
-
-
-
                 //For each non day definite item,
                 this._data.nonDayDefinite.forEach(function (day) {
                     //For each rate on the day,
@@ -2239,10 +2247,8 @@
                     var sortFunction = this._getDeliveryMethodSortFunction();
                     results = results.sort(sortFunction);
                 }
-
                 return results;
             },
-
             
             _getDeliveryRateById: function (id) {
                 var combinedRateGroups = this._data.dayDefinite.concat(this._data.nonDayDefinite);
@@ -2258,7 +2264,6 @@
                 }
                 else return null;
             },
-
 
             _unselectMethod: function() {
                 var methods = this.standardRates;
@@ -2295,7 +2300,6 @@
 
             onShowPage_Calendar: function(preselect) {
                 this.showingDroppoints = false;
-
             },
 
             showPage_Standard: function (preselect) {
@@ -2370,16 +2374,11 @@
                     this.$.calendardelivery_tab.classList.add('hidden');
                 }
             },
-
-
+            
             hasLatLng: function (item) {
                 //return true;
                 return (item.lat && item.lng)
             }
-
-
-
-
         });
 
         function isNull(a, b) {
