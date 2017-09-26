@@ -54,9 +54,11 @@
             line-height: 1em;
             margin-bottom: .425em;
         }*/
+
+        /* OMG THIS WORKS!!!! */
         h1 {
 /*          border: var(--p4m-general-fault-border,5px solid green);*/
-            color: var(--p4m-general-fault-h1-border,#fff);
+            color: var(--p4m-general-fault-h1-border,#37a553);
             font-size: var(--p4m-general-fault-h1-font-size,48px);
             line-height: var(--p4m-general-fault-h1-line-height,1em);
             margin-bottom: var(--p4m-general-fault-h1-margin-bottom,.425em);
@@ -75,7 +77,7 @@
             line-height: 1.5em;
         }
         p {
-            color: #fff;
+            color: #37a553;
             font-size: 20px;
             font-weight: 200;
             line-height: 1.3em;
@@ -95,17 +97,17 @@
             display: flex;
         }
         .buttons a {
-            color: #fff;
+            color: #37a553;
             padding: 4px 0;
             text-decoration: none;
-            border-bottom: 2px solid rgba(255,255,255,0);
+            border-bottom: 2px solid rgba(55, 165, 83, 0);;
         }
         .buttons a:hover {
-            color: #fff;
-            border-bottom: 2px solid rgba(255,255,255,0.65);
+            color: #37a553;
+            border-bottom: 2px solid rgba(55, 165, 83, 0.65);
         }
         .buttons span {
-            color: rgba(255, 255, 255, 0.65);
+            color: rgba(55, 165, 83, 0.65);
             padding: 4px 0 6px 0;
             margin: 0 10px 0 0;
         }
@@ -124,10 +126,10 @@
             height: 24px;
         }
         #p4m-logo svg {
-            fill: #fff;
+            fill: #37a553;
         }
         .generalFault h3 {
-            color: #fff;
+            color: #37a553;
             font-weight: 200 !important;
             font-size: 18px;
             height: 24px;
@@ -137,14 +139,14 @@
             align-items: flex-end;
         }
         .generalFault p4m-spinner {
-            background: rgba(255,255,255,0.3);
+            background: rgba(55, 165, 83, 0.3);
             position: relative;
             top: initial;
             bottom: initial;
             margin-bottom: 12px;
         }
         button {
-          color: #fff;
+          color: #37a553;
           border-radius: 24px;
           text-align: center;
           cursor: pointer;
@@ -157,8 +159,8 @@
           -o-transition: all 0.15s ease-in-out 0s;
           transition: all 0.15s ease-in-out 0s;
           background-color: rgba(255,255,255,0);
-          box-shadow: inset 0 0 2000px #37a553;
-          border: solid 2px rgba(55, 165, 83, 0.5);
+          box-shadow: inset 0 0 2000px #fff;
+          border: solid 2px rgba(255, 255, 255, 0.5); 
           align-self: center !important;
           font-weight: 400 !important;
           font-size: 18px !important;
@@ -170,7 +172,7 @@
           align-items: center;
         }
         button:hover {
-          background-color: #37a553;
+          background-color: #fff;
         }
         button:focus, .button:focus, a:focus {
             outline: none;
@@ -181,28 +183,28 @@
           justify-content: center;
         }
         button.inverse {
-            color: #fff;
+            color: #37a553;
             background-color: transparent;
             box-shadow: none;
-            border: solid 2px rgba(255,255,255,.5);
+            border: solid 2px rgba(55, 165, 83, 0.5);
         }
         button.inverse:hover {
-            color: #37a553;
-            background-color: #fff;
+            color: #fff;
+            background-color: #37a553;
             box-shadow: none;
             border: solid 2px rgba(255,255,255,.5);
         }
         button.secondary {
-            color: #37a553;
+            color: #fff;
             background-color: transparent;
             box-shadow: none;
             border: solid 2px rgba(55, 165, 83, 0.5);
         }
         button.secondary:hover {
-            color: #fff;
-            background-color: rgba(255,255,255,.05);
-            box-shadow: inset 0 0 1000px #37a553, inset 0 0 1000px #37a553;
-            border: solid 2px rgba(55, 165, 83, 0.5);
+            color: #37a553;
+            background-color: rgba(55, 165, 83, 0.05);;
+            box-shadow: inset 0 0 1000px #fff, inset 0 0 1000px #fff;
+            border: solid 2px rgba(255, 255, 255, 0.5);
         }
 
         /*iron-overlay-backdrop {
