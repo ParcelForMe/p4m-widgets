@@ -28,18 +28,18 @@
 
     <style>
         :host {
-            --iron-overlay-backdrop-background-color: #37a553;
+            --iron-overlay-backdrop-background-color: #fff;
             --iron-overlay-backdrop-opacity: 0.95;
         }
 
-/*        iron-overlay-backdrop.opened {
+        iron-overlay-backdrop.opened {
             opacity: 0.95;
-            background-color: green;
-        }*/
-/*        iron-overlay-backdrop {
-            --iron-overlay-backdrop-background-color: #37a553;
+            background-color: #fff;
+        }
+        iron-overlay-backdrop {
+            --iron-overlay-backdrop-background-color: #fff;
             --iron-overlay-backdrop-opacity: 0.95;
-        }*/
+        }
         paper-spinner {
             width: 200px;
             height: 200px;
@@ -61,6 +61,16 @@
             line-height: var(--p4m-general-fault-h1-line-height,1em);
             margin-bottom: var(--p4m-general-fault-h1-margin-bottom,.425em);
         }
+
+        /* Trying to style this thing */
+        iron-overlay-backdrop {
+            background-color: pink;
+        }
+
+
+        /* END Trying to style this thing */
+
+
         h1 span {
             line-height: 1.5em;
         }
