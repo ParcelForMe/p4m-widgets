@@ -57,6 +57,9 @@
                     type: String,
                     notify: true
                 },
+                newCardId: {
+                    type: String,
+                },
                 platform: {
                     type: String
                 },
@@ -81,43 +84,33 @@
             },
 
             addNewCard: function () {
-                //var ctrl = this.$.newCardCollapse;
-
-                //var lbl = this.$.addNewCardLink;
-
                 if (this.$.cardSelectionPages.selected == 1) {
                     this.$.cardSelectionPages.select(0);
                     this.$.newCard.loadRealexForm();
                     this.set("labelText","Cancel");
-                    
                     this.$.addNewCardLink.classList.add("cancel");
                     this.$.addNewCardLink.classList.remove("add");
-
                 }
                 else {
                     this.$.cardSelectionPages.select(1);
                     this.set("labelText", "Add a New Card");
-                    
                     this.$.addNewCardLink.classList.add("add");
                     this.$.addNewCardLink.classList.remove("cancel");
                 }
 
-
             },
 
-
-            onGotNewCard: function () {
+            onGotNewCard: function (data) {
+                this.newCardId = data.detail;
                 this.addNewCard();
             },
-
-
-
+            
             onConsumerDataChange: function () {
-                if (false && !this.selectedCardId && this.consumerData) {
-                    //console.log("Setting selectedCardId to", this.consumerData.defaultPayMethodId);
-                    var foundDefaultCard = this.getCardDataById(this.consumerData.defaultPayMethodId);
+                // got the card list from the consumer so check if we need to select a newly added card
+                if (this.newCardId && (this.selectedCardId !== this.newCardId) && this.consumerData) {
+                    var foundDefaultCard = this.getCardDataById(this.newCardId);
                     if (foundDefaultCard) {
-                        this.set('selectedCardId', this.consumerData.defaultPayMethodId);
+                        this.set('selectedCardId', this.newCardId);
                         this.fire('selected', foundDefaultCard);
                     }
                 }

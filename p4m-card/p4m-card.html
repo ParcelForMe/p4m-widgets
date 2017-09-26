@@ -16,9 +16,7 @@
                                 <i class="p4micon-check"></i>
                             </template>
                         </div>
-                    <div>
-                            
-                    </div>
+                        <div></div>
                     </div>
                     <div class$="card-content {{cardData.issuer}}">
                         <custom-validator id="validator" validator-name="cvv"></custom-validator>
@@ -33,12 +31,8 @@
                         </div>                  
                     </div>
                 </div>
-                
-
             </div>
-
         </div>
-
     </template>
 
     <style>
@@ -200,12 +194,8 @@
                     }
                     else {
                         this._cvvLength = 4;
-                    }
-                   
+                    }                   
                 }
-                
-
-
                 this.updateUi();
             },
 
@@ -217,14 +207,11 @@
                     }
                     else if (this.cvv.length == this._cvvLength) {
                         this._lastCvv = this.cvv;
-                        this.validCvv = true;
-                        
+                        this.validCvv = true;                        
                     }
                     else {
-
                         this.set('cvv', this._lastCvv || "");
                     }
-
                     this.cardData.cvv = this.cvv;
                     this.fire('cvv', this.validCvv);
                 }
@@ -245,7 +232,6 @@
                 else {
                     this.$.selectedToggle.classList.remove('chosen');
                 }
-
             },
 
             validate: function (value) {
