@@ -109,7 +109,8 @@
 
             _addressToStr: function (address) {
                 if (address) {
-                    return address.street1;// + " " + address.Street2 + " in " + (address.City || address.PostCode);
+                    var company = address.companyName ? address.companyName : '';
+                    return company + ' ' + address.street1;// + " " + address.Street2 + " in " + (address.City || address.PostCode);
                 }
                 else {
                     return "";

@@ -369,6 +369,7 @@
 					<div class="content">
 						<div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>
 						</div>
+						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
 
 						<div id="dp-address">
 							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
