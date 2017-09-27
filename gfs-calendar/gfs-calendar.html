@@ -27,7 +27,9 @@
                         </template>
                         <template restamp="true" is="dom-if" if="{{_calendarShippingOptionIsSelected(shippingOption)}}">
                             <div class="makeFollowingSelected">
-                            <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell"><div>{{shippingOption.localizedPrice}}</div>
+                                <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell">
+                                    <div>{{shippingOption.localizedPrice}}</div>
+                                </div>
                             </div>
                         </template>
                     </template>                
