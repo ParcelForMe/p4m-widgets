@@ -39,7 +39,8 @@
 
             imgSrcChanged: function()
             {
-                this.calcUrl();
+                if (this.imgSrc && this.imgSrc !== '' && this.imgSrc.charAt(0) !== '.')
+                    this.calcUrl();
             },
             localFolderChanged: function() {
                 this.calcUrl();
