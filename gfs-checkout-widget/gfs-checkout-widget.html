@@ -105,8 +105,6 @@
                             <div class="page" id="pageDroppoints">
 
                             <div id="mapContainer">
-
-
                                 <div class="hidden" id="hiddenElements">
                                     <div id="droppoint_info" class="noscroll">Selected</div>
                                     <div id="inspectingDropPointPanel">
@@ -123,7 +121,6 @@
                                             <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -1396,10 +1393,34 @@
 
                 var home = null;
                 console.log("Infowindow = ", self.$.droppoint_info);
+                var imgSrc = this.resolveUrl('images/gmap-icon-selected-shadow-32px.png');
+                var imgTag = '<img src="' + imgSrc + '" style="position:relative;top:40px;left:12px;">';
                 self._infoWindow = new google.maps.InfoWindow({
                     //TIP: To use dynamic content here, use "droppoint_info" as shown in comment below. Then place a droppoint widget or similar into the droppoint_info element.
-                    content: "Selected" //self.$.droppoint_info
+                    content: imgTag
                 });
+
+                /*
+                 * The google.maps.event.addListener() event waits for
+                 * the creation of the infowindow HTML structure 'domready'
+                 * and before the opening of the infowindow defined styles
+                 * are applied.
+                 */
+                google.maps.event.addListener(self._infoWindow, 'domready', function () {
+                    // Reference to the DIV which receives the contents of the infowindow using jQuery
+                    var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
+                    iwOuter.style.overflow = 'visible';
+                    // the white bkg and shadow are grouped in the prev element
+                    iwOuter.previousSibling.style.display = 'none';
+                    // reduce the size of the non-clickable area created by the info window
+                    iwOuter.parentElement.style.width = 0;
+                    // remove the scroll bars from the img parent divs
+                    iwOuter.firstChild.style.overflow = 'visible';
+                    iwOuter.firstChild.firstChild.style.overflow = 'visible';
+                    // hide the close button
+                    iwOuter.nextSibling.style.display = 'none';
+                });
+
                 var position = new google.maps.LatLng(37, 0);
 
                 // map options
@@ -1918,8 +1939,6 @@
                
             },
 
-
-
             _selectDropPoint(dropPointId) {
                 var self = this;
                 this._completeDropPointSelection(dropPointId, null, function () {
@@ -1932,9 +1951,8 @@
             //Make it the 'selected' one
             //Select the infobox's gfs-droppoint widget.
             _selectDropPointMarker: function (marker) {
-                var dp = this._droppointById(null, marker.customData.droppointId);
-
-                //marker.setIcon(this._droppointIcon() + 'gmap-icon-selected-shadow.png');
+                //var dp = this._droppointById(null, marker.customData.droppointId);
+                //marker.setIcon('/scripts/lib/p4m-widgets/p4m-shared/img/gmap-icon-selected-shadow-32px.png');
                 this._selectDropPoint(marker.customData.droppointId);
             },
 
