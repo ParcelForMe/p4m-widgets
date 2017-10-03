@@ -28,24 +28,6 @@
        
     </template>
     <style>
-    :host {
-/*            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.2s;
-            pointer-events: none;*/
-            @apply(--iron-overlay-backdrop);
-            background-color: var(--iron-overlay-backdrop-background-color, #fff);
-        }
-
-        :host(.opened) {
-            opacity: var(--iron-overlay-backdrop-opacity, 0.95);
-            pointer-events: auto;
-            @apply(--iron-overlay-backdrop-opened);
-        }
         .checking {
             width: 320px;
             margin: auto;
@@ -89,7 +71,7 @@
 
             ready: function()
             {
-                this.positionTarget = document.body;
+                this.positionTarget = document.getElementsByTagName('p4m-checkout')[0];
                 window.addEventListener('generalFault', this.close.bind(this));
 
             }
