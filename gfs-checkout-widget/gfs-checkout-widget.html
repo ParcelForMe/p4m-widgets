@@ -1147,6 +1147,7 @@
                     if (newMethod.serviceType.type == "dmStandardDropPoint" && this._selectedDropPoint)
                     {
                         newSelectedServiceDetails.collectionPoint = this._selectedDropPoint.droppointId;
+                        newSelectedServiceDetails.companyName = this._selectedDropPoint.droppointDescription;
                         newSelectedServiceDetails.providerId = this._selectedDropPoint.providerId;
                         newSelectedServiceDetails.provider = this._selectedDropPoint.providerName;
                         newSelectedServiceDetails.deliveryAddress = this._selectedDropPoint.geoLocation;
