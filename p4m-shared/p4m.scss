@@ -1397,8 +1397,16 @@ p4m-register, p4m-login, p4m-checkout {
     p {
         font-size: 12px;
         margin: .5em 0;
+        line-height: normal;
         &.lg {
         	font-size: 16px;
+          line-height: 16px;
+
+          margin: .2em 0 !important;
+        }
+        &.deliveryDateRange {
+          line-height: normal !important;
+          margin: .2em 0 !important;
         }
     }
 }
@@ -1415,7 +1423,9 @@ paper-input .underline {
 }
 
 // HACK FIX easytees iron-overlay-background placing infront of modal dialog instead of behind
-.iron-overlay-backdrop-0.opened {z-index: 98 !important;}
+// Somehow this now breaks it, so removing the hack fix for now
+// .iron-overlay-backdrop-0.opened {z-index: 98 !important;}
+
 p4m-checkout {
   > #container {
     background-color: #fff !important;  // HACK FIX easytees container class conflict
@@ -3605,6 +3615,10 @@ gfs-calendar {
         height: 327px;
         display: block;
     }
+    .address-section {
+      position: relative;
+    }
+
 }
 p4m-address {
     #container {

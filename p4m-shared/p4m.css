@@ -1160,9 +1160,15 @@ p4m-register h6, p4m-login h6, p4m-checkout h6 {
 
 p4m-register p, p4m-login p, p4m-checkout p {
   font-size: 12px;
-  margin: .5em 0; }
+  margin: .5em 0;
+  line-height: normal; }
   p4m-register p.lg, p4m-login p.lg, p4m-checkout p.lg {
-    font-size: 16px; }
+    font-size: 16px;
+    line-height: 16px;
+    margin: .2em 0 !important; }
+  p4m-register p.deliveryDateRange, p4m-login p.deliveryDateRange, p4m-checkout p.deliveryDateRange {
+    line-height: normal !important;
+    margin: .2em 0 !important; }
 
 ul.separated li {
   background: #f8f8f8;
@@ -1172,9 +1178,6 @@ ul.separated li {
 
 paper-input .underline {
   display: none !important; }
-
-.iron-overlay-backdrop-0.opened {
-  z-index: 98 !important; }
 
 p4m-checkout > #container {
   background-color: #fff !important;
@@ -2768,6 +2771,9 @@ gfs-calendar .gfs-calendar {
 #p4m-address-list > #container.p4m-address-list, p4m-address-list > #container.p4m-address-list {
   height: 327px;
   display: block; }
+
+#p4m-address-list .address-section, p4m-address-list .address-section {
+  position: relative; }
 
 p4m-address #container {
   display: flex;
