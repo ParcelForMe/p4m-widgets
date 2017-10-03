@@ -28,6 +28,7 @@
        
     </template>
     <style>
+
     :host {
 /*          position: fixed;
             top: 0;
@@ -46,6 +47,7 @@
             pointer-events: auto;
             @apply(--iron-overlay-backdrop-opened);
         }
+
         .checking {
             width: 320px;
             margin: auto;
@@ -89,7 +91,7 @@
 
             ready: function()
             {
-                this.positionTarget = document.body;
+                this.positionTarget = document.getElementsByTagName('p4m-checkout')[0];
                 window.addEventListener('generalFault', this.close.bind(this));
 
             }
