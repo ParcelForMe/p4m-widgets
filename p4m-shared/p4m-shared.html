@@ -23,8 +23,8 @@
             --paper-p4m-green-700: #2f8e47;
             --paper-tabs-selection-bar-color: blue;
 
-            --iron-overlay-backdrop-opacity: 0.95;
-            --iron-overlay-backdrop-background-color: #37a553;
+            /*--iron-overlay-backdrop-opacity: 0.95;*/
+/*            --iron-overlay-backdrop-background-color: #37a553;*/
         }
         :host(:focus):before, .paper-item:focus:before {
 
@@ -36,27 +36,27 @@
             @apply(--paper-item-focused-before);
           }
 
-        iron-overlay-backdrop {
+/*        iron-overlay-backdrop {
             opacity: var(--iron-overlay-backdrop-opacity, 0.95);
             background-color: var(--iron-overlay-backdrop-background-color, #37a553);
-        }
+        }*/
 
         paper-ripple {
-        color: var(--paper-p4m-green-700);
+            color: var(--paper-p4m-green-700);
         }
         paper-tabs[no-bar] paper-tab.iron-selected {
             color: $white;
             background: var(--paper-p4m-green-300);
         }
         .tab-content {
-        height: 100%;
-        transform: initial;
-        -webkit-transform: initial;
-/*        transition: opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);
-        @apply(--layout-horizontal);
-        @apply(--layout-center-center);
-        @apply(--layout-flex-auto);
-        @apply(--paper-tab-content);*/
+            height: 100%;
+            transform: initial;
+            -webkit-transform: initial;
+    /*      transition: opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);
+            @apply(--layout-horizontal);
+            @apply(--layout-center-center);
+            @apply(--layout-flex-auto);
+            @apply(--paper-tab-content); */
       }
       
     </style>
