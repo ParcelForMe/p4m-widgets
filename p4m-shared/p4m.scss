@@ -1201,8 +1201,8 @@ p4m-spinner[species='progress'] {
 
 
 // Non-Tooltip Error messages 
-.input-validation-error + span.alert:after, 
-.invalid + span.alert:after {
+.input-validation-error + span.p4m-alert:after, 
+.invalid + span.p4m-alert:after {
   content: '!';
   z-index: 2;
   display: flex;
