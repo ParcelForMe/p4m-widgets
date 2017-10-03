@@ -1937,7 +1937,8 @@ p4m-checkout {
     width: 100%;
     margin: auto;
     padding-bottom: 8px;
-    box-sizing: border-box; }
+    box-sizing: border-box;
+    position: static; }
   p4m-checkout paper-tab.gfs-checkout {
     padding: 0 0; }
   p4m-checkout .topPanel {
