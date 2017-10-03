@@ -43,20 +43,18 @@
                 <iron-page>
                     <div class="card-panel">
                         <div class="card-body card-edit">
-                                <div class="vertical layout end">
-                                    <a class="p4m-button save shadow style-scope p4m-address" href="#">Save <i class="p4micon p4micon-save style-scope p4m-address"></i></a>
-                                    <template is="dom-if" if="{{showCancel}}">
-                                        <div class="link add cancel-button">
-                                            <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
-                                        </div>
-                                    </template>
+                            <template is="dom-if" if="{{showCancel}}">
+                                <div class="vertical link add layout end cancel-button">
+                                    <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
                                 </div>
-                            
+                            </template>
                             <div class="address-form">
+
+                                <address-lookup-field class="width-50" on-foundplace="onFoundPlace"></address-lookup-field>
                                 
                                 <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" placeholder="Label, e.g. 'Home'" class="width-50" />
                                 <span class="p4m-alert"></span>
-                                <address-lookup-field class="width-50" on-foundplace="onFoundPlace"></address-lookup-field>
+                                
                                 <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" placeholder="Street address" class="width-50" />
                                 <span class="p4m-alert"></span>
                                 <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" placeholder="Street address" class="width-50" />
@@ -74,7 +72,9 @@
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span>
                             </div>
-                            
+                            <div class="vertical layout end">
+                                <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
+                            </div>
                         </div>
                     </div>
 
