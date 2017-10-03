@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<hr />
+
+<h2 id="markdownlanguagerules">Markdown Language Rules</h2>
+
+<h1 id="heading">Heading</h1>
+
+<h2 id="sub-heading">Sub-heading</h2>
+
+<h3 id="anotherdeeperheading">Another deeper heading</h3>
+
+<p>Paragraphs are separated
+by a blank line.</p>
+
+<p>Two spaces at the end of a line leave a<br/>
+line break.</p>
+
+<p>Text attributes <em>italic</em>, <em>italic</em>, <strong>bold</strong>, <strong>bold</strong>, <code>monospace</code>.</p>
+
+<p>Horizontal rule:</p>
+
+<hr />
+
+<p>Bullet list:</p>
+
+<ul>
+<li>apples</li>
+<li>oranges</li>
+<li>pears</li>
+</ul>
+
+<p>Numbered list:</p>
+
+<ol>
+<li>apples</li>
+<li>oranges</li>
+<li>pears</li>
+</ol>
+
+<p>A <a href="http://example.com">link</a>.</p>
+
+<hr />
+
+<h1 id="scopedstylingofp4mwidgets">Scoped styling of P4M widgets</h1>
+
+<p>A document explaining the methodology of scoping styles used in P4M and including examples of how to implement them.</p>
+
+<h2 id="why">Why?</h2>
+
+<p>Identifying the twin problems of:
+1. P4M widget styles being affected by host site stylesheets
+2. P4M styles affecting the styles of the host site</p>
+
+<h2 id="customcssproperties">(custom) css properties</h2>
+
+<p>Get created by prefacing the property with two dashes: &#8211;
+example:
+&#8211;button-background-color: blue;
+This tells he browser that we are declaring a new (custom) css property</p>
+
+<p>To use this on out custom element, this (custom) css property will be added inside the custom element and will only be applied to elements within the <shiny-button> element.
+We can set the default style (blue) for our &#8211;button-background-color custom property like so:</p>
+
+<p><dom-module id="shiny-button">
+ <template>
+ <style>
+ .button {
+ &#8211;button-background-color: blue; /* -You can use a standard style here <em>/
+ background:var(&#8211;button-background-color, blue); /</em> or you can declare a variable <em>/
+ @apply(&#8211;button-background-attributes); /</em> or you can declare a mixin which will collect a range of attributes for our button - eg: background-color, color, padding, font-size etc.. */
+ }
+ </style>
+ </template>
+</dom-module></p>
+
+<p>If we like, we can set a variable here instead of just a style so we can have the option of styling different instances of the new property. Like so:</p>
+
+<p><dom-module id="shiny-button">
+ <template>
+ <style>
+ .button {
+ /* -button-background-color: blue; */
+ background:var(&#8211;button-background-color, blue);
+ }
+ </style>
+ </template>
+</dom-module></p>
+
+<p>so now when we go to change an <em>instance</em> of the custom property in the html we can modify the style like so:</p>
+
+<style is="custom-style"> /* The "is="custom-style" is a polyfill that is required for now */
+    fancy-button {
+        --button-background-color: green; /* here we're changing the value of our custom property in this instance only */
+        --button-background-attributes: { /* here we're setting the values of the mixin */
+            background: blue;
+            color: #fff;
+            font-size: 24px;
+            padding:8px 16px;
+        }
+    }
+</style>
+
+<p><html>
+ <style is="custom-style"></p>
+
+<pre><code>&lt;/style&gt;
+</code></pre>
+
+<p><body>
+ <dom-module id="shiny-button">
+ <style>
+ .button {</p>
+
+<pre><code>}
+</code></pre>
+
+</body>
+</html>
