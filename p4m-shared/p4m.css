@@ -2850,6 +2850,16 @@ gfs-calendar .gfs-calendar {
     background: rgba(200, 200, 200, 0.02); }
   gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.3); }
+  gfs-calendar .gfs-calendar .calendar-delivery-label {
+    background: rgba(55, 165, 83, 0.05) !important; }
+    gfs-calendar .gfs-calendar .calendar-delivery-label .calendar-cell:nth-of-type(odd) {
+      background: rgba(55, 165, 83, 0.15) !important;
+      cursor: default; }
+    gfs-calendar .gfs-calendar .calendar-delivery-label .calendar-cell:nth-of-type(1) {
+      background: #7bc78f !important;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase; }
 
 #p4m-address-list > #container.p4m-address-list, p4m-address-list > #container.p4m-address-list {
   height: 327px;
