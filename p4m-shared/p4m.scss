@@ -1952,6 +1952,9 @@ p4m-profile {
 
 
 
+//////////////////////////////////////////////////
+// Login Widget
+//////////////////////////////////////////////////
 
 p4m-login {
   #loginWidget, #p4m-menu-wrapper {
@@ -2133,7 +2136,188 @@ p4m-login {
 }
 
 
+
+//////////////////////////////////////////////////
+// Registration Widget
+//////////////////////////////////////////////////
+
+#p4mRegisterContainer {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 300px;
+    padding: 8px;
+    .button-container {
+        display: flex;
+        flex-direction: row;
+    }
+    #p4m-profile-container {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        #profileName {
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            margin-top: -24px;
+            margin-right: 0;
+            position: absolute;
+            background: rgba(51, 51, 51, 0.85);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            white-space: nowrap;
+            @include transition(.5s);
+            &:after {
+                content: "▼";
+                color: rgba(51, 51, 51, 0.85);
+                position: absolute;
+                bottom: -10px;
+                right: 50%;
+                margin-right: -6px;
+                font-size: 10px;
+            }
+        }
+        &:hover {
+            #profileName {
+                visibility: visible;
+                opacity: 1;
+                margin-top: -30px;
+            }
+        }
+    }
+    #p4m-logo {
+        width: 146px;
+        height: 78px;
+        align-self: center;
+        margin: 1em 0;
+        svg {
+            fill: #fff;
+            width: 146px;
+            height: 78px;
+        }
+    }
+    .p4m-register-title {
+        margin:auto;
+    }
+    div {
+        justify-content: center;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+    }
+    p {
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        justify-content: center;
+        font-size: 13px;
+        margin: 0 0 .7em 0;
+    }
+    .p4m-register-explain {
+        display: flex;
+        flex-direction: column;
+    }
+    .p4m-register-top {
+        display: flex;
+        flex-direction: row;
+        padding: 8px;
+        text-transform: uppercase;
+    }
+    .p4m-register-middle {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: $p4m-green;
+        color:#fff;
+        padding:10px;
+    }
+    .p4m-register-text {
+        text-align:center;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 12px;
+    }
+    .p4m-register-text-link {
+        display: flex;
+        flex-direction: row;
+        margin: .6em auto 1.5em auto;
+        cursor: pointer;
+        a {
+            color: white;
+            margin-left: 4px;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            @include transition;
+            &:hover {
+                border-bottom: 2px solid $white;
+            }
+        }
+    }
+
+
+    // Colours
+
+    // White
+    &.white {
+        #p4m-logo {
+            svg {
+            fill: #37a553;
+            }
+        }
+        .p4m-register-middle {
+          color: $p4m-green;
+          background-color: #fff;
+        }
+        #p4m-logo svg {
+          fill: #37a553;
+        }
+        #p4m-profile-container {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            #profileName {
+                background: rgba(55, 165, 83, 0.85);
+                &:after {
+                    color: rgba(55, 165, 83, 0.85);
+                }
+            }
+        }
+        p {
+          color: rgba(55, 165, 83, 0.6);
+        }
+        .p4m-register-text-link {
+            a {
+                color: #37a553;
+                &:hover {
+                    border-bottom: 2px solid #37a553;
+                }
+            }
+        }
+    }
+
+
+    .p4m-button.p4m-register-button { 
+        // HACK FIX easytees - !importants used to override styles conflicts
+        font-family: 'Lato', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        padding: 10px 15px !important;
+        display: flex !important;
+        line-height: normal !important;
+        margin: .65em 0 !important;
+        letter-spacing: normal !important;
+        width: calc(100% - 50px);
+        justify-content: center;
+    }
+}
+
+
+
+
+//////////////////////////////////////////////////
 // Restore last Cart Dialog 
+//////////////////////////////////////////////////
 
 #lastCartDlg {
   background: #37a553;
@@ -2237,137 +2421,6 @@ p4m-login {
   }
 }
 
-
-
-
-
-
-//////////////////////////////////////////////////
-// Registration Widget
-//////////////////////////////////////////////////
-
-#p4mRegisterContainer {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    width: 300px;
-    padding: 8px;
-    .button-container {
-        display: flex;
-        flex-direction: row;
-    }
-    #p4m-profile-container {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        #profileName {
-            display: block;
-            visibility: hidden;
-            opacity: 0;
-            margin-top: -24px;
-            margin-right: 0;
-            position: absolute;
-            background: rgba(51, 51, 51, 0.85);
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            white-space: nowrap;
-            @include transition(.5s);
-            &:after {
-                content: "▼";
-                color: rgba(51, 51, 51, 0.85);
-                position: absolute;
-                bottom: -10px;
-                right: 50%;
-                margin-right: -6px;
-                font-size: 10px;
-            }
-        }
-        &:hover {
-            #profileName {
-                visibility: visible;
-                opacity: 1;
-                margin-top: -30px;
-            }
-        }
-    }
-    
-    .p4m-register-logo {
-        height: 80px;
-        align-self: center;
-        margin: 1em 0;
-    }
-    .p4m-register-title {
-        margin:auto;
-    }
-    div {
-        justify-content: center;
-        display: flex;
-        align-content: center;
-        align-items: center;
-        justify-content: center;
-    }
-    p {
-        color: rgba(255, 255, 255, 0.6);
-        text-align: center;
-        justify-content: center;
-        font-size: 13px;
-        margin: 0 0 .7em 0;
-    }
-    .p4m-register-explain {
-        display: flex;
-        flex-direction: column;
-    }
-    .p4m-register-top {
-        display: flex;
-        flex-direction: row;
-        padding: 8px;
-        text-transform: uppercase;
-    }
-    .p4m-register-middle {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        background-color: $p4m-green;
-        color:#fff;
-        padding:10px;
-    }
-    .p4m-register-text {
-        text-align:center;
-        font-weight: 400;
-        font-style: italic;
-        font-size: 12px;
-    }
-    .p4m-register-text-link {
-        display: flex;
-        flex-direction: row;
-        margin: .6em auto 1.5em auto;
-        cursor: pointer;
-        a {
-            color: white;
-            margin-left: 4px;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 2px;
-            @include transition;
-            &:hover {
-                border-bottom: 2px solid $white;
-            }
-        }
-    }
-    .p4m-button.p4m-register-button { 
-        // HACK FIX easytees - !importants used to override styles conflicts
-        font-family: 'Lato', sans-serif !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        padding: 10px 15px !important;
-        display: flex !important;
-        line-height: normal !important;
-        margin: .65em 0 !important;
-        letter-spacing: normal !important;
-        width: calc(100% - 50px);
-        justify-content: center;
-    }
-}
 
 
 
