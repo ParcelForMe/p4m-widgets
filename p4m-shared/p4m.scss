@@ -3641,6 +3641,11 @@ gfs-calendar {
 			&:nth-of-type(even) {
 				background: rgba(200,200,200,0.02);
 				.calendar-cell {
+          cursor: pointer;
+          -webkit-transition: all 0.2s ease;
+          -moz-transition: all 0.2s ease;
+          -o-transition: all 0.2s ease;
+          transition: all 0.2s ease;
 					&:nth-of-type(even) {
 						background: rgba(200, 200, 200, 0.15);
 					}
@@ -3652,7 +3657,23 @@ gfs-calendar {
 						color: $white;
 						font-weight: 600;
 						text-transform: uppercase;
+            cursor: default;
 					}
+          &:hover {
+            &:nth-of-type(even) {
+              background: rgba(55, 165, 83, 0.15);
+            }
+            &:nth-of-type(odd) {
+              background: rgba(55, 165, 83, 0.15);
+            }
+            &:nth-of-type(1) {
+              background: $p4m-green-100;
+              color: $white;
+              font-weight: 600;
+              text-transform: uppercase;
+            }
+          }
+          
 				}
 			}
 			
@@ -3661,6 +3682,11 @@ gfs-calendar {
 			&:nth-of-type(odd) {
 				background: rgba(200,200,200,0.05);
 				.calendar-cell {
+          cursor: pointer;
+          -webkit-transition: all 0.2s ease;
+          -moz-transition: all 0.2s ease;
+          -o-transition: all 0.2s ease;
+          transition: all 0.2s ease;
 					&:nth-of-type(odd) {
 						background: rgba(220,220,220,0.25	);
 					}
@@ -3672,7 +3698,22 @@ gfs-calendar {
 						color: $white;
 						font-weight: 600;
 						text-transform: uppercase;
+            cursor: default;
 					}
+          &:hover {
+            &:nth-of-type(even) {
+              background: rgba(55, 165, 83, 0.15);
+            }
+            &:nth-of-type(odd) {
+              background: rgba(55, 165, 83, 0.15);
+            }
+            &:nth-of-type(1) {
+              background: lighten($p4m-green-100, 8%);
+              color: $white;
+              font-weight: 600;
+              text-transform: uppercase;
+            }
+          }
 				}
 			}
 		}
