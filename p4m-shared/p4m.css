@@ -2851,7 +2851,7 @@ gfs-calendar .gfs-calendar {
   gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.3); }
   gfs-calendar .gfs-calendar .calendar-delivery-label {
-    background: rgba(55, 165, 83, 0.05) !important; }
+    background: rgba(55, 165, 83, 0.04) !important; }
     gfs-calendar .gfs-calendar .calendar-delivery-label .calendar-cell:nth-of-type(odd) {
       background: rgba(55, 165, 83, 0.15) !important;
       cursor: default; }
