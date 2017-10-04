@@ -37,6 +37,11 @@ A [link](http://example.com).
 
 ---
 
+## References
+[link](https://developers.google.com/web/fundamentals/web-components/shadowdom)
+[link](https://www.smashingmagazine.com/2016/12/styling-web-components-using-a-shared-style-sheet/]po00-o9)
+
+
 
 # Scoped styling of P4M widgets 
 A document explaining the methodology of scoping styles used in P4M and including examples of how to implement them.
