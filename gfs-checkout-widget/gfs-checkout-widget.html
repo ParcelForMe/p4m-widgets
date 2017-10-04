@@ -737,7 +737,7 @@
                     callback("No address");
                 }
                 else {
-                    console.log('setGfsAddress(' + JSON.stringify(address) + ')');
+                    //console.log('setGfsAddress(' + JSON.stringify(address) + ')');
                     this._postData.Request.Order.Transit.Recipient.Location = address;
                     if (autoSelectDelivery) 
                         this.autoSelectDeliveryMethod(callback);
@@ -765,16 +765,23 @@
                 this.set('_favAddresses', addressList);
             },
 
-            selectFavAddress: function (addressId, autoSelectMethod, callback) {
+            selectFavAddress: function (address, callback) {
                 var self = this;
-                var foundItem = self._favAddresses.find(function (item) {
-                    return item.id == addressId;
-                });
+                var foundItem;
+                if (address.addressType === 'Address')
+                    foundItem = self._favAddresses.find(function (item) {
+                        return item.id == address.id;
+                    })
+                else
+                    foundItem = self._favDropPoints.find(function (item) {
+                        return item.id == address.id;
+                    });
+
                 if (foundItem) {
-                    self._unselectDropPoint();
+                    //self._unselectDropPoint();
                     console.log(">>>Setting address", foundItem);
                     
-                    self.setGfsAddress(foundItem, autoSelectMethod, callback);
+                    self.setGfsAddress(foundItem, false, callback);
                     /*function (err) {
                         if (err) {
                             callback(err)
@@ -1178,9 +1185,7 @@
                     return this.selectedServiceDetails;
                 }
             },
-
-
-            
+                        
             selectNearestFavDropPoint: function(callback) {
                 if (this._favDropPoints.length) {
                     this._selectDropPoint(this._favDropPoints[0].droppointId, callback);
@@ -1609,6 +1614,10 @@
                     callback(null, { 'lat': address.lat, 'lng': address.lng });
                     return;
                 }
+                if (!address.addressLineCollection || address.addressLineCollection.length == 0) {
+                    callback("No results");
+                    return;
+                }
                 var addressStr = address.addressLineCollection[0] + "," + address.Postcode;
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
@@ -1744,8 +1753,6 @@
                 }
 
             },
-
-
 
             _showDropPointDetails: function() {
                 this.mapHeight = this.$.gfsMapCanvas.clientHeight;

@@ -109,6 +109,10 @@
         -->
 
         <style include="p4m-shared">
+            :host {
+                position: absolute;
+            }
+
             p4m-general-fault {
                --p4m-general-fault-h1-border: 5px solid red;
                 --p4m-general-fault-h1-border: #fff;
@@ -136,12 +140,7 @@
                 border-left: none;
             }
         </style>
-
     </template>
-
-
-
-
 
     <script>
 
@@ -252,6 +251,20 @@
                 }
 
                 this.init();
+            },
+
+            behaviors: [ Polymer.IronResizableBehavior ],
+            listeners: { "iron-resize": "onResize" },
+            placeHolder: null,
+            onResize: function() {
+                // insert a div with the same height and width as p4m-checkout to ensure the hosting page allows room
+                // when this is positioned absolute
+                if (this.placeHolder == null) {
+                    this.placeHolder = document.createElement('div');
+                    Polymer.dom(this.parentNode).insertBefore(this.placeHolder, this.nextSibling);
+                }
+                this.placeHolder.setAttribute('style', 'height:' + this.offsetHeight + 'px;width:' + this.offsetWidth + 'px');
+                this.$.screenOverlay.style.top = '' + this.offsetHeight / 2 + 'px';
             },
 
             init: function (finalCallback) {
@@ -816,8 +829,8 @@
                     };
                     self.saveAddress(address, function (err, result) {
                         //debugger;
-                        self.set('cartData.addressId', result.address.id);
-                        self.notifyPath('cartData.addressId');
+                        //self.set('cartData.addressId', result.address.id);
+                        //self.notifyPath('cartData.addressId');
                         self.notifyPath('consumerData.addresses');
                         callback(err);
                     });
@@ -825,10 +838,11 @@
                 }
                 else {
                     //TODO: Replace with selectDeliveryAddress?
-                    this.set('cartData.addressId', existingDropPoint.id); //collectPointAddress.Id;
-                    this.notifyPath('cartData.addressId');
-                    result = existingDropPoint;
-                    callback(null);
+                    this.selectDeliveryAddress(existingDropPoint.id, false, callback);
+                    //this.set('cartData.addressId', existingDropPoint.id); //collectPointAddress.Id;
+                    //this.notifyPath('cartData.addressId');
+                    //result = existingDropPoint;
+                    //callback(null);
                 }
               
             },
@@ -957,19 +971,20 @@
                         //if (!this.$.gfsCheckoutWidget.initialised) {
                             //this._updateGfs(function(err) {
 
-                                self.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
+                                self.$.gfsCheckoutWidget.selectFavAddress(addressId, function(err) {
                                     if (!err) {
                                         self._gfsCurrentAddrId = addressId;
                                         self.set('cartData.addressId', addressId); //This allows the address UI to update
                                         self.notifyPath('cartData.addressId');
-                                        self._updateGfs(callback);
+                                        //self._updateGfs(callback); <-- not needed?
+                                        callback(null, address);
                                     }
                                 });
                             //})
                         //}
                         /*
                         else {
-                            this.$.gfsCheckoutWidget.selectFavAddress(addressId, true, function(err) {
+                            this.$.gfsCheckoutWidget.selectFavAddress(addressId, function(err) {
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
                                 if (callback) {
@@ -1021,12 +1036,13 @@
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
                                 address.id = result.address.id;
-                                if (!existingAddress) {
+                                if (!existingAddress) 
                                     self.push('consumerData.addresses', result.address);
-                                }
+                                else
+                                    self.updAddressById(address);
                                 self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses())
 
-                                callback(err);
+                                callback(err, result);
                             });
                         },
                         function _selectAddress(callback) {
@@ -1181,6 +1197,15 @@
                 }
                 var foundItem = this.consumerData.addresses.find(function(item) { return item.id == id });
                 return foundItem;
+            },
+
+            updAddressById: function (address) {
+                if (!this.consumerData) {
+                    return null;
+                }
+                var foundAt = this.consumerData.addresses.findIndex(function (addr) { return addr.id === address.id; });
+                if (foundAt >= 0)
+                    this.consumerData.addresses[foundAt] = address;
             },
 
             goToPaymentMethods: function () {

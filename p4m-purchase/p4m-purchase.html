@@ -399,15 +399,18 @@
                 
             },
 
-
+            buying: false,
             setLoadingState: function(loading) {
                 if (loading) {
+                    this.buying = true;
                     this.showOverlay();                  
                     this._topClass = "loading";
                 }
                 else {
-                    this.hideOverlay();
-
+                    if (this.buying) {
+                        this.hideOverlay();
+                        this.buying = false;
+                    }
                     this._topClass = "active";
                 }
             },
@@ -484,12 +487,18 @@
                 this.topClass = "failed";
             },
 
-            showOverlay: function() {
-                this.$.overlay.open();
+            showOverlay: function () {
+                var overlay = document.getElementById('screenOverlay'); 
+                if (overlay)
+                    overlay.open();
+//                this.$.overlay.open();
             },
 
             hideOverlay: function () {
-                this.$.overlay.close();
+                var overlay = document.getElementById('screenOverlay');
+                if (overlay)
+                    overlay.close();
+//                this.$.overlay.close();
             },
 
             requestPaymentMethod: function () {
