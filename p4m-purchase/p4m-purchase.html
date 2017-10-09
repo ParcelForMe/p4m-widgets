@@ -26,7 +26,8 @@
                     <p4m-card id="card" selected-card-id={{selectedCard.id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
                 </template>
                 <template is="dom-if" if="{{_noCardSelected}}">
-                    You have not yet selected a payment method. <a on-click="requestPaymentMethod">Click here to select one.</a>
+                    <div class="card-panel no-card"><p>You have not yet selected a payment method.</p>
+                    <p><a on-click="requestPaymentMethod">Click here to select one.</a></p></div>
                 </template>  
             </div>
                                         
@@ -48,6 +49,7 @@
         }
         paper-tabs {
             overflow: visible;
+            margin-bottom: 6px;
         }
         .p4m-error {
             color: red;
@@ -58,6 +60,48 @@
         .button-container {
             display: flex;
             flex-direction: row;
+        }
+
+        #p4mPurchaseContainer .card-panel {
+            border-radius: 6px;
+            box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+            display: flex;
+            align-self: stretch;
+            flex: 1;
+            color: #777;
+            min-height: 125px;
+            justify-content: center;
+            align-items: center;
+        }
+        #p4mPurchaseContainer .card-panel.no-card {
+            flex-direction: column;
+        }
+        p4mPurchaseContainer .card-panel.no-card p {
+            margin: 0;
+        }
+
+        #p4mPurchaseContainer .card-panel p {
+            text-align: center;
+            line-height: 1.5em;
+            font-size: 14px;
+            display: block;
+            font-size: 14px;
+        }
+        #p4mPurchaseContainer .card-panel.no-card p {
+            margin: .2em 0;
+        }
+
+        #p4mPurchaseContainer .card-panel p a {
+            border-bottom: 2px solid transparent;
+            display: block;
+        }
+
+        #p4mPurchaseContainer .card-panel p a:hover {
+            border-bottom: 2px solid #777;
+        }
+        #p4mPurchaseContainer .card-panel p a:hover {
+            color: #37a553;
+            border-bottom: 2px solid #37a553;
         }
 
         .p4m-button#p4mBuyNowButton {
