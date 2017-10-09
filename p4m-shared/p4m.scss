@@ -2257,7 +2257,7 @@ p4m-register {
       }
 
     } // 1 open tag - p4m-register
-    
+
     // Colours
 
     // White
@@ -3314,7 +3314,7 @@ p4m-checkout {
         background: $white;
 
     	p4m-order-text {
-    		flex: 2;
+    		flex: 3;
         font-size: 16px;
         line-height: 20px;
         color: $grey-b2;
@@ -3898,7 +3898,7 @@ p4m-address {
 footer.p4m-checkout {
     p4m-purchase-btn#p4mPurchaseBtn {
         display: flex;
-        flex: 1;
+        flex: 2;
         #p4mPurchaseBtnContainer {
             display: flex;
             flex: 1;
