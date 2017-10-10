@@ -27,9 +27,7 @@
 
             ready: function()
             {
-                this.fire('ready1');
                 this.initAutoComplete();
-                this.fire('ready2');
             },
 
             initAutoComplete() {
@@ -46,6 +44,7 @@
 
             selectAddress: function () {
                 var place = this.autoComplete.getPlace();
+                this.dataHost.addressLookupLocation = place.geometry.location;
                 this.fire('foundplace', place);
             }
         });
