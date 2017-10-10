@@ -769,9 +769,28 @@ a, a:visited, .link i {
 	&:hover {
 		color: $grey-b4;
 	}
+  &.green:hover {
+    color: $p4m-green;
+  }
+  &.feature {
+    padding-bottom: 2px;
+    &:hover {
+      color: $p4m-green;
+      border-bottom: 2px solid $p4m-green;
+    }
+  }
+  &.green {
+    padding-bottom: 2px;
+    color: $p4m-green;
+    &:hover {
+      color: $p4m-green;
+      border-bottom-color: $p4m-green;
+    }
+  }
   &.icon {
     text-decoration: none;
   }
+
 }
 i.link {
   color: $grey-hb;
@@ -782,6 +801,7 @@ i.link {
     color: $grey-b4;
   }
 }
+
 
 .flex {display: flex;}
 .flex-spacer {display: flex; flex: 1;}
@@ -953,7 +973,7 @@ p4m-spinner[species='progress'] {
     pointer-events: none;
     margin-top: 0;
     z-index: 2;
-    transition: all 0.2s ease 0s;
+    @include transition();
     margin-top: 0;
   }
   /* Show tooltip content on hover - Centred bove content by default */
@@ -986,7 +1006,7 @@ p4m-spinner[species='progress'] {
   &:after {
     display: flex;
     position: absolute;
-    transition: all 0.2s ease 0s;
+    @include transition();
     bottom: 150%;
     left: 50%;
     margin-left: -5px;
@@ -1162,7 +1182,7 @@ p4m-spinner[species='progress'] {
     pointer-events: none;
     margin-top: 0;
     z-index: 2;
-    transition: all 0.2s ease 0s;
+    @include transition();
     margin-top: 0;
     
     visibility: hidden;
@@ -2409,12 +2429,7 @@ p4m-register {
     padding: 1px 0;
     cursor: pointer;
     border-bottom: 2px solid rgba(255,255,255,0);
-    -webkit-transition: all 0.15s ease-in-out 0s;
-    -khtml-transition: all 0.15s ease-in-out 0s;
-    -moz-transition: all 0.15s ease-in-out 0s;
-    -ms-transition: all 0.15s ease-in-out 0s;
-    -o-transition: all 0.15s ease-in-out 0s;
-    transition: all 0.15s ease-in-out 0s;
+    @include transition();
   }
   a span {
     color: #fff;
@@ -2721,14 +2736,25 @@ p4m-checkout {
 		flex:1;
 		min-width: 100%;
     }
+    #selectedDropPointPanel {
+      -webkit-transition: .2s ease-in-out;
+                -moz-transition: .2s ease-in-out;
+                transition: .2s ease-in-out;
+    }
     #mainDropPointListArea #dropPointList {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        -webkit-transition: .2s ease-in-out;
+                -moz-transition: .2s ease-in-out;
+                transition: .2s ease-in-out;
         .content-container {
             padding: 0 0 1em 0;
             margin: .65em 1em;
             border-bottom: 2px solid #eaeaea;
+            -webkit-transition: .2s ease-in-out;
+                -moz-transition: .2s ease-in-out;
+                transition: .2s ease-in-out;
         }
     }
     /* If .showPreferredDroppoints, single column of cards and a zone on the right for the preferred droppoint list*/
@@ -2752,25 +2778,6 @@ p4m-checkout {
     }
 
     #selectedDropPointPanel {
-      // position: absolute;
-      // z-index: 1;
-      // right: 0;
-      // top: 0;
-      // background: rgba(255, 255, 255, 0.95);
-      // display: flex;
-      // flex: 2;
-      // box-sizing:  border-box;
-      // max-height: 327px;
-      // width: 33%;
-      // overflow-y: scroll;
-      // padding: 15px;
-
-      display: flex;
-      flex: 2;
-      overflow-y: scroll;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.95);
-
     }
     #selectedDropPointPanel .content-container {
         // background: #f8f8f8;
@@ -3644,10 +3651,7 @@ gfs-calendar {
 				background: rgba(200,200,200,0.02);
 				.calendar-cell {
           cursor: pointer;
-          -webkit-transition: all 0.2s ease;
-          -moz-transition: all 0.2s ease;
-          -o-transition: all 0.2s ease;
-          transition: all 0.2s ease;
+          @include transition();
 					&:nth-of-type(even) {
 						background: rgba(200, 200, 200, 0.15);
 					}
@@ -3685,10 +3689,7 @@ gfs-calendar {
 				background: rgba(200,200,200,0.05);
 				.calendar-cell {
           cursor: pointer;
-          -webkit-transition: all 0.2s ease;
-          -moz-transition: all 0.2s ease;
-          -o-transition: all 0.2s ease;
-          transition: all 0.2s ease;
+          @include transition();
 					&:nth-of-type(odd) {
 						background: rgba(220,220,220,0.25	);
 					}
