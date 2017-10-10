@@ -2452,7 +2452,6 @@ p4m-checkout {
     #container {
         width: 100%;
         margin: auto;
-        padding-bottom: 8px;
         box-sizing: border-box;
         position: static;
     }
@@ -3311,19 +3310,18 @@ p4m-checkout {
     	flex: 1;
     	flex-direction: row;
     	border-top: 2px solid $grey-h8;
-        background: $white;
+      background: $white;
 
     	p4m-order-text {
     		flex: 3;
-        font-size: 16px;
-        line-height: 20px;
         color: $grey-b2;
         #container {
           background-color: transparent !important;  // HACK FIX easytees container class conflict
           box-shadow: none !important;  // HACK FIX easytees container class conflict
         }
         p {
-            font-size: 16px;
+            font-size: 14px;
+            line-height: 16px;
             margin: 0;
         }
         span {

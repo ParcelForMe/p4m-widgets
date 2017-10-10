@@ -1969,7 +1969,6 @@ p4m-checkout {
   p4m-checkout #container {
     width: 100%;
     margin: auto;
-    padding-bottom: 8px;
     box-sizing: border-box;
     position: static; }
   p4m-checkout paper-tab.gfs-checkout {
@@ -2568,14 +2567,13 @@ p4m-checkout {
     background: #fff; }
     p4m-checkout footer p4m-order-text {
       flex: 3;
-      font-size: 16px;
-      line-height: 20px;
       color: #777; }
       p4m-checkout footer p4m-order-text #container {
         background-color: transparent !important;
         box-shadow: none !important; }
       p4m-checkout footer p4m-order-text p {
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 16px;
         margin: 0; }
       p4m-checkout footer p4m-order-text span {
         font-weight: 600; }
