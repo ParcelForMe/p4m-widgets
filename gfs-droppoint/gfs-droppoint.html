@@ -190,6 +190,21 @@
 				margin-top: 4px;
 				width: 100%;
 			}
+			/* Hide until shown */
+			.closed .dp-opening-hours, 
+            .closed span.info, 
+            .closed span.daterange {
+                height: 0;
+                overflow: hidden;
+            }
+            a.open-hours {
+				font-size: 12px;
+				padding: 2px 0;
+				border-bottom: 2px solid transparent;
+				text-decoration: none;
+				margin: 0px 0;
+				display: inline-block;
+            }
 
 			div.dp-day-name {
 				font-weight: bold;
@@ -352,7 +367,7 @@
 		</style>
 
 
-		<div class$="{{containerClass}}" on-click="_onClick">
+		<div class$="{{containerClass}} closed" on-click="_onClick"> <!-- Here it is Michael - see the closed class -->
 			<template is="dom-if" if="{{title}}">
 				<h3>{{title}}</h3>
 			</template>
@@ -451,6 +466,7 @@
 							<template is="dom-if" if="{{isStandardButton}}">
 								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
 							</template>
+							<a class="feature open-hours" href="#">View Opening Hours</a>
 						</div>
 					</div>
 				</div>

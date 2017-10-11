@@ -690,6 +690,19 @@ a, a:visited, .link i {
   transition: all 0.15s ease-in-out 0s; }
   a:hover, a:visited:hover, .link i:hover {
     color: #555; }
+  a.green:hover, a:visited.green:hover, .link i.green:hover {
+    color: #37a553; }
+  a.feature, a:visited.feature, .link i.feature {
+    padding-bottom: 2px; }
+    a.feature:hover, a:visited.feature:hover, .link i.feature:hover {
+      color: #37a553;
+      border-bottom: 2px solid #37a553; }
+  a.green, a:visited.green, .link i.green {
+    padding-bottom: 2px;
+    color: #37a553; }
+    a.green:hover, a:visited.green:hover, .link i.green:hover {
+      color: #37a553;
+      border-bottom-color: #37a553; }
   a.icon, a:visited.icon, .link i.icon {
     text-decoration: none; }
 
@@ -810,7 +823,12 @@ p4m-spinner[species='progress'] {
     pointer-events: none;
     margin-top: 0;
     z-index: 2;
-    transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.15s ease-in-out 0s;
+    -khtml-transition: all 0.15s ease-in-out 0s;
+    -moz-transition: all 0.15s ease-in-out 0s;
+    -ms-transition: all 0.15s ease-in-out 0s;
+    -o-transition: all 0.15s ease-in-out 0s;
+    transition: all 0.15s ease-in-out 0s;
     margin-top: 0; }
   [data-tooltip]:before {
     content: attr(data-tooltip);
@@ -841,7 +859,12 @@ p4m-spinner[species='progress'] {
   [data-tooltip]:after {
     display: flex;
     position: absolute;
-    transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.15s ease-in-out 0s;
+    -khtml-transition: all 0.15s ease-in-out 0s;
+    -moz-transition: all 0.15s ease-in-out 0s;
+    -ms-transition: all 0.15s ease-in-out 0s;
+    -o-transition: all 0.15s ease-in-out 0s;
+    transition: all 0.15s ease-in-out 0s;
     bottom: 150%;
     left: 50%;
     margin-left: -5px;
@@ -959,7 +982,12 @@ p4m-spinner[species='progress'] {
     pointer-events: none;
     margin-top: 0;
     z-index: 2;
-    transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.15s ease-in-out 0s;
+    -khtml-transition: all 0.15s ease-in-out 0s;
+    -moz-transition: all 0.15s ease-in-out 0s;
+    -ms-transition: all 0.15s ease-in-out 0s;
+    -o-transition: all 0.15s ease-in-out 0s;
+    transition: all 0.15s ease-in-out 0s;
     margin-top: 0;
     visibility: hidden;
     opacity: 0; }
@@ -2146,14 +2174,24 @@ p4m-checkout {
     display: flex;
     flex: 1;
     min-width: 100%; }
+  p4m-checkout #selectedDropPointPanel {
+    -webkit-transition: .2s ease-in-out;
+    -moz-transition: .2s ease-in-out;
+    transition: .2s ease-in-out; }
   p4m-checkout #mainDropPointListArea #dropPointList {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    -webkit-transition: .2s ease-in-out;
+    -moz-transition: .2s ease-in-out;
+    transition: .2s ease-in-out; }
     p4m-checkout #mainDropPointListArea #dropPointList .content-container {
       padding: 0 0 1em 0;
       margin: .65em 1em;
-      border-bottom: 2px solid #eaeaea; }
+      border-bottom: 2px solid #eaeaea;
+      -webkit-transition: .2s ease-in-out;
+      -moz-transition: .2s ease-in-out;
+      transition: .2s ease-in-out; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints #dropPointList {
     width: 60%;
     float: left;
@@ -2168,12 +2206,6 @@ p4m-checkout {
     line-height: 11px;
     padding-top: 0;
     padding-bottom: 0; }
-  p4m-checkout #selectedDropPointPanel {
-    display: flex;
-    flex: 2;
-    overflow-y: scroll;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.95); }
   p4m-checkout #selectedDropPointPanel .content-container {
     /* border-radius: 5px; */
     /* border: 2px solid #37a553; */
@@ -2805,10 +2837,12 @@ gfs-calendar .gfs-calendar {
     background: rgba(200, 200, 200, 0.02); }
     gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell {
       cursor: pointer;
-      -webkit-transition: all 0.2s ease;
-      -moz-transition: all 0.2s ease;
-      -o-transition: all 0.2s ease;
-      transition: all 0.2s ease; }
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
       gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(even) {
         background: rgba(200, 200, 200, 0.15); }
       gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(1) {
@@ -2830,10 +2864,12 @@ gfs-calendar .gfs-calendar {
     background: rgba(200, 200, 200, 0.05); }
     gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell {
       cursor: pointer;
-      -webkit-transition: all 0.2s ease;
-      -moz-transition: all 0.2s ease;
-      -o-transition: all 0.2s ease;
-      transition: all 0.2s ease; }
+      -webkit-transition: all 0.15s ease-in-out 0s;
+      -khtml-transition: all 0.15s ease-in-out 0s;
+      -moz-transition: all 0.15s ease-in-out 0s;
+      -ms-transition: all 0.15s ease-in-out 0s;
+      -o-transition: all 0.15s ease-in-out 0s;
+      transition: all 0.15s ease-in-out 0s; }
       gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell:nth-of-type(odd) {
         background: rgba(220, 220, 220, 0.25); }
       gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell:nth-of-type(1) {
