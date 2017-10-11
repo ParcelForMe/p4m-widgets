@@ -386,6 +386,10 @@
 						</div>
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
 
+                        <template is="dom-if" if="{{panelMode}}">
+                            <a on-click="_toggleHours" class="feature open-hours" href="#">Shipping options and details</a>
+                        </template>
+
 						<div id="dp-address">
 							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
 								<template is="dom-if" if="{{item}}">
@@ -401,10 +405,6 @@
 								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
 							</div>
 						</template>
-
-                        <template is="dom-if" if="{{panelMode}}">
-                            <a on-click="_toggleHours" class="feature open-hours" href="#">View Opening Hours</a>
-                        </template>
 
 						<div id="dp-body">
 							<div id="dp-minor-info">
