@@ -367,7 +367,7 @@
 		</style>
 
 
-		<div class$="{{containerClass}} closed" on-click="_onClick"> <!-- Here it is Michael - see the closed class -->
+		<div class$="{{containerClass}}" on-click="_onClick">
 			<template is="dom-if" if="{{title}}">
 				<h3>{{title}}</h3>
 			</template>
@@ -401,6 +401,10 @@
 								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
 							</div>
 						</template>
+
+                        <template is="dom-if" if="{{panelMode}}">
+                            <a on-click="_toggleHours" class="feature open-hours" href="#">View Opening Hours</a>
+                        </template>
 
 						<div id="dp-body">
 							<div id="dp-minor-info">
@@ -466,8 +470,7 @@
 							<template is="dom-if" if="{{isStandardButton}}">
 								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
 							</template>
-							<a class="feature open-hours" href="#">View Opening Hours</a>
-						</div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -482,6 +485,11 @@
             properties: {
                 title: {
                     type: String
+                },
+                
+                panelMode: {
+                    type: Boolean,
+                    value: false,
                 },
 
                 droppointData: {
@@ -546,8 +554,10 @@
 
 			ready: function () {
 
-				var self = this;
-				this.initData();
+			    if (this.panelMode) 
+			        this.toggleClass("closed", true, Polymer.dom(this).node.firstElementChild);
+
+			    this.initData();
 
                 //Set the button type, if any
 				if (this.buttonType === "none")
@@ -621,8 +631,7 @@
                 
 			    //this.fire('droppoint-selected', this.droppointData);
 			},
-
-
+            
 			unselect: function () {
 			    this.set('droppointData.selected', false);
 			    this.render();
@@ -693,11 +702,12 @@
 
 			    }
 			    var method = this.getSelectedMethod();
-			    this.droppointData.deliveryMethod = method.service.id;
-			    if (!supressEvent) {
-			    	this.fire('droppoint-selected', this.droppointData);
+			    if (method) {
+			        this.droppointData.deliveryMethod = method.service.id;
+			        if (!supressEvent) {
+			            this.fire('droppoint-selected', this.droppointData);
+			        }
 			    }
-			    
 			},
 
 			getSelectedMethod: function () {
@@ -747,6 +757,18 @@
 			_onClick: function () {
 			    this.select();
 			    this.fire('user-select', this.droppointData);
+			},
+
+            _showingHours: false,
+			_toggleHours: function () {
+			    if (this.panelMode) {
+			        this._showingHours = !this._showingHours;
+			        //			        this.toggleClass("closed", this._showingHours, Polymer.dom(this).node.firstElementChild);
+                    if (!this._showingHours)
+                        Polymer.dom(this).node.firstElementChild.classList.add('closed');
+                    else
+                        Polymer.dom(this).node.firstElementChild.classList.remove('closed');
+                }
 			}
 
 		});
