@@ -792,22 +792,9 @@
                     });
 
                 if (foundItem) {
-                    //self._unselectDropPoint();
+                    self._unselectDropPoint();
                     console.log(">>>Setting address", foundItem);
-                    
-                    self.setGfsAddress(foundItem, false, callback);
-                    /*function (err) {
-                        if (err) {
-                            callback(err)
-                        }
-                        else if (autoSelectMethod) {
-                            self.autoSelectDeliveryMethod(callback)
-                        }
-                        else {
-                            callback(err);
-                        }
-                    });*/
-                    
+                    self.setGfsAddress(foundItem, true, callback);
                 }
                 else {
                     callback("Address not found");
