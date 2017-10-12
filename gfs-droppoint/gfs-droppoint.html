@@ -399,10 +399,6 @@
 						</div>
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
 
-                        <template is="dom-if" if="{{panelMode}}">
-                            <a on-click="_toggleHours" class="feature open-hours">Shipping options and details</a>
-                        </template>
-
 						<div id="dp-address">
 							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
 								<template is="dom-if" if="{{item}}">
@@ -484,6 +480,11 @@
 								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
 							</template>
                         </div>
+
+                        <template is="dom-if" if="{{panelMode}}">
+                            <a on-click="_toggleHours" class="feature open-hours">Shipping options and details</a>
+                        </template>
+                        
 					</div>
 				</div>
 			</div>

@@ -1351,6 +1351,250 @@ p4m-checkout .button.search-button iron-icon {
   width: 21px;
   height: 21px; }
 
+p4m-checkout .floating-labels {
+  /* easeInOutQuart */
+  opacity: 0;
+  -webkit-animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) 0.175s 1 normal forwards;
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) 0.175s 1 normal forwards; }
+  p4m-checkout .floating-labels [type="text"],
+  p4m-checkout .floating-labels [type="password"],
+  p4m-checkout .floating-labels [type="date"],
+  p4m-checkout .floating-labels [type="datetime"],
+  p4m-checkout .floating-labels [type="datetime-local"],
+  p4m-checkout .floating-labels [type="month"],
+  p4m-checkout .floating-labels [type="week"],
+  p4m-checkout .floating-labels [type="email"],
+  p4m-checkout .floating-labels [type="number"],
+  p4m-checkout .floating-labels [type="search"],
+  p4m-checkout .floating-labels [type="tel"],
+  p4m-checkout .floating-labels [type="time"],
+  p4m-checkout .floating-labels [type="url"],
+  p4m-checkout .floating-labels [type="color"],
+  p4m-checkout .floating-labels textarea,
+  p4m-checkout .floating-labels select,
+  p4m-checkout .floating-labels vaadin-combo-box-light input {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    border: 0;
+    top: 1.2em;
+    z-index: 1;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 28px;
+    letter-spacing: 0.012em;
+    color: #0a0a0a;
+    height: 28px;
+    margin: 0;
+    padding: 1px;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 2px solid #e0e0e0;
+    background-color: transparent;
+    transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; }
+    p4m-checkout .floating-labels [type="text"]:focus,
+    p4m-checkout .floating-labels [type="password"]:focus,
+    p4m-checkout .floating-labels [type="date"]:focus,
+    p4m-checkout .floating-labels [type="datetime"]:focus,
+    p4m-checkout .floating-labels [type="datetime-local"]:focus,
+    p4m-checkout .floating-labels [type="month"]:focus,
+    p4m-checkout .floating-labels [type="week"]:focus,
+    p4m-checkout .floating-labels [type="email"]:focus,
+    p4m-checkout .floating-labels [type="number"]:focus,
+    p4m-checkout .floating-labels [type="search"]:focus,
+    p4m-checkout .floating-labels [type="tel"]:focus,
+    p4m-checkout .floating-labels [type="time"]:focus,
+    p4m-checkout .floating-labels [type="url"]:focus,
+    p4m-checkout .floating-labels [type="color"]:focus,
+    p4m-checkout .floating-labels textarea:focus,
+    p4m-checkout .floating-labels select:focus,
+    p4m-checkout .floating-labels vaadin-combo-box-light input:focus {
+      outline: none;
+      border-color: #37a553; }
+  p4m-checkout .floating-labels input[type="color"]::-webkit-color-swatch {
+    border: none; }
+  p4m-checkout .floating-labels textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 90px;
+    margin: 0;
+    padding: 0 0.5rem;
+    border-radius: 0;
+    border-bottom: 2px solid #e0e0e0;
+    background-color: rgba(100, 100, 100, 0.05);
+    box-shadow: none;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 400;
+    color: #0a0a0a;
+    transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    resize: none; }
+    p4m-checkout .floating-labels textarea:focus {
+      outline: none;
+      border-color: #37a553; }
+  p4m-checkout .floating-labels label {
+    display: block;
+    position: relative;
+    margin-top: -24px;
+    margin-bottom: 22px;
+    line-height: 12px;
+    padding: 1px;
+    letter-spacing: 0.012em;
+    color: #acacac;
+    font-size: 14px;
+    -webkit-animation-name: labelIn;
+    animation-name: labelIn;
+    -webkit-animation-duration: 0.35s;
+    animation-duration: 0.35s;
+    -webkit-animation-direction: reverse;
+    animation-direction: reverse;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+  p4m-checkout .floating-labels label[for="textarea"] {
+    margin-top: -90px;
+    margin-bottom: 90px;
+    line-height: 22px;
+    padding-left: 0.2rem; }
+  p4m-checkout .floating-labels textarea:focus + label[for="textarea"] {
+    line-height: 12px;
+    margin-bottom: 100px;
+    transition-property: line-height margin-bottom;
+    transition-delay: 0.5s; }
+  p4m-checkout .floating-labels *:focus + label,
+  p4m-checkout .floating-labels *:valid + label {
+    -webkit-animation-name: labelOut;
+    animation-name: labelOut;
+    -webkit-animation-duration: 0.35s;
+    animation-duration: 0.35s;
+    -webkit-animation-direction: normal;
+    animation-direction: normal;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+
+@-webkit-keyframes labelIn {
+  0% {
+    opacity: 1;
+    top: 1.2em;
+    font-size: 14px;
+    font-weight: 300; }
+  50% {
+    font-size: 14px;
+    opacity: 0;
+    top: 1.2em;
+    font-weight: 300; }
+  50.01% {
+    font-size: 0.65em;
+    opacity: 0;
+    top: 0.5em;
+    color: #37a553;
+    font-weight: 400; }
+  100% {
+    font-size: 0.65em;
+    opacity: 1;
+    top: 0.2em;
+    color: #37a553;
+    font-weight: 400; } }
+
+@keyframes labelIn {
+  0% {
+    opacity: 1;
+    top: 1.2em;
+    font-size: 14px;
+    font-weight: 300; }
+  50% {
+    font-size: 14px;
+    opacity: 0;
+    top: 1.2em;
+    font-weight: 300; }
+  50.01% {
+    font-size: 0.65em;
+    opacity: 0;
+    top: 0.5em;
+    color: #37a553;
+    font-weight: 400; }
+  100% {
+    font-size: 0.65em;
+    opacity: 1;
+    top: 0.2em;
+    color: #37a553;
+    font-weight: 400; } }
+
+@-webkit-keyframes labelOut {
+  0% {
+    opacity: 1;
+    top: 1.2em;
+    font-size: 14px;
+    font-weight: 300; }
+  50% {
+    font-size: 14px;
+    opacity: 0;
+    top: 1.2em;
+    font-weight: 300; }
+  50.01% {
+    font-size: 0.65em;
+    opacity: 0;
+    top: 0.5em;
+    color: #37a553;
+    font-weight: 400; }
+  100% {
+    font-size: 0.65em;
+    opacity: 1;
+    top: 0.2em;
+    color: #37a553;
+    font-weight: 400; } }
+
+@keyframes labelOut {
+  0% {
+    opacity: 1;
+    top: 1.2em;
+    font-size: 14px;
+    font-weight: 300; }
+  50% {
+    font-size: 14px;
+    opacity: 0;
+    top: 1.2em;
+    font-weight: 300; }
+  50.01% {
+    font-size: 0.65em;
+    opacity: 0;
+    top: 0.5em;
+    color: #37a553;
+    font-weight: 400; }
+  100% {
+    font-size: 0.65em;
+    opacity: 1;
+    top: 0.2em;
+    color: #37a553;
+    font-weight: 400; } }
+  p4m-checkout .floating-labels *:focus {
+    outline: 0; }
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
 .gfs-button {
   background-color: #c8c8c8;
   color: #000000;
@@ -2321,7 +2565,7 @@ p4m-checkout {
       font-variant: normal;
       text-transform: none;
       line-height: 1;
-      font-size: 21px;
+      font-size: 18px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       position: absolute;
@@ -2334,7 +2578,19 @@ p4m-checkout {
       justify-content: center;
       color: #aaa; }
     p4m-checkout address-lookup-field input[type='text'] {
-      background: rgba(55, 165, 83, 0.08); }
+      background: rgba(55, 165, 83, 0.08);
+      position: initial !important;
+      position: initial !important;
+      padding: 1px !important; }
+      p4m-checkout address-lookup-field input[type='text']::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        color: #acacac; }
+      p4m-checkout address-lookup-field input[type='text']::-moz-placeholder {
+        /* Firefox 19+ */
+        color: #acacac; }
+      p4m-checkout address-lookup-field input[type='text']:-ms-input-placeholder {
+        /* IE 10+ */
+        color: #acacac; }
   p4m-checkout paper-menu-button #contentWrapper .dropdown-content {
     max-height: 50vh !important; }
   p4m-checkout gfs-location-button .wrap {
@@ -2991,8 +3247,7 @@ p4m-address .address-text {
 
 p4m-address .address-form {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap; }
+  flex-direction: column; }
 
 p4m-address .address-form input {
   margin: 4px;
@@ -3007,7 +3262,7 @@ p4m-address .card-body {
 p4m-address .card-body.card-edit {
   display: flex;
   flex-direction: column;
-  background: #f8f8f8;
+  height: 365px;
   box-sizing: border-box;
   padding: 15px 15px 8px 15px; }
 
