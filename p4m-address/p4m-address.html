@@ -48,27 +48,41 @@
                                     <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
                                 </div>
                             </template>
-                            <div class="address-form">
+                            <div class="address-form floating-labels">
 
-                                <address-lookup-field class="width-50" on-foundplace="onFoundPlace"></address-lookup-field>
+                                <address-lookup-field class="width-50" on-foundplace="onFoundPlace" label="Search for an address..."></address-lookup-field>
                                 
-                                <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" placeholder="Label, e.g. 'Home'" class="width-50" />
+                                <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" class="width-50" required />
+                                <label for="email">Label, e.g. 'Home'</label>
                                 <span class="p4m-alert"></span>
                                 
-                                <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" placeholder="Street address" class="width-50" />
+                                <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" required />
+                                <label for="address">Street address</label>
                                 <span class="p4m-alert"></span>
-                                <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" placeholder="Street address" class="width-50" />
+
+                                <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" required />
+                                <label for="address">Street address</label>
                                 <span class="p4m-alert"></span>
-                                <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}" placeholder="City" class="width-50" />
+
+                                <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}"  class="width-50" required />
+                                <label for="city">City</label>
                                 <span class="p4m-alert"></span>
-                                <input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" placeholder="Postal code" class="width-25" />
+
+                                <input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" required />
+                                <label for="postcode">Postcode</label>
                                 <span class="p4m-alert"></span>
-                                <input is="iron-input" type="text" id="state" bind-value="{{addressData.state}}" placeholder="State/County" class="width-50" />
+
+                                <input is="iron-input" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" required />
+                                <label for="state">State/County</label>
                                 <span class="p4m-alert"></span>
-                                <input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}" placeholder="Phone at address" class="width-50" />
+
+                                <input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" required />
+                                <label for="phone">Phone at address</label>
                                 <span class="p4m-alert"></span>
+
                                 <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
-                                    <input is="iron-input" placeholder="Country" />
+                                    <input type="text" is="iron-input" required />
+                                    <label for="country">Country</label>
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span>
                             </div>
