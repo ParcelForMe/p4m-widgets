@@ -142,6 +142,12 @@
 				margin-right: 0.2em;
 			}
 
+			.droppoint-delivery-selection {
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+
 			.choose-droppoint {
 				border: none;
 				background: #eaeaea;
@@ -190,10 +196,16 @@
 				margin-top: 4px;
 				width: 100%;
 			}
+			#dp-address {
+				margin-top: 10px;
+			}
 			/* Hide until shown */
 			.closed .dp-opening-hours, 
             .closed span.info, 
-            .closed span.daterange {
+            .closed span.daterange,
+            .closed #dp-address,
+            .closed #dp-distance,
+            .closed .shippingOptions label {
                 height: 0;
                 overflow: hidden;
             }
@@ -202,8 +214,9 @@
 				padding: 2px 0;
 				border-bottom: 2px solid transparent;
 				text-decoration: none;
-				margin: 0px 0;
+				margin: 10px 0 0 0;
 				display: inline-block;
+				cursor: pointer;
             }
 
 			div.dp-day-name {
@@ -387,7 +400,7 @@
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
 
                         <template is="dom-if" if="{{panelMode}}">
-                            <a on-click="_toggleHours" class="feature open-hours" href="#">Shipping options and details</a>
+                            <a on-click="_toggleHours" class="feature open-hours">Shipping options and details</a>
                         </template>
 
 						<div id="dp-address">
