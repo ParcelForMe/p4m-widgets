@@ -501,21 +501,7 @@
                 this.init();
             },
 
-            /*behaviors: [ Polymer.IronResizableBehavior ],
-            listeners: { "iron-resize": "onResize" },
-            placeHolder: null,
-            onResize: function() {
-                // insert a div with the same height and width as p4m-checkout to ensure the hosting page allows room
-                // when this is positioned absolute
-                if (this.placeHolder == null) {
-                    this.placeHolder = document.createElement('div');
-                    Polymer.dom(this.parentNode).insertBefore(this.placeHolder, this.nextSibling);
-                }
-                this.placeHolder.setAttribute('style', 'height:' + this.offsetHeight + 'px;width:' + this.offsetWidth + 'px');
-                this.$.screenOverlay.style.top = '' + this.offsetHeight / 2 + 'px';
-            },*/
-
-            init: function (finalCallback) {
+            init: function () {
                 var self = this;
                 self.initialising = true;
                 console.log('Initialising...');
@@ -530,7 +516,7 @@
                     this.localCountries[i] = this.localCountries[i].toLowerCase();
                 }
 
-                async.series(
+                async.parallel(
                     [
                         function _consumer(callback) {
                             self._getConsumer(callback)
@@ -557,16 +543,7 @@
                                 callback("No cart");
                                 //self.getP4mCart(callback);
                             }
-                        },
-                        /*
-                        function _setAddress(callback) {
-                            if (self.isNew) {
-                                self.preselectAddress(callback)                                
-                            }
-
-                            else 
-                                callback(null);
-                        }*/
+                        }
                     ],
                     function (err) {
 
@@ -576,31 +553,10 @@
                             console.log('...Initialisation aborted.');
                             throw err;
                         }
-
-                        async.series(
-                        [
-
-                            //Send info from cart and consumer to GFS
-                            function _gfs(callback) {
-                                self.initialising = false;
-                                console.log('_gfs()');
-                                self._runGFS_IfReady(callback);
-
-                            },
-
-                            //function _p4mCart(callback) {
-                            //    //self.initialising = true;
-                                
-                            //    console.log('init: Second updateP4mCart() start - still required??');
-                            //    //self.preselectDeliveryMethod();
-
-                            //    self.updateP4mCart(function(err) {//This will set IsNew to false
-                            //        console.log('init: Second updateP4mCart() complete');
-                            //        callback(err);
-                            //    }); 
-                            //}
-                        ],
-                        function (err) {
+                        //Send info from cart and consumer to GFS
+                        self.initialising = false;
+                        console.log('_gfs()');
+                        self._runGFS_IfReady(function (err) {
                             if (err) {
                                 console.error(err);
                                 console.error("Cancelled initialisation.");
@@ -610,6 +566,7 @@
                         })
                     }
                 )
+
                 this.$.p4mPurchase.beforePurchase = this.$.gfsCheckoutWidget._closeReq.bind(this.$.gfsCheckoutWidget);
             },
 
@@ -720,10 +677,6 @@
                 });
             },
 
-            getP4mCart: function (callback) {
-                this.$.p4mCheckoutApi.call('currentCart', { sessionId: this.sessionId }, null, this.onRemoteCartData.bind(this, callback));
-            },
-
             sendCartItemChanges: function () {          
                 //Send changes to local API, then to P4m
 
@@ -824,18 +777,12 @@
             },
 
             updateP4mCart: function (callback) {
-                //console.log("updateP4mCart():", new Error().stack);
                 //Send changes to P4M
                 if (!callback) {
                     console.warn('updateP4mCart: no callback');
                     callback = function () { };
                 } 
-                /*if (this.updating) {
-                    callback(null);
-                    return;
-                }*/
                 console.log('updateP4mCart()');
-                //console.trace();
                 this.updating = true;
                 try {
                    
@@ -865,12 +812,8 @@
                 }
                 catch (e) {
                     this.updating = false;
-                }
-
-
-                
+                }                
             },
-            //lastSelectedAddrId: '', // record the last selected address for switching between drop points and delivery addrs
 
             onRemoteCartData: function (data, callback) {
                 console.log('onRemoteCartData()');
@@ -888,33 +831,13 @@
                     else {
                         this.cartData = data.cart;
                         this.isNew = data.isNew;
-                        /*var address = this.getAddressById(this.cartData.AddressId);
-                        if (address && address.AddressType == "Address") {
-                            this.lastSelectedAddrId = data.Cart.AddressId;
-                        } */                                                     
                     }
                     callback(null);
                 }                                     
             },
 
-            /*
-            onCartData: function (data, callback) {
-                this.toggleLoading(false);
-              
-                if (data.Success) {
-                    this.cartData = data.Cart;
-                    callback(null, this.cartData);
-                }
-                else {
-                    console.error(data.Error);
-                    callback(data.Error);
-                }
-                
-                //this.$.p4mPurchase.updateUi();
-            },*/
-
             onCartItemsChange: function (e) {
-                console.log('p4m-checkout: onCartItemsChange()');//, JSON.stringify(e));
+                console.log('p4m-checkout: onCartItemsChange()');
                 //If this is a valid change record,
                 var beforeHash = JSON.stringify(e.base);
                 var afterHash = JSON.stringify(e.value);
@@ -932,15 +855,18 @@
             },
 
             onConsumerAddressChange: function (e) {
-                this._runGFS_IfReady();
+                if (!this.initialising)
+                    this._runGFS_IfReady();
             },
 
             _runGFS_IfReady: function (callback) {
                 var shouldShow = this._readyForShippingSelector();
                 this._ensureShippingVisible(shouldShow);
-                if (shouldShow && this._gfsCurrentAddrId != this.consumerData.prefDeliveryAddressId) {
+                if (shouldShow && !this._gfsCurrentAddrId) {
                     this._updateGfs(callback);
                 }
+                else if (callback)
+                    callback();
             },
 
             _ensureShippingVisible: function (show) {
@@ -1034,7 +960,6 @@
                         });
                     }
                 }
-
             },
 
 
@@ -1219,7 +1144,7 @@
                         //if (!this.$.gfsCheckoutWidget.initialised) {
                             //this._updateGfs(function(err) {
 
-                                self.$.gfsCheckoutWidget.selectFavAddress(addressId, function(err) {
+                                self.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
                                     if (!err) {
                                         self._gfsCurrentAddrId = addressId;
                                         self.set('cartData.addressId', addressId); //This allows the address UI to update
@@ -1288,13 +1213,16 @@
                                     self.push('consumerData.addresses', result.address);
                                 else
                                     self.updAddressById(address);
-                                self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses())
-
+                                if (address.addressType === 'Address')
+                                    self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses());
+                                else
+                                    self.$.gfsCheckoutWidget.setFavDropPoints(self._getPreferredDropPoints());
                                 callback(err, result);
                             });
                         },
                         function _selectAddress(callback) {
-                            self.selectDeliveryAddress(result.address.id, true, function(err, data) {
+                            var sendToGfs = result.address.addressType === 'Address';
+                            self.selectDeliveryAddress(result.address.id, sendToGfs, function(err, data) {
                                 //  result = data;
                                 callback(err);
                             });
