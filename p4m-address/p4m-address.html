@@ -44,6 +44,9 @@
                     <div class="card-panel">
                         <div class="card-body card-edit">
                             <template is="dom-if" if="{{showCancel}}">
+                                <div class="vertical layout end">
+                                    <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
+                                </div>
                                 <div class="vertical link add layout end cancel-button">
                                     <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
                                 </div>
@@ -85,9 +88,6 @@
                                     <label for="country">Country</label>
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span>
-                            </div>
-                            <div class="vertical layout end">
-                                <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
                             </div>
                         </div>
                     </div>
@@ -236,6 +236,7 @@
                 // store a copy of the values in case the user cancels editing
                 this._origVals = {};
                 for (var p in this.addressData) this._origVals[p] = this.addressData[p];
+                this.fire('begin-edit', this.addressData.id);
             },
 
             view: function () {
