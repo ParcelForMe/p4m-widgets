@@ -197,7 +197,7 @@
 				width: 100%;
 			}
 			#dp-address {
-				margin-top: 10px;
+				margin-top: 8px;
 			}
 
 			.dpDescription, #dp-address-line1 {
@@ -216,13 +216,20 @@
             .closed .shippingOptions label {
                 height: 0;
                 overflow: hidden;
+                margin: 0;
+            }
+            #dp-address-line1 {
+            	display: none;
+            }
+            .closed #dp-address-line1 {
+            	display: block;
             }
             a.open-hours {
 				font-size: 12px;
 				padding: 2px 0;
 				border-bottom: 2px solid transparent;
 				text-decoration: none;
-				margin: 0;
+				margin: 8px 0 0 0;
 				display: inline-block;
 				cursor: pointer;
             }
