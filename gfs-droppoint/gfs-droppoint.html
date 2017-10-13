@@ -399,15 +399,24 @@
 						</div>
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
 
-						<div id="dp-address">
-							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
+						<div id="dp-address-line1">
+							<template is="dom-repeat" initial-count="1" items="{{droppointData.geoLocation.addressLines}}">
 								<template is="dom-if" if="{{item}}">
 									{{item}}
 									<br />
 								</template>
 							</template>
-							{{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
 						</div>
+
+                        <div id="dp-address">
+                            <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
+                                <template is="dom-if" if="{{item}}">
+                                    {{item}}
+                                    <br />
+                                </template>
+                            </template>
+                            {{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
+                        </div>
 						<template is="dom-if" if="{{showDistance}}">
 							<div id="dp-distance">
 								<div class="font-weight-600">Distance:</div>
@@ -482,7 +491,7 @@
                         </div>
 
                         <template is="dom-if" if="{{panelMode}}">
-                            <a on-click="_toggleHours" class="feature open-hours">Shipping options and details</a>
+                            <a on-click="_toggleHours" class="feature open-hours">{{_expandText}}</a>
                         </template>
                         
 					</div>
@@ -555,6 +564,10 @@
                 _id: {
                     type: String,
                     value: Math.floor(Math.random() * 99999) + (new Date().getDate()).toString()
+                },
+                _expandText: {
+                    type: String,
+                    value: 'Show shipping options and details...'
                 }
             },
 
@@ -777,11 +790,14 @@
 			_toggleHours: function () {
 			    if (this.panelMode) {
 			        this._showingHours = !this._showingHours;
-			        //			        this.toggleClass("closed", this._showingHours, Polymer.dom(this).node.firstElementChild);
-                    if (!this._showingHours)
-                        Polymer.dom(this).node.firstElementChild.classList.add('closed');
-                    else
-                        Polymer.dom(this).node.firstElementChild.classList.remove('closed');
+			        if (!this._showingHours) {
+			            Polymer.dom(this).node.firstElementChild.classList.add('closed');
+			            this._expandText = 'Show shipping options and details...';
+			        }
+			        else {
+			            Polymer.dom(this).node.firstElementChild.classList.remove('closed');
+			            this._expandText = 'Hide shipping options and details...';
+                    }
                 }
 			}
 
