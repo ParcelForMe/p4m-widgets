@@ -62,7 +62,7 @@
             ready: function () {
                 if (this.addressData && this.addressData.addressLineCollection) {
                     this._addressTop = this.addressData.addressLineCollection[0];
-                    this._addressBottom = this.addressData.town + ", " + this.addressData.Postcode;
+                    this._addressBottom = this.addressData.town + ", " + this.addressData.postCode;
                     if (this.addressData.lat && this.addressData.lng) {
                         this.geoLocation = { lat: this.addressData.lat, lng: this.addressData.lng };
                     }
@@ -94,10 +94,6 @@
             _handleError: function(err) {
                 console.error(err);
             }
-
-
-
-
 		});
     </script>
 </dom-module>
