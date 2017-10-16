@@ -52,43 +52,64 @@
                                 </div>
                             </template>
 
-                            <div class="address-form floating-labels">
+                            <!-- <div class="address-form floating-labels"> -->
+                            <div class="address-form paper-form">
 
                                 <address-lookup-field class="width-50" on-foundplace="onFoundPlace" label="Search for an address..."></address-lookup-field>
                                 
-                                <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" class="width-50" required />
+<!--                                 <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" class="width-50" required />
                                 <label for="email">Label, e.g. 'Home'</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input class="width-50 label="Label, e.g. Home" type="text" auto-validate error-message="Required" bind-value="{{addressData.label}}" required>
+                                </paper-input>
                                 
-                                <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" required />
+                                <!-- <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" required />
                                 <label for="address">Street address</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input label="Street address" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" error-message="Required" required>
+                                </paper-input>
 
-                                <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" required />
+                                <!-- <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" required />
                                 <label for="address">Street address</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input label="Street address 2" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" error-message="Required" required />
+                                </paper-input>
 
-                                <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}"  class="width-50" required />
+                                <!-- <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}"  class="width-50" required />
                                 <label for="city">City</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input label="City" type="text" id="city" bind-value="{{addressData.city}}" class="width-50" error-message="Required" required >
+                                </paper-input>
 
-                                <input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" required />
+                                <!-- <input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" required />
                                 <label for="postcode">Postcode</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input Label="Postcode" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" error-message="Required" required />
+                                </paper-input>
 
-                                <input is="iron-input" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" required />
+                                <!-- <input is="iron-input" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" required />
                                 <label for="state">State/County</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input Label="State" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" error-message="Required" required />
+                                </paper-input>
 
-                                <input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" required />
+                                <!-- <input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" required />
                                 <label for="phone">Phone at address</label>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <paper-input Label="Phone" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" error-message="Required" required />
+                                </paper-input>
 
-                                <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
+
+                                <!-- <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
                                     <input type="text" is="iron-input" required />
                                     <label for="country">Country</label>
                                 </vaadin-combo-box-light>
-                                <span class="p4m-alert"></span>
+                                <span class="p4m-alert"></span> -->
+                                <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
+                                    <input type="text" is="iron-input" error-message="Required" required />
+                                    <label for="country">Country</label>
+                                </vaadin-combo-box-light>
+
                             </div>
                         </div>
                     </div>

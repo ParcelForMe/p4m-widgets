@@ -1439,7 +1439,7 @@ ul.separated li {
 }
 
 paper-input .underline {
-	display: none !important;
+	// display: none !important;
 }
 
 // HACK FIX easytees iron-overlay-background placing infront of modal dialog instead of behind
@@ -1572,37 +1572,37 @@ p4m-card {
 
 // Old form code
 p4m-checkout {
-	[type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
-	    display: block;
-	    box-sizing: border-box;
-	    width: 100%;
-	    height: 32px;
-	    margin: 0;
-	    padding: 0 0.5rem;
-	    border-radius: 3px;
-      border: 2px solid #e0e0e0;
-	    background-color: #fefefe;
-	    box-shadow: none;
-	    font-family: inherit;
-	    font-size: 14px;
-	    line-height: 32px;
-	    font-weight: 400;
-	    color: #0a0a0a;
-	    transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
-	    -webkit-appearance: none;
-	    -moz-appearance: none;
-	    appearance: none;
-      &:focus {
-        outline: none;
-        border-color: #37a553;
-      }
-	}
-  input:focus {
-    border-color: #aaa; 
-    outline: 0;
-    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1); 
-    box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1);
-  }
+	// [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
+	//     display: block;
+	//     box-sizing: border-box;
+	//     width: 100%;
+	//     height: 32px;
+	//     margin: 0;
+	//     padding: 0 0.5rem;
+	//     border-radius: 3px;
+ //      border: 2px solid #e0e0e0;
+	//     background-color: #fefefe;
+	//     box-shadow: none;
+	//     font-family: inherit;
+	//     font-size: 14px;
+	//     line-height: 32px;
+	//     font-weight: 400;
+	//     color: #0a0a0a;
+	//     transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+	//     -webkit-appearance: none;
+	//     -moz-appearance: none;
+	//     appearance: none;
+ //      &:focus {
+ //        outline: none;
+ //        border-color: #37a553;
+ //      }
+	// }
+ //  input:focus {
+ //    border-color: #aaa; 
+ //    outline: 0;
+ //    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1); 
+ //    box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1);
+ //  }
   p4m-cart {
       [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
     min-width: 290px;
@@ -4154,15 +4154,23 @@ p4m-address {
     	font-weight: 400;
     	color: $grey-hb;
     }
-    .address-form {
-        display: flex;
-        flex-direction: column;
-        // flex-wrap: wrap;
-    }
+    // .address-form {
+    //     display: flex;
+    //     flex-direction: column;
+    //     // flex-wrap: wrap;
+    // }
     .address-form input {
-        margin: 4px;
+        // margin: 4px;
         width: 100%;
         max-width: 100%;
+    }
+    paper-input-error {
+      position: absolute !important;
+      right: 0;
+      text-align: right;
+    }
+    paper-input-container {
+      padding: 2px 0 !important;
     }
     .card-body {
         display: flex;

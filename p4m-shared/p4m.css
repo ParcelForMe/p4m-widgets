@@ -1204,9 +1204,6 @@ ul.separated li {
   box-sizing: border-box;
   padding: 0 15px; }
 
-paper-input .underline {
-  display: none !important; }
-
 p4m-checkout > #container {
   background-color: #fff !important;
   box-shadow: none !important; }
@@ -1300,36 +1297,6 @@ p4m-card {
     p4m-card .show-cvv #cvvField:focus {
       outline: none;
       border-color: #37a553; }
-
-p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='date'], p4m-checkout [type='datetime'], p4m-checkout [type='datetime-local'], p4m-checkout [type='month'], p4m-checkout [type='week'], p4m-checkout [type='email'], p4m-checkout [type='number'], p4m-checkout [type='search'], p4m-checkout [type='tel'], p4m-checkout [type='time'], p4m-checkout [type='url'], p4m-checkout [type='color'], p4m-checkout textarea, p4m-checkout vaadin-combo-box-light input {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  height: 32px;
-  margin: 0;
-  padding: 0 0.5rem;
-  border-radius: 3px;
-  border: 2px solid #e0e0e0;
-  background-color: #fefefe;
-  box-shadow: none;
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 32px;
-  font-weight: 400;
-  color: #0a0a0a;
-  transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none; }
-  p4m-checkout [type='text']:focus, p4m-checkout [type='password']:focus, p4m-checkout [type='date']:focus, p4m-checkout [type='datetime']:focus, p4m-checkout [type='datetime-local']:focus, p4m-checkout [type='month']:focus, p4m-checkout [type='week']:focus, p4m-checkout [type='email']:focus, p4m-checkout [type='number']:focus, p4m-checkout [type='search']:focus, p4m-checkout [type='tel']:focus, p4m-checkout [type='time']:focus, p4m-checkout [type='url']:focus, p4m-checkout [type='color']:focus, p4m-checkout textarea:focus, p4m-checkout vaadin-combo-box-light input:focus {
-    outline: none;
-    border-color: #37a553; }
-
-p4m-checkout input:focus {
-  border-color: #aaa;
-  outline: 0;
-  -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1); }
 
 p4m-checkout p4m-cart [type='text'], p4m-checkout p4m-cart [type='password'], p4m-checkout p4m-cart [type='date'], p4m-checkout p4m-cart [type='datetime'], p4m-checkout p4m-cart [type='datetime-local'], p4m-checkout p4m-cart [type='month'], p4m-checkout p4m-cart [type='week'], p4m-checkout p4m-cart [type='email'], p4m-checkout p4m-cart [type='number'], p4m-checkout p4m-cart [type='search'], p4m-checkout p4m-cart [type='tel'], p4m-checkout p4m-cart [type='time'], p4m-checkout p4m-cart [type='url'], p4m-checkout p4m-cart [type='color'], p4m-checkout p4m-cart textarea, p4m-checkout p4m-cart vaadin-combo-box-light input {
   min-width: 290px; }
@@ -3245,14 +3212,17 @@ p4m-address .address-text {
   font-weight: 400;
   color: #aaa; }
 
-p4m-address .address-form {
-  display: flex;
-  flex-direction: column; }
-
 p4m-address .address-form input {
-  margin: 4px;
   width: 100%;
   max-width: 100%; }
+
+p4m-address paper-input-error {
+  position: absolute !important;
+  right: 0;
+  text-align: right; }
+
+p4m-address paper-input-container {
+  padding: 2px 0 !important; }
 
 p4m-address .card-body {
   display: flex;
