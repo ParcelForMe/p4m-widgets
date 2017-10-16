@@ -44,8 +44,11 @@
                     <div class="card-panel">
                         <div class="card-body card-edit">
                             <template is="dom-if" if="{{showCancel}}">
-                                <div class="vertical link add layout end cancel-button">
-                                    <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                                <div class="btn-container">
+                                    <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
+                                    <div class="cancel-addr">
+                                        <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                                    </div>
                                 </div>
                             </template>
 
@@ -87,9 +90,6 @@
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span>
                             </div>
-                            <div class="vertical layout end">
-                                <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
-                            </div>
                         </div>
                     </div>
 
@@ -117,17 +117,27 @@
             width: 100%;
         }
         .invalid {
-            /*background-color: red;*/
-            /*border-color: #da343a;*/
             background: rgba(218, 52, 58, 0.15);
         }
-        .p4m-button.save {
+        .btn-container{
+            display: flex;
             position: absolute;
             top: 0;
-            right: 96px;
+            right: 0;
+            justify-content: flex-end;
+            align-items: center;
+            z-index: 10;
+        }
+        .p4m-button.save {
             height: 32px;
             margin: 7px 0;
             font-weight: 400;
+        }
+        .cancel-addr {
+            margin-left: 10px;
+            margin-right: 28px;
+            display: flex;
+            align-items: center;
         }
     </style>
 
@@ -203,8 +213,8 @@
             observers: ["onDataChange(cartData.*)"],
             ready: function()
             {
-                //console.log(this.addressData);
-                this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
+                if (this.addressData)
+                   this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
             },
 
             countryChanged: function(e) {
@@ -237,6 +247,7 @@
                 // store a copy of the values in case the user cancels editing
                 this._origVals = {};
                 for (var p in this.addressData) this._origVals[p] = this.addressData[p];
+                this.fire('begin-edit', this.addressData);
             },
 
             view: function () {
