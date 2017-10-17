@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 .p4m-green {
   background-color: #37a553 !important; }
 
@@ -1298,6 +1298,52 @@ p4m-card {
       outline: none;
       border-color: #37a553; }
 
+p4m-checkout :not([paper-input]) input[type='text'], p4m-checkout :not([paper-input]) input[type='password'], p4m-checkout :not([paper-input]) input[type='date'], p4m-checkout :not([paper-input]) input[type='datetime'], p4m-checkout :not([paper-input]) input[type='datetime-local'], p4m-checkout :not([paper-input]) input[type='month'], p4m-checkout :not([paper-input]) input[type='week'], p4m-checkout :not([paper-input]) input[type='email'], p4m-checkout :not([paper-input]) input[type='number'], p4m-checkout :not([paper-input]) input[type='search'], p4m-checkout :not([paper-input]) input[type='tel'], p4m-checkout :not([paper-input]) input[type='time'], p4m-checkout :not([paper-input]) input[type='url'], p4m-checkout :not([paper-input]) input[type='color'], p4m-checkout :not([paper-input]) textarea, p4m-checkout :not([paper-input]) vaadin-combo-box-light input {
+  border: 1px solid red;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  padding: 0 0.5rem;
+  border-radius: 3px;
+  border: 2px solid #e0e0e0;
+  background-color: #fefefe;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 32px;
+  font-weight: 400;
+  color: #0a0a0a;
+  transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+  p4m-checkout :not([paper-input]) input[type='text']:focus, p4m-checkout :not([paper-input]) input[type='password']:focus, p4m-checkout :not([paper-input]) input[type='date']:focus, p4m-checkout :not([paper-input]) input[type='datetime']:focus, p4m-checkout :not([paper-input]) input[type='datetime-local']:focus, p4m-checkout :not([paper-input]) input[type='month']:focus, p4m-checkout :not([paper-input]) input[type='week']:focus, p4m-checkout :not([paper-input]) input[type='email']:focus, p4m-checkout :not([paper-input]) input[type='number']:focus, p4m-checkout :not([paper-input]) input[type='search']:focus, p4m-checkout :not([paper-input]) input[type='tel']:focus, p4m-checkout :not([paper-input]) input[type='time']:focus, p4m-checkout :not([paper-input]) input[type='url']:focus, p4m-checkout :not([paper-input]) input[type='color']:focus, p4m-checkout :not([paper-input]) textarea:focus, p4m-checkout :not([paper-input]) vaadin-combo-box-light input:focus {
+    outline: none;
+    border-color: #37a553; }
+
+p4m-checkout :not([paper-input]) input:focus {
+  border-color: #aaa;
+  outline: 0;
+  -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.1); }
+
+p4m-checkout :not(#maptools) paper-input input[type='text'], p4m-checkout :not(#maptools) paper-input input[type='password'], p4m-checkout :not(#maptools) paper-input input[type='date'], p4m-checkout :not(#maptools) paper-input input[type='datetime'], p4m-checkout :not(#maptools) paper-input input[type='datetime-local'], p4m-checkout :not(#maptools) paper-input input[type='month'], p4m-checkout :not(#maptools) paper-input input[type='week'], p4m-checkout :not(#maptools) paper-input input[type='email'], p4m-checkout :not(#maptools) paper-input input[type='number'], p4m-checkout :not(#maptools) paper-input input[type='search'], p4m-checkout :not(#maptools) paper-input input[type='tel'], p4m-checkout :not(#maptools) paper-input input[type='time'], p4m-checkout :not(#maptools) paper-input input[type='url'], p4m-checkout :not(#maptools) paper-input input[type='color'], p4m-checkout :not(#maptools) paper-input textarea, p4m-checkout :not(#maptools) paper-input vaadin-combo-box-light input {
+  height: 21px !important; }
+
+p4m-checkout .paper-input-container-1 .focused-line.paper-input-container {
+  border-bottom-color: #37a553; }
+
+p4m-checkout .paper-input-container-1 .underline.is-invalid.paper-input-container .focused-line.paper-input-container {
+  border-color: #dc5345; }
+
+p4m-checkout .paper-input-container-1 .add-on-content.is-invalid.paper-input-container * {
+  color: #dc5345; }
+
+p4m-checkout address-lookup-field {
+  display: flex; }
+
 p4m-checkout p4m-cart [type='text'], p4m-checkout p4m-cart [type='password'], p4m-checkout p4m-cart [type='date'], p4m-checkout p4m-cart [type='datetime'], p4m-checkout p4m-cart [type='datetime-local'], p4m-checkout p4m-cart [type='month'], p4m-checkout p4m-cart [type='week'], p4m-checkout p4m-cart [type='email'], p4m-checkout p4m-cart [type='number'], p4m-checkout p4m-cart [type='search'], p4m-checkout p4m-cart [type='tel'], p4m-checkout p4m-cart [type='time'], p4m-checkout p4m-cart [type='url'], p4m-checkout p4m-cart [type='color'], p4m-checkout p4m-cart textarea, p4m-checkout p4m-cart vaadin-combo-box-light input {
   min-width: 290px; }
 
@@ -2545,6 +2591,7 @@ p4m-checkout {
       justify-content: center;
       color: #aaa; }
     p4m-checkout address-lookup-field input[type='text'] {
+      width: 50%;
       background: rgba(55, 165, 83, 0.08);
       position: initial !important;
       position: initial !important;
@@ -3302,7 +3349,3 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
     footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
       opacity: .5;
       cursor: not-allowed; }
-
-#noShippingWarning {
-    padding: 10px;
-}
