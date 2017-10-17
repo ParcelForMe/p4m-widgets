@@ -739,7 +739,7 @@
 
             setGfsOrderValue: function (value) {
                 console.log('setGfsOrderValue(' + value + ')');
-                this._postData.Request.Order.Value.Value = value;
+                this._postData.request.order.value.value = value;
             },
 
             //Put the address value into the GFS post data
@@ -753,7 +753,7 @@
                 }
                 else {
                     //console.log('setGfsAddress(' + JSON.stringify(address) + ')');
-                    this._postData.Request.Order.Transit.Recipient.Location = address;
+                    this._postData.request.order.transit.recipient.location = address;
                     if (autoSelectDelivery) 
                         this.autoSelectDeliveryMethod(callback);
                     else
@@ -763,7 +763,7 @@
             },
 
             getDeliveryAddress: function() {
-                return this._postData.Request.Order.Transit.Recipient.Location
+                return this._postData.request.order.transit.recipient.location
             },
 
             /*
@@ -826,7 +826,7 @@
                     'countryCode',
                     'postCode',
                     'town',
-                    'addressLines',
+                    'addressLineCollection',
                     'contactEmail',
                     'recipientFirstName',
                     'recipientLastName',
@@ -850,57 +850,60 @@
                     //==== Create post data
                     var now = new Date();
                     var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
-                    
+
                     this._postData = {
-                        "Request":
+                        "request":
                         {
-                            "DateRange": {
-                                "DateFrom": this._makeDateStr(now),
-                                "DateTo": this._makeDateStr(maxDate)
+                            "dateRange": {
+                                "dateFrom": this._makeDateStr(now),
+                                "dateTo": this._makeDateStr(maxDate)
                             },
-                            "Order": {
-                                "Transit": {
-                                    "Recipient": {
-                                        "Location": {
-                                            "CountryCode": {
-                                                "Code":  config.countryCode,
-                                                "Encoding": "ccISO_3166_1_Alpha2"
+                            "droppointSettings": {
+                                "maxRadiusMeters": 5000,
+                                "maxResults": 100,
+                                "useDroppointDays": true
+                            },
+                            "order": {
+                                "transit": {
+                                    "recipient": {
+                                        "location": {
+                                            "countryCode": {
+                                                "code":  config.countryCode,
+                                                "encoding": "ccISO_3166_1_Alpha2"
                                             },
-                                            "Postcode": config.postcode,
+                                            "postCode": config.postCode,
                                             "town": config.town,
-                                            "addressLineCollection": config.addressLines
+                                            "county": config.state,
+                                            "addressLineCollection": config.addressLineCollection
                                         },
                                         "contactDetails": {
-                                            "Email": config.contactEmail
+                                            "email": config.contactEmail
                                         },
-                                        "Person": {
+                                        "person": {
                                             "firstName": config.recipientFirstName,
                                             "lastName": config.recipientLastName,
                                             "title": config.recipientTitle || "Mr"
                                         }
                                     }
                                 },
-                                "Value": {
-                                    "CurrencyCode": "GBP",
-                                    "Value": config.cartValue
+                                "value": {
+                                    "currencyCode": "GBP",
+                                    "value": config.cartValue
                                 }
                             },
-                            "RequestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
-                            "Session": {
-                                "APIKeyId": "CL-4CE92613-89A6-4248-A573-A9A7333E6A06",
-                                "sessionID": ""
-                            }
+                            "requestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
+                            "session": { "sessionID": "" }
                         }
                     };
 
                     if (selection && selection.address) {
-                        var location = this._postData.Request.Order.Transit.Recipient.Location;
+                        var location = this._postData.request.order.transit.recipient.location;
                         location.CountryCode = selection.address.CountryCode;
                         location.Postcode = selection.address.Postcode;
                         location.town = selection.address.town || "";
                         location.addressLineCollection = selection.address.addressLineCollection;
-                        location.lat = selection.address.lat;
-                        location.lng = selection.address.lng;
+                        //location.lat = selection.address.lat;
+                        //location.lng = selection.address.lng;
                     }
 
                     
@@ -1558,11 +1561,11 @@
                     callback("No results");
                     return;
                 }
-                var addressStr = address.addressLineCollection[0] + "," + address.Postcode;
+                var addressStr = address.addressLineCollection[0] + "," + address.postCode;
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     componentRestrictions: {
-                        country: address.CountryCode.Code || this.countryCode
+                        country: address.countryCode.code || this.countryCode
                     },
                     address: addressStr
                 },
@@ -2014,8 +2017,8 @@
                 else if (this.currentMapCenter) {
                     self._panToGeoLocation(this.currentMapCenter);
                 }
-                else if (this._postData.Request.Order.Transit.Recipient.Location) {
-                    var loc = this._postData.Request.Order.Transit.Recipient.Location;
+                else if (this._postData.request.order.transit.recipient.location) {
+                    var loc = this._postData.request.order.transit.recipient.location;
                     this._geoCodeAddress(loc, function (err, data) {
                         if (err)
                             console.error('panToDefaultLocation():', err);
