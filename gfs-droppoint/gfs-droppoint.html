@@ -803,7 +803,7 @@
 			},
 
             _showingHours: false,
-			_toggleHours: function () {
+			_toggleHours: function (e) {
 			    if (this.panelMode) {
 			        this._showingHours = !this._showingHours;
 			        if (!this._showingHours) {
@@ -814,7 +814,8 @@
 			            Polymer.dom(this).node.firstElementChild.classList.remove('closed');
 			            this._expandText = 'Hide shipping options and details...';
                     }
-                }
+			    }
+			    e.stopPropagation();
 			}
 
 		});
