@@ -64,7 +64,7 @@
                                                 <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
                                             </paper-item>
 
-    			                            <template is="dom-repeat" items="{{_favAddresses}}" filter="hasLatLng">
+    			                            <template id="myLocations" is="dom-repeat" items="{{_favAddresses}}" filter="hasLatLng">
                                                 <paper-item label="{{item.name}}">
         			                                <gfs-location-button on-click="_onClickFavAddress" google-api-key="AIzaSyAMQhcXM06TZBHZ95LwJBRVGSV4CqUQMpI" address-name="{{item.name}}" address-data="{{item}}"></gfs-location-button>
                                                 </paper-item>
@@ -781,25 +781,11 @@
             },
 
             selectFavAddress: function (address, callback) {
-                var self = this;
-                var foundItem;
-                if (address.addressType === 'Address')
-                    foundItem = self._favAddresses.find(function (item) {
-                        return item.id == address.id;
-                    })
-                else
-                    foundItem = self._favDropPoints.find(function (item) {
-                        return item.id == address.id;
-                    });
-
-                if (foundItem) {
-                    self._unselectDropPoint();
-                    console.log(">>>Setting address", foundItem);
-                    self.setGfsAddress(foundItem, true, callback);
-                }
-                else {
-                    callback("Address not found");
-                }
+                // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
+                this._unselectDropPoint();
+                console.log(">>>Setting address", address);
+                this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
+                this.setGfsAddress(address, true, callback);
             },
 
 
@@ -851,17 +837,18 @@
                     var now = new Date();
                     var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
 
+                    //"droppointSettings": {
+                    //    "maxRadiusMeters": 5000,
+                    //    "maxResults": 100,
+                    //    "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+                    //},
+
                     this._postData = {
                         "request":
                         {
                             "dateRange": {
                                 "dateFrom": this._makeDateStr(now),
                                 "dateTo": this._makeDateStr(maxDate)
-                            },
-                            "droppointSettings": {
-                                "maxRadiusMeters": 5000,
-                                "maxResults": 100,
-                                "useDroppointDays": true
                             },
                             "order": {
                                 "transit": {
@@ -2012,6 +1999,7 @@
             panToDefaultLocation: function () {
                 var self = this;
                 if (this._currentMarker) {
+                    self._infoWindow.open(self._map, self._currentMarker);
                     self._panToGeoLocation(this._currentMarker.getPosition());
                 }
                 else if (this.currentMapCenter) {

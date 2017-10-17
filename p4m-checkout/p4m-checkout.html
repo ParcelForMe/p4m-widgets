@@ -633,7 +633,7 @@
                     recipientLastName: this.consumerData.givenName,
                     recipientTitle: this.consumerData.title || "",
                     favDropPoints: self._getPreferredDropPoints() || [],
-                    favAddresses: self._getPreferredAddresses() || [],
+                    favAddresses: self._getPreferredAddresses(defAddr) || [],
                     defaultAddress: p4mAddressToGfsAddress(defAddr),
                     cartValue: orderValue,
                     addressPreferences: addrPrefs,
@@ -1146,7 +1146,7 @@
                             })
                         }
                         else {
-                            this.$.gfsCheckoutWidget.selectFavAddress(addressId, function(err) {
+                            this.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
                                 self._gfsCurrentAddrId = addressId;
                                 self.set('cartData.addressId', addressId); //This allows the address UI to update
                                 self.notifyPath('cartData.addressId');
@@ -1209,7 +1209,7 @@
                                 else
                                     self.updAddressById(address);
                                 if (address.addressType === 'Address')
-                                    self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses());
+                                    self.$.gfsCheckoutWidget.setFavAddresses(self._getPreferredAddresses(address));
                                 else
                                     self.$.gfsCheckoutWidget.setFavDropPoints(self._getPreferredDropPoints());
                                 callback(err, result);
@@ -1306,13 +1306,13 @@
                     .map(p4mDroppointToGfsDroppoint);
             },
 
-            _getPreferredAddresses: function (maxItems) {
-                var preferredAddress = this.getDefaultAddr();
+            _getPreferredAddresses: function (topAddr) {
+                var preferredAddress = topAddr || this.getDefaultAddr();
                 var prefId = preferredAddress ? preferredAddress.id : null;
                 return this.consumerData.addresses
                     .filter(function (item, i) { return (item.addressType == "Address") }) //Only addresses, not droppoints
                     .sort(function (a, b) { if (a.id == prefId) { return -1; } else { return 1 } })
-                    .filter(function (item, i) { return (i < (maxItems || 99)) }) //Up to 99 addresses                   
+                    .filter(function (item, i) { return (i < 99) }) //Up to 99 addresses                   
                     .map(p4mAddressToGfsAddress);
             },
 
