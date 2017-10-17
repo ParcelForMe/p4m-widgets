@@ -13,32 +13,33 @@
 
         <div id="container">  
             <div id="errorMessage">{{_errorMessage}}</div>
-            <ul class="address-list separated">
+            <!--<ul class="address-list separated">-->
             <iron-pages selected="{{selectedMode}}">
                 <iron-page>
-                    <li class="horizontal layout center">
-
-                        <i class="p4micon-map-marker"></i>
-                        <div class="address-content">
-                            <p class="p4m-address-label lg">{{addressData.label}}</p>
-                            <p class="address-text lg font-weight-regular">{{addressData.street1}}</p>
-                        </div>
-                        <div class="flex-spacer"></div>
-                        <div id="deliveryToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your shipping address">
-                            <span on-tap="markAsDelivery">Shipping</span>
-                            <template is="dom-if" if="{{isDelivery}}"><i class="p4micon-check"></i></template>
-                        </div>
-                        <div id="billingToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your billing address">
-                            <span on-tap="markAsBilling">Billing</span>
-                            <template is="dom-if" if="{{isBilling}}"><i class="p4micon-check"></i></template>
-                        </div>
-                        <div data-tooltip="Edit">
-                            <i on-tap="edit" class="p4micon-edit-circle link"></i>
-                        </div>
-                        <!-- <div data-tooltip="Delete">
-                            <i on-tap="delete" class="p4micon-delete-circle link"></i>
-                        </div> -->
-                    </li>
+                    <ul class="address-list separated">
+                        <li class="horizontal layout center">
+                            <i class="p4micon-map-marker"></i>
+                            <div class="address-content">
+                                <p class="p4m-address-label lg">{{addressData.label}}</p>
+                                <p class="address-text lg font-weight-regular">{{addressData.street1}}</p>
+                            </div>
+                            <div class="flex-spacer"></div>
+                            <div id="deliveryToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your shipping address">
+                                <span on-tap="markAsDelivery">Shipping</span>
+                                <template is="dom-if" if="{{isDelivery}}"><i class="p4micon-check"></i></template>
+                            </div>
+                            <div id="billingToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your billing address">
+                                <span on-tap="markAsBilling">Billing</span>
+                                <template is="dom-if" if="{{isBilling}}"><i class="p4micon-check"></i></template>
+                            </div>
+                            <div data-tooltip="Edit">
+                                <i on-tap="edit" class="p4micon-edit-circle link"></i>
+                            </div>
+                            <!-- <div data-tooltip="Delete">
+                                <i on-tap="delete" class="p4micon-delete-circle link"></i>
+                            </div> -->
+                        </li>
+                    </ul>
                 </iron-page>
                 <iron-page>
                     <div class="card-panel">
@@ -60,43 +61,43 @@
 <!--                                 <input is="iron-input" type="text" id="label" bind-value="{{addressData.label}}" class="width-50" required />
                                 <label for="email">Label, e.g. 'Home'</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input class="width-50 label="Label, e.g. Home" type="text" auto-validate error-message="Required" bind-value="{{addressData.label}}" required>
+                                <paper-input class="width-50" label="Label, e.g. Home" type="text" auto-validate error-message="Required" value="{{addressData.label}}" required>
                                 </paper-input>
                                 
                                 <!-- <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" required />
                                 <label for="address">Street address</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input label="Street address" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" error-message="Required" required>
+                                <paper-input label="Street address" type="text" id="street1" value="{{addressData.street1}}" class="width-50" error-message="Required" required>
                                 </paper-input>
 
                                 <!-- <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" required />
                                 <label for="address">Street address</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input label="Street address 2" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" error-message="Required" required />
+                                <paper-input label="Street address 2" type="text" id="street2" value="{{addressData.street2}}" class="width-50">
                                 </paper-input>
 
                                 <!-- <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}"  class="width-50" required />
                                 <label for="city">City</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input label="City" type="text" id="city" bind-value="{{addressData.city}}" class="width-50" error-message="Required" required >
+                                <paper-input label="City" type="text" id="city" value="{{addressData.city}}" class="width-50" error-message="Required" required >
                                 </paper-input>
 
-                                <!-- <input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" required />
+                                <!--<input is="iron-input" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" required />
                                 <label for="postcode">Postcode</label>
-                                <span class="p4m-alert"></span> -->
-                                <paper-input Label="Postcode" type="text" id="postCode" bind-value="{{addressData.postCode}}" class="width-25" error-message="Required" required />
+                                <span class="p4m-alert"></span>-->
+                                <paper-input label="Postcode" type="text" id="postCode" value="{{addressData.postCode}}" class="width-25" error-message="Required" required >
                                 </paper-input>
 
                                 <!-- <input is="iron-input" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" required />
                                 <label for="state">State/County</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input Label="State" type="text" id="state" bind-value="{{addressData.state}}"  class="width-50" error-message="Required" required />
+                                <paper-input label="State" type="text" id="state" value="{{addressData.state}}"  class="width-50" error-message="Required" required >
                                 </paper-input>
 
-                                <!-- <input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" required />
+                                <!--<input is="iron-input" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" required />
                                 <label for="phone">Phone at address</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input Label="Phone" type="text" id="phone" bind-value="{{addressData.phone}}"  class="width-50" error-message="Required" required />
+                                <paper-input label="Phone" type="text" id="phone" value="{{addressData.phone}}"  class="width-50">
                                 </paper-input>
 
 
@@ -106,7 +107,7 @@
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span> -->
                                 <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
-                                    <input type="text" is="iron-input" error-message="Required" required />
+                                    <input type="text" is="iron-input" />
                                     <label for="country">Country</label>
                                 </vaadin-combo-box-light>
 
@@ -120,19 +121,16 @@
                         <h3>Pending</h3>
                         <p>Enter your security code to activate this address.</p>
                         <div class="address-text">{{addressData.label}}</div>
-                        <input is="iron-input" type="text" id="address-postcode" bind-value="{{securityCode}}" placeholder="Security code" />
+                        <input is="iron-input" type="text" id="address-postcode" value="{{securityCode}}" placeholder="Security code" />
                     </div>
                     <div class="address-actions">
                         <a class="p4m-button" href="#" on-tap="confirmPending">Confirm</a>
                     </div>
                 </iron-page>
             </iron-pages>  
-            </ul>
+            <!--</ul>-->
         </div>
-
-
     </template>
-
     <style>
         vaadin-combo-box-light {
             width: 100%;
