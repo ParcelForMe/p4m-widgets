@@ -1142,6 +1142,7 @@
                         this.$.calendar.selectShippingOption(methodId, dateOverride, true);
                     }
                     else {
+                        this.$.calendar.selectShippingOption(null, null, true);
                         newSelectedServiceDetails.expDeliveryDate = moment.utc(newMethod.deliveryTimeTo).add(newMethod.maxDD - newMethod.minDD, 'days').toISOString();
                     }
 
@@ -1374,7 +1375,7 @@
                 //Now replace preferred items with real data
                 var self = this;
                 this._favDropPoints = this._favDropPoints.map(function (item) {
-                    var existingItem = self._droppointById(null, item.droppointId);
+                    var existingItem = self._droppointById(item.droppointId);
                     if (existingItem) {
                         existingItem.selected = item.selected;
                     }
@@ -1755,7 +1756,7 @@
 
             _openSelectedDropPointInfoWindow: function () {
                 if (this._showingDroppointsMap && this._selectedDropPoint) {
-                    var dp = this._droppointById(this._selectedDropPoint.providerId, this._selectedDropPoint.droppointId);
+                    var dp = this._droppointById(this._selectedDropPoint.droppointId);
                     
                     if (dp) {
                         if (this._currentMarker == dp.marker) return;
@@ -1810,7 +1811,7 @@
                     callback(null); 
                 } 
                 else {
-                    var dp = this._droppointById(null, droppointId)            
+                    var dp = this._droppointById(droppointId)            
                     this.set("_selectedDropPoint", dp);
                     this.set("_selectedDropPoint.selected", true);
                     if (methodId) {    
@@ -1848,7 +1849,7 @@
             },
 
             _inspectDropPointMarker: function (marker) {
-                var dp = this._droppointById(null, marker.customData.droppointId);
+                var dp = this._droppointById(marker.customData.droppointId);
                 this._inspectDropPoint(dp, marker);
             },
 
@@ -1920,7 +1921,7 @@
                 }
             },
            
-            _droppointById: function (providerId, droppointId) {
+            _droppointById: function (droppointId) {
                 if (this._dropPoints) 
                     for (var i = 0; i < this._dropPoints.length; i++) 
                         if (this._dropPoints[i].droppointId === droppointId) 
