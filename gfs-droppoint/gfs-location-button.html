@@ -43,6 +43,7 @@
                 },
                 addressData: {
                     type: Object,
+                    notify: true,
                     value: {}
                 },
                 googleApiKey: {
@@ -59,7 +60,15 @@
 				}
             },
 
+            observers: [
+                "onAddressDataChange(addressData)",
+            ],
+
             ready: function () {
+
+            },
+
+            onAddressDataChange: function(e) {
                 if (this.addressData && this.addressData.addressLineCollection) {
                     this._addressTop = this.addressData.addressLineCollection[0];
                     this._addressBottom = this.addressData.town + ", " + this.addressData.postCode;
