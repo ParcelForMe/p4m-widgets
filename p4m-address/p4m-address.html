@@ -67,14 +67,14 @@
                                 <!-- <input is="iron-input" type="text" id="street1" bind-value="{{addressData.street1}}" class="width-50" required />
                                 <label for="address">Street address</label>
                                 <span class="p4m-alert"></span> -->
-                                <paper-input label="Street address" type="text" id="street1" value="{{addressData.street1}}" class="width-50" error-message="Required" required>
+                                <paper-input label="Street" type="text" id="street1" value="{{addressData.street1}}" class="width-50" error-message="Required" required>
                                 </paper-input>
 
                                 <!-- <input is="iron-input" type="text" id="street2" bind-value="{{addressData.street2}}" class="width-50" required />
                                 <label for="address">Street address</label>
-                                <span class="p4m-alert"></span> -->
+                                <span class="p4m-alert"></span> 
                                 <paper-input label="Street address 2" type="text" id="street2" value="{{addressData.street2}}" class="width-50">
-                                </paper-input>
+                                </paper-input>-->
 
                                 <!-- <input is="iron-input" type="text" id="city" bind-value="{{addressData.city}}"  class="width-50" required />
                                 <label for="city">City</label>
@@ -107,8 +107,8 @@
                                 </vaadin-combo-box-light>
                                 <span class="p4m-alert"></span> -->
                                 <vaadin-combo-box-light on-selected-item-changed="countryChanged" is="iron-input" id="country" class="width-50" label="Country" items="{{countries}}">
-                                    <input type="text" is="iron-input" />
                                     <label for="country">Country</label>
+                                    <input type="text" is="iron-input" />
                                 </vaadin-combo-box-light>
 
                             </div>
