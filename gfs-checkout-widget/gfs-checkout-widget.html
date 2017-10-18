@@ -762,15 +762,6 @@
 
             },
 
-            getDeliveryAddress: function() {
-                return this._postData.request.order.transit.recipient.location
-            },
-
-            /*
-            setGfsService: function(serviceId) {
-                setDeliveryMethod(serviceId);
-            },*/
-
             setFavDropPoints: function (droppointList) {
                 this._favDropPoints = droppointList;
                 this._processFavDroppoints();
@@ -794,7 +785,7 @@
                 var self = this;
                 this._geoCodeAddress(address, function (err, data) {
                     if (!err && data) {
-                        var box = [[data.lng - 0.1, data.lat - 0.1], [data.lng + 0.1, data.lat + 0.1]];
+                        var box = [[data.lng - 0.01, data.lat - 0.01], [data.lng + 0.01, data.lat + 0.01]];
                         self._requestDroppointsByGeoBoxes([box], callback);
                     }
                     else {
@@ -1168,7 +1159,7 @@
                             //So we don't need to autoselect one.
                             console.log("Not selecting a standard address automatically.")
                         }
-                        newSelectedServiceDetails.deliveryAddress = this.getDeliveryAddress();
+                        newSelectedServiceDetails.deliveryAddress = this._postData.request.order.transit.recipient.location;
                     }
                     this.set('selectedServiceDetails', newSelectedServiceDetails);                  
 
