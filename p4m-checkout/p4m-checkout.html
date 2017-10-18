@@ -623,17 +623,18 @@
 
                 var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
                 var defAddr = this.getDefaultAddr();
+                var currAddr = this.getCartAddr();
                 var gfsPostConfig = {
-                    countryCode: defAddr.countryCode,
-                    town: defAddr.city,
-                    postCode: defAddr.postCode,
-                    addressLineCollection: [defAddr.street1, defAddr.street2],
+                    countryCode: currAddr.countryCode,
+                    town: currAddr.city,
+                    postCode: currAddr.postCode,
+                    addressLineCollection: [currAddr.street1, currAddr.street2],
                     contactEmail: this.consumerData.email,
                     recipientFirstName: this.consumerData.familyName,
                     recipientLastName: this.consumerData.givenName,
                     recipientTitle: this.consumerData.title || "",
                     favDropPoints: self._getPreferredDropPoints() || [],
-                    favAddresses: self._getPreferredAddresses(defAddr) || [],
+                    favAddresses: self._getPreferredAddresses(currAddr) || [],
                     defaultAddress: p4mAddressToGfsAddress(defAddr),
                     cartValue: orderValue,
                     addressPreferences: addrPrefs,
@@ -664,6 +665,10 @@
             },
 
             getDefaultAddr: function () {
+                return this.getAddressById(this.consumerData.prefDeliveryAddressId);
+            },
+
+            getCartAddr: function () {
                 var returnAddr = null;
                 var addrId = (this.cartData && this.cartData.addressId) ? this.cartData.addressId : null;
                 if (addrId)
@@ -675,7 +680,7 @@
                 return returnAddr;
             },
 
-            debug: function(e) {
+            debug: function (e) {
                 console.log("p4m-checkout debug", this.cartData);
             },
 
@@ -1429,6 +1434,7 @@
                                     
                     postCode: item.postCode,
                     addressLineCollection: [item.companyName, item.street1],
+                    addressLines: [item.companyName, item.street1],
                     town: item.city,
                     coordinates: {
                         latitude: item.latitude,
@@ -1459,6 +1465,7 @@
                     postCode: item.postCode || "",
                     town: item.city,
                     addressLineCollection: [item.street1, item.street2],
+                    addressLines: [item.street1, item.street2],
                     name: item.label
                 };
                 if (item.latitude && item.longitude) {
