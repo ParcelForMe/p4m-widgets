@@ -18,7 +18,7 @@
                     <iron-page>
                         <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOrEdit">
                         
-                            <p4m-address show-cancel="true" address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" mode="{{mode}}" on-begin-edit="beginEdit" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
+                            <p4m-address show-cancel="true" address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" xmode="view" on-begin-edit="beginEdit" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
                         </template>
                     </iron-page>
                     <iron-page>
@@ -71,8 +71,8 @@
                     type: Array,
                     notify: true
                 },
-                editAddress: {
-                    type: Object,
+                editAddressId: {
+                    type: String,
                     notify: true
                 },
                 cartData: {
@@ -134,9 +134,26 @@
 
             beginEdit: function (e) {
                 this.$.addAddressPanel.style.display = 'none';
-                this.editAddress = e.detail;
+                this.editAddressId = e.detail.id;
                 this.mode = 'edit';
-                this.$.oldAddresses.render();
+                this.hideNonEditing();// this.$.oldAddresses.render();
+            },
+
+            hideNonEditing: function () {
+                var addrId = this.editAddressId;
+                Polymer.dom(this.root).querySelectorAll('p4m-address').map(
+                    function (item) {
+                        if (item.attributes['addressid'].value !== addrId)
+                            item.classList.add('hidden');
+                    });
+            },
+
+            showAll: function () {
+                var self = this;
+                Polymer.dom(this.root).querySelectorAll('p4m-address').map(
+                    function (item) {
+                        item.classList.remove('hidden');
+                    });
             },
 
             cancelAdd: function (e) {
@@ -150,9 +167,9 @@
             cancelEdit: function (e) {
                 // revert card to previous values
                 console.log("Cancel edit address");
-                this.editAddress = undefined;
+                this.editAddressId = null;
                 this.mode = 'view';
-                this.$.oldAddresses.render();
+                this.showAll(); //this.$.oldAddresses.render();
                 this.$.addAddressPanel.style.display = 'flex';
             },
 
@@ -176,19 +193,7 @@
             },
 
             onCartAddressDataChange: function (e) {
-                var i = 0;
-
                 this.$.oldAddresses.render();
-                /*
-                console.log("*** Changed delivery or billing address", e);
-                if (this.addressListData) {
-                    this.addressListData.forEach((function (item) {
-                        this.notifyPath('addressListData.#' + i + "._update", Math.random());
-                        i++;
-                    }).bind(this));
-                }*/
-
-                //this.notifyPath('addressData', this.addressListData);
             },
 
             filterNewOnly: function (e) {
@@ -196,11 +201,9 @@
             },
 
             filterOldOrEdit: function (e) {
-                //return true;
-                //return false;
-                if (this.editAddress)
-                    return (e.addressType == "Address" && e.id == this.editAddress.id);
-                else
+                //if (this.editAddressId)
+                //    return (e.addressType == "Address" && e.id == this.editAddressId);
+                //else
                     return (e && typeof (e.label) === "string" && e.addressType == "Address");
             },
 

@@ -229,16 +229,18 @@
                     }]
                  }
             },
-            observers: ["onDataChange(cartData.*)"],
+            //observers: ["onDataChange(cartData.*)"],
             ready: function()
             {
-                if (this.addressData)
-                   this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
+                if (this.addressData) {
+                    Polymer.dom(this).setAttribute('addressid', this.addressData.id);
+                    this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
+                }
             },
 
             countryChanged: function(e) {
                 //debugger;
-                if (e.detail.value) {
+                if (e.detail && e.detail.value) {
                     this.set('addressData.country', e.detail.value.label);
                     this.set('addressData.countryCode', e.detail.value.value);
                 }               
@@ -362,7 +364,9 @@
 
             updateUi: function()
             {
-                this.isBilling = (this.addressData && this.cartData && (this.cartData.billingAddressId === this.addressData.id));
+                if (!this.addressData || !this.cartData)
+                    return;
+                this.isBilling = (this.cartData.billingAddressId === this.addressData.id);
                 if (this.isBilling) {
                     this.$.billingToggle.classList.add('chosen');
                 }
@@ -370,7 +374,7 @@
                     this.$.billingToggle.classList.remove('chosen');
                 }
 
-                this.isDelivery = (this.addressData && this.cartData && (this.cartData.addressId === this.addressData.id));
+                this.isDelivery = (this.cartData.addressId === this.addressData.id);
                 if (this.isDelivery) {
                     this.$.deliveryToggle.classList.add('chosen');
                 }
