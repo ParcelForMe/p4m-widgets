@@ -1301,11 +1301,6 @@ p4m-card {
       outline: none;
       border-color: #37a553; }
 
-div.address-form {
-  width: 100%;
-  min-width: 280px;
-  max-width: 480px; }
-
 p4m-checkout :not([paper-input]) input[type='text'], p4m-checkout :not([paper-input]) input[type='password'], p4m-checkout :not([paper-input]) input[type='date'], p4m-checkout :not([paper-input]) input[type='datetime'], p4m-checkout :not([paper-input]) input[type='datetime-local'], p4m-checkout :not([paper-input]) input[type='month'], p4m-checkout :not([paper-input]) input[type='week'], p4m-checkout :not([paper-input]) input[type='email'], p4m-checkout :not([paper-input]) input[type='number'], p4m-checkout :not([paper-input]) input[type='search'], p4m-checkout :not([paper-input]) input[type='tel'], p4m-checkout :not([paper-input]) input[type='time'], p4m-checkout :not([paper-input]) input[type='url'], p4m-checkout :not([paper-input]) input[type='color'], p4m-checkout :not([paper-input]) textarea, p4m-checkout :not([paper-input]) vaadin-combo-box-light input {
   border: none;
   display: block;
@@ -1730,7 +1725,8 @@ p4m-checkout .floating-labels {
 paper-input paper-input-container .floated-label-placeholder {
   font-family: 'Lato', sans-serif !important;
   line-height: 16px !important;
-  color: #37a553; }
+  color: #37a553;
+  height: 12px; }
 
 .toggle-button {
   border-radius: 32px;
@@ -2432,25 +2428,22 @@ p4m-checkout {
       display: flex; }
   p4m-checkout paper-input {
     padding: 0 0; }
-  p4m-checkout paper-dropdown-menu {
-    min-width: 100%; }
-    p4m-checkout paper-dropdown-menu paper-input-container {
-      padding: 0 !important;
-      height: 28px; }
-      p4m-checkout paper-dropdown-menu paper-input-container .floated-label-placeholder, p4m-checkout paper-dropdown-menu paper-input-container .label-is-floating label {
-        display: none; }
-      p4m-checkout paper-dropdown-menu paper-input-container input, p4m-checkout paper-dropdown-menu paper-input-container label {
-        line-height: 28px !important;
-        height: 28px !important;
-        font-size: 14px !important;
-        font-family: 'Lato', sans-serif; }
   p4m-checkout #mapTools {
     height: 48px;
     display: flex;
     align-items: center;
-    background: #f8f8f8;
+    background: #fff;
     border-top: 1px solid #fff;
     box-sizing: border-box; }
+    p4m-checkout #mapTools paper-dropdown-menu, p4m-checkout #mapTools address-lookup-field {
+      width: 100%; }
+      p4m-checkout #mapTools paper-dropdown-menu paper-input, p4m-checkout #mapTools address-lookup-field paper-input {
+        width: 100%; }
+    p4m-checkout #mapTools paper-input paper-input-container {
+      padding: 0 0; }
+    p4m-checkout #mapTools paper-input-container .input-content.label-is-floating.paper-input-container label, p4m-checkout #mapTools paper-input-container .input-content.label-is-floating.paper-input-container .paper-input-label {
+      -webkit-transform: translateY(-60%) scale(0.75);
+      transform: translateY(-60%) scale(0.75); }
   p4m-checkout #mapContainer {
     display: block;
     position: relative; }
@@ -2613,57 +2606,12 @@ p4m-checkout {
       color: #aaa; }
   p4m-checkout .collection-points, p4m-checkout .location-points, p4m-checkout .search-postcode-wrap {
     width: 26%;
-    margin: 0 1%; }
+    margin: 0 1%;
+    flex: 1;
+    display: flex; }
   p4m-checkout .addressTitle {
     display: flex;
     align-items: center; }
-  p4m-checkout address-lookup-field {
-    width: 100%;
-    position: relative;
-    display: flex;
-    height: 43px;
-    align-items: flex-end;
-    flex-direction: column; }
-    p4m-checkout address-lookup-field:before {
-      content: "\e909";
-      font-family: 'p4m' !important;
-      speak: none;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      line-height: 1;
-      font-size: 18px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      align-items: center;
-      display: flex;
-      width: 32px;
-      justify-content: center;
-      color: #aaa;
-      z-index: 2;
-      pointer-events: none; }
-    p4m-checkout address-lookup-field input[type='text'] {
-      width: 50%;
-      background: rgba(55, 165, 83, 0.08); }
-      p4m-checkout address-lookup-field input[type='text']::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-        color: #acacac; }
-      p4m-checkout address-lookup-field input[type='text']::-moz-placeholder {
-        /* Firefox 19+ */
-        color: #acacac; }
-      p4m-checkout address-lookup-field input[type='text']:-ms-input-placeholder {
-        /* IE 10+ */
-        color: #acacac; }
-    p4m-checkout address-lookup-field label {
-      position: absolute;
-      z-index: 1;
-      width: 100%;
-      pointer-events: none; }
   p4m-checkout paper-menu-button #contentWrapper .dropdown-content {
     max-height: 50vh !important; }
   p4m-checkout gfs-location-button .wrap {
@@ -2881,18 +2829,16 @@ p4m-checkout {
     position: absolute;
     right: 4px;
     left: initial;
-    top: 6px;
+    top: initial;
+    bottom: 2px;
     color: #ccc;
-    background: white;
-    box-shadow: 0 0 3px 3px white;
     width: 21px !important;
-    height: 21px !important; }
+    height: 21px !important;
+    cursor: pointer; }
     p4m-checkout .search-button iron-icon {
       width: 21px !important;
       height: 21px !important; }
   p4m-checkout paper-input iron-icon {
-    background: white;
-    box-shadow: 0 0 3px 3px white;
     width: 21px !important;
     height: 21px !important; }
   p4m-checkout .consumer-addresses {
@@ -3349,6 +3295,68 @@ p4m-address .buttons {
   flex-direction: row;
   margin: auto;
   padding: 4px; }
+
+p4m-address paper-dropdown-menu {
+  min-width: 100%; }
+  p4m-address paper-dropdown-menu paper-input-container {
+    padding: 0 !important;
+    height: 28px; }
+    p4m-address paper-dropdown-menu paper-input-container input, p4m-address paper-dropdown-menu paper-input-container label {
+      line-height: 28px !important;
+      height: 28px !important;
+      font-size: 14px !important;
+      font-family: 'Lato', sans-serif; }
+
+p4m-address address-lookup-field {
+  display: flex;
+  height: 48px;
+  align-items: flex-end;
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 43px;
+  align-items: flex-end;
+  flex-direction: column; }
+  p4m-address address-lookup-field:before {
+    content: "\e909";
+    font-family: 'p4m' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    width: 32px;
+    justify-content: center;
+    color: #aaa;
+    z-index: 2;
+    pointer-events: none; }
+  p4m-address address-lookup-field input[type='text'] {
+    width: 50%;
+    background: rgba(55, 165, 83, 0.08); }
+    p4m-address address-lookup-field input[type='text']::-webkit-input-placeholder {
+      /* Chrome/Opera/Safari */
+      color: #acacac; }
+    p4m-address address-lookup-field input[type='text']::-moz-placeholder {
+      /* Firefox 19+ */
+      color: #acacac; }
+    p4m-address address-lookup-field input[type='text']:-ms-input-placeholder {
+      /* IE 10+ */
+      color: #acacac; }
+  p4m-address address-lookup-field label {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    pointer-events: none; }
 
 footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
