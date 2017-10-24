@@ -2230,7 +2230,8 @@ p4m-register .p4m-button.p4m-register-button {
     color: rgba(255, 255, 255, 0.65); }
   #lastCartDlg .buttons {
     margin: 20px 0 0 0 !important;
-    padding: 0 !important; }
+    padding: 0 !important;
+    align-items: center; }
     #lastCartDlg .buttons > div {
       height: 44px;
       margin: 0 9px;
