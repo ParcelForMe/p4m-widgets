@@ -1577,36 +1577,36 @@ div.address-form {
 p4m-checkout {
   :not([paper-input]) {
     input[type='text'], input[type='password'], input[type='date'], input[type='datetime'], input[type='datetime-local'], input[type='month'], input[type='week'], input[type='email'], input[type='number'], input[type='search'], input[type='tel'], input[type='time'], input[type='url'], input[type='color'], textarea, vaadin-combo-box-light input {
-      border: 1px solid red;
-      display: block;
-      box-sizing: border-box;
-      width: 100%;
-      height: 32px;
-      margin: 0;
-      padding: 0 0.5rem;
-      border-radius: 3px;
-      border: 2px solid #e0e0e0;
-      background-color: #fefefe;
-      box-shadow: none;
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 32px;
-      font-weight: 400;
-      color: #0a0a0a;
-      transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
+        border: none;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 32px;
+        margin: 0;
+        padding: 0 0.5rem;
+        border-radius: 0;
+        border-bottom: 1px solid #737373;
+        background-color: #fefefe;
+        box-shadow: none;
+        font-family: 'Lato', sans-serif !important;
+        font-size: 14px;
+        line-height: 32px;
+        font-weight: 400;
+        color: #0a0a0a;
+        transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
       &:focus {
         outline: none;
         border-color: #37a553;
       }
     }
     input:focus {
-      border-color: #aaa; 
+      border-color: $p4m-green; 
       outline: 0;
-      -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1); 
-      box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1);
+      // -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1); 
+      // box-shadow: inset 1px 1px 2px rgba(0,0,0,.2), inset -1px -1px 2px rgba(0,0,0,.1);
     }
   }
   :not(#maptools) {
@@ -1616,8 +1616,53 @@ p4m-checkout {
       }
     }
   }
+  p4m-checkout #availableDropPoints #maptools paper-input {
+    input[type='text'], input[type='password'], input[type='date'], input[type='datetime'], input[type='datetime-local'], input[type='month'], input[type='week'], input[type='email'], input[type='number'], input[type='search'], input[type='tel'], input[type='time'], input[type='url'], input[type='color'], textarea, vaadin-combo-box-light input {
+        height: 32px !important;
+        font-family: 'Lato', sans-serif;
+    }
+  }
+  .floating-labels {
+    input[type='text'], input[type='password'], input[type='date'], input[type='datetime'], input[type='datetime-local'], input[type='month'], input[type='week'], input[type='email'], input[type='number'], input[type='search'], input[type='tel'], input[type='time'], input[type='url'], input[type='color'], textarea, vaadin-combo-box-light input {
+        border: none;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 21px;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        border-bottom: 1px solid #737373;
+        background-color: #fefefe;
+        box-shadow: none;
+        font-family: 'Lato', sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 400;
+        color: #0a0a0a;
+        transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+        -webkit-font-smoothing: antialiased;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+      &:focus {
+        outline: none;
+        border-color: #37a553;
+      }
+    }
+  }
+  .paper-input {
+    .input-content.paper-input-container {
+      label {
+        font-family: 'Lato', sans-serif;
+        pointer-events: none;
+      }
+    }
+  }
   .paper-input-container-1 .focused-line.paper-input-container {
     border-bottom-color: #37a553;
+    border-bottom-width: 1px;
   }
   .paper-input-container-1 .underline.is-invalid.paper-input-container .focused-line.paper-input-container {
     border-color: #dc5345;
@@ -1630,9 +1675,9 @@ p4m-checkout {
   } 
 
   p4m-cart {
-      [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
-    min-width: 290px;
-  }
+    [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, vaadin-combo-box-light input {
+      min-width: 290px;
+    }
   }
 
   [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='time'], input#postCode {
@@ -1692,27 +1737,25 @@ p4m-checkout {
   textarea,
   select,
   vaadin-combo-box-light input {
+    border: none;
     display: block;
-    position: relative;
     box-sizing: border-box;
-    width: 100%;
-    border: 0;
     top: 1.2em;
-    z-index: 1;
-    font-family: sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 28px;
-    letter-spacing: 0.012em;
-    color: #0a0a0a;
-    height: 28px;
+    width: 100%;
+    height: 21px;
     margin: 0;
-    padding: 1px;
+    padding: 0;
     border-radius: 0;
+    border-bottom: 1px solid #737373;
+    background-color: #fefefe;
     box-shadow: none;
-    border-bottom: 2px solid #e0e0e0;
-    background-color: transparent;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #0a0a0a;
     transition: box-shadow 0.2s, border-color 0.2s ease-in-out;
+    -webkit-font-smoothing: antialiased;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -1737,7 +1780,7 @@ p4m-checkout {
     border-bottom: 2px solid #e0e0e0;
     background-color: rgba(100, 100, 100, 0.05);
     box-shadow: none;
-    font-family: inherit;
+    font-family: 'Lato', sans-serif;
     font-size: 14px;
     line-height: 30px;
     font-weight: 400;
@@ -1755,19 +1798,17 @@ p4m-checkout {
   }
 
   label {
-    // font-family: sans-serif;
     display: block;
     position: relative;
-    // pointer-events: none;
-    // margin-top: -24px;
-    // margin-bottom: 24px;
-    margin-top: -24px;
-    margin-bottom: 22px;
-    line-height: 12px;
-    padding: 1px;
-    letter-spacing: 0.012em;
-    color: #acacac;
-    font-size: 14px;
+    margin-top: -22px;
+    margin-bottom: 20px;
+    line-height: 16px;
+    padding: 0;
+    color: #737373;
+    font-size: 16px;
+    pointer-events: none;
+
+    -webkit-font-smoothing: antialiased;
     -webkit-animation-name: labelIn;
     animation-name: labelIn;
     -webkit-animation-duration: 0.35s;
@@ -1792,6 +1833,12 @@ p4m-checkout {
     transition-property: line-height margin-bottom;
     transition-delay: 0.5s;
   }
+  *:focus + label {
+    color: $p4m-green;
+  }
+  *:valid + label {
+    color: $p4m-green;
+  }
   *:focus + label,
   *:valid + label {
     -webkit-animation-name: labelOut;
@@ -1809,24 +1856,24 @@ p4m-checkout {
     0% {
       opacity: 1;
       top: 1.2em;
-      font-size: 14px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 400;
     }
     50% {
-      font-size: 14px;
+      font-size: 16px;
       opacity: 0;
       top: 1.2em;
-      font-weight: 300;
+      font-weight: 400;
     }
     50.01% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 0;
       top: 0.5em;
       color: #37a553;
       font-weight: 400;
     }
     100% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 1;
       top: 0.2em;
       color: #37a553;
@@ -1837,24 +1884,24 @@ p4m-checkout {
     0% {
       opacity: 1;
       top: 1.2em;
-      font-size: 14px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 400;
     }
     50% {
-      font-size: 14px;
+      font-size: 16px;
       opacity: 0;
       top: 1.2em;
-      font-weight: 300;
+      font-weight: 400;
     }
     50.01% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 0;
       top: 0.5em;
       color: #37a553;
       font-weight: 400;
     }
     100% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 1;
       top: 0.2em;
       color: #37a553;
@@ -1865,24 +1912,24 @@ p4m-checkout {
     0% {
       opacity: 1;
       top: 1.2em;
-      font-size: 14px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 400;
     }
     50% {
-      font-size: 14px;
+      font-size: 16px;
       opacity: 0;
       top: 1.2em;
-      font-weight: 300;
+      font-weight: 400;
     }
     50.01% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 0;
       top: 0.5em;
       color: #37a553;
       font-weight: 400;
     }
     100% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 1;
       top: 0.2em;
       color: #37a553;
@@ -1893,24 +1940,24 @@ p4m-checkout {
     0% {
       opacity: 1;
       top: 1.2em;
-      font-size: 14px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 400;
     }
     50% {
-      font-size: 14px;
+      font-size: 16px;
       opacity: 0;
       top: 1.2em;
       font-weight: 300;
     }
     50.01% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 0;
       top: 0.5em;
       color: #37a553;
       font-weight: 400;
     }
     100% {
-      font-size: 0.65em;
+      font-size: 75%;
       opacity: 1;
       top: 0.2em;
       color: #37a553;
@@ -2073,6 +2120,12 @@ p4m-checkout {
     // }
 }
 
+paper-input paper-input-container .floated-label-placeholder {
+  font-family: 'Lato', sans-serif !important;
+  line-height: 16px !important;
+  color: $p4m-green;
+}
+
 
 .toggle-button {
     border-radius: 32px;
@@ -2173,8 +2226,6 @@ div.pac-container.pac-logo {
     min-width: 200px;
     width: 200px !important;
 }
-
-
 
 
 .p4m-label { color: darkgreen }
@@ -3235,8 +3286,12 @@ p4m-checkout {
 	    align-items: center;
     }
     address-lookup-field {
-    	width: 100%;
+      width: 100%;
       position: relative;
+      display: flex;
+      height: 43px;
+      align-items: flex-end;
+      flex-direction: column;
       &:before {
         content: "\e909";
         font-family: 'p4m' !important;
@@ -3258,13 +3313,15 @@ p4m-checkout {
         width: 32px;
         justify-content: center;
         color: #aaa;
+        z-index: 2;
+        pointer-events: none;
       }
       input[type='text'] {
         width: 50%;
         background: rgba(55, 165, 83, .08);
-        position: initial !important;
-        position: initial !important;
-        padding: 1px !important;
+        // position: absolute !important;
+        // bottom: 0 !important;
+        // top: initial;
         &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
           color: #acacac;
         }
@@ -3274,6 +3331,14 @@ p4m-checkout {
         &:-ms-input-placeholder { /* IE 10+ */
           color: #acacac;
         }
+      }
+      label {
+        // margin-top: 0 !important;
+        // margin-bottom: 0 !important;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        pointer-events: none;
       }
     }
     paper-menu-button #contentWrapper {

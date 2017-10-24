@@ -23,6 +23,16 @@
             --paper-p4m-green-700: #2f8e47;
             --paper-tabs-selection-bar-color: blue;
 
+            --paper-input-container-invalid-color: #dc5345;
+            --paper-input-container-focus-color: #37a553;
+            --paper-input-container-underline-focus: {
+                border-color: #dc5345;
+            };
+
+            --paper-input-container-input {
+                font-family: 'Lato', sans-serif;
+            }
+
             /*--iron-overlay-backdrop-opacity: 0.95;*/
 /*            --iron-overlay-backdrop-background-color: #37a553;*/
         }
@@ -47,6 +57,13 @@
         paper-tabs[no-bar] paper-tab.iron-selected {
             color: $white;
             background: var(--paper-p4m-green-300);
+        }
+        paper-input {
+            font-family: 'Lato', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 24px;
         }
         .tab-content {
             height: 100%;

@@ -2,9 +2,21 @@
 
 <dom-module id="address-lookup-field">
     <template>
-        <input placeholder="Search for an address..." type="text" name="alfField" id="alfField" />
+        <input placeholder="" type="text" name="alfField" id="alfField" required />
+        <label>Search for an address</label>
     </template>
     <style>
+    :host {
+        display: flex;
+        height: 48px;
+        align-items: flex-end;
+    }
+    label {
+        z-index: 1;
+        width: 100%;
+        pointer-events: none;
+    }
+    
 
     </style>
 
