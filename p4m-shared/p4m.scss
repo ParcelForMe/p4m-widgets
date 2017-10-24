@@ -4262,7 +4262,6 @@ p4m-address {
         }
       }
     }
-
     address-lookup-field {
       display: flex;
       height: 48px;
@@ -4270,7 +4269,7 @@ p4m-address {
       width: 100%;
       position: relative;
       display: flex;
-      height: 43px;
+      // height: 43px;
       align-items: flex-end;
       flex-direction: column;
       &:before {
@@ -4323,6 +4322,11 @@ p4m-address {
       }
       paper-input {
         width: 100%;
+      }
+    }
+    .address-form {
+      address-lookup-field {
+        height: 39px;
       }
     }
 }
