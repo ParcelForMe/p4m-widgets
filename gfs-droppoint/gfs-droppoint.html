@@ -143,9 +143,9 @@
 			}
 
 			.droppoint-delivery-selection {
-				position: absolute;
 				right: 0;
-				top: 0;
+				top: initial;
+				bottom: 0;
 			}
 
 			.choose-droppoint {
@@ -583,7 +583,7 @@
                 },
                 _expandText: {
                     type: String,
-                    value: 'Show shipping options and details...'
+                    value: 'Show shipping options and details'
                 }
             },
 
@@ -808,11 +808,11 @@
 			        this._showingHours = !this._showingHours;
 			        if (!this._showingHours) {
 			            Polymer.dom(this).node.firstElementChild.classList.add('closed');
-			            this._expandText = 'Show shipping options and details...';
+			            this._expandText = 'Show shipping options and details';
 			        }
 			        else {
 			            Polymer.dom(this).node.firstElementChild.classList.remove('closed');
-			            this._expandText = 'Hide shipping options and details...';
+			            this._expandText = 'Hide shipping options and details';
                     }
 			    }
 			    e.stopPropagation();

@@ -4229,6 +4229,11 @@ p4m-address {
 	    padding: 15px 15px 8px 15px;
       justify-content: center;
       align-items: flex-start;
+      .address-form {
+        min-width: 280px;
+        width: 100%;
+        max-width: 480px;
+      }
     }
     .buttons {
         display: flex;
@@ -4315,6 +4320,9 @@ p4m-address {
         z-index: 1;
         width: 100%;
         pointer-events: none;
+      }
+      paper-input {
+        width: 100%;
       }
     }
 }

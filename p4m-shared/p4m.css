@@ -3291,6 +3291,10 @@ p4m-address .card-body.card-edit {
   padding: 15px 15px 8px 15px;
   justify-content: center;
   align-items: flex-start; }
+  p4m-address .card-body.card-edit .address-form {
+    min-width: 280px;
+    width: 100%;
+    max-width: 480px; }
 
 p4m-address .buttons {
   display: flex;
@@ -3359,6 +3363,8 @@ p4m-address address-lookup-field {
     z-index: 1;
     width: 100%;
     pointer-events: none; }
+  p4m-address address-lookup-field paper-input {
+    width: 100%; }
 
 footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
