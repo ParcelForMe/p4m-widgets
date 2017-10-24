@@ -2444,6 +2444,8 @@ p4m-checkout {
     p4m-checkout #mapTools paper-input-container .input-content.label-is-floating.paper-input-container label, p4m-checkout #mapTools paper-input-container .input-content.label-is-floating.paper-input-container .paper-input-label {
       -webkit-transform: translateY(-60%) scale(0.75);
       transform: translateY(-60%) scale(0.75); }
+    p4m-checkout #mapTools paper-input-container .focused-line.paper-input-container {
+      border-color: #37a553; }
   p4m-checkout #mapContainer {
     display: block;
     position: relative; }

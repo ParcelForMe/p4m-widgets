@@ -3052,6 +3052,9 @@ p4m-checkout {
           -webkit-transform: translateY(-60%) scale(0.75);
           transform: translateY(-60%) scale(0.75);
       }
+      paper-input-container .focused-line.paper-input-container {
+            border-color: #37a553;
+      }
     }
     
 
