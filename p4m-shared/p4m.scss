@@ -2033,28 +2033,29 @@ p4m-checkout {
 }
 
 // p4m buttons
+// Yes, a pox on my house for all of the !important declarations, but it's needed for the demo sites until shadow dom is turned on and we scope our css - Adrian
 .p4m-button {
-    margin: 10px;
-    padding: 10px;
-    background: transparent;
-    color: #fff;
-    border-radius: 24px;
-    text-align: center;
-    border: solid 1px #fff;
-    cursor: pointer; 
-    min-width: 100px;
-    font-weight: bold;
+    margin: 10px !important;
+    padding: 10px !important;
+    background: transparent !important;
+    color: #fff !important;
+    border-radius: 24px !important;
+    text-align: center !important;
+    border: solid 1px #fff !important;
+    cursor: pointer !important; 
+    min-width: 100px !important;
+    font-weight: bold !important;
     @include transition;
 	&.p4m-button-active {
-	    background-color: #fff;
-	    color: #2aa54f;
+	    background-color: #fff !important;
+	    color: #2aa54f !important;
 	    &:hover {
-		    background-color: #fff;
-		    color: #2aa54f;
+		    background-color: #fff !important;
+		    color: #2aa54f !important;
 		}
 		&:active {
-		    background-color: rgba(255, 255, 255, 0.8);
-		    color: #2aa54f;
+		    background-color: rgba(255, 255, 255, 0.8) !important;
+		    color: #2aa54f !important;
 		}
 		// &.no {
 		//     background-color: rgba(144, 68, 68, 1.0);
@@ -2065,31 +2066,31 @@ p4m-checkout {
 	}
 	&.disabled {
       // background-color: rgba(100, 100, 100, 1.0);
-      opacity:.5;
-      cursor: not-allowed;
+      opacity:.5 !important;
+      cursor: not-allowed !important;
 	}
     &.white {
-        background-color: $p4m-green;
-        color: $white;
-        border: solid 2px $white;
+        background-color: $p4m-green !important;
+        color: $white !important;
+        border: solid 2px $white !important;
         i {
-            color: $white;
+            color: $white !important;
             span {
-                border-color: $p4m-green;
-                color: $p4m-green;
-                background-color: $white;
+                border-color: $p4m-green !important;
+                color: $p4m-green !important;
+                background-color: $white !important;
             }
         }
         &:hover {
-            background-color: $white;
-            border-color: $xpale-p4m-green;
-            color: $p4m-green;
+            background-color: $white !important;
+            border-color: $xpale-p4m-green !important;
+            color: $p4m-green !important;
             i {
-                color: $p4m-green;
+                color: $p4m-green !important;
                 span {
-                    border-color: $white;
-                    color: $white;
-                    background-color: $p4m-green;
+                    border-color: $white !important;
+                    color: $white !important;
+                    background-color: $p4m-green !important;
                 }
             }
         }

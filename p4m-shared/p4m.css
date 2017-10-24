@@ -1678,16 +1678,16 @@ p4m-checkout .floating-labels {
     overflow: hidden; }
 
 .p4m-button {
-  margin: 10px;
-  padding: 10px;
-  background: transparent;
-  color: #fff;
-  border-radius: 24px;
-  text-align: center;
-  border: solid 1px #fff;
-  cursor: pointer;
-  min-width: 100px;
-  font-weight: bold;
+  margin: 10px !important;
+  padding: 10px !important;
+  background: transparent !important;
+  color: #fff !important;
+  border-radius: 24px !important;
+  text-align: center !important;
+  border: solid 1px #fff !important;
+  cursor: pointer !important;
+  min-width: 100px !important;
+  font-weight: bold !important;
   -webkit-transition: all 0.15s ease-in-out 0s;
   -khtml-transition: all 0.15s ease-in-out 0s;
   -moz-transition: all 0.15s ease-in-out 0s;
@@ -1695,37 +1695,37 @@ p4m-checkout .floating-labels {
   -o-transition: all 0.15s ease-in-out 0s;
   transition: all 0.15s ease-in-out 0s; }
   .p4m-button.p4m-button-active {
-    background-color: #fff;
-    color: #2aa54f; }
+    background-color: #fff !important;
+    color: #2aa54f !important; }
     .p4m-button.p4m-button-active:hover {
-      background-color: #fff;
-      color: #2aa54f; }
+      background-color: #fff !important;
+      color: #2aa54f !important; }
     .p4m-button.p4m-button-active:active {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #2aa54f; }
+      background-color: rgba(255, 255, 255, 0.8) !important;
+      color: #2aa54f !important; }
   .p4m-button.disabled {
-    opacity: .5;
-    cursor: not-allowed; }
+    opacity: .5 !important;
+    cursor: not-allowed !important; }
   .p4m-button.white {
-    background-color: #37a553;
-    color: #fff;
-    border: solid 2px #fff; }
+    background-color: #37a553 !important;
+    color: #fff !important;
+    border: solid 2px #fff !important; }
     .p4m-button.white i {
-      color: #fff; }
+      color: #fff !important; }
       .p4m-button.white i span {
-        border-color: #37a553;
-        color: #37a553;
-        background-color: #fff; }
+        border-color: #37a553 !important;
+        color: #37a553 !important;
+        background-color: #fff !important; }
     .p4m-button.white:hover {
-      background-color: #fff;
-      border-color: #b0d4b9;
-      color: #37a553; }
+      background-color: #fff !important;
+      border-color: #b0d4b9 !important;
+      color: #37a553 !important; }
       .p4m-button.white:hover i {
-        color: #37a553; }
+        color: #37a553 !important; }
         .p4m-button.white:hover i span {
-          border-color: #fff;
-          color: #fff;
-          background-color: #37a553; }
+          border-color: #fff !important;
+          color: #fff !important;
+          background-color: #37a553 !important; }
 
 paper-input paper-input-container .floated-label-placeholder {
   font-family: 'Lato', sans-serif !important;
