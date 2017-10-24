@@ -1210,14 +1210,16 @@
                 async.series(
                     [
                         function _postAddress(callback) {
+                            // send the new address details to P4M
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
                                 address = result.address;
-                                if (result.isBillingAddr || !self.consumerData.billingAddressId) {
+                                // if this is the first address it will be set as the billing and delivery addresses
+                                if (result.isBillingAddr && (!self.consumerData.billingAddressId || self.consumerData.billingAddressId !== address.id)) {
                                     self.set('consumerData.billingAddressId', address.id);
                                     self.set('cartData.billingAddressId', address.id);
                                 }
-                                if (result.isPrefDeliveryAddr || !self.consumerData.prefDeliveryAddressId) {
+                                if (result.isPrefDeliveryAddr && (!self.consumerData.prefDeliveryAddressId || self.consumerData.prefDeliveryAddressId !== address.id)) {
                                     self.set('consumerData.prefDeliveryAddressId', address.id);
                                 }
                                 if (!existingAddress) {
@@ -1233,11 +1235,16 @@
                             });
                         },
                         function _selectAddress(callback) {
-                            var sendToGfs = result.address.addressType === 'Address';
-                            self.selectDeliveryAddress(result.address.id, sendToGfs, function(err, data) {
-                                //  result = data;
-                                callback(err);
-                            });
+                            // check if the selected address has changed
+                            if (!self.cartData.addressId || self.cartData.addressId != address.id) {
+                                var sendToGfs = result.address.addressType === 'Address';
+                                self.selectDeliveryAddress(result.address.id, sendToGfs, function (err, data) {
+                                    //  result = data;
+                                    callback(err);
+                                });
+                            }
+                            else
+                                callback(null);
                         }
                     ],
                     function(err) {
@@ -1397,6 +1404,7 @@
             },
 
             updAddressById: function (address) {
+                return;
                 if (!this.consumerData) {
                     return null;
                 }
