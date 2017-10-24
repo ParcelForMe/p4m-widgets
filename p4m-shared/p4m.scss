@@ -792,6 +792,9 @@ a, a:visited, .link i {
   }
 
 }
+.link {
+  cursor: pointer;
+}
 i.link {
   color: $grey-hb;
   cursor: pointer;

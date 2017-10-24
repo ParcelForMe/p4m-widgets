@@ -706,6 +706,9 @@ a, a:visited, .link i {
   a.icon, a:visited.icon, .link i.icon {
     text-decoration: none; }
 
+.link {
+  cursor: pointer; }
+
 i.link {
   color: #aaa;
   cursor: pointer;
