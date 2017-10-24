@@ -1572,6 +1572,9 @@ p4m-card {
 
 // Old form code
 div.address-form { 
+  width: 100%;
+  min-width: 280px;
+  max-width: 480px;
 } 
 
 p4m-checkout {
@@ -4143,7 +4146,7 @@ gfs-calendar {
 // Addresses
 #p4m-address-list, p4m-address-list {
     > #container.p4m-address-list {
-        height: 327px;
+        height: 423px;
         display: block;
     }
     .address-section {
@@ -4272,9 +4275,11 @@ p4m-address {
     .card-body.card-edit {
 	    display: flex;
 	    flex-direction: column;
-      height: 365px;
+      height: 423px;
 	    box-sizing: border-box;
 	    padding: 15px 15px 8px 15px;
+      justify-content: center;
+      align-items: flex-start;
     }
     .buttons {
         display: flex;

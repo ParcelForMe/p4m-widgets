@@ -1298,6 +1298,11 @@ p4m-card {
       outline: none;
       border-color: #37a553; }
 
+div.address-form {
+  width: 100%;
+  min-width: 280px;
+  max-width: 480px; }
+
 p4m-checkout :not([paper-input]) input[type='text'], p4m-checkout :not([paper-input]) input[type='password'], p4m-checkout :not([paper-input]) input[type='date'], p4m-checkout :not([paper-input]) input[type='datetime'], p4m-checkout :not([paper-input]) input[type='datetime-local'], p4m-checkout :not([paper-input]) input[type='month'], p4m-checkout :not([paper-input]) input[type='week'], p4m-checkout :not([paper-input]) input[type='email'], p4m-checkout :not([paper-input]) input[type='number'], p4m-checkout :not([paper-input]) input[type='search'], p4m-checkout :not([paper-input]) input[type='tel'], p4m-checkout :not([paper-input]) input[type='time'], p4m-checkout :not([paper-input]) input[type='url'], p4m-checkout :not([paper-input]) input[type='color'], p4m-checkout :not([paper-input]) textarea, p4m-checkout :not([paper-input]) vaadin-combo-box-light input {
   border: none;
   display: block;
@@ -3223,7 +3228,7 @@ gfs-calendar .gfs-calendar {
       text-transform: uppercase; }
 
 #p4m-address-list > #container.p4m-address-list, p4m-address-list > #container.p4m-address-list {
-  height: 327px;
+  height: 423px;
   display: block; }
 
 #p4m-address-list .address-section, p4m-address-list .address-section {
@@ -3329,9 +3334,11 @@ p4m-address .card-body {
 p4m-address .card-body.card-edit {
   display: flex;
   flex-direction: column;
-  height: 365px;
+  height: 423px;
   box-sizing: border-box;
-  padding: 15px 15px 8px 15px; }
+  padding: 15px 15px 8px 15px;
+  justify-content: center;
+  align-items: flex-start; }
 
 p4m-address .buttons {
   display: flex;
