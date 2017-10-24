@@ -46,9 +46,9 @@
                         <div class="card-body card-edit">
                             <template is="dom-if" if="{{showCancel}}">
                                 <div class="btn-container">
-                                    <a class="p4m-button save shadow" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
+                                    <a class="p4m-button save shadow link" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
                                     <div class="cancel-addr">
-                                        <span>Cancel</span> <a href="#" on-tap="cancel"><i class="p4micon p4micon-delete-circle"></i></a>
+                                        <span>Cancel</span> <a on-tap="cancel" class="icon link"><i class="p4micon p4micon-delete-circle"></i></a>
                                     </div>
                                 </div>
                             </template>
@@ -148,15 +148,17 @@
             justify-content: flex-end;
             align-items: center;
             z-index: 10;
+            padding: 10px;
+            height: 48px;
+            box-sizing: border-box;
         }
         .p4m-button.save {
             height: 32px;
-            margin: 7px 0;
+            margin: 0;
             font-weight: 400;
         }
         .cancel-addr {
             margin-left: 10px;
-            margin-right: 28px;
             display: flex;
             align-items: center;
         }
