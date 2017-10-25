@@ -117,7 +117,7 @@
             };
 
             this.toGeoBox = function() {
-                return [[this.topLeft.y, this.topLeft.x], [this.bottomRight.y, this.bottomRight.x]];
+                return [[this.topLeft.x, this.topLeft.y], [this.bottomRight.x, this.bottomRight.y]];
             };
           
             this.containsPoint = function(point) {
@@ -151,10 +151,10 @@
                 var lngRad = lng * (Math.PI / 180);
                 var dx = radius * cos(angle45); // the change in long in metres
                 var dy = radius * sin(angle45); // change in lat in metres 
-                var delta_longitude = dx/(111320*cos(latRad)); // allows for curvature
-                var delta_latitude = dy/110540;
-                var cnrLng = lng + delta_longitude;
-                var cnrLat = lat + delta_latitude;
+                var dlng = dx/(111320*cos(latRad)); // allows for curvature
+                var dlat = dy/110540;
+                var cnrLng = lng + dlng;
+                var cnrLat = lat + dlat;
             },
 
             getUncoveredRectangles: function(viewPort) {
