@@ -2,7 +2,7 @@
 
 <dom-module id="address-lookup-field">
     <template>
-        <paper-input label="Search for an address" name="alfField" id="alfField" type="text" id="street1" value="" required>
+        <paper-input label="Search for an address" name="alfField" id="alfField" type="text" value="" required>
         <label>Search for an address</label>
     </template>
     <style>
@@ -42,8 +42,9 @@
 
             initAutoComplete() {
                 // Create the autocomplete object, restricting the search to geographical location types.
+                var input = this.$.alfField.querySelector('input');
                 this.autoComplete = new google.maps.places.Autocomplete(
-                    this.$.alfField,
+                    input,
                     {
                         types: ['geocode']
                     }
