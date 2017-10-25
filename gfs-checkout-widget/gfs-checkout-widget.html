@@ -829,18 +829,17 @@
                     var now = new Date();
                     var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
 
-                    //"droppointSettings": {
-                    //    "maxRadiusMeters": 5000,
-                    //    "maxResults": 100,
-                    //    "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
-                    //},
-
                     this._postData = {
                         "request":
                         {
                             "dateRange": {
                                 "dateFrom": this._makeDateStr(now),
                                 "dateTo": this._makeDateStr(maxDate)
+                            },
+                            "droppointSettings": {
+                                "maxRadiusMeters": 5000,
+                                "maxResults": 100,
+                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
                             },
                             "order": {
                                 "transit": {
@@ -881,8 +880,6 @@
                         location.Postcode = selection.address.Postcode;
                         location.town = selection.address.town || "";
                         location.addressLineCollection = selection.address.addressLineCollection;
-                        //location.lat = selection.address.lat;
-                        //location.lng = selection.address.lng;
                     }
 
                     
@@ -894,6 +891,7 @@
                     if (selection && selection.deliveryMethodId) {
                         //Post, then try to re-select the chosen method
                         this.postGfsData(function (err) {
+                            this.initialised = true;
                             if (!err) {
                                 if (selection.dropPointId) {
                                     self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
@@ -924,6 +922,7 @@
                         //Set delivery address first. This will then trigger auto-setting of delivery method
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
                             self.postGfsData(function(err) {
+                                this.initialised = true;
                                 if (err) {
                                     console.error("postGfsData() returned", err);
                                     finalCallback(err);
@@ -933,11 +932,9 @@
                                     self.autoSelectDeliveryMethod(finalCallback);
                                 }
                             });
-                            //finalCallback(err);
                         });
                     }                 
                 }
-                this.initialised = true;
             },
 
             //TODO
