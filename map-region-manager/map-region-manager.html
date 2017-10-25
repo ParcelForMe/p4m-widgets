@@ -4,137 +4,125 @@
 
     <script>
         function Rectangle(params) {
-          if (params.constructor === Array) {
-            //Assume geoBox
+            if (params.constructor === Array) {
+                // viewport from google maps: SW -> NE
+                // lat is y, lng is x
+                // set top left, width, height
+                this.x = params[0][0];
+                this.y = params[1][1];
+                this.width = params[1][0] - params[0][0];
+                this.height = params[1][1] - params[0][1];
+            }
+            else {                   
+                this.x = params.x;
+                this.y = params.y;
+                this.width = params.width;
+                this.height = params.height;
+            }
 
-                var corner1 = {
-                    x: params[0][1],
-                    y: params[0][0]
-                };
-                var corner2= {
-                    x: params[1][1],
-                    y: params[1][0]
-                };
-                var minX = Math.min(corner1.x, corner2.x);
-                var minY = Math.min(corner1.y, corner2.y);
-                var maxX = Math.max(corner1.x, corner2.x);
-                var maxY = Math.max(corner1.y, corner2.y);
-                this.x = minX;
-                this.y = minY;
-                this.width = maxX - minX;
-                this.height = maxY - minY;               
-          }
+            this.top = this.y;
+            this.left = this.x;
+            this.bottom = this.y - this.height;
+            this.right = this.x + this.width;
+            this.topLeft = {x: this.x, y: this.y};
+            this.topRight = {x: this.x + this.width, y: this.y};
+            this.bottomRight = {x: this.x + this.width, y: this.y - this.height};
+            this.bottomLeft = {x: this.x, y: this.y - this.height};
+            this.points = [this.topLeft, this.topRight, this.bottomRight, this.bottomLeft];
 
-          else {                   
-              this.x = params.x;
-              this.y = params.y;
-              this.width = params.width;
-              this.height = params.height;
-          }
+            this.equals = function(otherRect) {
+                return (this.x == otherRect.x && this.y == otherRect.y && this.width == otherRect.width && this.height == otherRect.height);
+            }
 
-          this.top = this.y;
-          this.left = this.x;
-          this.bottom = this.y + this.height;
-          this.right = this.x + this.width;
-          this.topLeft = {x: this.x, y: this.y};
-          this.topRight = {x: this.x+this.width, y: this.y};
-          this.bottomRight = {x: this.x+this.width, y: this.y+this.height};
-          this.bottomLeft = {x: this.x, y: this.y+this.height};
-          this.points = [this.topLeft, this.topRight, this.bottomRight, this.bottomLeft];
-
-          this.equals = function(otherRect) {
-            return (this.x == otherRect.x && this.y == otherRect.y && this.width == otherRect.width && this.height == otherRect.height);
-          }
-          this.intersect = function(otherRect) {
-          
-            var maxLeftX = Math.max(this.x, otherRect.x); 
-            var minRightX = Math.min(this.right, otherRect.right); 
-            var maxBottomY = Math.max(this.y, otherRect.y); 
-            var minTopY = Math.min(this.bottom, otherRect.bottom);
+            this.intersect = function (otherRect) {
+                // x = longitude which gets greater towards the right
+                var left = Math.max(this.x, otherRect.x); 
+                var right = Math.min(this.right, otherRect.right);
+                // y = latitude which gets greater towards the top
+                var top = Math.min(this.y, otherRect.y); 
+                var bottom = Math.max(this.bottom, otherRect.bottom);
             
-            if ((minRightX > maxLeftX) && (minTopY > maxBottomY)) {
-                var params = {
-                "x": maxLeftX,
-                "y": maxBottomY,
-                "width": minRightX-maxLeftX,
-                "height": minTopY-maxBottomY 
-              };
+                if ((right > left) && (top > bottom)) {
+                    var params = {
+                        "x": left,
+                        "y": top,
+                        "width": right - left,
+                        "height": top - bottom 
+                    };
               
-              if (params.height === 0 || params.width === 0) {
-                return {};
-              }
+                    if (params.height === 0 || params.width === 0) {
+                        return {};
+                    }
               
-              var result = {
-                rectangle: new Rectangle(params),
-                sharedPoints: [],
-                containedPoints: [],
-                touchingPoints: [],
-                intersectingPoints: []
-              };
+                    var result = {
+                        rectangle: new Rectangle(params),
+                        sharedPoints: [],
+                        containedPoints: [],
+                        touchingPoints: [],
+                        intersectingPoints: []
+                    };
               
-              //To find intersection points, find points of intersecting rectangle where one and only one dimension matches with a point on the original
-              //For each point on intersecting rectangle,
-              for (var i=0; i<4; i++) {
-                var theirPoint = result.rectangle.points[i];
+                    //To find intersection points, find points of intersecting rectangle where one and only one dimension matches with a point on the original
+                    //For each point on intersecting rectangle,
+                    for (var i = 0; i < 4; i++) {
+                        var theirPoint = result.rectangle.points[i];
                 
-                //See if it is invalid (i.e. shares both or no co-ords with one on the original)
-                if (this.hasPoint(theirPoint)) {
-                  result.sharedPoints.push(theirPoint);
-                }
-                else if (this.containsPoint(theirPoint)) {
-                  result.containedPoints.push(theirPoint);
+                        //See if it is invalid (i.e. shares both or no co-ords with one on the original)
+                        if (this.hasPoint(theirPoint)) {
+                            result.sharedPoints.push(theirPoint);
+                        }
+                        else if (this.containsPoint(theirPoint)) {
+                            result.containedPoints.push(theirPoint);
+                        }
+                        else {
+                            var intersectPoint = theirPoint;
+                            intersectPoint.intersectType = {
+                                'me': this.getPointIntersectType(intersectPoint),
+                                'other': otherRect.getPointIntersectType(intersectPoint)
+                            };
+                            result.intersectingPoints.push(intersectPoint);
+                            if (this.isEdgePoint(intersectPoint)) {
+                                result.touchingPoints.push(intersectPoint);
+                            }
+                        }
+                    }
+                    return result;
                 }
                 else {
-                  var intersectPoint = theirPoint;
-                  intersectPoint.intersectType = {
-                    'me': this.getPointIntersectType(intersectPoint),
-                    'other': otherRect.getPointIntersectType(intersectPoint)
-                  };
-                  result.intersectingPoints.push(intersectPoint);
-                  if (this.isEdgePoint(intersectPoint)) {
-                    result.touchingPoints.push(intersectPoint);
-                  }
+                    return {}
+                } 
+            }
+          
+            this.hasPoint = function(point) {
+                return this.points.filter(function(p){ return p.x == point.x && p.y == point.y }).length > 0;
+            }
+          
+            this.isEdgePoint = function(point) {
+                return this.points.filter(function(p) { return p.x == point.x || p.y == point.y}).length > 0;
+            }
+          
+            this.getPointIntersectType = function(point) {
+                if (point.x === this.left) {
+                    return 'left';
                 }
-              }
+                else if (point.x === this.right) {
+                    return 'right';
+                }
+                else if (point.y === this.top) {
+                    return 'top';
+                }
+                else {
+                    return 'bottom';
+                }
+            };
 
-              return result;
-            }
-            else {
-              return {}
-            } 
-          }
-          
-          
-          this.hasPoint = function(point) {
-            return this.points.filter(function(p){ return p.x == point.x && p.y == point.y }).length > 0;
-          }
-          
-          this.isEdgePoint = function(point) {
-            return this.points.filter(function(p) { return p.x == point.x || p.y == point.y}).length > 0;
-          }
-          
-          this.getPointIntersectType = function(point) {
-            if (point.x === this.left) {
-              return 'left';
-            }
-            else if (point.x === this.right) {
-              return 'right';
-            }
-            else if (point.y === this.top) {
-              return 'top';
-            }
-            else {
-              return 'bottom';
-            }
-          };
-
-          this.toGeoBox = function() {
+            this.toGeoBox = function() {
                 return [[this.topLeft.y, this.topLeft.x], [this.bottomRight.y, this.bottomRight.x]];
-          };
+            };
           
-          this.containsPoint = function(point) {
-            return (point.x > this.left) && (point.x < this.right) &&  (point.y > this.top) && (point.y < this.bottom);
-          };
+            this.containsPoint = function(point) {
+                return (point.x > this.left) && (point.x < this.right) &&  (point.y > this.top) && (point.y < this.bottom);
+            };
         };
 
         Polymer({
@@ -152,6 +140,21 @@
 
             addRegion: function(geoBox) {
                 this.coveredRectangles.push(new Rectangle(geoBox));
+            },
+
+            largestSqrInCircle: function(lat, lng, radius) {
+                // used when DPs are capped at maximum count and therefore there could
+                // be more DPs in the searched for area. Our safest covered area is therefore
+                // the largest square that fits within the radius of the furthest DP from the center
+                const angle45 = 45.0 * (Math.PI / 180); // 45 degrees as radians
+                var latRad = lat * (Math.PI / 180);
+                var lngRad = lng * (Math.PI / 180);
+                var dx = radius * cos(angle45); // the change in long in metres
+                var dy = radius * sin(angle45); // change in lat in metres 
+                var delta_longitude = dx/(111320*cos(latRad)); // allows for curvature
+                var delta_latitude = dy/110540;
+                var cnrLng = lng + delta_longitude;
+                var cnrLat = lat + delta_latitude;
             },
 
             getUncoveredRectangles: function(viewPort) {
