@@ -1574,11 +1574,6 @@ p4m-card {
 // Forms
 
 // Old form code
-div.address-form { 
-  width: 100%;
-  min-width: 280px;
-  max-width: 480px;
-} 
 
 p4m-checkout {
   :not([paper-input]) {
@@ -2131,7 +2126,9 @@ paper-input paper-input-container .floated-label-placeholder {
   font-family: 'Lato', sans-serif !important;
   line-height: 16px !important;
   color: $p4m-green;
+  height: 12px;
 }
+
 
 
 .toggle-button {
@@ -2744,6 +2741,7 @@ p4m-register {
   .buttons {
     margin: 20px 0 0 0 !important;
     padding: 0 !important;
+    align-items: center;
     > div {
       height: 44px;
       margin: 0 9px;
@@ -3032,33 +3030,31 @@ p4m-checkout {
         padding: 0 0;
     }
 
-    paper-dropdown-menu {
-    	min-width: 100%;
-    	iron-dropdown {
-    	}
-    	paper-input-container {
-    		padding: 0 !important;
-    		height: 28px;
-    		// margin-top: -20px;
-    		.floated-label-placeholder, .label-is-floating label {
-				display: none;
-    		}
-    		input, label {
-    			line-height: 28px !important;
-    			height: 28px !important;
-    			font-size: 14px !important;
-    			font-family: 'Lato', sans-serif;
-    		}
-    	}
-    }
-
     #mapTools {
     	height: 48px;
     	display: flex;
     	align-items: center;
-      background: #f8f8f8;
+      background: #fff;
       border-top: 1px solid #fff;
       box-sizing: border-box;
+      paper-dropdown-menu, address-lookup-field {
+        width: 100%;
+        paper-input {
+          width: 100%;
+        }
+      }
+      paper-input {
+        paper-input-container {
+              padding: 0 0;
+        }
+      }
+      paper-input-container .input-content.label-is-floating.paper-input-container  label, paper-input-container .input-content.label-is-floating.paper-input-container  .paper-input-label {
+          -webkit-transform: translateY(-60%) scale(0.75);
+          transform: translateY(-60%) scale(0.75);
+      }
+      paper-input-container .focused-line.paper-input-container {
+            border-color: #37a553;
+      }
     }
     
 
@@ -3287,73 +3283,20 @@ p4m-checkout {
     .collection-points, .location-points, .search-postcode-wrap {
     	width: 26%;
     	margin: 0 1%;
+      flex: 1;
+      display: flex;
     }
     .addressTitle {
 	   	display: flex;
 	    align-items: center;
     }
-    address-lookup-field {
-      width: 100%;
-      position: relative;
-      display: flex;
-      height: 43px;
-      align-items: flex-end;
-      flex-direction: column;
-      &:before {
-        content: "\e909";
-        font-family: 'p4m' !important;
-        speak: none;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        line-height: 1;
-        font-size: 18px;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
-        align-items: center;
-        display: flex;
-        width: 32px;
-        justify-content: center;
-        color: #aaa;
-        z-index: 2;
-        pointer-events: none;
-      }
-      input[type='text'] {
-        width: 50%;
-        background: rgba(55, 165, 83, .08);
-        // position: absolute !important;
-        // bottom: 0 !important;
-        // top: initial;
-        &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-          color: #acacac;
-        }
-        &::-moz-placeholder { /* Firefox 19+ */
-          color: #acacac;
-        }
-        &:-ms-input-placeholder { /* IE 10+ */
-          color: #acacac;
-        }
-      }
-      label {
-        // margin-top: 0 !important;
-        // margin-bottom: 0 !important;
-        position: absolute;
-        z-index: 1;
-        width: 100%;
-        pointer-events: none;
-      }
-    }
+    
     paper-menu-button #contentWrapper {
 		.dropdown-content {
 			// // min-width: calc(18vw - 32px);
 			// min-width: 26%;
 			// width: 26%;
-            max-height: 50vh !important;
+      max-height: 50vh !important;
 		}
 	}
 	gfs-location-button {
@@ -3655,20 +3598,22 @@ p4m-checkout {
   		position: absolute;
   		right: 4px;
   		left: initial;
-  		top: 6px;
+  		top: initial;
+      bottom: 2px;
   		color: #ccc;
-      background: rgb(255,255,255);
-      box-shadow: 0 0 3px 3px rgb(255,255,255);
+      // background: rgb(255,255,255);
+      // box-shadow: 0 0 3px 3px rgb(255,255,255);
       width: 21px !important;
       height: 21px !important;
+      cursor: pointer;
       iron-icon {
         width: 21px !important;
         height: 21px !important;
       }
     } 
     paper-input iron-icon {
-      background: rgba(255,255,255,1);
-      box-shadow: 0 0 3px 3px rgb(255,255,255);
+      // background: rgba(255,255,255,1);
+      // box-shadow: 0 0 3px 3px rgb(255,255,255);
       width: 21px !important;
       height: 21px !important;
     }            
@@ -4214,19 +4159,19 @@ p4m-address {
     	}
     }
     .p4m-button {
-		height: 36px;
-		background-color: #37a553;
-		color: #fff;
-		border-radius: 20px;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		text-decoration: none;
-		justify-content: center;
-		padding-left: 12px;
-		padding-right: 12px;
-		width: auto;
-		min-width: initial;
+  		height: 36px;
+  		background-color: #37a553;
+  		color: #fff;
+  		border-radius: 20px;
+  		padding: 0;
+  		display: flex;
+  		align-items: center;
+  		text-decoration: none;
+  		justify-content: center;
+  		padding-left: 12px;
+  		padding-right: 12px;
+  		width: auto;
+  		min-width: initial;
         i {
         	color: $white;
         	font-size: 18px;
@@ -4284,6 +4229,11 @@ p4m-address {
 	    padding: 15px 15px 8px 15px;
       justify-content: center;
       align-items: flex-start;
+      .address-form {
+        min-width: 280px;
+        width: 100%;
+        max-width: 480px;
+      }
     }
     .buttons {
         display: flex;
@@ -4292,6 +4242,92 @@ p4m-address {
         padding: 4px;
     }
     #actions {
+    }
+    paper-dropdown-menu {
+      min-width: 100%;
+      iron-dropdown {
+      }
+      paper-input-container {
+        padding: 0 !important;
+        height: 28px;
+        // margin-top: -20px;
+        .floated-label-placeholder, .label-is-floating label {
+        // display: none;
+        }
+        input, label {
+          line-height: 28px !important;
+          height: 28px !important;
+          font-size: 14px !important;
+          font-family: 'Lato', sans-serif;
+        }
+      }
+    }
+    address-lookup-field {
+      display: flex;
+      height: 48px;
+      align-items: flex-end;
+      width: 100%;
+      position: relative;
+      display: flex;
+      // height: 43px;
+      align-items: flex-end;
+      flex-direction: column;
+      &:before {
+        content: "\e909";
+        font-family: 'p4m' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        font-size: 18px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        align-items: center;
+        display: flex;
+        width: 32px;
+        justify-content: center;
+        color: #aaa;
+        z-index: 2;
+        pointer-events: none;
+      }
+      input[type='text'] {
+        width: 50%;
+        background: rgba(55, 165, 83, .08);
+        // position: absolute !important;
+        // bottom: 0 !important;
+        // top: initial;
+        &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+          color: #acacac;
+        }
+        &::-moz-placeholder { /* Firefox 19+ */
+          color: #acacac;
+        }
+        &:-ms-input-placeholder { /* IE 10+ */
+          color: #acacac;
+        }
+      }
+      label {
+        // margin-top: 0 !important;
+        // margin-bottom: 0 !important;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        pointer-events: none;
+      }
+      paper-input {
+        width: 100%;
+      }
+    }
+    .address-form {
+      address-lookup-field {
+        height: 39px;
+      }
     }
 }
 
