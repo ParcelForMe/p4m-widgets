@@ -927,69 +927,68 @@
                 if (!callback) {
                     throw "updateShippingService(): No callback";
                 }
-                //if (this.updatingShipping) {
-                if (false) {
-                    callback(null);
+                this.updatingShipping = true;
+                //If nothing has changed, exit
+                if (this.currentService.shipping === data.shipping &&
+                    this.currentService.collectionPoint === data.collectionPoint &&
+                    this.currentService.service === data.service &&
+                    this.currentService.serviceId === data.serviceId &&
+                    this.currentService.expDeliveryDate === data.expDeliveryDate) {
+                    console.warn("updateShippingService(): Nothing has changed")
+                    this.updatingShipping = false;
+                    callback(null);                       
                 }
                 else {
-                    this.updatingShipping = true;
-                    //If nothing has changed, exit
-                    if (this.currentService.shipping === data.shipping &&
-                        this.currentService.collectionPoint === data.collectionPoint &&
-                        this.currentService.service === data.service &&
-                        this.currentService.serviceId === data.serviceId &&
-                        this.currentService.expDeliveryDate === data.expDeliveryDate) {
-                        console.warn("updateShippingService(): Nothing has changed")
-                        this.updatingShipping = false;
-                        callback(null);                       
-                    }
-                    else {
-                        var addr = this.consumerData.addresses.find(a => a.id === this.cartData.addressId);
-                        var shippingDetails = { 'service': data.service, 'amount': data.shipping, 'dueDate': data.expDeliveryDate, 'address': addr };
-                        // got new shipping details so we need to get updated tax from the host
-                        this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
-                            if (err) {
-                                console.error("localApi updShippingService error: ", err);
-                                callback(err);
-                            }
-                            else {
-                                this.currentService = data;
-                                self.set('cartData.carrier', data.carrier);
-                                self.set('cartData.shippingAmt', data.shipping);
-                                self.set('cartData.serviceName', data.service);
-                                self.set('cartData.serviceId', data.serviceId);
-                                self.set('cartData.dropPointId', data.collectionPoint);
-                                self.set('cartData.expDeliveryDate', data.expDeliveryDate);
-                                self.set('cartData.tax', cartTotals.tax || 0);
-                                self.set('cartData.total', cartTotals.total || 0);
-                                if (data.collectionPoint) {
-                                    self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, data.companyName, function (err) {
-                                        self.updateP4mCart(function (err) {
-                                            self.updatingShipping = false;
-                                            callback(err);
-                                        });
-                                    });
-                                }
-                                else if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
-                                    console.log("update shipping addr: ", addr);
-                                    self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
-                                        self.updateP4mCart(function (err) {
-                                            self.updatingShipping = false;
-                                            callback(err);
-                                        })
-                                    });
-                                }
-                                else {
-                                    // something has changed on the cart so we need to update it
-                                    console.log("updating cart because service or address has changed");
+                    self.toggleLoading(true);
+                    var addr = this.consumerData.addresses.find(a => a.id === this.cartData.addressId);
+                    var shippingDetails = { 'service': data.service, 'amount': data.shipping, 'dueDate': data.expDeliveryDate, 'address': addr };
+                    // got new shipping details so we need to get updated tax from the host
+                    this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
+                        if (err) {
+                            console.error("localApi updShippingService error: ", err);
+                            self.toggleLoading(false);
+                            callback(err);
+                        }
+                        else {
+                            this.currentService = data;
+                            self.set('cartData.carrier', data.carrier);
+                            self.set('cartData.shippingAmt', data.shipping);
+                            self.set('cartData.serviceName', data.service);
+                            self.set('cartData.serviceId', data.serviceId);
+                            self.set('cartData.dropPointId', data.collectionPoint);
+                            self.set('cartData.expDeliveryDate', data.expDeliveryDate);
+                            self.set('cartData.tax', cartTotals.tax || 0);
+                            self.set('cartData.total', cartTotals.total || 0);
+                            if (data.collectionPoint) {
+                                self.selectCollectPoint(data.provider, data.providerId, data.collectionPoint, data.deliveryAddress, data.companyName, function (err) {
                                     self.updateP4mCart(function (err) {
                                         self.updatingShipping = false;
+                                        self.toggleLoading(false);
+                                        callback(err);
+                                    });
+                                });
+                            }
+                            else if (data.deliveryAddress.id && data.deliveryAddress.id !== self.cartData.addressId) {
+                                console.log("update shipping addr: ", addr);
+                                self.selectDeliveryAddress(data.deliveryAddress.id, false /*Not updating GFS*/, function (err) {
+                                    self.updateP4mCart(function (err) {
+                                        self.updatingShipping = false;
+                                        self.toggleLoading(false);
                                         callback(err);
                                     })
-                                }
+                                });
                             }
-                        });
-                    }
+                            else {
+                                // something has changed on the cart so we need to update it
+                                console.log("updating cart because service or address has changed");
+                                self.updateP4mCart(function (err) {
+                                    self.updatingShipping = false;
+                                    self.toggleLoading(false);
+                                    callback(err);
+                                })
+                            }
+                        }
+                    });
                 }
             },
 
@@ -1210,6 +1209,7 @@
                 async.series(
                     [
                         function _postAddress(callback) {
+                            self.toggleLoading(true);
                             // send the new address details to P4M
                             self.$.p4mCheckoutApi.call("postAddress", null, postData, function (err, data) {
                                 result = data;
@@ -1247,7 +1247,8 @@
                                 callback(null);
                         }
                     ],
-                    function(err) {
+                    function (err) {
+                        self.toggleLoading(false);
                         finalCallback(err, result);
                     }
                 )
