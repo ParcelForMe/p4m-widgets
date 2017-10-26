@@ -648,7 +648,8 @@
 						dayCount++;
 						if (dayCount <= 7) {
 
-							collectionSlot.collectionDateTime = self._getUtcTime(new Date(collectionSlot.collectionDate));
+							//collectionSlot.collectionDateTime = self._getUtcTime(new Date(collectionSlot.collectionDate));
+							collectionSlot.collectionDateTime = new Date(collectionSlot.collectionDate);
 							collectionSlot.day = DOW_NAMES[collectionSlot.collectionDateTime.getDay()];
 
 							collectionSlot.timeSlots.forEach(function (timeSlot) {
