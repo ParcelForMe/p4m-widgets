@@ -1145,41 +1145,24 @@
                     //return false;
                 }
                 else {
+                    self.set('cartData.addressId', addressId); //This allows the address UI to update
+                    self.notifyPath('cartData.addressId');
                     //Send to GFS Checkout and await shipping event
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
-
-                        if (!this.$.gfsCheckoutWidget.initialised) {
-                            this._updateGfs(function(err) {
-
-                                self.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
-                                    if (!err) {
-                                        self._gfsCurrentAddrId = addressId;
-                                        self.set('cartData.addressId', addressId); //This allows the address UI to update
-                                        self.notifyPath('cartData.addressId');
-                                        callback(null, address);
-                                    }
-                                });
-                            })
-                        }
-                        else {
-                            this.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
-                                self._gfsCurrentAddrId = addressId;
-                                self.set('cartData.addressId', addressId); //This allows the address UI to update
-                                self.notifyPath('cartData.addressId');
-                                if (callback) {
+                        self._gfsCurrentAddrId = addressId;
+                        this._updateGfs(function (err) {
+                            self.$.gfsCheckoutWidget.selectFavAddress(address, function (err) {
+                                if (!err) {
                                     callback(null, address);
                                 }
                             });
-                        }
+                        });
                     }
                     else {
-                        this.set('cartData.addressId', addressId); //This allows the address UI to update
-                        this.notifyPath('cartData.addressId');
                         callback(null, address);
                     }
                 }
-
             },
 
             onAddAddress: function (e) {

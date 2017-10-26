@@ -663,7 +663,13 @@
                         }
                         else {
                             this.set('_data', JSON.parse(data));
-                            this.set('_dropPoints', this._data.droppoints);
+                            if (!this._dropPoints) {
+                                this.set('_dropPoints', this._data.droppoints);
+                            }
+                            else {
+                                var newDPs = this._data.droppoints.sort(this.sortByDistance);
+                                this._dropPoints = this._dropPoints.concat(newDPs);
+                            }
                             // record the region queried
                             /* "droppointSettings": {
                                 "maxRadiusMeters": 5000,
