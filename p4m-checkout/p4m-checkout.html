@@ -652,7 +652,8 @@
                     addressPreferences: addrPrefs,
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.preferSoonestDelivery
-                    }
+                    },
+                    mapCenter: { 'lat': currAddr.latitude, 'lng': currAddr.longitude }
                 };
 
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options

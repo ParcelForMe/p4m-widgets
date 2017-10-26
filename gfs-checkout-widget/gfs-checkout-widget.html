@@ -548,17 +548,10 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
-                /*
-                if (this.gfsData) {
-                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                    if (this.autoLoad) {
-                        this.postGfsData(function () { });
-                    }
-                }  */             
             },
 
-            postGfsData: function (callback) {
-                this._postReq(this._postData, callback);             
+            postGfsData: function (mapCenter, callback) {
+                this._postReq(mapCenter, this._postData, callback);             
             },
 
             _makeRequest: function (method, url, callback) {
@@ -623,7 +616,7 @@
                 };
             },
 
-            _postReq: function (data, callback) {
+            _postReq: function (mapCenter, data, callback) {
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
                 }
@@ -639,7 +632,7 @@
                             if (!data) {
                                 debugger;
                             }
-                            this._getReq(data, (function (err) {
+                            this._getReq(mapCenter, data, (function (err) {
                                 callback(err);
                             }).bind(this));
                         }
@@ -648,7 +641,7 @@
                 request.send(JSON.stringify(data));
             },
 
-            _getReq: function (resourceUrl, callback) {
+            _getReq: function (mapCenter, resourceUrl, callback) {
                 var self = this;
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
@@ -671,6 +664,13 @@
                         else {
                             this.set('_data', JSON.parse(data));
                             this.set('_dropPoints', this._data.droppoints);
+                            // record the region queried
+                            /* "droppointSettings": {
+                                "maxRadiusMeters": 5000,
+                                "maxResults": 100,
+                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+                            },*/
+                            this.$.regionManager.recordQuery(this.droppointSettings, mapCenter, this._data.droppoints);
                             this._processAllDroppoints();
                             this._requestDroppointList(this._favDropPoints, (function (err) {
                                 this._delayedInit.bind(self)();
@@ -796,7 +796,12 @@
                 })
             },
 
- 
+            droppointSettings: {
+                "maxRadiusMeters": 5000,
+                "maxResults": 100,
+                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+            },
+
             init: function (config, selection, finalCallback) {
                 var self = this;
                 this._suppliedSelection = selection;
@@ -836,11 +841,9 @@
                                 "dateFrom": this._makeDateStr(now),
                                 "dateTo": this._makeDateStr(maxDate)
                             },
-                            "droppointSettings": {
-                                "maxRadiusMeters": 5000,
-                                "maxResults": 100,
-                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
-                            },
+
+                            "droppointSettings": this.droppointSettings,
+
                             "order": {
                                 "transit": {
                                     "recipient": {
@@ -882,7 +885,6 @@
                         location.addressLineCollection = selection.address.addressLineCollection;
                     }
 
-                    
                     //==== Set fav address data
                     this.setFavDropPoints(this.config.favDropPoints); 
                     this.setFavAddresses(this.config.favAddresses);
@@ -890,7 +892,7 @@
                     //if everything has been preselected, preselect,
                     if (selection && selection.deliveryMethodId) {
                         //Post, then try to re-select the chosen method
-                        this.postGfsData(function (err) {
+                        this.postGfsData(config.mapCenter, function (err) {
                             this.initialised = true;
                             if (!err) {
                                 if (selection.dropPointId) {
@@ -921,7 +923,7 @@
                     else {
                         //Set delivery address first. This will then trigger auto-setting of delivery method
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
-                            self.postGfsData(function(err) {
+                            self.postGfsData(self.config.mapCenter, function(err) {
                                 this.initialised = true;
                                 if (err) {
                                     console.error("postGfsData() returned", err);
@@ -936,25 +938,6 @@
                     }                 
                 }
             },
-
-            //TODO
-            /*
-            applySelection: function(selection) {
-                
-                //    dropPointId
-                //    deliveryMethodId
-                //    addressId
-                //    deliveryDate
-               
-                if (selection.dropPointId) {
-                    this._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
-                }
-                else {
-                    this.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
-                }
-                
-            },*/
-
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
             //preferSoonest: true/false
