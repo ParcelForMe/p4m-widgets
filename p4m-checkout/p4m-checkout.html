@@ -667,7 +667,6 @@
                         address: p4mAddressToGfsAddress(addr) || null,
                         deliveryDate: new Date(self.cartData.expDeliveryDate)
                     }
-                    //selection = null;
                 }
                 this.toggleLoading(true);
                 this.$.gfsCheckoutWidget.init(gfsPostConfig, selection, function(err) {
