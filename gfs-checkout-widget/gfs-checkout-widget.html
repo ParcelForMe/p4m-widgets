@@ -587,7 +587,6 @@
                                     this.fire('noservice');
                                     console.error(httpRequest.responseText);
                                     //console.log("GFS error. Re-starting session.");    
-                                    //this.postGfsData(callback);                     
                                     //callback(httpRequest.status, httpRequest.responseText);
                                 }                                 
                             }
@@ -749,26 +748,6 @@
                 this._postData.request.order.value.value = value;
             },
 
-            //Put the address value into the GFS post data
-            //TODO: Rename
-            setGfsAddress: function (address, autoSelectDelivery, callback) {
-                if (typeof (callback) !== "function") {
-                    callback = function(){};
-                }
-                if (!address) {
-                    callback("No address");
-                }
-                else {
-                    //console.log('setGfsAddress(' + JSON.stringify(address) + ')');
-                    this._postData.request.order.transit.recipient.location = address;
-                    if (autoSelectDelivery) 
-                        this.autoSelectDeliveryMethod(callback);
-                    else
-                        callback(null);
-                }
-
-            },
-
             setFavDropPoints: function (droppointList) {
                 this._favDropPoints = droppointList;
                 this._processFavDroppoints();
@@ -778,13 +757,14 @@
                 this.set('_favAddresses', addressList);
             },
 
-            selectFavAddress: function (address, callback) {
+            /*selectFavAddress: function (address, callback) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
                 this._unselectDropPoint();
                 console.log(">>>Setting address", address);
                 this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
-                this.setGfsAddress(address, true, callback);
-            },
+                this._postData.request.order.transit.recipient.location = address;
+                this.autoSelectDeliveryMethod(callback);
+            },*/
 
 
             requestDropPointsByAddress: function (address, callback) {
@@ -1051,32 +1031,7 @@
 
                 runHandler(0);
 
-            },
-
-            _preselectForCalendar: function () {
-                //this.$.calendar.autoSelect();
-            },
-
-            //TODO: Change to use _originalShippingService.selected
-            _preselectForStandard: function () {
-                /*
-                //TODO This function needs to change
-                if (this.standardRates) {
-                    //this.set('_selectedDropPoint', null);
-                    this._unselectDropPoint();
-                    var preselectedService = this.standardRates[0];
-                    if (!preselectedService.selected) {
-                        preselectedService.selected = true;
-                    }                   
-                    
-                    this.setDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
-                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    this.$.standardRatesTemplate.render();
-                    //this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
-                    //this.fire('preselectedservice', this.selectedServiceDetails);
-                }*/
-
-            },
+            },*/
 
             //Select a delivery service
             //TODO: Refactor?
@@ -1139,7 +1094,7 @@
                         //We need to unselected it and then auto-select a standard address
                         if (this._selectedDropPoint) {
                             this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
-                            this.autoSelectDeliveryAddress(newMethod); //This is a reference to the original delivery method object                           
+                            this._postData.request.order.transit.recipient.location = this.config.defaultAddress;
                         }
                         else {
                             //We had a standard address selected already, apparently. 
@@ -1930,32 +1885,6 @@
                     console.error("Browser does not support geolocation");
 
                 }
-            },
-
-            _setGfsLocationToHere: function() {
-                /*var self = this;
-                this._locateMe(function(err, latlng) {
-                    if (err) {
-                        //zzzz
-                    }
-                    else {
-                        //TODO: Reverse geolocate latlng to address, then pass the country and postcode
-                        var geocoder = new google.maps.Geocoder;
-                         geocoder.geocode({'location': latlng}, function(results, status) {
-                            console.log(result);
-                            //Now extract the post code and country, set it the GFS address, and post it to GFS
-                
-                            self.setGfsAddress({
-                                location: {
-                                    countryCode: "",
-                                    postCode: ""
-                                }
-                            });
-                           self.postGfsData();
-                        });
-
-                    }
-                });*/
             },
 
             setMapHome: function (location, label) {
