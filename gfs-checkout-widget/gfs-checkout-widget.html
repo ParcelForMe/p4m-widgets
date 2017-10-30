@@ -147,7 +147,7 @@
                         <h2>Sorry</h2>
                         <p>There are no drop points available in your region</p>
                         <paper-item >
-                            <gfs-location-button address-name="Current location" on-click="_setGfsLocationToHere" >Use my current location</gfs-location-button>
+                            <gfs-location-button address-name="Current location" on-click="_locateMe" >Use my current location</gfs-location-button>
                         </paper-item>
                         <div class="search-postcode-wrap">
                             <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
@@ -669,8 +669,8 @@
                                 var newDPs = this._data.droppoints.sort(this.sortByDistance);
                                 this._dropPoints = this._dropPoints.concat(newDPs);
                             }
-                            // record the region queried
-                            /* "droppointSettings": {
+                            /* record the region queried e.g.
+                            "droppointSettings": {
                                 "maxRadiusMeters": 5000,
                                 "maxResults": 100,
                                 "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
@@ -835,7 +835,7 @@
                                     "recipient": {
                                         "location": {
                                             "countryCode": {
-                                                "code":  config.countryCode,
+                                                "code": config.countryCode,
                                                 "encoding": "ccISO_3166_1_Alpha2"
                                             },
                                             "postCode": config.postCode,
