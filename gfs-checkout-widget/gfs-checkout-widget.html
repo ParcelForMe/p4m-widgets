@@ -757,14 +757,13 @@
                 this.set('_favAddresses', addressList);
             },
 
-            /*selectFavAddress: function (address, callback) {
+            selectFavAddress: function (address, callback) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
                 this._unselectDropPoint();
-                console.log(">>>Setting address", address);
                 this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
                 this._postData.request.order.transit.recipient.location = address;
                 this.autoSelectDeliveryMethod(callback);
-            },*/
+            },
 
 
             requestDropPointsByAddress: function (address, callback) {
@@ -865,69 +864,106 @@
 
                     if (selection && selection.address) {
                         var location = this._postData.request.order.transit.recipient.location;
-                        location.CountryCode = selection.address.CountryCode;
-                        location.Postcode = selection.address.Postcode;
+                        location.countryCode = selection.address.countryCode;
+                        location.postCode = selection.address.postCode;
                         location.town = selection.address.town || "";
                         location.addressLineCollection = selection.address.addressLineCollection;
                     }
 
                     //==== Set fav address data
-                    this.setFavDropPoints(this.config.favDropPoints); 
+                    this.setFavDropPoints(this.config.favDropPoints);
                     this.setFavAddresses(this.config.favAddresses);
 
-                    //if everything has been preselected, preselect,
-                    if (selection && selection.deliveryMethodId) {
-                        //Post, then try to re-select the chosen method
-                        this.postGfsData(config.mapCenter, function (err) {
-                            this.initialised = true;
-                            if (!err) {
-                                if (selection.dropPointId) {
-                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
-                                }
-                                else {
-                                    var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
-                                    if (res)
-                                        finalCallback();
-                                    else {
-                                        // the methodId could not be found in the new methods list so auto select something
-                                        self.runDeliveryAddressPreferences(self.config.addressPreferences, self.config.defaultAddress, function (err) {
-                                            if (err) {
-                                                console.error("postGfsData() returned", err);
-                                                finalCallback(err);
-                                            }
-                                            else {
-                                                self.autoSelectDeliveryMethod(finalCallback);
-                                            }
-                                        });
-                                    }
-                                }
+                    // Post, then select address and method - these can be previously chosen if the cart already exists
+                    // or will be defaulted based on the consumer's preferences
+                    this.postGfsData(config.mapCenter, function (err) {
+                        if (err) {
+                            this.initialised = false;
+                            console.error("postGfsData() returned: ", err);
+                            finalCallback(err);
+                            return;
+                        }
+                        this.initialised = true;
+                        if (!selection)
+                            selection = self.getDefaultDelivery();
+                        if (selection.dropPointId) {
+                            // try to select the drop point
+                            self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
+                        }
+                        else {
+                            // try to select the physical address delivery method (e.g. std, international, day def, etc)
+                            var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                            if (!res) {
+                                // this will only fail if a service was pre-selected on an existing cart and no longer exists
+                                selection = self.getDefaultDelivery();
+                                res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                             }
-                            else finalCallback(err);
-                        });
-                    }
-                    //Otherwise auto-select address and delivery method according to preferences (if any)
-                    else {
-                        //Set delivery address first. This will then trigger auto-setting of delivery method
-                        this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
-                            self.postGfsData(self.config.mapCenter, function(err) {
-                                this.initialised = true;
-                                if (err) {
-                                    console.error("postGfsData() returned", err);
-                                    finalCallback(err);
-                                }
-                                else
-                                {
-                                    self.autoSelectDeliveryMethod(finalCallback);
-                                }
-                            });
-                        });
-                    }                 
+                            if (res)
+                                finalCallback();
+                            else
+                                finalCallback("Could not select a delivery method");
+                        }
+                    });
                 }
+            },
+
+            //Select a delivery address based on the users preferences
+            getDefaultDelivery: function () {
+                // select a default address or droppoint during initial load, or if loading
+                // an existing cart and the address / DP is no longer available
+
+                // first use the preferred delivery address to initialise GFS and return local DPs
+                // if the consumer then prefers to use their own DPs see if one is in the list
+                // or if the consumer prefers to use the nearest DP then select that from the list
+                var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
+                var prefs = this.config.addressPreferences;
+                if (!prefs || prefs.constructor !== Array) 
+                    prefs = defaultPrefs;
+                var dropPointId = null;
+                var serviceId = this.getDefaultServiceId();
+                if (prefs[0] !== 'useMyDeliveryAddress') {    // try to use a DP
+                    var dp;
+                    if (prefs[0] === 'useMyDropPoints' && this.config.favDropPoints && this.config.favDropPoints.length > 0) 
+                        dp = this._droppointById(this.config.favDropPoints[0].droppointId);
+                    if (!dp && this._dropPoints && this._dropPoints.length > 0) 
+                        dp = this._dropPoints[0];
+                    if (dp) {
+                        dropPointId = dp.droppointId;
+                        serviceId = dp.deliveries[0].service.id;
+                    }
+                    else
+                        dropPointId = null;
+                }
+                return {
+                    dropPointId: dropPointId,
+                    deliveryMethodId: serviceId,
+                    address: this.config.defaultAddress
+                }
+            },
+
+            getDefaultServiceId: function () {
+                // Choose the most preferred standard delivery
+                var serviceId;
+                if (this.standardRates.length) {
+                    serviceId = this.standardRates[0].id;
+                    if (this.config.deliveryPreferences) {
+                        var sortFunction = this._getDeliveryMethodSortFunction();
+                        if (this.config.deliveryPreferences.preferSoonest) {
+                            serviceId = this._data.dayDefinite[0].id;
+                            this.showPage_Calendar();
+                        }
+                        else {
+                            this.standardRates = this.standardRates.sort(sortFunction);
+                            serviceId = this.standardRates[0].id;
+                            this.showPage_Standard();
+                        }
+                    }
+                }
+                return serviceId;
             },
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
             //preferSoonest: true/false
-            //
             autoSelectDeliveryMethod: function (callback) {
                 //If the address chosen is a droppoint,
                 //   Get the delivery methods on the droppoint
@@ -950,7 +986,7 @@
                             this.showPage_Droppoints();
                         }
                         else if (this.config.deliveryPreferences.preferSoonest) {
-                            this.setDeliveryMethod(this._data.dayDefinite[0]);
+                            this.setDeliveryMethod(this._data.dayDefinite[0].id);
                             this.showPage_Calendar();
                         }
                         else {
@@ -973,21 +1009,7 @@
                 }
             },
 
-            //Assuming a delivery method has been chosen, choose a delivery address
-            autoSelectDeliveryAddress: function (serviceDetails) {
-                //If it's a standard delivery method, choose default fav address
-                //newSelectedServiceDetails
-                if (serviceDetails.serviceType.type == "dmStandard") {
-                    this.setGfsAddress(this.config.defaultAddress);
-                }
-                else {
-                    //If it's a droppoint delivery method....?
-                    //TODO
-                }
-            },
-
-            //Select a delivery address based on the users preferences
-            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
+            /*            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
 
                 //Select address based on preferences
                 var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
@@ -1747,20 +1769,14 @@
                     var dp = this._droppointById(droppointId)            
                     this.set("_selectedDropPoint", dp);
                     this.set("_selectedDropPoint.selected", true);
-                    if (methodId) {    
-                        //If we're selecting a new droppoint and/or method,
-                        this.$['infobox-droppoint'].select();
-                        this.$['infobox-droppoint'].selectMethod(methodId, true);      
-                        this.setDeliveryMethod(methodId);    
-                        self._updateUi(); 
-                        callback(null);
-                    }
-                    else {
-                        this.autoSelectDeliveryMethod(function (err) {
-                            self._updateUi();
-                            callback(err);
-                        });
-                    }
+                    if (!methodId) 
+                        methodId = dp.deliveries[0].service.id;
+                    //If we're selecting a new droppoint and/or method,
+                    this.$['infobox-droppoint'].select();
+                    this.$['infobox-droppoint'].selectMethod(methodId, true);      
+                    this.setDeliveryMethod(methodId);    
+                    self._updateUi(); 
+                    callback(null);
                 }
             },
 
