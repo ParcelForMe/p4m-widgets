@@ -627,7 +627,6 @@
                             callback(err);
                         }
                         else {
-                            //this.fire('noservice'); //DEBUG
                             if (!data) {
                                 debugger;
                             }
@@ -1008,12 +1007,7 @@
                     }
                     else {
                         console.warn("No delivery preferences - autoselecting without them");
-                        if (this._selectedDropPoint) {
-                            this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
-                        }
-                        else {
-                            this.setDeliveryMethod(this.standardRates[0].id);
-                        }
+                        this.setDeliveryMethod(this.standardRates[0].id);
                         callback(null);
                     }                   
                 }
@@ -1070,15 +1064,12 @@
             setDeliveryMethod: function (methodId, dateOverride) {
 
                 if (!methodId) {
-                    debugger;
                     return;
                 }
 
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
-                    debugger;
                     console.error("Method not available");
-                    //this.fire('noservice');
                     return;
                 }
 
@@ -1089,8 +1080,6 @@
                     }
 
                     newMethod.selected = true;
-                    //if (!newMethod.price) {
-                    //}
 
                     var newSelectedServiceDetails = {
                         _originalMethodObject: newMethod,
@@ -1368,16 +1357,18 @@
                 google.maps.event.addListener(self._infoWindow, 'domready', function () {
                     // Reference to the DIV which receives the contents of the infowindow using jQuery
                     var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
-                    iwOuter.style.overflow = 'visible';
-                    // the white bkg and shadow are grouped in the prev element
-                    iwOuter.previousSibling.style.display = 'none';
-                    // reduce the size of the non-clickable area created by the info window
-                    iwOuter.parentElement.style.width = 0;
-                    // remove the scroll bars from the img parent divs
-                    iwOuter.firstChild.style.overflow = 'visible';
-                    iwOuter.firstChild.firstChild.style.overflow = 'visible';
-                    // hide the close button
-                    iwOuter.nextSibling.style.display = 'none';
+                    if (iwOuter) {
+                        iwOuter.style.overflow = 'visible';
+                        // the white bkg and shadow are grouped in the prev element
+                        iwOuter.previousSibling.style.display = 'none';
+                        // reduce the size of the non-clickable area created by the info window
+                        iwOuter.parentElement.style.width = 0;
+                        // remove the scroll bars from the img parent divs
+                        iwOuter.firstChild.style.overflow = 'visible';
+                        iwOuter.firstChild.firstChild.style.overflow = 'visible';
+                        // hide the close button
+                        iwOuter.nextSibling.style.display = 'none';
+                    }
                 });
 
                 var position = new google.maps.LatLng(37, 0);
@@ -1689,8 +1680,8 @@
 
             },
 
-            CheckMapIsReset: function () {
-                if (this._map && !this.mapIsReset) {
+            checkMapIsReset: function (force) {
+                if (this._map && (force || !this.mapIsReset)) {
                     var self = this;
                     this._resetMap(this._map, function () {
                         self.panToDefaultLocation();
@@ -1759,8 +1750,8 @@
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
 
                     //Show on the map, pop up the info window
-                    self._openSelectedDropPointInfoWindow();
-                    self._updateUi();
+                    //self._openSelectedDropPointInfoWindow();
+                    //self._updateUi();
 
                 });
 
@@ -1785,7 +1776,8 @@
                     this.$['infobox-droppoint'].select();
                     this.$['infobox-droppoint'].selectMethod(methodId, true);      
                     this.setDeliveryMethod(methodId);    
-                    self._updateUi(); 
+                    self._openSelectedDropPointInfoWindow();
+                    self._updateUi();
                     callback(null);
                 }
             },
