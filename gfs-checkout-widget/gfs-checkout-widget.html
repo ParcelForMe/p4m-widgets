@@ -919,47 +919,66 @@
                 var prefs = this.config.addressPreferences;
                 if (!prefs || prefs.constructor !== Array) 
                     prefs = defaultPrefs;
-                var dropPointId = null;
-                var serviceId = this.getDefaultServiceId();
-                if (prefs[0] !== 'useMyDeliveryAddress') {    // try to use a DP
+                var dropPointId = null, delDate = null;
+                var serviceId;
+                if (prefs[0] !== 'useMyDeliveryAddress') {
+                    // consumer wants to use a DP by preference - either their preferred or the closest
                     var dp;
-                    if (prefs[0] === 'useMyDropPoints' && this.config.favDropPoints && this.config.favDropPoints.length > 0) 
-                        dp = this._droppointById(this.config.favDropPoints[0].droppointId);
-                    if (!dp && this._dropPoints && this._dropPoints.length > 0) 
-                        dp = this._dropPoints[0];
+                    if (prefs[0] === 'useMyDropPoints' && this.config.favDropPoints && this.config.favDropPoints.length > 0)
+                        // they want to use one of their preferred DPs if possible
+                        for (var i = 0; i < this.config.favDropPoints.length; i++) {
+                            dp = this._droppointById(this.config.favDropPoints[i].droppointId);
+                            if (dp)
+                                break;
+                        }
+                    if (!dp) {
+                        // a preferred DP is not being used, so check for next preference
+                        if (prefs[1] === 'useMyDeliveryAddress')
+                            // delivery address is second pref
+                            return this.getDefaultServiceId();
+                        // closest retailer DP is second pref
+                        if (this._dropPoints && this._dropPoints.length > 0)
+                            dp = this._dropPoints[0];
+                    }
                     if (dp) {
                         dropPointId = dp.droppointId;
                         serviceId = dp.deliveries[0].service.id;
+                        return {
+                            dropPointId: dropPointId,
+                            deliveryMethodId: serviceId,
+                            address: this.config.defaultAddress
+                        };
                     }
-                    else
-                        dropPointId = null;
                 }
-                return {
-                    dropPointId: dropPointId,
-                    deliveryMethodId: serviceId,
-                    address: this.config.defaultAddress
-                }
+                // consumer prefers their own address or no DP could be used
+                return this.getDefaultServiceId();
             },
 
             getDefaultServiceId: function () {
                 // Choose the most preferred standard delivery
-                var serviceId;
+                var serviceId, delDate;
                 if (this.standardRates.length) {
                     serviceId = this.standardRates[0].id;
                     if (this.config.deliveryPreferences) {
                         var sortFunction = this._getDeliveryMethodSortFunction();
-                        if (this.config.deliveryPreferences.preferSoonest) {
-                            serviceId = this._data.dayDefinite[0].id;
+                        if (this.config.deliveryPreferences.preferSoonest && this._data.dayDefinite && this._data.dayDefinite.length > 0) {
+                            this._data.dayDefinite[0].rates.sort(sortFunction);
+                            serviceId = this._data.dayDefinite[0].rates[0].id;
+                            delDate = this._data.dayDefinite[0].deliveryDate;
                             this.showPage_Calendar();
                         }
                         else {
-                            this.standardRates = this.standardRates.sort(sortFunction);
+                            this.standardRates.sort(sortFunction);
                             serviceId = this.standardRates[0].id;
                             this.showPage_Standard();
                         }
                     }
                 }
-                return serviceId;
+                return {
+                    deliveryMethodId: serviceId,
+                    deliveryDate: delDate,
+                    address: this.config.defaultAddress
+                }
             },
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
@@ -975,22 +994,13 @@
                 }
                 else {
                     if (this.config.deliveryPreferences) {
-                        var sortFunction = this._getDeliveryMethodSortFunction();
-                        if (this._selectedDropPoint) {
-                            //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
-                            //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
-                            //this.setDeliveryMethod();
-                            
-                            //Can I get away without selecting it via the droppoint widget?
-                            this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
-                            this.showPage_Droppoints();
-                        }
-                        else if (this.config.deliveryPreferences.preferSoonest) {
-                            this.setDeliveryMethod(this._data.dayDefinite[0].id);
+                        if (this.config.deliveryPreferences.preferSoonest) {
+                            var sortFunction = this._getDeliveryMethodSortFunction();
+                            this._data.dayDefinite[0].rates.sort(sortFunction);
+                            this.setDeliveryMethod(this._data.dayDefinite[0].rates[0].id, this._data.dayDefinite[0].deliveryDate);
                             this.showPage_Calendar();
                         }
                         else {
-                            this.standardRates = this.standardRates.sort(sortFunction);
                             this.setDeliveryMethod(this.standardRates[0].id);
                             this.showPage_Standard();
                         }
@@ -1240,8 +1250,8 @@
                 if (this.config.deliveryPreferences.preferSoonest) {
                     return (
                         function(a, b) {
-                            if (a && b) {
-                                return a.deliveryTimeFrom || a.deliveryDate < b.deliveryTimeFrom || a.deliveryDate ? 1 : -1;
+                            if (a && b && a.deliveryTimeTo && b.deliveryTimeTo) {
+                                return a.deliveryTimeTo <= b.deliveryTimeTo ? -1 : 1;
                             }
                             else {
                                 console.warn("Sorting by deliveryDate: invalid parameter: ", a, b);
