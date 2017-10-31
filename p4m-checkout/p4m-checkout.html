@@ -65,7 +65,7 @@
                         <iron-page id="deliveryPage">
                             <div id="shippingSelector" class="hidden">
 
-                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                                <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                             </div>
                             <div id="noShippingWarning">
                                 Please <a class="link" href="#">enter an address</a> to continue.
@@ -780,11 +780,14 @@
 
             toggleLoading: function (loading) {
                 var showAsLoading;
-                if (loading) {
-                    this._loadingStack ++;
+                if (loading === 'reset') {
+                    this._loadingStack = 0;
+                }
+                else if (loading) {
+                    this._loadingStack++;
                 }
                 else {
-                    this._loadingStack --;
+                    this._loadingStack--;
                 }
                 showAsLoading = (this._loadingStack > 0);
 
@@ -1362,14 +1365,15 @@
 
             onGfsSessionExpiry: function (e) {
                 console.log("GFS Checkout session expired");
-                if (this.onSessionExpiry) {
-                    window[this.onSessionExpiry]();
-                }
-                else
-                {
-                    window.reload();
-                }
-                
+                var self = this;
+                this.$.localApi.call('renewShippingToken', null, null, function (err, data) {
+                    if (err) {
+                        self.showGeneralFault();
+                    }
+                    self._gfsCurrentAddrId = null;
+                    self.toggleLoading('reset');
+                    self._updateGfs(function () { self.$.gfsCheckoutWidget.refreshShippingTab(); });
+                });
             },
 
             addressExists: function(addrId) {
@@ -1413,8 +1417,7 @@
                 var page = tab.detail.item;
                 if (page.id === 'deliveryPage') {
                     // refresh google map because it's been hidden
-                    var gfsCheckout = this.$.gfsCheckoutWidget;
-                    gfsCheckout.CheckMapIsReset();
+                    this.$.gfsCheckoutWidget.checkMapIsReset();
                 }
 //                console.log('page selected', page);
             },

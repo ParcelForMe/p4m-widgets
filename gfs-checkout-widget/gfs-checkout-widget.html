@@ -579,15 +579,20 @@
                         else {
                             this._showAsLoading(false);
                             try {
-                                if (httpRequest.status == 200 || httpRequest.status == 201) {
+                                /*var throwErr = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+                                if (throwErr === 2) {
+                                    this.fire('gfs-token-expired');
+                                }
+                                else */ if (httpRequest.status == 200 || httpRequest.status == 201) {
                                     callback(null, httpRequest.responseText);
                                 }
+                                else if (httpRequest.status == 401) {
+                                    this.fire('gfs-token-expired');
+                                    console.error(httpRequest.responseText);
+                                }
                                 else {
-                                    //debugger;
                                     this.fire('noservice');
                                     console.error(httpRequest.responseText);
-                                    //console.log("GFS error. Re-starting session.");    
-                                    //callback(httpRequest.status, httpRequest.responseText);
                                 }                                 
                             }
                             catch (e) {
@@ -2152,7 +2157,21 @@
                 }
             },
 
-            showPage_Calendar: function() {              
+            refreshShippingTab: function () {
+                if (this.$.pages.selected === 0) {
+                    this.onShowPage_Calendar();
+                }
+                else if (this.$.pages.selected === 1) {
+                    this.onShowPage_Droppoints();
+                }
+                else if (this.$.pages.selected === 2) {
+                    this.onShowPage_Standard();
+                }
+                else {
+                }
+            },
+
+            showPage_Calendar: function () {
                 this.$.pages.select(0);
                 this.onShowPage_Calendar();              
             },
