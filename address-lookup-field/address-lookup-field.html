@@ -42,8 +42,9 @@
 
             initAutoComplete() {
                 // Create the autocomplete object, restricting the search to geographical location types.
+                var input = this.$.alfField.querySelector('input');
                 this.autoComplete = new google.maps.places.Autocomplete(
-                    this.$.alfField,
+                    input,
                     {
                         types: ['geocode']
                     }
