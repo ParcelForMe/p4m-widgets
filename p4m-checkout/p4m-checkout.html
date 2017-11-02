@@ -1314,7 +1314,17 @@
             _getPreferredDropPoints: function() {
                 return this.consumerData.addresses         
                     .filter(function (item) { return (item.addressType == "Collect" && item.latitude && item.dropPointId) })
+                    .sort(this.sortByPreference)
                     .map(p4mDroppointToGfsDroppoint);
+            },
+
+            sortByPreference: function (a, b) {
+                if (a.collectPrefOrder < b.collectPrefOrder)
+                    return -1
+                else if (b.collectPrefOrder < a.collectPrefOrder)
+                    return 1
+                else 
+                    return 0;
             },
 
             _getPreferredAddresses: function (topAddr) {
@@ -1392,7 +1402,6 @@
             },
 
             updAddressById: function (address) {
-                return;
                 if (!this.consumerData) {
                     return null;
                 }
