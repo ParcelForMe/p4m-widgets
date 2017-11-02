@@ -27,8 +27,9 @@
 
 
 <link rel="import" href="../p4m-imports/p4m-imports.html" />  
+<link rel="import" href="../p4m-shared/p4m-shared-styles.html" />  
  
-<link rel="stylesheet" href="../p4m-shared/p4m.css" />
+<!-- <link rel="stylesheet" href="../p4m-shared/p4m.css" /> -->
 
 <dom-module id="p4m-checkout">
 
@@ -49,14 +50,41 @@
 
             <div id="panelContainer" class="horizontal layout">
                 <div id="detailPanel" class="p4m-panel flex-2">                   
-                    <paper-tabs selected="{{selectedTab}}" no-bar>
+
+                    <!-- Desktop Tabs -->               
+<!--                     <paper-tabs selected="{{selectedTab}}" no-bar>
                         <paper-tab>My Order<p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner></paper-tab>
                         <paper-tab>Addresses<p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner></paper-tab>
                         <paper-tab>Delivery Options<p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner></paper-tab>
                         <paper-tab>Payment Options<p4m-spinner species="progress" id="payment_spinner"></p4m-spinner></paper-tab>                  
-                    </paper-tabs>
-                    <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">                   
-                        <iron-page id="cartPage">                       
+                    </paper-tabs> -->
+                    <!-- END Desktop Tabs -->     
+
+                    <!-- Mobile Tabs -->
+<!--                     <paper-tabs selected="{{selectedTab}}" no-bar>
+                        <paper-tab onclick="select(0);">My Order<p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner></paper-tab>
+                        <paper-tab onclick="select(1);">Addresses<p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner></paper-tab>
+                        <paper-tab onclick="select(2);">Delivery Options<p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner></paper-tab>
+                        <paper-tab onclick="select(3);">Payment Options<p4m-spinner species="progress" id="payment_spinner"></p4m-spinner></paper-tab>                  
+                    </paper-tabs> -->
+                    <!-- END Mobile Tabs -->
+
+                    <!-- Mobile Tabs 2 -->
+                    <div id="nav">
+                          <p onclick="select(0);">Page 1</p>
+                          <p onclick="select(1);">Page 2</p>
+                          <p onclick="select(2);">Page 3</p>
+                        </div>
+                    <!-- END Mobile Tabs 2 -->
+
+
+
+
+                    <!-- Neon Animated Mobile Pages -->
+                    <!-- <template is="dom-bind" id="mobilepages"> -->
+<!--                     <div id="mobilepages">
+                        <neon-animated-pages class="flex" selected="[[selected]]">
+                            <iron-page id="cartPage">                       
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="addressPage">
@@ -65,7 +93,7 @@
                         <iron-page id="deliveryPage">
                             <div id="shippingSelector" class="hidden">
 
-                                <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                             </div>
                             <div id="noShippingWarning">
                                 Please <a class="link" href="#">enter an address</a> to continue.
@@ -78,7 +106,91 @@
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
                         </iron-page>
 
+                        </neon-animated-pages>      
+                    </div> -->
+                    <!-- END Neon Animated Mobile Pages -->
+
+
+                    <!-- Desktop Pages -->
+<!--                     <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">    
+
+                        <iron-page id="cartPage">                       
+                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
+                        </iron-page>
+                        <iron-page id="addressPage">
+                            <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
+                        </iron-page>
+                        <iron-page id="deliveryPage">
+                            <div id="shippingSelector" class="hidden">
+
+                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                            </div>
+                            <div id="noShippingWarning">
+                                Please <a class="link" href="#">enter an address</a> to continue.
+                            </div>
+
+                            <template is="dom-if" if="{{useGfsCheckout}}">
+                            </template>
+                        </iron-page>
+                        <iron-page id="cardPage">
+                            <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
+                        </iron-page>
+
+                    </iron-pages> -->
+                    <!-- END Desktop Pages -->
+
+
+                    <!-- Mobile pages 2 -->
+<!-- 
+                        <div id="nav">
+                          <p onclick="select(0);">Page 1</p>
+                          <p onclick="select(1);">Page 2</p>
+                          <p onclick="select(2);">Page 3</p>
+                        </div>
+
+                        <iron-pages
+                          id="mobilepages"
+                          selected="{{selected}}"
+                        >
+                          <div class="page one">
+                          </div>
+                          <div class="page two"><p>My page 2</p></div>
+                          <div class="page three"><p>My page 3</p></div>
+                        </iron-pages>
+ -->
+                    <!-- END Mobile pages 2 -->
+
+
+
+                    <!-- Mobile pages 3 -->
+                    <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
+
+                        <iron-page id="cartPage" class="page one">                       
+                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
+                        </iron-page>
+                        <iron-page id="addressPage" class="page two">
+                            <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
+                        </iron-page>
+                        <iron-page id="deliveryPage" class="page three">
+                            <div id="shippingSelector" class="hidden">
+
+                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                            </div>
+                            <div id="noShippingWarning">
+                                Please <a class="link" href="#">enter an address</a> to continue.
+                            </div>
+
+                            <template is="dom-if" if="{{useGfsCheckout}}">
+                            </template>
+                        </iron-page>
+                        <iron-page id="cardPage" class="page four">
+                            <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
+                        </iron-page>
+
                     </iron-pages>
+                    <!-- END Mobile pages 3 -->
+
+
                 </div>
                 <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
                     <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
@@ -1488,4 +1600,48 @@
             return value.split("").reverse().join("")
         }
     </script>
+
+        <script>
+    function select (n) {
+      /* Be careful with the shadow-dom, 2.0 doesn't mess around */
+      /* Depending on how deep this element is, you may need to find a
+         different way of accessing iron-pages */
+      let mobilepages = document.querySelector('mobileslider').$.mobilepages;
+      mobilepages.select(n);
+    }
+
+    // Replace mySrc and my-src with appropriate names if copy-pasting this code
+    class mySrc extends Polymer.Element {
+      static get is () { return 'my-src'; }
+
+      static get properties () {
+        return {
+          // Two-way bound to iron-pages selected property
+          selected: {
+            type: Number,
+            notify: true,
+            value: 0,
+            observer: '_newPageSelected',
+          },
+        };
+      }
+
+      // Observers
+      _newPageSelected (newVal, oldVal) {
+        let mobilepages = this.$.mobilepages.children;
+
+        // Run the animation on the newly selected page
+        if (!mobilepages[newVal].className.includes('animated')) {
+          mobilepages[newVal].className += ' animated';
+        }
+
+        if (typeof oldVal !== 'undefined') {
+          // Stop the animation of hidden pages
+          mobilepages[oldVal].className = mobilepages[oldVal].className.split(' animated').join('');
+        }
+      }
+    }
+
+    window.customElements.define(mySrc.is, mySrc);
+  </script>
 </dom-module>
