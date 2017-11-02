@@ -165,13 +165,16 @@
                     <!-- Mobile pages 3 -->
                     <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
 
-                        <iron-page id="cartPage" class="page one">                       
+                        <iron-page id="cartPage" class="page one">     
+                            <p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner>                  
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
                         </iron-page>
                         <iron-page id="addressPage" class="page two">
+                            <p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner>
                             <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
                         <iron-page id="deliveryPage" class="page three">
+                            <p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner>
                             <div id="shippingSelector" class="hidden">
 
                                 <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
@@ -184,6 +187,7 @@
                             </template>
                         </iron-page>
                         <iron-page id="cardPage" class="page four">
+                            <p4m-spinner species="progress" id="payment_spinner"></p4m-spinner>
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
                         </iron-page>
 
@@ -600,8 +604,15 @@
                 _loadingStack: {
                     type: Number,
                     value: 0
-                }
-                
+                },
+
+                selected: {
+                    type: Number,
+                    notify: true,
+                    value: 0,
+                    observer: '_newPageSelected',
+                },
+
             },
 
             observers: [
@@ -628,6 +639,17 @@
                 }
 
                 this.init();
+                this.selected = 0;
+            },
+
+            // A member function of your src element
+            _newPageSelected (newVal, oldVal) {
+                let pages = this.$.mobilepages.children;
+                pages[newVal].style.opacity = 0;
+                setTimeout(
+                 ((node) => {
+                     node.style.opacity = 1;
+                 }).bind(this, pages[newVal]), 0);
             },
 
             init: function () {
@@ -1599,49 +1621,9 @@
             //return Math.random().toString();
             return value.split("").reverse().join("")
         }
+        
+        function select(tab) {
+            document.getElementsByTagName('p4m-checkout')[0].selected = tab;
+        }
     </script>
-
-        <script>
-    function select (n) {
-      /* Be careful with the shadow-dom, 2.0 doesn't mess around */
-      /* Depending on how deep this element is, you may need to find a
-         different way of accessing iron-pages */
-      let mobilepages = document.querySelector('mobileslider').$.mobilepages;
-      mobilepages.select(n);
-    }
-
-    // Replace mySrc and my-src with appropriate names if copy-pasting this code
-    class mySrc extends Polymer.Element {
-      static get is () { return 'my-src'; }
-
-      static get properties () {
-        return {
-          // Two-way bound to iron-pages selected property
-          selected: {
-            type: Number,
-            notify: true,
-            value: 0,
-            observer: '_newPageSelected',
-          },
-        };
-      }
-
-      // Observers
-      _newPageSelected (newVal, oldVal) {
-        let mobilepages = this.$.mobilepages.children;
-
-        // Run the animation on the newly selected page
-        if (!mobilepages[newVal].className.includes('animated')) {
-          mobilepages[newVal].className += ' animated';
-        }
-
-        if (typeof oldVal !== 'undefined') {
-          // Stop the animation of hidden pages
-          mobilepages[oldVal].className = mobilepages[oldVal].className.split(' animated').join('');
-        }
-      }
-    }
-
-    window.customElements.define(mySrc.is, mySrc);
-  </script>
 </dom-module>
