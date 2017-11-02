@@ -324,10 +324,9 @@
                         if (bucketIndex == -1) {
                             //stretch out the top bucket to accomodate this one
                             self._buckets[self._buckets.length - 1] = minutes;
+                            bucketIndex = self._buckets.length - 1;
                         }
-                        else {
-                            today.slots[bucketIndex] = rateData;
-                        }
+                        today.slots[bucketIndex] = rateData;
                     });
                     today.slots = today.slots.map(function (item) {
                         if (!item) item = { localizedPrice: "" }

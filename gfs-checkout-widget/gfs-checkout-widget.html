@@ -147,7 +147,7 @@
                         <h2>Sorry</h2>
                         <p>There are no drop points available in your region</p>
                         <paper-item >
-                            <gfs-location-button address-name="Current location" on-click="_setGfsLocationToHere" >Use my current location</gfs-location-button>
+                            <gfs-location-button address-name="Current location" on-click="_locateMe" >Use my current location</gfs-location-button>
                         </paper-item>
                         <div class="search-postcode-wrap">
                             <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
@@ -548,17 +548,10 @@
             // This function is called as soon as the widget is ready
             ready: function () {
                 console.log("GFS Checkout ready", new Date().getTime());
-                /*
-                if (this.gfsData) {
-                    this._postData = JSON.parse(atob(this.gfsData).replace(/\r?\n|\r/g, ""));
-                    if (this.autoLoad) {
-                        this.postGfsData(function () { });
-                    }
-                }  */             
             },
 
-            postGfsData: function (callback) {
-                this._postReq(this._postData, callback);             
+            postGfsData: function (mapCenter, callback) {
+                this._postReq(mapCenter, this._postData, callback);             
             },
 
             _makeRequest: function (method, url, callback) {
@@ -586,16 +579,20 @@
                         else {
                             this._showAsLoading(false);
                             try {
-                                if (httpRequest.status == 200 || httpRequest.status == 201) {
+                                /*var throwErr = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+                                if (throwErr === 2) {
+                                    this.fire('gfs-token-expired');
+                                }
+                                else */ if (httpRequest.status == 200 || httpRequest.status == 201) {
                                     callback(null, httpRequest.responseText);
                                 }
+                                else if (httpRequest.status == 401) {
+                                    this.fire('gfs-token-expired');
+                                    console.error(httpRequest.responseText);
+                                }
                                 else {
-                                    //debugger;
                                     this.fire('noservice');
                                     console.error(httpRequest.responseText);
-                                    //console.log("GFS error. Re-starting session.");    
-                                    //this.postGfsData(callback);                     
-                                    //callback(httpRequest.status, httpRequest.responseText);
                                 }                                 
                             }
                             catch (e) {
@@ -623,7 +620,7 @@
                 };
             },
 
-            _postReq: function (data, callback) {
+            _postReq: function (mapCenter, data, callback) {
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
                 }
@@ -635,11 +632,10 @@
                             callback(err);
                         }
                         else {
-                            //this.fire('noservice'); //DEBUG
                             if (!data) {
                                 debugger;
                             }
-                            this._getReq(data, (function (err) {
+                            this._getReq(mapCenter, data, (function (err) {
                                 callback(err);
                             }).bind(this));
                         }
@@ -648,7 +644,7 @@
                 request.send(JSON.stringify(data));
             },
 
-            _getReq: function (resourceUrl, callback) {
+            _getReq: function (mapCenter, resourceUrl, callback) {
                 var self = this;
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
@@ -670,7 +666,20 @@
                         }
                         else {
                             this.set('_data', JSON.parse(data));
-                            this.set('_dropPoints', this._data.droppoints);
+                            if (!this._dropPoints) {
+                                this.set('_dropPoints', this._data.droppoints);
+                            }
+                            else {
+                                var newDPs = this._data.droppoints.sort(this.sortByDistance);
+                                this._dropPoints = this._dropPoints.concat(newDPs);
+                            }
+                            /* record the region queried e.g.
+                            "droppointSettings": {
+                                "maxRadiusMeters": 5000,
+                                "maxResults": 100,
+                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+                            },*/
+                            this.$.regionManager.recordQuery(this.droppointSettings, mapCenter, this._data.droppoints);
                             this._processAllDroppoints();
                             this._requestDroppointList(this._favDropPoints, (function (err) {
                                 this._delayedInit.bind(self)();
@@ -743,26 +752,6 @@
                 this._postData.request.order.value.value = value;
             },
 
-            //Put the address value into the GFS post data
-            //TODO: Rename
-            setGfsAddress: function (address, autoSelectDelivery, callback) {
-                if (typeof (callback) !== "function") {
-                    callback = function(){};
-                }
-                if (!address) {
-                    callback("No address");
-                }
-                else {
-                    //console.log('setGfsAddress(' + JSON.stringify(address) + ')');
-                    this._postData.request.order.transit.recipient.location = address;
-                    if (autoSelectDelivery) 
-                        this.autoSelectDeliveryMethod(callback);
-                    else
-                        callback(null);
-                }
-
-            },
-
             setFavDropPoints: function (droppointList) {
                 this._favDropPoints = droppointList;
                 this._processFavDroppoints();
@@ -775,9 +764,9 @@
             selectFavAddress: function (address, callback) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
                 this._unselectDropPoint();
-                console.log(">>>Setting address", address);
                 this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
-                this.setGfsAddress(address, true, callback);
+                this._postData.request.order.transit.recipient.location = address;
+                this.autoSelectDeliveryMethod(callback);
             },
 
 
@@ -796,7 +785,12 @@
                 })
             },
 
- 
+            droppointSettings: {
+                "maxRadiusMeters": 5000,
+                "maxResults": 100,
+                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+            },
+
             init: function (config, selection, finalCallback) {
                 var self = this;
                 this._suppliedSelection = selection;
@@ -836,17 +830,15 @@
                                 "dateFrom": this._makeDateStr(now),
                                 "dateTo": this._makeDateStr(maxDate)
                             },
-                            "droppointSettings": {
-                                "maxRadiusMeters": 5000,
-                                "maxResults": 100,
-                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
-                            },
+
+                            "droppointSettings": this.droppointSettings,
+
                             "order": {
                                 "transit": {
                                     "recipient": {
                                         "location": {
                                             "countryCode": {
-                                                "code":  config.countryCode,
+                                                "code": config.countryCode,
                                                 "encoding": "ccISO_3166_1_Alpha2"
                                             },
                                             "postCode": config.postCode,
@@ -876,89 +868,125 @@
 
                     if (selection && selection.address) {
                         var location = this._postData.request.order.transit.recipient.location;
-                        location.CountryCode = selection.address.CountryCode;
-                        location.Postcode = selection.address.Postcode;
+                        location.countryCode = selection.address.countryCode;
+                        location.postCode = selection.address.postCode;
                         location.town = selection.address.town || "";
                         location.addressLineCollection = selection.address.addressLineCollection;
                     }
 
-                    
                     //==== Set fav address data
-                    this.setFavDropPoints(this.config.favDropPoints); 
+                    this.setFavDropPoints(this.config.favDropPoints);
                     this.setFavAddresses(this.config.favAddresses);
 
-                    //if everything has been preselected, preselect,
-                    if (selection && selection.deliveryMethodId) {
-                        //Post, then try to re-select the chosen method
-                        this.postGfsData(function (err) {
-                            this.initialised = true;
-                            if (!err) {
-                                if (selection.dropPointId) {
-                                    self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
-                                }
-                                else {
-                                    var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
-                                    if (res)
-                                        finalCallback();
-                                    else {
-                                        // the methodId could not be found in the new methods list so auto select something
-                                        self.runDeliveryAddressPreferences(self.config.addressPreferences, self.config.defaultAddress, function (err) {
-                                            if (err) {
-                                                console.error("postGfsData() returned", err);
-                                                finalCallback(err);
-                                            }
-                                            else {
-                                                self.autoSelectDeliveryMethod(finalCallback);
-                                            }
-                                        });
-                                    }
-                                }
+                    // Post, then select address and method - these can be previously chosen if the cart already exists
+                    // or will be defaulted based on the consumer's preferences
+                    this.postGfsData(config.mapCenter, function (err) {
+                        if (err) {
+                            this.initialised = false;
+                            console.error("postGfsData() returned: ", err);
+                            finalCallback(err);
+                            return;
+                        }
+                        this.initialised = true;
+                        if (!selection)
+                            selection = self.getDefaultDelivery();
+                        if (selection.dropPointId) {
+                            // try to select the drop point
+                            self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
+                        }
+                        else {
+                            // try to select the physical address delivery method (e.g. std, international, day def, etc)
+                            var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
+                            if (!res) {
+                                // this will only fail if a service was pre-selected on an existing cart and no longer exists
+                                selection = self.getDefaultDelivery();
+                                res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                             }
-                            else finalCallback(err);
-                        });
-                    }
-                    //Otherwise auto-select address and delivery method according to preferences (if any)
-                    else {
-                        //Set delivery address first. This will then trigger auto-setting of delivery method
-                        this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
-                            self.postGfsData(function(err) {
-                                this.initialised = true;
-                                if (err) {
-                                    console.error("postGfsData() returned", err);
-                                    finalCallback(err);
-                                }
-                                else
-                                {
-                                    self.autoSelectDeliveryMethod(finalCallback);
-                                }
-                            });
-                        });
-                    }                 
+                            if (res)
+                                finalCallback();
+                            else
+                                finalCallback("Could not select a delivery method");
+                        }
+                    });
                 }
             },
 
-            //TODO
-            /*
-            applySelection: function(selection) {
-                
-                //    dropPointId
-                //    deliveryMethodId
-                //    addressId
-                //    deliveryDate
-               
-                if (selection.dropPointId) {
-                    this._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId);
-                }
-                else {
-                    this.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
-                }
-                
-            },*/
+            //Select a delivery address based on the users preferences
+            getDefaultDelivery: function () {
+                // select a default address or droppoint during initial load, or if loading
+                // an existing cart and the address / DP is no longer available
 
+                // first use the preferred delivery address to initialise GFS and return local DPs
+                // if the consumer then prefers to use their own DPs see if one is in the list
+                // or if the consumer prefers to use the nearest DP then select that from the list
+                var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
+                var prefs = this.config.addressPreferences;
+                if (!prefs || prefs.constructor !== Array) 
+                    prefs = defaultPrefs;
+                var dropPointId = null, delDate = null;
+                var serviceId;
+                if (prefs[0] !== 'useMyDeliveryAddress') {
+                    // consumer wants to use a DP by preference - either their preferred or the closest
+                    var dp;
+                    if (prefs[0] === 'useMyDropPoints' && this.config.favDropPoints && this.config.favDropPoints.length > 0)
+                        // they want to use one of their preferred DPs if possible
+                        for (var i = 0; i < this.config.favDropPoints.length; i++) {
+                            dp = this._droppointById(this.config.favDropPoints[i].droppointId);
+                            if (dp)
+                                break;
+                        }
+                    if (!dp) {
+                        // a preferred DP is not being used, so check for next preference
+                        if (prefs[1] === 'useMyDeliveryAddress')
+                            // delivery address is second pref
+                            return this.getDefaultServiceId();
+                        // closest retailer DP is second pref
+                        if (this._dropPoints && this._dropPoints.length > 0)
+                            dp = this._dropPoints[0];
+                    }
+                    if (dp) {
+                        dropPointId = dp.droppointId;
+                        serviceId = dp.deliveries[0].service.id;
+                        return {
+                            dropPointId: dropPointId,
+                            deliveryMethodId: serviceId,
+                            address: this.config.defaultAddress
+                        };
+                    }
+                }
+                // consumer prefers their own address or no DP could be used
+                return this.getDefaultServiceId();
+            },
+
+            getDefaultServiceId: function () {
+                // Choose the most preferred standard delivery
+                var serviceId, delDate;
+                if (this.standardRates.length) {
+                    serviceId = this.standardRates[0].id;
+                    if (this.config.deliveryPreferences) {
+                        var sortFunction = this._getDeliveryMethodSortFunction();
+                        if (this.config.deliveryPreferences.preferSoonest && this._data.dayDefinite && this._data.dayDefinite.length > 0) {
+                            this._data.dayDefinite[0].rates.sort(sortFunction);
+                            serviceId = this._data.dayDefinite[0].rates[0].id;
+                            delDate = this._data.dayDefinite[0].deliveryDate;
+                            this.showPage_Calendar();
+                        }
+                        else {
+                            this.standardRates.sort(sortFunction);
+                            serviceId = this.standardRates[0].id;
+                            this.showPage_Standard();
+                        }
+                    }
+                }
+                return {
+                    deliveryMethodId: serviceId,
+                    deliveryDate: delDate,
+                    address: this.config.defaultAddress
+                }
+            },
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
             //preferSoonest: true/false
-            //
             autoSelectDeliveryMethod: function (callback) {
                 //If the address chosen is a droppoint,
                 //   Get the delivery methods on the droppoint
@@ -970,22 +998,13 @@
                 }
                 else {
                     if (this.config.deliveryPreferences) {
-                        var sortFunction = this._getDeliveryMethodSortFunction();
-                        if (this._selectedDropPoint) {
-                            //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
-                            //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
-                            //this.setDeliveryMethod();
-                            
-                            //Can I get away without selecting it via the droppoint widget?
-                            this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
-                            this.showPage_Droppoints();
-                        }
-                        else if (this.config.deliveryPreferences.preferSoonest) {
-                            this.setDeliveryMethod(this._data.dayDefinite[0]);
+                        if (this.config.deliveryPreferences.preferSoonest) {
+                            var sortFunction = this._getDeliveryMethodSortFunction();
+                            this._data.dayDefinite[0].rates.sort(sortFunction);
+                            this.setDeliveryMethod(this._data.dayDefinite[0].rates[0].id, this._data.dayDefinite[0].deliveryDate);
                             this.showPage_Calendar();
                         }
                         else {
-                            this.standardRates = this.standardRates.sort(sortFunction);
                             this.setDeliveryMethod(this.standardRates[0].id);
                             this.showPage_Standard();
                         }
@@ -993,32 +1012,13 @@
                     }
                     else {
                         console.warn("No delivery preferences - autoselecting without them");
-                        if (this._selectedDropPoint) {
-                            this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
-                        }
-                        else {
-                            this.setDeliveryMethod(this.standardRates[0].id);
-                        }
+                        this.setDeliveryMethod(this.standardRates[0].id);
                         callback(null);
                     }                   
                 }
             },
 
-            //Assuming a delivery method has been chosen, choose a delivery address
-            autoSelectDeliveryAddress: function (serviceDetails) {
-                //If it's a standard delivery method, choose default fav address
-                //newSelectedServiceDetails
-                if (serviceDetails.serviceType.type == "dmStandard") {
-                    this.setGfsAddress(this.config.defaultAddress);
-                }
-                else {
-                    //If it's a droppoint delivery method....?
-                    //TODO
-                }
-            },
-
-            //Select a delivery address based on the users preferences
-            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
+            /*            runDeliveryAddressPreferences: function(prefs, defaultAddress, finalCallback) {
 
                 //Select address based on preferences
                 var defaultPrefs = ["useMyDeliveryAddress", "useMyDropPoints", "useRetailerDropPoint"];
@@ -1062,47 +1062,19 @@
 
                 runHandler(0);
 
-            },
-
-            _preselectForCalendar: function () {
-                //this.$.calendar.autoSelect();
-            },
-
-            //TODO: Change to use _originalShippingService.selected
-            _preselectForStandard: function () {
-                /*
-                //TODO This function needs to change
-                if (this.standardRates) {
-                    //this.set('_selectedDropPoint', null);
-                    this._unselectDropPoint();
-                    var preselectedService = this.standardRates[0];
-                    if (!preselectedService.selected) {
-                        preselectedService.selected = true;
-                    }                   
-                    
-                    this.setDeliveryMethod(preselectedService.id, preselectedService.deliveryDate);
-                    this.set('standardRates', JSON.parse(JSON.stringify(this.standardRates)));
-                    this.$.standardRatesTemplate.render();
-                    //this.fire('selectedservicechanged', this.selectedServiceDetails);//.standardRates[0]);
-                    //this.fire('preselectedservice', this.selectedServiceDetails);
-                }*/
-
-            },
+            },*/
 
             //Select a delivery service
             //TODO: Refactor?
             setDeliveryMethod: function (methodId, dateOverride) {
 
                 if (!methodId) {
-                    debugger;
                     return;
                 }
 
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
-                    debugger;
                     console.error("Method not available");
-                    //this.fire('noservice');
                     return;
                 }
 
@@ -1113,8 +1085,6 @@
                     }
 
                     newMethod.selected = true;
-                    //if (!newMethod.price) {
-                    //}
 
                     var newSelectedServiceDetails = {
                         _originalMethodObject: newMethod,
@@ -1150,7 +1120,7 @@
                         //We need to unselected it and then auto-select a standard address
                         if (this._selectedDropPoint) {
                             this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
-                            this.autoSelectDeliveryAddress(newMethod); //This is a reference to the original delivery method object                           
+                            this._postData.request.order.transit.recipient.location = this.config.defaultAddress;
                         }
                         else {
                             //We had a standard address selected already, apparently. 
@@ -1274,8 +1244,8 @@
                 if (this.config.deliveryPreferences.preferSoonest) {
                     return (
                         function(a, b) {
-                            if (a && b) {
-                                return a.deliveryTimeFrom || a.deliveryDate < b.deliveryTimeFrom || a.deliveryDate ? 1 : -1;
+                            if (a && b && a.deliveryTimeTo && b.deliveryTimeTo) {
+                                return a.deliveryTimeTo <= b.deliveryTimeTo ? -1 : 1;
                             }
                             else {
                                 console.warn("Sorting by deliveryDate: invalid parameter: ", a, b);
@@ -1392,16 +1362,18 @@
                 google.maps.event.addListener(self._infoWindow, 'domready', function () {
                     // Reference to the DIV which receives the contents of the infowindow using jQuery
                     var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
-                    iwOuter.style.overflow = 'visible';
-                    // the white bkg and shadow are grouped in the prev element
-                    iwOuter.previousSibling.style.display = 'none';
-                    // reduce the size of the non-clickable area created by the info window
-                    iwOuter.parentElement.style.width = 0;
-                    // remove the scroll bars from the img parent divs
-                    iwOuter.firstChild.style.overflow = 'visible';
-                    iwOuter.firstChild.firstChild.style.overflow = 'visible';
-                    // hide the close button
-                    iwOuter.nextSibling.style.display = 'none';
+                    if (iwOuter) {
+                        iwOuter.style.overflow = 'visible';
+                        // the white bkg and shadow are grouped in the prev element
+                        iwOuter.previousSibling.style.display = 'none';
+                        // reduce the size of the non-clickable area created by the info window
+                        iwOuter.parentElement.style.width = 0;
+                        // remove the scroll bars from the img parent divs
+                        iwOuter.firstChild.style.overflow = 'visible';
+                        iwOuter.firstChild.firstChild.style.overflow = 'visible';
+                        // hide the close button
+                        iwOuter.nextSibling.style.display = 'none';
+                    }
                 });
 
                 var position = new google.maps.LatLng(37, 0);
@@ -1700,7 +1672,7 @@
                             self.panToDefaultLocation();
                         // Switch classes on the Map/list toggle - help BAZ!
                         self.$.viewAsMap.classList.add('active');
-                        self.$.viewAsList.classList.remove('active');
+                        //self.$.viewAsList.classList.remove('active');
                     });
                 }
                 else {
@@ -1708,13 +1680,13 @@
                     this.$.mapContainer.classList.add('hidden');
                     // Switch classes on the Map/list toggle_sel
                     this.$.viewAsMap.classList.remove('active');
-                    this.$.viewAsList.classList.add('active');
+                    //this.$.viewAsList.classList.add('active');
                 }
 
             },
 
-            CheckMapIsReset: function () {
-                if (this._map && !this.mapIsReset) {
+            checkMapIsReset: function (force) {
+                if (this._map && (force || !this.mapIsReset)) {
                     var self = this;
                     this._resetMap(this._map, function () {
                         self.panToDefaultLocation();
@@ -1783,8 +1755,8 @@
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
 
                     //Show on the map, pop up the info window
-                    self._openSelectedDropPointInfoWindow();
-                    self._updateUi();
+                    //self._openSelectedDropPointInfoWindow();
+                    //self._updateUi();
 
                 });
 
@@ -1803,20 +1775,15 @@
                     var dp = this._droppointById(droppointId)            
                     this.set("_selectedDropPoint", dp);
                     this.set("_selectedDropPoint.selected", true);
-                    if (methodId) {    
-                        //If we're selecting a new droppoint and/or method,
-                        this.$['infobox-droppoint'].select();
-                        this.$['infobox-droppoint'].selectMethod(methodId, true);      
-                        this.setDeliveryMethod(methodId);    
-                        self._updateUi(); 
-                        callback(null);
-                    }
-                    else {
-                        this.autoSelectDeliveryMethod(function (err) {
-                            self._updateUi();
-                            callback(err);
-                        });
-                    }
+                    if (!methodId) 
+                        methodId = dp.deliveries[0].service.id;
+                    //If we're selecting a new droppoint and/or method,
+                    this.$['infobox-droppoint'].select();
+                    this.$['infobox-droppoint'].selectMethod(methodId, true);      
+                    this.setDeliveryMethod(methodId);    
+                    self._openSelectedDropPointInfoWindow();
+                    self._updateUi();
+                    callback(null);
                 }
             },
 
@@ -1941,32 +1908,6 @@
                     console.error("Browser does not support geolocation");
 
                 }
-            },
-
-            _setGfsLocationToHere: function() {
-                /*var self = this;
-                this._locateMe(function(err, latlng) {
-                    if (err) {
-                        //zzzz
-                    }
-                    else {
-                        //TODO: Reverse geolocate latlng to address, then pass the country and postcode
-                        var geocoder = new google.maps.Geocoder;
-                         geocoder.geocode({'location': latlng}, function(results, status) {
-                            console.log(result);
-                            //Now extract the post code and country, set it the GFS address, and post it to GFS
-                
-                            self.setGfsAddress({
-                                location: {
-                                    countryCode: "",
-                                    postCode: ""
-                                }
-                            });
-                           self.postGfsData();
-                        });
-
-                    }
-                });*/
             },
 
             setMapHome: function (location, label) {
@@ -2216,7 +2157,21 @@
                 }
             },
 
-            showPage_Calendar: function() {              
+            refreshShippingTab: function () {
+                if (this.$.pages.selected === 0) {
+                    this.onShowPage_Calendar();
+                }
+                else if (this.$.pages.selected === 1) {
+                    this.onShowPage_Droppoints();
+                }
+                else if (this.$.pages.selected === 2) {
+                    this.onShowPage_Standard();
+                }
+                else {
+                }
+            },
+
+            showPage_Calendar: function () {
                 this.$.pages.select(0);
                 this.onShowPage_Calendar();              
             },

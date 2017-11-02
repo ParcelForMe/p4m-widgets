@@ -117,7 +117,7 @@
             };
 
             this.toGeoBox = function() {
-                return [[this.topLeft.y, this.topLeft.x], [this.bottomRight.y, this.bottomRight.x]];
+                return [[this.topLeft.x, this.topLeft.y], [this.bottomRight.x, this.bottomRight.y]];
             };
           
             this.containsPoint = function(point) {
@@ -142,19 +142,39 @@
                 this.coveredRectangles.push(new Rectangle(geoBox));
             },
 
+            /* "droppointSettings": {
+                                "maxRadiusMeters": 5000,
+                                "maxResults": 100,
+                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+                            },*/
+            recordQuery: function(droppointSettings, location, droppoints) {
+                // record the area queried for droppoints
+                var radius = droppointSettings.maxRadiusMeters;
+                if (droppoints.length == droppointSettings.maxResults) {
+                    // there are possibly more droppoints in this area so reduce the radius to the furthest DP in the list
+                    const maxDP = droppoints.reduce(function (prev, current) {
+                        return (prev.y > current.y) ? prev : current
+                    });
+                    radius = maxDP.distanceInMeters;
+                }
+                var region = this.largestSqrInCircle(location.lat, location.lng, radius);
+                this.addRegion(region);
+            },
+
             largestSqrInCircle: function(lat, lng, radius) {
-                // used when DPs are capped at maximum count and therefore there could
-                // be more DPs in the searched for area. Our safest covered area is therefore
-                // the largest square that fits within the radius of the furthest DP from the center
-                const angle45 = 45.0 * (Math.PI / 180); // 45 degrees as radians
+                // given a radius we need to find the largest square INSIDE the circle to ensure
+                // that no DPs get missed by recording a square that contains the radius
+                // get the bottom left SW and top right corners NE
+                const angle45 = 45.0 * (Math.PI / 180); // NE (45 degrees anti-clockwise from E) as radians
                 var latRad = lat * (Math.PI / 180);
                 var lngRad = lng * (Math.PI / 180);
-                var dx = radius * cos(angle45); // the change in long in metres
-                var dy = radius * sin(angle45); // change in lat in metres 
-                var delta_longitude = dx/(111320*cos(latRad)); // allows for curvature
-                var delta_latitude = dy/110540;
-                var cnrLng = lng + delta_longitude;
-                var cnrLat = lat + delta_latitude;
+                var dx = radius * Math.cos(angle45); // the change in long in metres
+                var dy = radius * Math.sin(angle45); // change in lat in metres 
+                var dlng = dx / (111320 * Math.cos(latRad)); // allows for curvature
+                var dlat = dy / 110540;
+                var topRight = [lng + dlng, lat + dlat];
+                var btmLeft = [topRight[0] - Math.abs(2 * dlng), topRight[1] - Math.abs(2 * dlat)];
+                return [btmLeft, topRight];
             },
 
             getUncoveredRectangles: function(viewPort) {

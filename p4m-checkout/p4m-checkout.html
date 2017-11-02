@@ -65,7 +65,7 @@
                         <iron-page id="deliveryPage">
                             <div id="shippingSelector" class="hidden">
 
-                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                                <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                             </div>
                             <div id="noShippingWarning">
                                 Please <a class="link" href="#">enter an address</a> to continue.
@@ -652,7 +652,8 @@
                     addressPreferences: addrPrefs,
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.preferSoonestDelivery
-                    }
+                    },
+                    mapCenter: { 'lat': currAddr.latitude, 'lng': currAddr.longitude }
                 };
 
                 //Make an object containing everything needed for GFS Checkout to re-select my previous delivery options
@@ -666,7 +667,6 @@
                         address: p4mAddressToGfsAddress(addr) || null,
                         deliveryDate: new Date(self.cartData.expDeliveryDate)
                     }
-                    //selection = null;
                 }
                 this.toggleLoading(true);
                 this.$.gfsCheckoutWidget.init(gfsPostConfig, selection, function(err) {
@@ -780,11 +780,14 @@
 
             toggleLoading: function (loading) {
                 var showAsLoading;
-                if (loading) {
-                    this._loadingStack ++;
+                if (loading === 'reset') {
+                    this._loadingStack = 0;
+                }
+                else if (loading) {
+                    this._loadingStack++;
                 }
                 else {
-                    this._loadingStack --;
+                    this._loadingStack--;
                 }
                 showAsLoading = (this._loadingStack > 0);
 
@@ -1144,41 +1147,24 @@
                     //return false;
                 }
                 else {
+                    self.set('cartData.addressId', addressId); //This allows the address UI to update
+                    self.notifyPath('cartData.addressId');
                     //Send to GFS Checkout and await shipping event
                     //If this is a user-initiated address change, we need to tell GFS and get new shipping details back (via onGfsServiceChanged)
                     if (sendToGfs) {
-
-                        if (!this.$.gfsCheckoutWidget.initialised) {
-                            this._updateGfs(function(err) {
-
-                                self.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
-                                    if (!err) {
-                                        self._gfsCurrentAddrId = addressId;
-                                        self.set('cartData.addressId', addressId); //This allows the address UI to update
-                                        self.notifyPath('cartData.addressId');
-                                        callback(null, address);
-                                    }
-                                });
-                            })
-                        }
-                        else {
-                            this.$.gfsCheckoutWidget.selectFavAddress(address, function(err) {
-                                self._gfsCurrentAddrId = addressId;
-                                self.set('cartData.addressId', addressId); //This allows the address UI to update
-                                self.notifyPath('cartData.addressId');
-                                if (callback) {
+                        self._gfsCurrentAddrId = addressId;
+                        this._updateGfs(function (err) {
+                            self.$.gfsCheckoutWidget.selectFavAddress(address, function (err) {
+                                if (!err) {
                                     callback(null, address);
                                 }
                             });
-                        }
+                        });
                     }
                     else {
-                        this.set('cartData.addressId', addressId); //This allows the address UI to update
-                        this.notifyPath('cartData.addressId');
                         callback(null, address);
                     }
                 }
-
             },
 
             onAddAddress: function (e) {
@@ -1379,14 +1365,15 @@
 
             onGfsSessionExpiry: function (e) {
                 console.log("GFS Checkout session expired");
-                if (this.onSessionExpiry) {
-                    window[this.onSessionExpiry]();
-                }
-                else
-                {
-                    window.reload();
-                }
-                
+                var self = this;
+                this.$.localApi.call('renewShippingToken', null, null, function (err, data) {
+                    if (err) {
+                        self.showGeneralFault();
+                    }
+                    self._gfsCurrentAddrId = null;
+                    self.toggleLoading('reset');
+                    self._updateGfs(function () { self.$.gfsCheckoutWidget.refreshShippingTab(); });
+                });
             },
 
             addressExists: function(addrId) {
@@ -1430,8 +1417,7 @@
                 var page = tab.detail.item;
                 if (page.id === 'deliveryPage') {
                     // refresh google map because it's been hidden
-                    var gfsCheckout = this.$.gfsCheckoutWidget;
-                    gfsCheckout.CheckMapIsReset();
+                    this.$.gfsCheckoutWidget.checkMapIsReset();
                 }
 //                console.log('page selected', page);
             },
