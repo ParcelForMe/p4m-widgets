@@ -85,7 +85,7 @@
     							<div class="collection-points">
     								<paper-dropdown-menu label="My Collection Points" noink no-animations>
     									<paper-listbox class="dropdown-content">
-    									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" sort="sortByDistance">
+    									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" xx-sort="sortByDistance">
     					                     <paper-item label="{{item.droppointDescription}}">
         										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected="_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
     	                            		 </paper-item>						
@@ -1140,7 +1140,7 @@
                 }
             },
                         
-            selectNearestFavDropPoint: function(callback) {
+            /*selectNearestFavDropPoint: function(callback) {
                 if (this._favDropPoints.length) {
                     this._selectDropPoint(this._favDropPoints[0].droppointId, callback);
                 }
@@ -1164,7 +1164,7 @@
                 }
                 else
                     callback();
-            },
+            },*/
 
             //This runs after the GFS requests have returned data
             _delayedInit: function () {
@@ -1203,8 +1203,7 @@
                     this.$$('#calendar-loading').classList.add('hidden');
                 }
             },
-
-
+            
             sortByDistance: function (a, b) {
                 if (a.selected) return -1
                 else if (b.selected) return 1
@@ -1339,7 +1338,7 @@
                         existingItem.selected = item.selected;
                     }
                     return existingItem || item;
-                }).sort(this.sortByDistance);
+                });//.sort(this.sortByDistance);
             },
             
             _makeMap: function () {
@@ -1790,7 +1789,7 @@
             _selectDropPoint(dropPointId) {
                 var self = this;
                 this._completeDropPointSelection(dropPointId, null, function () {
-                    self.$['infobox-droppoint'].select(); //The gfs-droppoint widget will fire droppoint-selected 
+                    //self.$['infobox-droppoint'].select(); //The gfs-droppoint widget will fire droppoint-selected 
                     //Next stop _onDropPointSelectedEvent() 
                 })
             },
