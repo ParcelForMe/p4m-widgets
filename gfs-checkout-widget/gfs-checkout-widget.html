@@ -937,10 +937,10 @@
                         }
                     if (!dp) {
                         // a preferred DP is not being used, so check for next preference
-                        if (prefs[1] === 'useMyDeliveryAddress')
+                        if (prefs[0] === 'useMyDropPoints' && prefs[1] === 'useMyDeliveryAddress')
                             // delivery address is second pref
                             return this.getDefaultServiceId();
-                        // closest retailer DP is second pref
+                        // closest retailer DP is first or second pref
                         if (this._dropPoints && this._dropPoints.length > 0)
                             dp = this._dropPoints[0];
                     }
