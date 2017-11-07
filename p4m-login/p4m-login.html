@@ -72,8 +72,6 @@
             <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
-            <polymer-cookie id="p4mDefaultCountryCodeCookie" name="p4mDefaultCountryCode"></polymer-cookie>
-            <polymer-cookie id="p4mDefaultPostCodeCookie" name="p4mDefaultPostCode"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
             <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
 
@@ -135,9 +133,6 @@
                 logoutForm: {
                     type: String,
                 },
-                p4mToken: {
-                    type: String
-                },
                 class: {
                   reflectToAttribute: true
                 },
@@ -149,6 +144,9 @@
                     type: String
                 },
 
+                p4mToken: {
+                    type: String
+                },
                 _state: {
                     type: String
                 },
@@ -183,7 +181,8 @@
                     }
                     else {
                         var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
-                        if (offerRestore === "true")
+                        var p4mCheckout = document.getElementsByTagName('p4m-checkout');
+                        if (offerRestore === "true" && (!p4mCheckout || p4mCheckout.length === 0))
                         {
                             this.$.p4mOfferCartRestoreCookie.eraseCookie();
                             this.$.lastCartDlg.open();
@@ -300,10 +299,12 @@
                 this.$.p4mLocalLoginCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
-                this.$.p4mDefaultCountryCodeCookie.eraseCookie();
-                this.$.p4mDefaultPostCodeCookie.eraseCookie();
                 this.$.p4mGivenNameCookie.eraseCookie();
                 this.$.gfsCheckoutTokenCookie.eraseCookie();
+                // clear local properties
+                this.p4mToken = null;
+                this._state = null;
+                this._nonce = null;
             },
 
             popupCenter: function(url, title, w, h) {
