@@ -34,8 +34,11 @@
                 },
                 content: {
                     type: String
+                },
+                retailer: {
+                    type: String,
+                    value: 'us'
                 }
-
             },
             listeners: {
 
@@ -45,7 +48,9 @@
 
             },
             _handleResponse: function (data) {
-                this.$.content.innerHTML = data.detail.response;
+                var s = data.detail.response;
+                s = s.replace('{{retailer}}', this.retailer ? this.retailer : 'us');
+                this.$.content.innerHTML = s;
             }
         });
     </script>
