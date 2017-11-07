@@ -314,9 +314,10 @@
                     httpRequest.onreadystatechange = (function () {
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             try {
-                                if (httpRequest.status === 401) {
+                                if (httpRequest.status === 401 || httpRequest.responseText.includes('Access has expired')) {
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                                    loginWidget.logoutThisSite();
+                                    loginWidget.clearCookies();
+                                    this.fire('p4m-request-login');
                                 }
                                 else if (httpRequest.status === 0) { //Timeout
                                     this.fire('noservice');
