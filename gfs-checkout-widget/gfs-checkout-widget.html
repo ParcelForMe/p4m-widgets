@@ -761,12 +761,12 @@
                 this.set('_favAddresses', addressList);
             },
 
-            selectFavAddress: function (address, callback) {
+            selectFavAddress: function (address) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
-                this._unselectDropPoint();
+                //this._unselectDropPoint();
                 this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
-                this._postData.request.order.transit.recipient.location = address;
-                this.autoSelectDeliveryMethod(callback);
+                //this._postData.request.order.transit.recipient.location = address;
+                //this.autoSelectDeliveryMethod(callback);
             },
 
 
@@ -890,6 +890,8 @@
                         this.initialised = true;
                         if (!selection)
                             selection = self.getDefaultDelivery();
+                        else if (!selection.deliveryMethodId && !selection.deliveryDate)
+                            self.autoSelectDeliveryMethod(selection);
                         if (selection.dropPointId) {
                             // try to select the drop point
                             self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
@@ -899,6 +901,7 @@
                             var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                             if (!res) {
                                 // this will only fail if a service was pre-selected on an existing cart and no longer exists
+                                // or the consumer changes the delivery address manually
                                 selection = self.getDefaultDelivery();
                                 res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                             }
@@ -987,34 +990,19 @@
 
             //Assuming an address has been chosen, choose a delivery method that best suits the user's preferences:
             //preferSoonest: true/false
-            autoSelectDeliveryMethod: function (callback) {
-                //If the address chosen is a droppoint,
-                //   Get the delivery methods on the droppoint
-                //   Choose the most preferred
-                //Else if the address chosen isn't a droppoint,
-                //   Choose the most preferred standard delivery
-                if (!this.standardRates.length) {
-                    callback(null); //No delivery methods available yet                    
-                }
-                else {
-                    if (this.config.deliveryPreferences) {
-                        if (this.config.deliveryPreferences.preferSoonest) {
-                            var sortFunction = this._getDeliveryMethodSortFunction();
-                            this._data.dayDefinite[0].rates.sort(sortFunction);
-                            this.setDeliveryMethod(this._data.dayDefinite[0].rates[0].id, this._data.dayDefinite[0].deliveryDate);
-                            this.showPage_Calendar();
-                        }
-                        else {
-                            this.setDeliveryMethod(this.standardRates[0].id);
-                            this.showPage_Standard();
-                        }
-                        callback(null);
+            autoSelectDeliveryMethod: function (selection) {
+                if (this.standardRates.length) {
+                    if (this.config.deliveryPreferences && this.config.deliveryPreferences.preferSoonest) {
+                        var sortFunction = this._getDeliveryMethodSortFunction();
+                        this._data.dayDefinite[0].rates.sort(sortFunction);
+                        selection.deliveryMethodId = this._data.dayDefinite[0].rates[0].id;
+                        selection.deliveryDate = this._data.dayDefinite[0].deliveryDate;
+                        this.showPage_Calendar();
                     }
                     else {
-                        console.warn("No delivery preferences - autoselecting without them");
-                        this.setDeliveryMethod(this.standardRates[0].id);
-                        callback(null);
-                    }                   
+                        selection.deliveryMethodId = this.standardRates[0].id;
+                        this.showPage_Standard();
+                    }
                 }
             },
 
@@ -1120,7 +1108,6 @@
                         //We need to unselected it and then auto-select a standard address
                         if (this._selectedDropPoint) {
                             this._unselectDropPoint(); //If unselect a droppoint, default back to a fav address
-                            this._postData.request.order.transit.recipient.location = this.config.defaultAddress;
                         }
                         else {
                             //We had a standard address selected already, apparently. 
