@@ -27,28 +27,122 @@
 
 
 <link rel="import" href="../p4m-imports/p4m-imports.html" />  
-<link rel="import" href="../p4m-shared/p4m-shared-styles.html" />  
+<!-- <link rel="import" href="../p4m-shared/p4m-shared-styles.html" />   -->
  
-<!-- <link rel="stylesheet" href="../p4m-shared/p4m.css" /> -->
+<link rel="stylesheet" href="../p4m-shared/p4m.css" />
 
 <dom-module id="p4m-checkout">
 
     <template>
 
+        <iron-media-query query="(max-width: 375px)"
+                        query-matches="{{Phone}}"></iron-media-query>
+        <iron-media-query query="(min-width: 376px) and (max-width: 767px)"
+                        query-matches="{{Phablet}}"></iron-media-query>
+        <iron-media-query query="(min-width: 768px) and (max-width: 1024px)"
+                        query-matches="{{Tablet}}"></iron-media-query>
+        <iron-media-query query="(min-width: 1024px)"
+                        query-matches="{{Desktop}}"></iron-media-query>
+        <iron-media-query query="(min-width: 768px)"
+                        query-matches="{{LargerThanPhone}}"></iron-media-query>
+        <iron-media-query query="(max-width: 767px)"
+                        query-matches="{{SmallerThanDesktop}}"></iron-media-query>
+
         <p4m-api id="p4mCheckoutApi" ssl="true" on-noservice="onP4mNoService" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
         <div id="container" class$="{{_changeIndicatorClass}}">
 
-            <div id="topPanel" class="topPanel">
-                <img class="p4m-register-logo" src="../p4m-shared/img/P4M-Top-Header.png" id="peli-icon-header" />
-                <!-- Not using due to Variable font baselines screwing alignment across browsers, Including in logo image instead.
-                <h2>Checkout &amp; Delivery</h2> -->
+        <!-- Top Panel on devices larger than 768px wide -->
+        <template is="dom-if" if="{{LargerThanPhone}}">
+        <div hidden$="{{!LargerThanPhone}}">
+            <content select="[LargerThanPhone]">
+                <div id="topPanel" class="topPanel">
+                    <img class="p4m-register-logo" src="../p4m-shared/img/P4M-Top-Header.png" id="peli-icon-header" />
+                    <!-- Not using due to Variable font baselines screwing alignment across browsers, Including in logo image instead.
+                    <h2>Checkout &amp; Delivery</h2> -->
+                    <div class="flex-spacer"></div>
+                    <div><span class="font-weight-light">Welcome,</span> </div>
+                    <p4m-profile mode="basic"></p4m-profile>
+                </div>
+            </content>
+        </div>
+        </template>
+
+        <!-- Top Panel on devices less than than 768px wide -->
+        <template is="dom-if" if="{{LargerThanPhone}}">
+        <div hidden$="{{!LargerThanPhone}}">
+            <content select="[LargerThanPhone]">
+                <div id="topPanel" class="topPanel">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 456.2 91" style="enable-background:new 0 0 456.2 91;" xml:space="preserve" id="logo">
+                <style type="text/css">
+                    .st0{display:none;}
+                    .st1{display:inline;}
+                    .st2{fill:#37A553;}
+                </style>
+                <g id="Layer_2" class="st0">
+                    <rect x="0.6" class="st1" width="480" height="91"/>
+                </g>
+                <g id="Layer_1">
+                    <g id="Vector_Smart_Object_xA0_Image_1_">
+                    </g>
+                    <g id="Parcel_For_Me">
+                    </g>
+                    <g>
+                        <path class="st2" d="M157.8,32.8c0-0.2-0.4-0.4-0.6-0.4h-0.4c-0.2,0-0.4,0.2-0.6,0.4l-11.7,25.6c-0.2,0.4,0.2,1,0.9,0.8h2.4
+                            c0.4,0,0.5-0.4,0.8-0.6c0.6-1.6,1.5-3.3,2.3-5.1h12.5l2.3,5.3c0,0.4,0.4,0.6,0.8,0.6h2.5c0.6,0,0.9-0.6,0.6-1L157.8,32.8z
+                             M152.2,50.2l4.7-10.4h0.2l4.7,10.4H152.2z"/>
+                        <path class="st2" d="M95.7,5.7c-4.1,1-12.2,4.5-19.8,1.3c-11.1-4.3-15.3,8-16.2,11.5C58.9,21.7,51.1,46,8.6,4.1
+                            C7.4,2.8,5.6,3.7,5.8,5.4c0.5,14.4,13.6,28.3,13.6,28.3S49.9,67.5,6,75.3c-9,2-4.1,4.5-2,5.3c0.8,0.2,1.4,0.8,2,1.4
+                            c0.8,0.8,1.3,2,0,3.5c-2.4,2.4-5.7,6.4,3.7,5.1c9.4-1.4,69.6-8.8,71.9-51.7C82.7,14.5,92,11.4,96.5,7.1
+                            C97.1,6.5,96.5,5.4,95.7,5.7z M73.7,10.8c1,0,1.6,0.2,2.3,0.2c0.2,0.2,0.5,0.5,0.2,0.8l-1.3,1.7c0,0-3.5,4.1-5.5,1.8
+                            c-0.2-0.2-0.2-0.4-0.4-0.6C67.8,11.8,71.9,10.4,73.7,10.8z M14.5,87.6c-0.2,0-0.4-0.2-0.6-0.2c-0.6-1.6-1.4-6.7,8.2-11.2
+                            C49,66,56.8,45.7,59.5,38c3.3-9,7.4-15.8,13.5-10.2C89.7,43.1,69.3,79.4,14.5,87.6z"/>
+                        <path class="st2" d="M132.4,32.6h-8.5c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h2.3c0.4,0,0.8-0.4,0.8-0.8v-9h5.5
+                            c4.6,0,8.5-3.8,8.5-8.5C140.9,36.6,137.1,32.6,132.4,32.6z M132.2,45.9h-5.3v-9.4h5.3c2.7,0,4.9,1.8,4.9,4.5
+                            C137.2,43.9,134.9,45.9,132.2,45.9z"/>
+                        <path class="st2" d="M70.7,13.8c1,1.3,2.8-1,2.8-1l0.6-0.4c0.2-0.2,0-0.4-0.2-0.4s-0.6,0-1-0.2c-1-0.2-3.1,0.6-2.4,1.8
+                            C70.5,13.8,70.7,13.8,70.7,13.8z"/>
+                        <path class="st2" d="M40.1,22.6c0,0.6,0.4,0.9,0.8,1c2.3,0.8,10.4,3.5,13.1-1.6c0.6-1,0.2-2.3-0.6-3.1c-6.1-4.9-9-9.4-11.8-14.3
+                            V4.4c-2.4-5.1-7.4-7.1-6.4,3.5C35.8,16.4,39.1,21.1,40.1,22.6z"/>
+                        <path class="st2" d="M377.4,40.8c0-4.5-3.9-8.2-8.4-8.2h-10.4c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
+                            c0.4,0,0.8-0.4,0.8-0.8v-9.6h5.7l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.1-9.6
+                            C375.1,47.2,377.4,44.3,377.4,40.8z M368.5,45.7h-6.7v-9.2h6.7c2.4,0,4.7,2,4.7,4.5C373.2,43.7,370.9,45.7,368.5,45.7z"/>
+                        <path class="st2" d="M313.6,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v25.3c0,0.4,0.4,0.8,0.8,0.8h2.4c0.4,0,0.8-0.4,0.8-0.8
+                            v-10h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-8.8h12.1c0.5,0,0.8-0.4,0.8-0.8v-2
+                            C314.4,33,314,32.6,313.6,32.6z"/>
+                        <path class="st2" d="M196.8,40.8c0-4.5-3.9-8.2-8.4-8.2H178c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
+                            c0.4,0,0.8-0.4,0.8-0.8v-9.6h6l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.3-9.6C194.5,47.2,196.8,44.3,196.8,40.8z
+                             M188,45.7h-7v-9.2h7c2.4,0,4.7,2,4.7,4.5C192.7,43.7,190.4,45.7,188,45.7z"/>
+                        <path class="st2" d="M334.7,32.4c-7.6,0-13.7,6.1-13.7,13.7s6.1,13.7,13.7,13.7c7.6,0,13.7-6.2,13.7-13.7
+                            C348.5,38.5,342.3,32.4,334.7,32.4z M334.7,55.9c-5.3,0-9.8-4.5-9.8-9.8c0-5.6,4.5-10,9.8-10c5.3,0,9.8,4.7,9.8,10
+                            S340.2,55.9,334.7,55.9z"/>
+                        <path class="st2" d="M451.8,36.3c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-15.2c-0.5,0-0.8,0.4-0.8,0.8h0.1v25.2
+                            c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2
+                            c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8H451.8z"/>
+                        <path class="st2" d="M252.5,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2
+                            c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8h12.1c0.5,0,0.8-0.4,0.8-0.8
+                            v-2C253.3,33,252.9,32.6,252.5,32.6z"/>
+                        <path class="st2" d="M277,55.7h-10.2V33.4c0-0.4-0.4-0.8-0.8-0.8h-2.4c-0.5,0-0.8,0.4-0.8,0.8v25.1c0,0.4,0.4,0.8,0.8,0.8H277
+                            c0.5,0,0.8-0.4,0.8-0.8v-2C277.8,56.1,277.4,55.7,277,55.7z"/>
+                        <path class="st2" d="M218,36.1c2.2,0,4.7,0.8,6.5,2.4c0.4,0.4,0.8,0.4,1,0l1.6-1.6c0.4-0.2,0.4-0.8,0-1c-2.7-2.2-5.3-3.5-9.2-3.5
+                            c-7.5,0-13.7,6.1-13.8,13.5c0,7.6,6.2,13.7,13.7,13.7c3.2,0,6.5-1.3,9.2-3.7c0.2-0.2,0.2-0.8,0-1l-1.8-1.6c-0.2-0.2-0.4-0.2-0.8,0
+                            c-1.8,1.4-3.7,2.4-6.5,2.4c-5.5,0-9.6-4.5-9.6-9.8C208.5,40.6,212.5,36.1,218,36.1z"/>
+                        <path class="st2" d="M421.9,32.8c0-0.4-0.4-0.6-0.6-0.6h-0.6c-0.2,0-0.6,0.2-0.6,0.4l-8,19.5h-0.2l-8-19.5c0-0.2-0.4-0.4-0.6-0.4
+                            h-0.6c-0.2,0-0.6,0.4-0.6,0.6l-4.8,25.6c0,0.4,0.2,0.8,0.8,0.8h2.4c0.2,0,0.6-0.4,0.6-0.6l2.7-16.9h0.2l7,17.6
+                            c0,0.2,0.4,0.4,0.6,0.4h0.6c0.4,0,0.6-0.2,0.6-0.4l7-17.6h0.2l2.8,16.9c0.2,0.4,0.4,0.6,0.8,0.6h2.4c0.4,0,0.9-0.2,0.6-0.8
+                            L421.9,32.8z"/>
+                    </g>
+                </g>
+                </svg>
                 <div class="flex-spacer"></div>
-                <div><span class="font-weight-light">Welcome,</span> </div>
                 <p4m-profile mode="basic"></p4m-profile>
             </div>
+            </content>
+        </div>
+        </template>
 
-            <div id="panelContainer" class="horizontal layout">
+            <div id="panelContainer" class="horizontal layout mobi">
                 <div id="detailPanel" class="p4m-panel flex-2">                   
 
                     <!-- Desktop Tabs -->               
@@ -60,119 +154,226 @@
                     </paper-tabs> -->
                     <!-- END Desktop Tabs -->     
 
-                    <!-- Mobile Tabs -->
-<!--                     <paper-tabs selected="{{selectedTab}}" no-bar>
-                        <paper-tab onclick="select(0);">My Order<p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab onclick="select(1);">Addresses<p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab onclick="select(2);">Delivery Options<p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab onclick="select(3);">Payment Options<p4m-spinner species="progress" id="payment_spinner"></p4m-spinner></paper-tab>                  
-                    </paper-tabs> -->
-                    <!-- END Mobile Tabs -->
 
                     <!-- Mobile Tabs 2 -->
                     <div id="nav">
-                          <p onclick="select(0);">Page 1</p>
-                          <p onclick="select(1);">Page 2</p>
-                          <p onclick="select(2);">Page 3</p>
+                          <span onclick="select(0);">Page 1</span>
+                          <span onclick="select(1);">Page 2</span>
+                          <span onclick="select(2);">Page 3</span>
+                          <span onclick="select(3);">Page 4</span>
                         </div>
                     <!-- END Mobile Tabs 2 -->
 
 
 
-
-                    <!-- Neon Animated Mobile Pages -->
-                    <!-- <template is="dom-bind" id="mobilepages"> -->
-<!--                     <div id="mobilepages">
-                        <neon-animated-pages class="flex" selected="[[selected]]">
-                            <iron-page id="cartPage">                       
-                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
-                        </iron-page>
-                        <iron-page id="addressPage">
-                            <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
-                        </iron-page>
-                        <iron-page id="deliveryPage">
-                            <div id="shippingSelector" class="hidden">
-
-                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
-                            </div>
-                            <div id="noShippingWarning">
-                                Please <a class="link" href="#">enter an address</a> to continue.
-                            </div>
-
-                            <template is="dom-if" if="{{useGfsCheckout}}">
-                            </template>
-                        </iron-page>
-                        <iron-page id="cardPage">
-                            <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
-                        </iron-page>
-
-                        </neon-animated-pages>      
-                    </div> -->
-                    <!-- END Neon Animated Mobile Pages -->
-
-
-                    <!-- Desktop Pages -->
-<!--                     <iron-pages id="p4mPages" selected="{{selectedTab}}" on-iron-select="_onSelectTab">    
-
-                        <iron-page id="cartPage">                       
-                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
-                        </iron-page>
-                        <iron-page id="addressPage">
-                            <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
-                        </iron-page>
-                        <iron-page id="deliveryPage">
-                            <div id="shippingSelector" class="hidden">
-
-                                <gfs-checkout id="gfsCheckoutWidget" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsAccessToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
-                            </div>
-                            <div id="noShippingWarning">
-                                Please <a class="link" href="#">enter an address</a> to continue.
-                            </div>
-
-                            <template is="dom-if" if="{{useGfsCheckout}}">
-                            </template>
-                        </iron-page>
-                        <iron-page id="cardPage">
-                            <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
-                        </iron-page>
-
-                    </iron-pages> -->
-                    <!-- END Desktop Pages -->
-
-
-                    <!-- Mobile pages 2 -->
-<!-- 
-                        <div id="nav">
-                          <p onclick="select(0);">Page 1</p>
-                          <p onclick="select(1);">Page 2</p>
-                          <p onclick="select(2);">Page 3</p>
-                        </div>
-
-                        <iron-pages
-                          id="mobilepages"
-                          selected="{{selected}}"
-                        >
-                          <div class="page one">
-                          </div>
-                          <div class="page two"><p>My page 2</p></div>
-                          <div class="page three"><p>My page 3</p></div>
-                        </iron-pages>
- -->
-                    <!-- END Mobile pages 2 -->
-
-
-
                     <!-- Mobile pages 3 -->
                     <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
+                        <iron-page id="summaryPanel" class="p4m-panel smallSummary flex-1 page four">
+                            <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
+                            <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
+
+
+                            <footer id="footerpPanel" class$="footerPanel {{_changeIndicatorClass}}">
+            
+                                <div class="left">
+                                    <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
+                                        <div id="downloadAppAd">
+                                                           <p class="p4m-info">Track your purchases in the free P4M App!</p>
+                                                           <div class="app-buttons"><a href="https://www.apple.com/ios/app-store/">
+                                                           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve">
+                                        <style type="text/css">
+                                            .st0{fill:#58595B;}
+                                        </style>
+                                        <g>
+                                            <path class="st0" d="M106.6,33.2c-1.3-0.5-2.2-1-2.7-1.4c-0.6-0.5-0.8-1.1-0.8-1.8c0-0.7,0.2-1.2,0.7-1.7c0.6-0.5,1.4-0.8,2.4-0.8
+                                                c1.3,0,2.5,0.3,3.5,0.8l0.7-2.4c-1.1-0.6-2.5-0.9-4.2-0.9c-1.9,0-3.4,0.5-4.5,1.4c-1.1,1-1.7,2.2-1.7,3.7c0,2.3,1.6,4.1,4.8,5.3
+                                                c1.2,0.4,2,0.9,2.5,1.4c0.5,0.5,0.8,1.1,0.8,1.9c0,0.8-0.3,1.5-0.9,2c-0.6,0.5-1.5,0.8-2.6,0.8c-1.5,0-3-0.4-4.3-1.1l-0.7,2.5
+                                                c1.2,0.8,2.8,1.1,4.8,1.1c2.1,0,3.8-0.5,5-1.6c1.1-1,1.6-2.3,1.6-3.8c0-1.3-0.4-2.3-1.1-3.2C109.4,34.6,108.2,33.8,106.6,33.2z"/>
+                                            <rect x="75" y="14.3" class="st0" width="1.7" height="6.9"/>
+                                            <path class="st0" d="M75.9,13.3c0.6,0,1-0.4,1-0.9c0-0.5-0.4-0.9-1-0.9c-0.6,0-1,0.4-1,0.9C74.9,12.9,75.3,13.3,75.9,13.3z"/>
+                                            <path class="st0" d="M144.7,15.5c1,0,1.3,0.8,1.3,1.7v3.9h1.7v-4c0-2.2-1.2-3-2.4-3c-0.4,0-0.8,0.1-1.2,0.3
+                                                c-0.4,0.2-0.6,0.5-0.9,0.8h0v-4.1h-1.7v10h1.7V17c0-0.2,0-0.4,0.1-0.5C143.5,16,144,15.5,144.7,15.5z"/>
+                                            <path class="st0" d="M83.4,19.3c0,1,0.8,2,2.2,2c0.9,0,1.6-0.4,2-0.9h0l0.1,0.8h1.6c-0.1-0.4-0.1-1-0.1-1.6V17
+                                                c0-1.5-0.6-2.9-2.8-2.9c-1.1,0-2,0.3-2.5,0.6l0.3,1.1c0.5-0.3,1.2-0.5,1.8-0.5c1.2,0,1.4,0.7,1.4,1.2v0.1
+                                                C85,16.6,83.4,17.5,83.4,19.3z M87.5,17.8v0.9c0,0.1,0,0.3,0,0.4c-0.2,0.5-0.7,0.9-1.4,0.9c-0.5,0-1-0.3-1-1
+                                                C85.1,18,86.3,17.8,87.5,17.8z"/>
+                                            <path class="st0" d="M139.9,30.9c-0.7,0.5-1.2,1.2-1.5,2.1h-0.1l-0.1-2.5h-2.6c0.1,1.3,0.1,2.7,0.1,4.2v9.1h3v-7
+                                                c0-1.1,0.2-1.9,0.7-2.6c0.6-0.8,1.4-1.2,2.4-1.2c0.3,0,0.6,0,0.9,0.1v-2.8c-0.2,0-0.5,0-0.7,0C141.3,30.2,140.6,30.5,139.9,30.9z"
+                                                />
+                                            <rect x="79.4" y="11.1" class="st0" width="1.7" height="10"/>
+                                            <path class="st0" d="M62.7,17.8c-0.2,0.6-0.3,1.2-0.5,1.7h0c-0.1-0.6-0.3-1.1-0.5-1.7l-1.1-3.5h-1.9l2.5,6.9H63l2.6-6.9h-1.8
+                                                L62.7,17.8z"/>
+                                            <path class="st0" d="M55.8,25.3l-5.9,18.4h3.1l1.6-5.4h6l1.7,5.4h3.2l-6-18.4H55.8z M55.1,36.1l1.5-4.8c0.4-1.5,0.7-2.7,0.9-3.5
+                                                h0.1c0.5,1.8,0.8,3,0.9,3.5l1.6,4.8H55.1z"/>
+                                            <path class="st0" d="M70.7,20.4L70.7,20.4l0.2,0.8h1.6c-0.1-0.4-0.1-1-0.1-1.6V17c0-1.5-0.6-2.9-2.8-2.9c-1.1,0-2,0.3-2.5,0.6
+                                                l0.3,1.1c0.5-0.3,1.2-0.5,1.8-0.5c1.2,0,1.4,0.7,1.4,1.2v0.1c-2.5,0-4.1,0.9-4.1,2.6c0,1,0.8,2,2.2,2
+                                                C69.6,21.3,70.3,20.9,70.7,20.4z M68.2,19.1c0-1,1.2-1.3,2.4-1.3v0.9c0,0.1,0,0.3,0,0.4c-0.2,0.5-0.7,0.9-1.4,0.9
+                                                C68.7,20.1,68.2,19.7,68.2,19.1z"/>
+                                            <path class="st0" d="M74.4,30.2c-2,0-3.5,0.8-4.5,2.4h-0.1l-0.2-2.1h-2.6c0.1,1.5,0.1,2.9,0.1,4.4v14.3h3v-7c0.8,1.3,2,1.9,3.8,1.9
+                                                c1.6,0,3-0.6,4.1-1.7c1.2-1.3,1.8-3.1,1.8-5.4c0-2-0.5-3.7-1.6-4.9C77.3,30.8,76,30.2,74.4,30.2z M76,40.5
+                                                c-0.6,0.9-1.5,1.3-2.6,1.3c-0.9,0-1.7-0.3-2.3-1c-0.6-0.7-0.9-1.5-0.9-2.5v-2.2c0-0.2,0-0.5,0.1-0.9c0.2-0.8,0.6-1.4,1.2-1.9
+                                                c0.6-0.5,1.3-0.7,2-0.7c1.1,0,1.9,0.4,2.6,1.3c0.6,0.8,0.9,1.9,0.9,3.2C76.9,38.5,76.6,39.6,76,40.5z"/>
+                                            <path class="st0" d="M52.5,18.4h3l0.9,2.7h1.9l-3.1-9.5h-2.2l-3,9.5h1.8L52.5,18.4z M53.5,14.8c0.2-0.6,0.3-1.2,0.5-1.8h0
+                                                c0.1,0.5,0.3,1.2,0.5,1.8l0.7,2.3h-2.4L53.5,14.8z"/>
+                                            <path class="st0" d="M150,30.2c-1.9,0-3.5,0.7-4.7,2.1c-1.1,1.3-1.6,3-1.6,5c0,2,0.6,3.7,1.8,4.9c1.2,1.2,2.8,1.8,4.9,1.8
+                                                c1.7,0,3.2-0.3,4.5-0.8l-0.5-2.1c-1.1,0.4-2.3,0.6-3.6,0.6c-1.2,0-2.2-0.3-2.9-0.9c-0.8-0.7-1.3-1.7-1.3-3h8.9
+                                                c0.1-0.4,0.1-0.8,0.1-1.3c0-1.7-0.4-3.1-1.2-4.2C153.4,30.9,152,30.2,150,30.2z M146.6,35.7c0.1-0.9,0.4-1.7,0.9-2.3
+                                                c0.6-0.8,1.4-1.2,2.4-1.2c1.1,0,1.8,0.4,2.4,1.2c0.4,0.6,0.6,1.4,0.6,2.3H146.6z"/>
+                                            <rect x="99.8" y="11.1" class="st0" width="1.7" height="10"/>
+                                            <path class="st0" d="M89.1,30.2c-2,0-3.5,0.8-4.5,2.4h-0.1l-0.2-2.1h-2.6c0.1,1.5,0.1,2.9,0.1,4.4v14.3h3v-7c0.8,1.3,2,1.9,3.8,1.9
+                                                c1.6,0,3-0.6,4.1-1.7c1.2-1.3,1.8-3.1,1.8-5.4c0-2-0.5-3.7-1.6-4.9C91.9,30.8,90.6,30.2,89.1,30.2z M90.6,40.5
+                                                c-0.6,0.9-1.5,1.3-2.6,1.3c-0.9,0-1.7-0.3-2.3-1c-0.6-0.7-0.9-1.5-0.9-2.5v-2.2c0-0.2,0-0.5,0.1-0.9c0.2-0.8,0.6-1.4,1.2-1.9
+                                                c0.6-0.5,1.2-0.7,2-0.7c1.1,0,1.9,0.4,2.6,1.3c0.6,0.8,0.9,1.9,0.9,3.2C91.5,38.5,91.2,39.6,90.6,40.5z"/>
+                                            <path class="st0" d="M95,14.1c-1,0-1.8,0.4-2.2,1.1h0v-4.1H91v8.1c0,0.7,0,1.5-0.1,1.9h1.5l0.1-1h0c0.5,0.8,1.3,1.2,2.2,1.2
+                                                c1.5,0,3.1-1.2,3.1-3.7C97.9,15.5,96.7,14.1,95,14.1z M94.3,19.9c-0.7,0-1.4-0.5-1.5-1.2c0-0.1,0-0.3,0-0.4v-1.1
+                                                c0-0.2,0-0.3,0.1-0.5c0.2-0.8,0.8-1.3,1.5-1.3c1.2,0,1.7,1,1.7,2.2C96.1,19.1,95.4,19.9,94.3,19.9z"/>
+                                            <path class="st0" d="M152.7,21.3c1,0,1.8-0.2,2.4-0.4l-0.3-1.2c-0.5,0.2-1.1,0.3-1.9,0.3c-1.1,0-2.1-0.5-2.1-1.8h4.6
+                                                c0-0.2,0.1-0.4,0.1-0.7c0-1.5-0.7-3.3-3-3.3c-2.2,0-3.3,1.8-3.3,3.7C149.2,19.9,150.5,21.3,152.7,21.3z M152.5,15.3
+                                                c1.2,0,1.4,1,1.4,1.7h-3C150.9,16.3,151.4,15.3,152.5,15.3z"/>
+                                            <path class="st0" d="M116.8,27.2l-2.9,0.9v2.4h-1.9v2.2h1.9v6.7c0,1.7,0.3,2.9,1,3.6c0.7,0.7,1.6,1.1,2.7,1.1
+                                                c0.9,0,1.7-0.1,2.3-0.3l-0.1-2.2c-0.3,0.1-0.8,0.1-1.3,0.1c-1.2,0-1.7-0.8-1.7-2.5v-6.5h3.3v-2.2h-3.3V27.2z"/>
+                                            <path class="st0" d="M118.5,14.1c-2.1,0-3.5,1.4-3.5,3.6c0,2.2,1.5,3.5,3.4,3.5c1.7,0,3.5-1.1,3.5-3.6
+                                                C121.9,15.6,120.5,14.1,118.5,14.1z M118.4,20c-1,0-1.7-1-1.7-2.3c0-1.1,0.5-2.3,1.7-2.3c1.2,0,1.7,1.2,1.7,2.3
+                                                C120.1,19.1,119.4,20,118.4,20z"/>
+                                            <path class="st0" d="M127.5,30.2c-2,0-3.6,0.6-4.8,2c-1.2,1.3-1.8,3-1.8,5.1c0,2,0.6,3.6,1.7,4.9c1.2,1.3,2.7,1.9,4.7,1.9
+                                                c2,0,3.6-0.7,4.9-2c1.2-1.3,1.7-3,1.7-5c0-2-0.6-3.6-1.7-4.9C131,30.9,129.5,30.2,127.5,30.2z M130,40.3c-0.6,1.1-1.5,1.6-2.6,1.6
+                                                c-1.2,0-2-0.5-2.7-1.6c-0.5-0.9-0.8-1.9-0.8-3.1c0-1.3,0.3-2.3,0.8-3.2c0.6-1.1,1.5-1.6,2.7-1.6c1.2,0,2,0.5,2.7,1.6
+                                                c0.5,0.9,0.8,1.9,0.8,3.1S130.6,39.4,130,40.3z"/>
+                                            <path class="st0" d="M136.2,18.8c0,0.9,0.2,1.5,0.5,1.9c0.3,0.4,0.8,0.6,1.5,0.6c0.5,0,1-0.1,1.3-0.2l0-1.3
+                                                c-0.2,0.1-0.4,0.1-0.7,0.1c-0.7,0-0.9-0.4-0.9-1.3v-3h1.6v-1.3h-1.6v-1.8l-1.7,0.5v1.3h-1v1.3h1V18.8z"/>
+                                            <path class="st0" d="M107.1,21.3c1,0,1.8-0.2,2.4-0.4l-0.3-1.2c-0.5,0.2-1.1,0.3-1.9,0.3c-1.1,0-2.1-0.5-2.1-1.8h4.6
+                                                c0-0.2,0.1-0.4,0.1-0.7c0-1.5-0.7-3.3-3-3.3c-2.2,0-3.3,1.8-3.3,3.7C103.6,19.9,104.9,21.3,107.1,21.3z M106.8,15.3
+                                                c1.2,0,1.4,1,1.4,1.7h-3C105.3,16.3,105.7,15.3,106.8,15.3z"/>
+                                            <path class="st0" d="M123.6,21.1h1.7v-4c0-0.2,0-0.4,0.1-0.5c0.2-0.5,0.7-1,1.4-1c0.9,0,1.3,0.7,1.3,1.7v3.9h1.7v-4.1
+                                                c0-2.2-1.2-2.9-2.4-2.9c-1.1,0-1.9,0.6-2.2,1.2h0l-0.1-1h-1.5c0,0.6,0.1,1.3,0.1,2V21.1z"/>
+                                            <path class="st0" d="M36.1,28.8c0-4.1,3.4-6.1,3.5-6.2c-1.9-2.8-4.9-3.2-6-3.2c-2.5-0.3-5,1.5-6.2,1.5c-1.3,0-3.3-1.5-5.4-1.4
+                                                c-2.7,0-5.3,1.6-6.7,4.1c-2.9,5-0.7,12.4,2,16.4c1.4,2,3,4.2,5.1,4.1c2.1-0.1,2.9-1.3,5.4-1.3c2.5,0,3.2,1.3,5.4,1.3
+                                                c2.2,0,3.6-2,5-4c1.6-2.3,2.2-4.5,2.3-4.6C40.4,35.4,36.1,33.7,36.1,28.8z"/>
+                                            <path class="st0" d="M32,16.7c1.1-1.4,1.9-3.3,1.7-5.2c-1.6,0.1-3.6,1.1-4.8,2.5c-1,1.2-2,3.2-1.7,5C29,19.1,30.8,18.1,32,16.7z"/>
+                                            <path class="st0" d="M162.4,0H8.5C3.8,0,0,3.8,0,8.5v40.3c0,4.7,3.8,8.5,8.5,8.5h154c4.7,0,8.5-3.8,8.5-8.5V8.5
+                                                C170.9,3.8,167.1,0,162.4,0z M168.9,48.8c0,3.6-2.9,6.5-6.5,6.5H8.5c-3.6,0-6.5-2.9-6.5-6.5V8.5C2,4.9,4.9,2,8.5,2h154
+                                                c3.6,0,6.5,2.9,6.5,6.5V48.8z"/>
+                                        </g>
+                                        </svg>
+                                        </a>
+                                        <a href="https://play.google.com/store/apps">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve" class="style-scope p4m-checkout">
+                                        
+                                        <g class="style-scope p4m-checkout">
+                                            <path class="st0 style-scope p4m-checkout" d="M162.4,0H8.5C3.8,0,0,3.8,0,8.5v40.3c0,4.7,3.8,8.5,8.5,8.5h154c4.7,0,8.5-3.8,8.5-8.5V8.5
+                                                C170.9,3.8,167.1,0,162.4,0z M168.9,48.8c0,3.6-2.9,6.5-6.5,6.5H8.5c-3.6,0-6.5-2.9-6.5-6.5V8.5C2,4.9,4.9,2,8.5,2h154
+                                                c3.6,0,6.5,2.9,6.5,6.5V48.8z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M52.5,17.3h1.8c0.2,0.8,0.4,1.3,0.4,1.5h1.3c0-0.1-0.3-1-0.8-2.6c-0.6-1.6-0.8-2.4-0.8-2.6h-1.5
+                                                c0,0.2-0.3,1-0.9,2.6c-0.6,1.6-0.9,2.4-0.9,2.5h1.2C52.1,18.6,52.2,18.1,52.5,17.3z M53.3,14.3L53.3,14.3c0.1,0.1,0.3,0.8,0.7,2.2
+                                                h-1.4C53.1,15.2,53.3,14.4,53.3,14.3z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M57.7,18.8c0-0.9-0.1-1.7-0.1-2.4c0-0.5,0-1-0.1-1.6h0.1c0.1,0.4,0.5,1.1,1.3,2.2c0.7,1,1.1,1.6,1.1,1.7h1
+                                                c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5h-1c0,0.8,0.1,1.5,0.1,2.2c0,0.5,0,1,0.1,1.6h-0.1c-0.1-0.4-0.5-1.1-1.2-2.1
+                                                c-0.7-1-1-1.5-1-1.7h-1.2c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H57.7z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M64,18.8c0.9,0,1.5-0.3,2-0.8c0.5-0.6,0.7-1.2,0.7-2c0-0.7-0.2-1.2-0.6-1.7c-0.4-0.5-1.1-0.7-2.1-0.7
+                                                c-0.1,0-0.2,0-0.4,0c-0.2,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7C63.1,18.8,63.6,18.8,64,18.8z M63.8,14.4
+                                                c0.6,0,1.1,0.2,1.4,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,0.9-0.4,1.3C65,17.8,64.5,18,64,18c-0.2,0-0.3,0-0.5-0.1
+                                                c0-0.6,0-1.2,0-1.9c0-0.6,0-1.1,0-1.7C63.6,14.4,63.7,14.4,63.8,14.4z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M68.9,18.8c0-0.7,0-1.4,0-2c0.1,0,0.3,0,0.4,0c0.4,0,0.6,0.1,0.8,0.3c0.2,0.2,0.4,0.8,0.7,1.7H72
+                                                c-0.3-0.9-0.6-1.5-0.8-1.9c-0.2-0.3-0.4-0.5-0.7-0.6v-0.1c0.7-0.3,1-0.7,1-1.4c0-0.8-0.6-1.2-1.8-1.2c-0.2,0-0.4,0-0.7,0
+                                                c-0.3,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H68.9z M69.5,14.3c0.7,0,1,0.3,1,0.8c0,0.6-0.4,0.9-1.3,0.9
+                                                c-0.1,0-0.2,0-0.4,0c0-0.7,0-1.2,0-1.6C69,14.4,69.3,14.3,69.5,14.3z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M75.1,18.9c0.7,0,1.3-0.3,1.8-0.8c0.5-0.5,0.7-1.2,0.7-2c0-0.8-0.2-1.4-0.7-1.9c-0.5-0.5-1.1-0.7-1.7-0.7
+                                                c-0.7,0-1.3,0.3-1.8,0.8c-0.5,0.5-0.7,1.2-0.7,2c0,0.8,0.2,1.4,0.7,1.9C73.8,18.7,74.4,18.9,75.1,18.9z M74.1,14.9
+                                                c0.3-0.3,0.6-0.5,1-0.5c0.4,0,0.8,0.2,1,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,1-0.4,1.3c-0.3,0.3-0.6,0.5-1,0.5
+                                                c-0.4,0-0.8-0.2-1-0.5c-0.3-0.3-0.4-0.8-0.4-1.3C73.7,15.7,73.9,15.2,74.1,14.9z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M78.8,13.6c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7h1.1c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5H78.8z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M82.9,18.8c0.9,0,1.5-0.3,2-0.8c0.5-0.6,0.7-1.2,0.7-2c0-0.7-0.2-1.2-0.6-1.7c-0.4-0.5-1.1-0.7-2.1-0.7
+                                                c-0.1,0-0.2,0-0.4,0c-0.2,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7C82,18.8,82.5,18.8,82.9,18.8z M82.7,14.4
+                                                c0.6,0,1.1,0.2,1.4,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,0.9-0.4,1.3S83.4,18,82.9,18c-0.2,0-0.3,0-0.5-0.1c0-0.6,0-1.2,0-1.9
+                                                c0-0.6,0-1.1,0-1.7C82.5,14.4,82.6,14.4,82.7,14.4z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M92.4,16.2c-0.6-1.6-0.8-2.4-0.8-2.6H90c0,0.2-0.3,1-0.9,2.6c-0.6,1.6-0.9,2.4-0.9,2.5h1.2
+                                                c0-0.2,0.1-0.7,0.4-1.5h1.8c0.2,0.8,0.4,1.3,0.4,1.5h1.3C93.2,18.6,92.9,17.8,92.4,16.2z M89.9,16.5c0.5-1.4,0.7-2.1,0.7-2.2h0.1
+                                                c0,0.1,0.2,0.8,0.7,2.2H89.9z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M95.2,18.8c0-0.8,0-1.5,0-2c0.1,0,0.1,0,0.3,0c0.7,0,1.3-0.2,1.7-0.5c0.5-0.3,0.7-0.8,0.7-1.4
+                                                c0-0.5-0.2-0.8-0.5-1c-0.3-0.2-0.8-0.3-1.3-0.3c-0.2,0-0.4,0-0.7,0c-0.3,0-0.5,0-0.6,0h-0.7c0,0.7,0.1,1.5,0.1,2.5
+                                                c0,1,0,1.9-0.1,2.7H95.2z M95.7,14.3c0.7,0,1.1,0.3,1.1,0.8c0,0.6-0.5,0.9-1.4,0.9c-0.1,0-0.2,0-0.2,0c0-0.6,0-1.2,0-1.7
+                                                C95.3,14.4,95.5,14.3,95.7,14.3z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M99.9,18.8c0-0.8,0-1.5,0-2c0.1,0,0.1,0,0.3,0c0.7,0,1.3-0.2,1.7-0.5c0.5-0.3,0.7-0.8,0.7-1.4
+                                                c0-0.5-0.2-0.8-0.5-1c-0.3-0.2-0.8-0.3-1.3-0.3c-0.2,0-0.4,0-0.7,0c-0.3,0-0.5,0-0.6,0h-0.7c0,0.7,0.1,1.5,0.1,2.5
+                                                c0,1,0,1.9-0.1,2.7H99.9z M100.4,14.3c0.7,0,1.1,0.3,1.1,0.8c0,0.6-0.5,0.9-1.4,0.9c-0.1,0-0.2,0-0.2,0c0-0.6,0-1.2,0-1.7
+                                                C100,14.4,100.2,14.3,100.4,14.3z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M107.7,18.9c0.7,0,1.3-0.3,1.8-0.8c0.5-0.5,0.7-1.2,0.7-2c0-0.8-0.2-1.4-0.7-1.9c-0.5-0.5-1.1-0.7-1.7-0.7
+                                                c-0.7,0-1.3,0.3-1.8,0.8c-0.5,0.5-0.7,1.2-0.7,2c0,0.8,0.2,1.4,0.7,1.9C106.4,18.7,107,18.9,107.7,18.9z M106.8,14.9
+                                                c0.3-0.3,0.6-0.5,1-0.5c0.4,0,0.8,0.2,1,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,1-0.4,1.3c-0.3,0.3-0.6,0.5-1,0.5
+                                                c-0.4,0-0.8-0.2-1-0.5c-0.3-0.3-0.4-0.8-0.4-1.3C106.4,15.7,106.5,15.2,106.8,14.9z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M112.4,18.8c0-0.9-0.1-1.7-0.1-2.4c0-0.5,0-1-0.1-1.6h0.1c0.1,0.4,0.5,1.1,1.3,2.2c0.7,1,1.1,1.6,1.1,1.7h1
+                                                c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5h-1c0,0.8,0.1,1.5,0.1,2.2c0,0.5,0,1,0.1,1.6h-0.1c-0.1-0.4-0.5-1.1-1.2-2.1
+                                                c-0.7-1-1-1.5-1-1.7h-1.2c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H112.4z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M59.1,31.3v2h6c-0.1,1.4-0.6,2.5-1.4,3.3c-1.2,1.2-2.8,1.8-4.6,1.8c-1.7,0-3.2-0.6-4.5-1.8
+                                                c-1.3-1.2-1.9-2.8-1.9-4.7c0-1.9,0.6-3.5,1.9-4.7c1.3-1.2,2.8-1.8,4.5-1.8c1.9,0,3.4,0.7,4.5,1.9l1.4-1.4c-0.6-0.8-1.5-1.4-2.6-1.8
+                                                c-1.1-0.5-2.2-0.7-3.4-0.7c-2.4,0-4.4,0.8-6,2.5c-1.7,1.6-2.5,3.7-2.5,6.1c0,2.4,0.8,4.5,2.5,6.1c1.7,1.6,3.7,2.5,6,2.5
+                                                c2.5,0,4.5-0.8,6-2.4c1.4-1.4,2-3.2,2-5.5c0-0.4,0-0.8-0.1-1.2H59.1z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M73.9,28.5c-1.7,0-3.1,0.6-4.1,1.7c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.5,1.7,4.1,1.7
+                                                c1.7,0,3.1-0.6,4.1-1.7c1.1-1.1,1.6-2.6,1.6-4.3s-0.5-3.1-1.6-4.3C76.9,29,75.5,28.5,73.9,28.5z M76.4,37.4
+                                                c-0.7,0.7-1.6,1.1-2.6,1.1c-1,0-1.9-0.4-2.6-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.6-1.1,2.6-1.1
+                                                c1,0,1.9,0.4,2.6,1.1c0.7,0.7,1.1,1.7,1.1,2.9C77.5,35.7,77.2,36.6,76.4,37.4z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M86.1,28.5c-1.7,0-3.1,0.6-4.1,1.7c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.5,1.7,4.1,1.7
+                                                c1.7,0,3.1-0.6,4.1-1.7c1.1-1.1,1.6-2.6,1.6-4.3s-0.5-3.1-1.6-4.3C89.2,29,87.8,28.5,86.1,28.5z M88.7,37.4
+                                                c-0.7,0.7-1.6,1.1-2.6,1.1c-1,0-1.9-0.4-2.6-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.6-1.1,2.6-1.1
+                                                c1,0,1.9,0.4,2.6,1.1c0.7,0.7,1.1,1.7,1.1,2.9C89.8,35.7,89.4,36.6,88.7,37.4z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M101.9,30.4L101.9,30.4c-0.5-0.6-1-1-1.7-1.4c-0.7-0.4-1.4-0.5-2.3-0.5c-1.5,0-2.7,0.6-3.8,1.7
+                                                c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.3,1.7,3.8,1.7c0.8,0,1.6-0.2,2.3-0.6c0.7-0.4,1.2-0.8,1.6-1.4h0.1v1.1
+                                                c0,1.2-0.3,2.1-1,2.8c-0.7,0.7-1.6,1-2.7,1c-0.7,0-1.4-0.2-2-0.6c-0.6-0.4-1-0.9-1.2-1.5l-1.9,0.8c0.4,0.9,1,1.6,1.8,2.3
+                                                c0.8,0.7,1.9,1,3.3,1c1.6,0,3-0.5,4.1-1.5c1.1-1,1.7-2.5,1.7-4.4V28.8h-2V30.4z M100.8,37.4c-0.7,0.7-1.5,1.1-2.5,1.1
+                                                c-1,0-1.8-0.4-2.5-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.5-1.1,2.5-1.1c1,0,1.8,0.4,2.5,1.1
+                                                c0.7,0.7,1,1.7,1,3C101.9,35.7,101.5,36.7,100.8,37.4z"></path>
+                                            <rect x="105.9" y="23.6" class="st0 style-scope p4m-checkout" width="2.1" height="16.4"></rect>
+                                            <path class="st0 style-scope p4m-checkout" d="M114.7,28.5c-1.6,0-2.9,0.6-4,1.8c-1,1.2-1.5,2.6-1.5,4.2c0,1.7,0.5,3.2,1.6,4.3c1.1,1.1,2.4,1.7,4.1,1.7
+                                                c1.2,0,2.3-0.3,3.1-0.9c0.8-0.6,1.4-1.3,1.8-2.2l-1.9-0.8c-0.5,1.3-1.6,1.9-3.1,1.9c-0.9,0-1.7-0.3-2.4-1c-0.7-0.7-1.1-1.6-1.1-2.7
+                                                h8.9l0-0.4c0-1.8-0.5-3.3-1.5-4.4C117.7,29,116.4,28.5,114.7,28.5z M111.5,33.1c0.2-0.8,0.6-1.5,1.2-2c0.6-0.5,1.2-0.7,2-0.7
+                                                c1.1,0,1.9,0.3,2.4,0.9c0.5,0.6,0.8,1.2,0.9,1.8H111.5z"></path>
+                                            <path class="st0 style-scope p4m-checkout" d="M132,23.6h-5.6v16.4h2.1v-6.6h3.5c1.4,0,2.6-0.5,3.6-1.4c1-0.9,1.5-2.1,1.5-3.5c0-1.4-0.5-2.6-1.5-3.5
+                                                C134.6,24.1,133.4,23.6,132,23.6z M134.2,30.5c-0.5,0.6-1.2,0.9-2.1,0.9h-3.5v-5.7h3.5c0.9,0,1.6,0.3,2.1,0.9
+                                                c0.5,0.6,0.8,1.3,0.8,2C135,29.2,134.7,29.9,134.2,30.5z"></path>
+                                            <rect x="138.5" y="23.6" class="st0 style-scope p4m-checkout" width="2.1" height="16.4"></rect>
+                                            <path class="st0 style-scope p4m-checkout" d="M146.9,28.5c-1.3,0-2.3,0.3-3,0.9c-0.8,0.6-1.3,1.2-1.5,1.9l1.9,0.8c0.2-0.5,0.5-0.9,1-1.2
+                                                c0.5-0.3,1.1-0.4,1.7-0.4c0.8,0,1.5,0.2,2.1,0.7c0.6,0.5,0.8,1.2,0.8,2v0.3c-0.8-0.5-1.8-0.7-3-0.7c-1.4,0-2.6,0.3-3.5,1
+                                                c-0.9,0.7-1.4,1.7-1.4,2.9c0,1.1,0.4,2,1.2,2.7c0.8,0.7,1.8,1,3,1c1.6,0,2.9-0.6,3.7-1.9h0.1v1.6h2v-6.8c0-1.5-0.5-2.7-1.4-3.6
+                                                C149.5,28.9,148.3,28.5,146.9,28.5z M148.8,37.5c-0.7,0.6-1.5,1-2.4,1c-0.6,0-1.2-0.2-1.6-0.5c-0.5-0.3-0.7-0.8-0.7-1.3
+                                                c0-0.6,0.3-1.1,0.8-1.6c0.5-0.4,1.3-0.7,2.3-0.7c1.2,0,2.1,0.2,2.7,0.7C149.9,36.1,149.5,36.9,148.8,37.5z"></path>
+                                            <polygon class="st0 style-scope p4m-checkout" points="157.9,36.9 157.9,36.9 154.6,28.8 152.3,28.8 156.9,39.3 154.3,45 156.5,45 163.5,28.8 161.2,28.8     
+                                                "></polygon>
+                                            <path class="st0 aqua style-scope p4m-checkout" d="M29.9,28.9c-2.3-2.3-4.6-4.6-6.9-7c-3.5-3.6-7.1-7.2-10.6-10.8c-0.2-0.2-0.3-0.2-0.5,0
+                                                c-0.5,0.5-0.6,1.1-0.6,1.7c0,5.2,0,10.5,0,15.7c0,0,0,0,0,0c0,2.2,0,4.4,0,6.6c0,3.1,0,6.2,0,9.3c0,0.7,0.2,1.4,0.8,1.8
+                                                c0.3,0.3,0.6,0.3,0.9-0.1c5.6-5.6,11.2-11.2,16.8-16.8C30.1,29.2,30.1,29.1,29.9,28.9z"></path>
+                                            <path class="st0 style-scope green p4m-checkout" d="M30.6,28.2c0.2,0.2,0.3,0.1,0.5,0c1.6-1.6,3.2-3.2,4.8-4.8c0.3-0.3,0.3-0.4-0.1-0.5c-7.2-4-14.4-8-21.5-12.1
+                                                c-0.3-0.2-0.6-0.3-1-0.3c0.1,0.1,0.1,0.2,0.2,0.2C19.2,16.6,24.9,22.4,30.6,28.2z"></path>
+                                            <path class="st0 style-scope red p4m-checkout" d="M31.3,30.3c-0.3-0.3-0.4-0.3-0.8,0c-5.2,5.3-10.4,10.5-15.6,15.8c0.1,0,0.2-0.1,0.3-0.2
+                                                c6.7-3.7,13.4-7.3,20.1-11c0.3-0.2,0.3-0.3,0.1-0.5C33.9,33,32.6,31.7,31.3,30.3z"></path>
+                                            <path class="st0 style-scope orange p4m-checkout" d="M43.5,27.2c-2-1.1-4-2.2-6-3.4c-0.2-0.1-0.4-0.1-0.6,0.1c-1.7,1.7-3.4,3.4-5.1,5c-0.2,0.2-0.2,0.3,0,0.5
+                                                c1.5,1.5,2.9,2.9,4.3,4.4c0.2,0.2,0.4,0.2,0.7,0.1c2-1.1,4-2.2,6.1-3.4c0.3-0.2,0.7-0.4,1-0.6c0.4-0.3,0.7-0.7,0.7-1.3
+                                                C44.6,28,44.2,27.5,43.5,27.2z"></path>
+                                        </g>
+                                        </svg>
+                                        </a>
+                                        </div>
+                                   </div>
+
+                                </div> <!-- END div.left -->
+
+                                <p4m-purchase-btn id="p4mPurchaseBtn"></p4m-purchase-btn>
+
+                            </footer>
+
+
+                        </iron-page>
 
                         <iron-page id="cartPage" class="page one">     
-                            <p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner>                  
-                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>                         
+                            <p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner>
+                            <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>
                         </iron-page>
+
                         <iron-page id="addressPage" class="page two">
                             <p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner>
                             <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                         </iron-page>
+
                         <iron-page id="deliveryPage" class="page three">
                             <p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner>
                             <div id="shippingSelector" class="hidden">
@@ -186,6 +387,7 @@
                             <template is="dom-if" if="{{useGfsCheckout}}">
                             </template>
                         </iron-page>
+
                         <iron-page id="cardPage" class="page four">
                             <p4m-spinner species="progress" id="payment_spinner"></p4m-spinner>
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
@@ -196,200 +398,11 @@
 
 
                 </div>
-                <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
-                    <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
-                    <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
-                </div>
+                
             </div> 
 
 
-            <footer id="footerpPanel" class$="footerPanel {{_changeIndicatorClass}}">
-            
-                <div class="left">
-                    <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
-                        <div id="downloadAppAd">
-                                           <p class="p4m-info">Track your purchases in the free P4M App!</p>
-                                           <div class="app-buttons"><a href="https://www.apple.com/ios/app-store/">
-                                           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                             viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve">
-                        <style type="text/css">
-                            .st0{fill:#58595B;}
-                        </style>
-                        <g>
-                            <path class="st0" d="M106.6,33.2c-1.3-0.5-2.2-1-2.7-1.4c-0.6-0.5-0.8-1.1-0.8-1.8c0-0.7,0.2-1.2,0.7-1.7c0.6-0.5,1.4-0.8,2.4-0.8
-                                c1.3,0,2.5,0.3,3.5,0.8l0.7-2.4c-1.1-0.6-2.5-0.9-4.2-0.9c-1.9,0-3.4,0.5-4.5,1.4c-1.1,1-1.7,2.2-1.7,3.7c0,2.3,1.6,4.1,4.8,5.3
-                                c1.2,0.4,2,0.9,2.5,1.4c0.5,0.5,0.8,1.1,0.8,1.9c0,0.8-0.3,1.5-0.9,2c-0.6,0.5-1.5,0.8-2.6,0.8c-1.5,0-3-0.4-4.3-1.1l-0.7,2.5
-                                c1.2,0.8,2.8,1.1,4.8,1.1c2.1,0,3.8-0.5,5-1.6c1.1-1,1.6-2.3,1.6-3.8c0-1.3-0.4-2.3-1.1-3.2C109.4,34.6,108.2,33.8,106.6,33.2z"/>
-                            <rect x="75" y="14.3" class="st0" width="1.7" height="6.9"/>
-                            <path class="st0" d="M75.9,13.3c0.6,0,1-0.4,1-0.9c0-0.5-0.4-0.9-1-0.9c-0.6,0-1,0.4-1,0.9C74.9,12.9,75.3,13.3,75.9,13.3z"/>
-                            <path class="st0" d="M144.7,15.5c1,0,1.3,0.8,1.3,1.7v3.9h1.7v-4c0-2.2-1.2-3-2.4-3c-0.4,0-0.8,0.1-1.2,0.3
-                                c-0.4,0.2-0.6,0.5-0.9,0.8h0v-4.1h-1.7v10h1.7V17c0-0.2,0-0.4,0.1-0.5C143.5,16,144,15.5,144.7,15.5z"/>
-                            <path class="st0" d="M83.4,19.3c0,1,0.8,2,2.2,2c0.9,0,1.6-0.4,2-0.9h0l0.1,0.8h1.6c-0.1-0.4-0.1-1-0.1-1.6V17
-                                c0-1.5-0.6-2.9-2.8-2.9c-1.1,0-2,0.3-2.5,0.6l0.3,1.1c0.5-0.3,1.2-0.5,1.8-0.5c1.2,0,1.4,0.7,1.4,1.2v0.1
-                                C85,16.6,83.4,17.5,83.4,19.3z M87.5,17.8v0.9c0,0.1,0,0.3,0,0.4c-0.2,0.5-0.7,0.9-1.4,0.9c-0.5,0-1-0.3-1-1
-                                C85.1,18,86.3,17.8,87.5,17.8z"/>
-                            <path class="st0" d="M139.9,30.9c-0.7,0.5-1.2,1.2-1.5,2.1h-0.1l-0.1-2.5h-2.6c0.1,1.3,0.1,2.7,0.1,4.2v9.1h3v-7
-                                c0-1.1,0.2-1.9,0.7-2.6c0.6-0.8,1.4-1.2,2.4-1.2c0.3,0,0.6,0,0.9,0.1v-2.8c-0.2,0-0.5,0-0.7,0C141.3,30.2,140.6,30.5,139.9,30.9z"
-                                />
-                            <rect x="79.4" y="11.1" class="st0" width="1.7" height="10"/>
-                            <path class="st0" d="M62.7,17.8c-0.2,0.6-0.3,1.2-0.5,1.7h0c-0.1-0.6-0.3-1.1-0.5-1.7l-1.1-3.5h-1.9l2.5,6.9H63l2.6-6.9h-1.8
-                                L62.7,17.8z"/>
-                            <path class="st0" d="M55.8,25.3l-5.9,18.4h3.1l1.6-5.4h6l1.7,5.4h3.2l-6-18.4H55.8z M55.1,36.1l1.5-4.8c0.4-1.5,0.7-2.7,0.9-3.5
-                                h0.1c0.5,1.8,0.8,3,0.9,3.5l1.6,4.8H55.1z"/>
-                            <path class="st0" d="M70.7,20.4L70.7,20.4l0.2,0.8h1.6c-0.1-0.4-0.1-1-0.1-1.6V17c0-1.5-0.6-2.9-2.8-2.9c-1.1,0-2,0.3-2.5,0.6
-                                l0.3,1.1c0.5-0.3,1.2-0.5,1.8-0.5c1.2,0,1.4,0.7,1.4,1.2v0.1c-2.5,0-4.1,0.9-4.1,2.6c0,1,0.8,2,2.2,2
-                                C69.6,21.3,70.3,20.9,70.7,20.4z M68.2,19.1c0-1,1.2-1.3,2.4-1.3v0.9c0,0.1,0,0.3,0,0.4c-0.2,0.5-0.7,0.9-1.4,0.9
-                                C68.7,20.1,68.2,19.7,68.2,19.1z"/>
-                            <path class="st0" d="M74.4,30.2c-2,0-3.5,0.8-4.5,2.4h-0.1l-0.2-2.1h-2.6c0.1,1.5,0.1,2.9,0.1,4.4v14.3h3v-7c0.8,1.3,2,1.9,3.8,1.9
-                                c1.6,0,3-0.6,4.1-1.7c1.2-1.3,1.8-3.1,1.8-5.4c0-2-0.5-3.7-1.6-4.9C77.3,30.8,76,30.2,74.4,30.2z M76,40.5
-                                c-0.6,0.9-1.5,1.3-2.6,1.3c-0.9,0-1.7-0.3-2.3-1c-0.6-0.7-0.9-1.5-0.9-2.5v-2.2c0-0.2,0-0.5,0.1-0.9c0.2-0.8,0.6-1.4,1.2-1.9
-                                c0.6-0.5,1.3-0.7,2-0.7c1.1,0,1.9,0.4,2.6,1.3c0.6,0.8,0.9,1.9,0.9,3.2C76.9,38.5,76.6,39.6,76,40.5z"/>
-                            <path class="st0" d="M52.5,18.4h3l0.9,2.7h1.9l-3.1-9.5h-2.2l-3,9.5h1.8L52.5,18.4z M53.5,14.8c0.2-0.6,0.3-1.2,0.5-1.8h0
-                                c0.1,0.5,0.3,1.2,0.5,1.8l0.7,2.3h-2.4L53.5,14.8z"/>
-                            <path class="st0" d="M150,30.2c-1.9,0-3.5,0.7-4.7,2.1c-1.1,1.3-1.6,3-1.6,5c0,2,0.6,3.7,1.8,4.9c1.2,1.2,2.8,1.8,4.9,1.8
-                                c1.7,0,3.2-0.3,4.5-0.8l-0.5-2.1c-1.1,0.4-2.3,0.6-3.6,0.6c-1.2,0-2.2-0.3-2.9-0.9c-0.8-0.7-1.3-1.7-1.3-3h8.9
-                                c0.1-0.4,0.1-0.8,0.1-1.3c0-1.7-0.4-3.1-1.2-4.2C153.4,30.9,152,30.2,150,30.2z M146.6,35.7c0.1-0.9,0.4-1.7,0.9-2.3
-                                c0.6-0.8,1.4-1.2,2.4-1.2c1.1,0,1.8,0.4,2.4,1.2c0.4,0.6,0.6,1.4,0.6,2.3H146.6z"/>
-                            <rect x="99.8" y="11.1" class="st0" width="1.7" height="10"/>
-                            <path class="st0" d="M89.1,30.2c-2,0-3.5,0.8-4.5,2.4h-0.1l-0.2-2.1h-2.6c0.1,1.5,0.1,2.9,0.1,4.4v14.3h3v-7c0.8,1.3,2,1.9,3.8,1.9
-                                c1.6,0,3-0.6,4.1-1.7c1.2-1.3,1.8-3.1,1.8-5.4c0-2-0.5-3.7-1.6-4.9C91.9,30.8,90.6,30.2,89.1,30.2z M90.6,40.5
-                                c-0.6,0.9-1.5,1.3-2.6,1.3c-0.9,0-1.7-0.3-2.3-1c-0.6-0.7-0.9-1.5-0.9-2.5v-2.2c0-0.2,0-0.5,0.1-0.9c0.2-0.8,0.6-1.4,1.2-1.9
-                                c0.6-0.5,1.2-0.7,2-0.7c1.1,0,1.9,0.4,2.6,1.3c0.6,0.8,0.9,1.9,0.9,3.2C91.5,38.5,91.2,39.6,90.6,40.5z"/>
-                            <path class="st0" d="M95,14.1c-1,0-1.8,0.4-2.2,1.1h0v-4.1H91v8.1c0,0.7,0,1.5-0.1,1.9h1.5l0.1-1h0c0.5,0.8,1.3,1.2,2.2,1.2
-                                c1.5,0,3.1-1.2,3.1-3.7C97.9,15.5,96.7,14.1,95,14.1z M94.3,19.9c-0.7,0-1.4-0.5-1.5-1.2c0-0.1,0-0.3,0-0.4v-1.1
-                                c0-0.2,0-0.3,0.1-0.5c0.2-0.8,0.8-1.3,1.5-1.3c1.2,0,1.7,1,1.7,2.2C96.1,19.1,95.4,19.9,94.3,19.9z"/>
-                            <path class="st0" d="M152.7,21.3c1,0,1.8-0.2,2.4-0.4l-0.3-1.2c-0.5,0.2-1.1,0.3-1.9,0.3c-1.1,0-2.1-0.5-2.1-1.8h4.6
-                                c0-0.2,0.1-0.4,0.1-0.7c0-1.5-0.7-3.3-3-3.3c-2.2,0-3.3,1.8-3.3,3.7C149.2,19.9,150.5,21.3,152.7,21.3z M152.5,15.3
-                                c1.2,0,1.4,1,1.4,1.7h-3C150.9,16.3,151.4,15.3,152.5,15.3z"/>
-                            <path class="st0" d="M116.8,27.2l-2.9,0.9v2.4h-1.9v2.2h1.9v6.7c0,1.7,0.3,2.9,1,3.6c0.7,0.7,1.6,1.1,2.7,1.1
-                                c0.9,0,1.7-0.1,2.3-0.3l-0.1-2.2c-0.3,0.1-0.8,0.1-1.3,0.1c-1.2,0-1.7-0.8-1.7-2.5v-6.5h3.3v-2.2h-3.3V27.2z"/>
-                            <path class="st0" d="M118.5,14.1c-2.1,0-3.5,1.4-3.5,3.6c0,2.2,1.5,3.5,3.4,3.5c1.7,0,3.5-1.1,3.5-3.6
-                                C121.9,15.6,120.5,14.1,118.5,14.1z M118.4,20c-1,0-1.7-1-1.7-2.3c0-1.1,0.5-2.3,1.7-2.3c1.2,0,1.7,1.2,1.7,2.3
-                                C120.1,19.1,119.4,20,118.4,20z"/>
-                            <path class="st0" d="M127.5,30.2c-2,0-3.6,0.6-4.8,2c-1.2,1.3-1.8,3-1.8,5.1c0,2,0.6,3.6,1.7,4.9c1.2,1.3,2.7,1.9,4.7,1.9
-                                c2,0,3.6-0.7,4.9-2c1.2-1.3,1.7-3,1.7-5c0-2-0.6-3.6-1.7-4.9C131,30.9,129.5,30.2,127.5,30.2z M130,40.3c-0.6,1.1-1.5,1.6-2.6,1.6
-                                c-1.2,0-2-0.5-2.7-1.6c-0.5-0.9-0.8-1.9-0.8-3.1c0-1.3,0.3-2.3,0.8-3.2c0.6-1.1,1.5-1.6,2.7-1.6c1.2,0,2,0.5,2.7,1.6
-                                c0.5,0.9,0.8,1.9,0.8,3.1S130.6,39.4,130,40.3z"/>
-                            <path class="st0" d="M136.2,18.8c0,0.9,0.2,1.5,0.5,1.9c0.3,0.4,0.8,0.6,1.5,0.6c0.5,0,1-0.1,1.3-0.2l0-1.3
-                                c-0.2,0.1-0.4,0.1-0.7,0.1c-0.7,0-0.9-0.4-0.9-1.3v-3h1.6v-1.3h-1.6v-1.8l-1.7,0.5v1.3h-1v1.3h1V18.8z"/>
-                            <path class="st0" d="M107.1,21.3c1,0,1.8-0.2,2.4-0.4l-0.3-1.2c-0.5,0.2-1.1,0.3-1.9,0.3c-1.1,0-2.1-0.5-2.1-1.8h4.6
-                                c0-0.2,0.1-0.4,0.1-0.7c0-1.5-0.7-3.3-3-3.3c-2.2,0-3.3,1.8-3.3,3.7C103.6,19.9,104.9,21.3,107.1,21.3z M106.8,15.3
-                                c1.2,0,1.4,1,1.4,1.7h-3C105.3,16.3,105.7,15.3,106.8,15.3z"/>
-                            <path class="st0" d="M123.6,21.1h1.7v-4c0-0.2,0-0.4,0.1-0.5c0.2-0.5,0.7-1,1.4-1c0.9,0,1.3,0.7,1.3,1.7v3.9h1.7v-4.1
-                                c0-2.2-1.2-2.9-2.4-2.9c-1.1,0-1.9,0.6-2.2,1.2h0l-0.1-1h-1.5c0,0.6,0.1,1.3,0.1,2V21.1z"/>
-                            <path class="st0" d="M36.1,28.8c0-4.1,3.4-6.1,3.5-6.2c-1.9-2.8-4.9-3.2-6-3.2c-2.5-0.3-5,1.5-6.2,1.5c-1.3,0-3.3-1.5-5.4-1.4
-                                c-2.7,0-5.3,1.6-6.7,4.1c-2.9,5-0.7,12.4,2,16.4c1.4,2,3,4.2,5.1,4.1c2.1-0.1,2.9-1.3,5.4-1.3c2.5,0,3.2,1.3,5.4,1.3
-                                c2.2,0,3.6-2,5-4c1.6-2.3,2.2-4.5,2.3-4.6C40.4,35.4,36.1,33.7,36.1,28.8z"/>
-                            <path class="st0" d="M32,16.7c1.1-1.4,1.9-3.3,1.7-5.2c-1.6,0.1-3.6,1.1-4.8,2.5c-1,1.2-2,3.2-1.7,5C29,19.1,30.8,18.1,32,16.7z"/>
-                            <path class="st0" d="M162.4,0H8.5C3.8,0,0,3.8,0,8.5v40.3c0,4.7,3.8,8.5,8.5,8.5h154c4.7,0,8.5-3.8,8.5-8.5V8.5
-                                C170.9,3.8,167.1,0,162.4,0z M168.9,48.8c0,3.6-2.9,6.5-6.5,6.5H8.5c-3.6,0-6.5-2.9-6.5-6.5V8.5C2,4.9,4.9,2,8.5,2h154
-                                c3.6,0,6.5,2.9,6.5,6.5V48.8z"/>
-                        </g>
-                        </svg>
-                        </a>
-                        <a href="https://play.google.com/store/apps">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve" class="style-scope p4m-checkout">
-                        
-                        <g class="style-scope p4m-checkout">
-                            <path class="st0 style-scope p4m-checkout" d="M162.4,0H8.5C3.8,0,0,3.8,0,8.5v40.3c0,4.7,3.8,8.5,8.5,8.5h154c4.7,0,8.5-3.8,8.5-8.5V8.5
-                                C170.9,3.8,167.1,0,162.4,0z M168.9,48.8c0,3.6-2.9,6.5-6.5,6.5H8.5c-3.6,0-6.5-2.9-6.5-6.5V8.5C2,4.9,4.9,2,8.5,2h154
-                                c3.6,0,6.5,2.9,6.5,6.5V48.8z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M52.5,17.3h1.8c0.2,0.8,0.4,1.3,0.4,1.5h1.3c0-0.1-0.3-1-0.8-2.6c-0.6-1.6-0.8-2.4-0.8-2.6h-1.5
-                                c0,0.2-0.3,1-0.9,2.6c-0.6,1.6-0.9,2.4-0.9,2.5h1.2C52.1,18.6,52.2,18.1,52.5,17.3z M53.3,14.3L53.3,14.3c0.1,0.1,0.3,0.8,0.7,2.2
-                                h-1.4C53.1,15.2,53.3,14.4,53.3,14.3z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M57.7,18.8c0-0.9-0.1-1.7-0.1-2.4c0-0.5,0-1-0.1-1.6h0.1c0.1,0.4,0.5,1.1,1.3,2.2c0.7,1,1.1,1.6,1.1,1.7h1
-                                c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5h-1c0,0.8,0.1,1.5,0.1,2.2c0,0.5,0,1,0.1,1.6h-0.1c-0.1-0.4-0.5-1.1-1.2-2.1
-                                c-0.7-1-1-1.5-1-1.7h-1.2c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H57.7z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M64,18.8c0.9,0,1.5-0.3,2-0.8c0.5-0.6,0.7-1.2,0.7-2c0-0.7-0.2-1.2-0.6-1.7c-0.4-0.5-1.1-0.7-2.1-0.7
-                                c-0.1,0-0.2,0-0.4,0c-0.2,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7C63.1,18.8,63.6,18.8,64,18.8z M63.8,14.4
-                                c0.6,0,1.1,0.2,1.4,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,0.9-0.4,1.3C65,17.8,64.5,18,64,18c-0.2,0-0.3,0-0.5-0.1
-                                c0-0.6,0-1.2,0-1.9c0-0.6,0-1.1,0-1.7C63.6,14.4,63.7,14.4,63.8,14.4z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M68.9,18.8c0-0.7,0-1.4,0-2c0.1,0,0.3,0,0.4,0c0.4,0,0.6,0.1,0.8,0.3c0.2,0.2,0.4,0.8,0.7,1.7H72
-                                c-0.3-0.9-0.6-1.5-0.8-1.9c-0.2-0.3-0.4-0.5-0.7-0.6v-0.1c0.7-0.3,1-0.7,1-1.4c0-0.8-0.6-1.2-1.8-1.2c-0.2,0-0.4,0-0.7,0
-                                c-0.3,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H68.9z M69.5,14.3c0.7,0,1,0.3,1,0.8c0,0.6-0.4,0.9-1.3,0.9
-                                c-0.1,0-0.2,0-0.4,0c0-0.7,0-1.2,0-1.6C69,14.4,69.3,14.3,69.5,14.3z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M75.1,18.9c0.7,0,1.3-0.3,1.8-0.8c0.5-0.5,0.7-1.2,0.7-2c0-0.8-0.2-1.4-0.7-1.9c-0.5-0.5-1.1-0.7-1.7-0.7
-                                c-0.7,0-1.3,0.3-1.8,0.8c-0.5,0.5-0.7,1.2-0.7,2c0,0.8,0.2,1.4,0.7,1.9C73.8,18.7,74.4,18.9,75.1,18.9z M74.1,14.9
-                                c0.3-0.3,0.6-0.5,1-0.5c0.4,0,0.8,0.2,1,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,1-0.4,1.3c-0.3,0.3-0.6,0.5-1,0.5
-                                c-0.4,0-0.8-0.2-1-0.5c-0.3-0.3-0.4-0.8-0.4-1.3C73.7,15.7,73.9,15.2,74.1,14.9z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M78.8,13.6c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7h1.1c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5H78.8z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M82.9,18.8c0.9,0,1.5-0.3,2-0.8c0.5-0.6,0.7-1.2,0.7-2c0-0.7-0.2-1.2-0.6-1.7c-0.4-0.5-1.1-0.7-2.1-0.7
-                                c-0.1,0-0.2,0-0.4,0c-0.2,0-0.4,0-0.5,0h-0.7c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7C82,18.8,82.5,18.8,82.9,18.8z M82.7,14.4
-                                c0.6,0,1.1,0.2,1.4,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,0.9-0.4,1.3S83.4,18,82.9,18c-0.2,0-0.3,0-0.5-0.1c0-0.6,0-1.2,0-1.9
-                                c0-0.6,0-1.1,0-1.7C82.5,14.4,82.6,14.4,82.7,14.4z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M92.4,16.2c-0.6-1.6-0.8-2.4-0.8-2.6H90c0,0.2-0.3,1-0.9,2.6c-0.6,1.6-0.9,2.4-0.9,2.5h1.2
-                                c0-0.2,0.1-0.7,0.4-1.5h1.8c0.2,0.8,0.4,1.3,0.4,1.5h1.3C93.2,18.6,92.9,17.8,92.4,16.2z M89.9,16.5c0.5-1.4,0.7-2.1,0.7-2.2h0.1
-                                c0,0.1,0.2,0.8,0.7,2.2H89.9z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M95.2,18.8c0-0.8,0-1.5,0-2c0.1,0,0.1,0,0.3,0c0.7,0,1.3-0.2,1.7-0.5c0.5-0.3,0.7-0.8,0.7-1.4
-                                c0-0.5-0.2-0.8-0.5-1c-0.3-0.2-0.8-0.3-1.3-0.3c-0.2,0-0.4,0-0.7,0c-0.3,0-0.5,0-0.6,0h-0.7c0,0.7,0.1,1.5,0.1,2.5
-                                c0,1,0,1.9-0.1,2.7H95.2z M95.7,14.3c0.7,0,1.1,0.3,1.1,0.8c0,0.6-0.5,0.9-1.4,0.9c-0.1,0-0.2,0-0.2,0c0-0.6,0-1.2,0-1.7
-                                C95.3,14.4,95.5,14.3,95.7,14.3z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M99.9,18.8c0-0.8,0-1.5,0-2c0.1,0,0.1,0,0.3,0c0.7,0,1.3-0.2,1.7-0.5c0.5-0.3,0.7-0.8,0.7-1.4
-                                c0-0.5-0.2-0.8-0.5-1c-0.3-0.2-0.8-0.3-1.3-0.3c-0.2,0-0.4,0-0.7,0c-0.3,0-0.5,0-0.6,0h-0.7c0,0.7,0.1,1.5,0.1,2.5
-                                c0,1,0,1.9-0.1,2.7H99.9z M100.4,14.3c0.7,0,1.1,0.3,1.1,0.8c0,0.6-0.5,0.9-1.4,0.9c-0.1,0-0.2,0-0.2,0c0-0.6,0-1.2,0-1.7
-                                C100,14.4,100.2,14.3,100.4,14.3z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M107.7,18.9c0.7,0,1.3-0.3,1.8-0.8c0.5-0.5,0.7-1.2,0.7-2c0-0.8-0.2-1.4-0.7-1.9c-0.5-0.5-1.1-0.7-1.7-0.7
-                                c-0.7,0-1.3,0.3-1.8,0.8c-0.5,0.5-0.7,1.2-0.7,2c0,0.8,0.2,1.4,0.7,1.9C106.4,18.7,107,18.9,107.7,18.9z M106.8,14.9
-                                c0.3-0.3,0.6-0.5,1-0.5c0.4,0,0.8,0.2,1,0.5c0.3,0.3,0.4,0.8,0.4,1.3c0,0.5-0.1,1-0.4,1.3c-0.3,0.3-0.6,0.5-1,0.5
-                                c-0.4,0-0.8-0.2-1-0.5c-0.3-0.3-0.4-0.8-0.4-1.3C106.4,15.7,106.5,15.2,106.8,14.9z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M112.4,18.8c0-0.9-0.1-1.7-0.1-2.4c0-0.5,0-1-0.1-1.6h0.1c0.1,0.4,0.5,1.1,1.3,2.2c0.7,1,1.1,1.6,1.1,1.7h1
-                                c0-0.8-0.1-1.7-0.1-2.7c0-1,0-1.8,0.1-2.5h-1c0,0.8,0.1,1.5,0.1,2.2c0,0.5,0,1,0.1,1.6h-0.1c-0.1-0.4-0.5-1.1-1.2-2.1
-                                c-0.7-1-1-1.5-1-1.7h-1.2c0,0.7,0.1,1.5,0.1,2.5c0,1,0,1.9-0.1,2.7H112.4z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M59.1,31.3v2h6c-0.1,1.4-0.6,2.5-1.4,3.3c-1.2,1.2-2.8,1.8-4.6,1.8c-1.7,0-3.2-0.6-4.5-1.8
-                                c-1.3-1.2-1.9-2.8-1.9-4.7c0-1.9,0.6-3.5,1.9-4.7c1.3-1.2,2.8-1.8,4.5-1.8c1.9,0,3.4,0.7,4.5,1.9l1.4-1.4c-0.6-0.8-1.5-1.4-2.6-1.8
-                                c-1.1-0.5-2.2-0.7-3.4-0.7c-2.4,0-4.4,0.8-6,2.5c-1.7,1.6-2.5,3.7-2.5,6.1c0,2.4,0.8,4.5,2.5,6.1c1.7,1.6,3.7,2.5,6,2.5
-                                c2.5,0,4.5-0.8,6-2.4c1.4-1.4,2-3.2,2-5.5c0-0.4,0-0.8-0.1-1.2H59.1z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M73.9,28.5c-1.7,0-3.1,0.6-4.1,1.7c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.5,1.7,4.1,1.7
-                                c1.7,0,3.1-0.6,4.1-1.7c1.1-1.1,1.6-2.6,1.6-4.3s-0.5-3.1-1.6-4.3C76.9,29,75.5,28.5,73.9,28.5z M76.4,37.4
-                                c-0.7,0.7-1.6,1.1-2.6,1.1c-1,0-1.9-0.4-2.6-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.6-1.1,2.6-1.1
-                                c1,0,1.9,0.4,2.6,1.1c0.7,0.7,1.1,1.7,1.1,2.9C77.5,35.7,77.2,36.6,76.4,37.4z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M86.1,28.5c-1.7,0-3.1,0.6-4.1,1.7c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.5,1.7,4.1,1.7
-                                c1.7,0,3.1-0.6,4.1-1.7c1.1-1.1,1.6-2.6,1.6-4.3s-0.5-3.1-1.6-4.3C89.2,29,87.8,28.5,86.1,28.5z M88.7,37.4
-                                c-0.7,0.7-1.6,1.1-2.6,1.1c-1,0-1.9-0.4-2.6-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.6-1.1,2.6-1.1
-                                c1,0,1.9,0.4,2.6,1.1c0.7,0.7,1.1,1.7,1.1,2.9C89.8,35.7,89.4,36.6,88.7,37.4z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M101.9,30.4L101.9,30.4c-0.5-0.6-1-1-1.7-1.4c-0.7-0.4-1.4-0.5-2.3-0.5c-1.5,0-2.7,0.6-3.8,1.7
-                                c-1.1,1.1-1.6,2.6-1.6,4.3s0.5,3.1,1.6,4.3c1.1,1.1,2.3,1.7,3.8,1.7c0.8,0,1.6-0.2,2.3-0.6c0.7-0.4,1.2-0.8,1.6-1.4h0.1v1.1
-                                c0,1.2-0.3,2.1-1,2.8c-0.7,0.7-1.6,1-2.7,1c-0.7,0-1.4-0.2-2-0.6c-0.6-0.4-1-0.9-1.2-1.5l-1.9,0.8c0.4,0.9,1,1.6,1.8,2.3
-                                c0.8,0.7,1.9,1,3.3,1c1.6,0,3-0.5,4.1-1.5c1.1-1,1.7-2.5,1.7-4.4V28.8h-2V30.4z M100.8,37.4c-0.7,0.7-1.5,1.1-2.5,1.1
-                                c-1,0-1.8-0.4-2.5-1.1c-0.7-0.7-1.1-1.7-1.1-2.9c0-1.2,0.4-2.2,1.1-2.9c0.7-0.7,1.5-1.1,2.5-1.1c1,0,1.8,0.4,2.5,1.1
-                                c0.7,0.7,1,1.7,1,3C101.9,35.7,101.5,36.7,100.8,37.4z"></path>
-                            <rect x="105.9" y="23.6" class="st0 style-scope p4m-checkout" width="2.1" height="16.4"></rect>
-                            <path class="st0 style-scope p4m-checkout" d="M114.7,28.5c-1.6,0-2.9,0.6-4,1.8c-1,1.2-1.5,2.6-1.5,4.2c0,1.7,0.5,3.2,1.6,4.3c1.1,1.1,2.4,1.7,4.1,1.7
-                                c1.2,0,2.3-0.3,3.1-0.9c0.8-0.6,1.4-1.3,1.8-2.2l-1.9-0.8c-0.5,1.3-1.6,1.9-3.1,1.9c-0.9,0-1.7-0.3-2.4-1c-0.7-0.7-1.1-1.6-1.1-2.7
-                                h8.9l0-0.4c0-1.8-0.5-3.3-1.5-4.4C117.7,29,116.4,28.5,114.7,28.5z M111.5,33.1c0.2-0.8,0.6-1.5,1.2-2c0.6-0.5,1.2-0.7,2-0.7
-                                c1.1,0,1.9,0.3,2.4,0.9c0.5,0.6,0.8,1.2,0.9,1.8H111.5z"></path>
-                            <path class="st0 style-scope p4m-checkout" d="M132,23.6h-5.6v16.4h2.1v-6.6h3.5c1.4,0,2.6-0.5,3.6-1.4c1-0.9,1.5-2.1,1.5-3.5c0-1.4-0.5-2.6-1.5-3.5
-                                C134.6,24.1,133.4,23.6,132,23.6z M134.2,30.5c-0.5,0.6-1.2,0.9-2.1,0.9h-3.5v-5.7h3.5c0.9,0,1.6,0.3,2.1,0.9
-                                c0.5,0.6,0.8,1.3,0.8,2C135,29.2,134.7,29.9,134.2,30.5z"></path>
-                            <rect x="138.5" y="23.6" class="st0 style-scope p4m-checkout" width="2.1" height="16.4"></rect>
-                            <path class="st0 style-scope p4m-checkout" d="M146.9,28.5c-1.3,0-2.3,0.3-3,0.9c-0.8,0.6-1.3,1.2-1.5,1.9l1.9,0.8c0.2-0.5,0.5-0.9,1-1.2
-                                c0.5-0.3,1.1-0.4,1.7-0.4c0.8,0,1.5,0.2,2.1,0.7c0.6,0.5,0.8,1.2,0.8,2v0.3c-0.8-0.5-1.8-0.7-3-0.7c-1.4,0-2.6,0.3-3.5,1
-                                c-0.9,0.7-1.4,1.7-1.4,2.9c0,1.1,0.4,2,1.2,2.7c0.8,0.7,1.8,1,3,1c1.6,0,2.9-0.6,3.7-1.9h0.1v1.6h2v-6.8c0-1.5-0.5-2.7-1.4-3.6
-                                C149.5,28.9,148.3,28.5,146.9,28.5z M148.8,37.5c-0.7,0.6-1.5,1-2.4,1c-0.6,0-1.2-0.2-1.6-0.5c-0.5-0.3-0.7-0.8-0.7-1.3
-                                c0-0.6,0.3-1.1,0.8-1.6c0.5-0.4,1.3-0.7,2.3-0.7c1.2,0,2.1,0.2,2.7,0.7C149.9,36.1,149.5,36.9,148.8,37.5z"></path>
-                            <polygon class="st0 style-scope p4m-checkout" points="157.9,36.9 157.9,36.9 154.6,28.8 152.3,28.8 156.9,39.3 154.3,45 156.5,45 163.5,28.8 161.2,28.8     
-                                "></polygon>
-                            <path class="st0 aqua style-scope p4m-checkout" d="M29.9,28.9c-2.3-2.3-4.6-4.6-6.9-7c-3.5-3.6-7.1-7.2-10.6-10.8c-0.2-0.2-0.3-0.2-0.5,0
-                                c-0.5,0.5-0.6,1.1-0.6,1.7c0,5.2,0,10.5,0,15.7c0,0,0,0,0,0c0,2.2,0,4.4,0,6.6c0,3.1,0,6.2,0,9.3c0,0.7,0.2,1.4,0.8,1.8
-                                c0.3,0.3,0.6,0.3,0.9-0.1c5.6-5.6,11.2-11.2,16.8-16.8C30.1,29.2,30.1,29.1,29.9,28.9z"></path>
-                            <path class="st0 style-scope green p4m-checkout" d="M30.6,28.2c0.2,0.2,0.3,0.1,0.5,0c1.6-1.6,3.2-3.2,4.8-4.8c0.3-0.3,0.3-0.4-0.1-0.5c-7.2-4-14.4-8-21.5-12.1
-                                c-0.3-0.2-0.6-0.3-1-0.3c0.1,0.1,0.1,0.2,0.2,0.2C19.2,16.6,24.9,22.4,30.6,28.2z"></path>
-                            <path class="st0 style-scope red p4m-checkout" d="M31.3,30.3c-0.3-0.3-0.4-0.3-0.8,0c-5.2,5.3-10.4,10.5-15.6,15.8c0.1,0,0.2-0.1,0.3-0.2
-                                c6.7-3.7,13.4-7.3,20.1-11c0.3-0.2,0.3-0.3,0.1-0.5C33.9,33,32.6,31.7,31.3,30.3z"></path>
-                            <path class="st0 style-scope orange p4m-checkout" d="M43.5,27.2c-2-1.1-4-2.2-6-3.4c-0.2-0.1-0.4-0.1-0.6,0.1c-1.7,1.7-3.4,3.4-5.1,5c-0.2,0.2-0.2,0.3,0,0.5
-                                c1.5,1.5,2.9,2.9,4.3,4.4c0.2,0.2,0.4,0.2,0.7,0.1c2-1.1,4-2.2,6.1-3.4c0.3-0.2,0.7-0.4,1-0.6c0.4-0.3,0.7-0.7,0.7-1.3
-                                C44.6,28,44.2,27.5,43.5,27.2z"></path>
-                        </g>
-                        </svg>
-                        </a>
-                        </div>
-                   </div>
 
-                </div> <!-- END div.left -->
-
-                <p4m-purchase-btn id="p4mPurchaseBtn"></p4m-purchase-btn>
-
-            </footer>
 
         </div>
 
@@ -515,6 +528,146 @@
                 font-weight: 400;
                 line-height: 24px;
             }
+
+            /* Page transition aniumation */
+
+            #nav > span {
+/*                height: 100%;*/
+                cursor: pointer;
+            }
+            #nav > span:hover {
+                color: #888;
+            }
+
+            /* Define the animation here. You can do pretty much anything you want. */
+/*            @keyframes slide {
+                from {
+                    left: -70%;
+                }
+
+                to {
+                    left: 0;
+                }
+            }*/
+
+/*            @keyframes slide-from-left {
+                from {
+                    left: -100%;
+                }
+
+                to {
+                    left: 0;
+                }
+            }
+            @keyframes slide-to-right {
+                from {
+                    left: 0%;
+                }
+
+                to {
+                    left: 100%;
+                }
+            }*/
+
+            /* Adding this class starts the animation, removing it cuts it short */
+/*            .animated {
+                display: block !important;
+                animation-duration: 1s;
+                animation-name: slide-from-left;
+            }
+            #summaryPanel.animated {
+                animation-name: slide-to-right;
+            }
+            iron-pages#mobilepages  > .animated:not(.iron-selected) {
+                display: block !important;
+            }
+            iron-pages#mobilepages  > :not(.iron-selected) {
+                overflow: hidden;
+                display: block !important;
+            }
+            iron-pages#mobilepages  > :not(.iron-selected) {
+                overflow: hidden;
+                display: block !important;
+            }
+*/
+            #nav {
+                display: block;
+                position: absolute;
+                z-index: 2;
+                height: 20px;
+                background: rgba(255,255,255,0.8);
+                margin-top: -20px;
+            }
+            iron-pages#mobilepages {
+                position: relative;
+                height: 375px;
+                overflow: hidden;
+            }
+            iron-pages#mobilepages > iron-page {
+                position: absolute;
+                top: 0;
+                height: 375px;
+                display: block !important;
+                background: #fff;
+            }
+            .animated {
+                -webkit-transform: translateX(-0%);
+                transform: translateX(-0%);
+                transition: transform 300ms ease-out;
+                will-change: transform;
+            }
+            iron-pages#mobilepages  > .animated:not(.iron-selected) {
+            }
+            iron-pages#mobilepages  > :not(.iron-selected):not(#summaryPanel) {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+                transition: transform 300ms ease-out;
+                will-change: transform;
+            }
+
+
+            .page {
+                position: relative;
+/*
+                width: 100vw;
+                height: 100vh;*/
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                align-self: stretch;
+            }
+
+            .page > p {
+/*                width: 30vw;
+                height: 15vh;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border: 3px solid black;
+
+                font-size: 5vmin;*/
+            }
+
+            .page#summaryPanel {
+                border: 1px solid orange;
+            }
+            .page#cartPage {
+                border: 1px solid red;
+            }
+            .page#addressPage {
+                border: 1px solid blue;
+            }
+            .page#deliveryPage {
+                border: 1px solid yellow;
+            }
+            .page#cardPage {
+                border: 1px solid green;
+            }
+
+
         </style>
     </template>
 
@@ -650,6 +803,21 @@
                  ((node) => {
                      node.style.opacity = 1;
                  }).bind(this, pages[newVal]), 0);
+            },
+
+            // Observers
+            _newPageSelected (newVal, oldVal) {
+                let mobilepages = this.$.mobilepages.children;
+
+                // Run the animation on the newly selected page
+                if (!mobilepages[newVal].className.includes('animated')) {
+                  mobilepages[newVal].className += ' animated';
+                }
+
+                if (typeof oldVal !== 'undefined') {
+                  // Stop the animation of hidden pages
+                  mobilepages[oldVal].className = mobilepages[oldVal].className.split(' animated').join('');
+                }
             },
 
             init: function () {
@@ -1625,5 +1793,7 @@
         function select(tab) {
             document.getElementsByTagName('p4m-checkout')[0].selected = tab;
         }
+
+
     </script>
 </dom-module>

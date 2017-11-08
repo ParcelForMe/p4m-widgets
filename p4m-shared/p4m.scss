@@ -755,6 +755,95 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 
 }
 
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-light-webfont.eot');
+    src: url('fonts/proximanova-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-light-webfont.woff') format('woff'),
+         url('fonts/proximanova-light-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-light-webfont.svg#ProximaNovaLight') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-lightitalic-webfont.eot');
+    src: url('fonts/proximanova-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-lightitalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-lightitalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-lightitalic-webfont.svg#ProximaNovaLightItalic') format('svg');
+    font-weight: 100;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-reg-webfont.eot');
+    src: url('fonts/proximanova-reg-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-reg-webfont.woff') format('woff'),
+         url('fonts/proximanova-reg-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-reg-webfont.svg#ProximaNovaRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-regitalic-webfont.eot');
+    src: url('fonts/proximanova-regitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-regitalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-regitalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-regitalic-webfont.svg#ProximaNovaRegularItalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-sbold-webfont.eot');
+    src: url('fonts/proximanova-sbold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-sbold-webfont.woff') format('woff'),
+         url('fonts/proximanova-sbold-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-sbold-webfont.svg#ProximaNovaSemibold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-sbolditalic-webfont.eot');
+    src: url('fonts/proximanova-sbolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-sbolditalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-sbolditalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-sbolditalic-webfont.svg#ProximaNovaSemiboldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima_nova_black-webfont.eot');
+    src: url('fonts/proxima_nova_black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proxima_nova_black-webfont.woff') format('woff'),
+         url('fonts/proxima_nova_black-webfont.ttf') format('truetype'),
+         url('fonts/proxima_nova_black-webfont.svg#ProximaNovaBlack') format('svg');
+    font-weight: 800;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima_nova_extrabold-webfont.eot');
+    src: url('fonts/proxima_nova_extrabold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proxima_nova_extrabold-webfont.woff') format('woff'),
+         url('fonts/proxima_nova_extrabold-webfont.ttf') format('truetype'),
+         url('fonts/proxima_nova_extrabold-webfont.svg#ProximaNovaExtrabold') format('svg');
+    font-weight: 900;
+    font-style: normal;
+
+}
+
 
 
 
@@ -2954,7 +3043,7 @@ p4m-checkout {
                     background: rgba($p4m-green-100, .25);
                 }
             }
-		}
+		    }
 
         #detailPanel {
             .p4m-panel {
@@ -2989,7 +3078,134 @@ p4m-checkout {
             }
 
         }
-    } 
+    }
+
+    // Mobile pages
+    #panelContainer.mobi {
+        display: flex;
+        border-radius: 0;
+        background-color: white;
+        > div {
+            @include transition();
+        }
+
+        .p4m-panel {
+            border: none;
+            width: 100%;
+            align-self: stretch;
+            padding-right: 0;
+            box-sizing: border-box;
+            #mobilepages > iron-page {
+                display: block;
+                width: 100%;
+                align-self: stretch;
+                padding-right: 0;
+                box-sizing: border-box;
+                overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                &#deliveryPage {
+                    overflow-y: hidden;
+                    iron-pages > iron-page {
+                        display: block;
+                        width: 100%;
+                        align-self: stretch;
+                        overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                        &#pageDroppoints {
+                            overflow-y: hidden;
+                            iron-pages > iron-page {
+                                display: block;
+                                width: 100%;
+                                align-self: stretch;
+                                overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                            }
+                        }
+                    }
+                }
+                &#summaryPanel {
+                  p4m-order-summary {
+                    min-width: 100%;
+                    max-width: initial;
+                    flex: 1;
+                  }
+                }
+            }
+            paper-tabs {
+                background: $pale-p4m-green;
+                color: $white;
+                font-weight: 600;
+                .iron-selected {
+                    // background: darken($pale-p4m-green, 8%);
+                }
+                paper-tab {
+                    font-family: 'Lato', sans-serif;
+                    font-weight: 600 !important;
+                    font-size: 14px;
+                    transform: initial !important;
+                    -webkit-transform: initial !important;
+                    -webkit-font-smoothing: antialiased !important;
+                    -webkit-animation: initial !important;
+                    -moz-animation: initial !important;
+                    -ms-animation: initial !important;
+                    animation: initial !important;
+                    .paper-tab {
+                        font-family: 'Lato', sans-serif;
+                        font-weight: 600 !important;
+                        font-size: 14px;
+                        transform: initial !important;
+                        -webkit-transform: initial !important;
+                        -webkit-font-smoothing: antialiased !important;
+                        -webkit-animation: initial !important;
+                        -moz-animation: initial !important;
+                        -ms-animation: initial !important;
+                        animation: initial !important;
+                    }
+                }
+            }
+        }
+
+        gfs-checkout#gfsCheckoutWidget {
+            paper-tabs {
+                background: $grey-h10;
+                color: $grey-b6;
+                .iron-selected {
+                    background: rgba($p4m-green-100, .25);
+                }
+            }
+        }
+
+        #detailPanel {
+            .p4m-panel {
+                width: 100%;
+                padding-right: 0;
+            }
+        }
+
+        #summaryPanel {
+          position: relative;
+            min-width: 100%;
+            flex: 1;
+          // &:before{
+          //  content:'';
+          //  height: 100%;
+          //  width: 2px;
+          //  background: rgba(235, 235, 235, 0.5);
+          //  display: flex;
+          //  flex-direction: column;
+          //  flex: 1;
+          //  position: absolute;
+          //  left: 0;
+          //  top: 0;
+          //  z-index: 1;
+          // }
+            .p4m-panel {
+                width: 100%;
+                border-left: solid 1px #E0E0E0;
+            } 
+            paper-tabs.select-payment-type {
+                background: transparent;
+            }
+
+        }
+    }
 
 
     h3 {

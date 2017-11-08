@@ -11,11 +11,23 @@
         <link rel="import" href="../lib/p4m-widgets/p4m-login/p4m-login.html" />
         <link rel="import" href="../lib/p4m-widgets/p4m-register/p4m-register.html" />
         <link rel="import" href="../lib/p4m-widgets/p4m-checkout/p4m-checkout.html" />
+        <meta name="viewport" content="width=device-width">
 
     </head>
 
-    <body style="padding:20px; margin: 0; background:#eeeeee;">
-        
+    <body style="padding:0; margin: 0; background:#eeeeee;">
+
+<!--         <div style="margin: 0 auto;"> -->
+            <p4m-checkout 
+                use-paypal="true" 
+
+                use-gfs-checkout="true"
+                host-type="dev"
+                session-id="SessionA1"
+                gfs-access-token="[gfs-access-token]" >
+            </p4m-checkout>
+<!--         </div> -->
+<!-- 
         <h1>Adrian's Antique Antonyms (Simple Shop) : Checkout</h1>
 
         <small>Use "AAA" discount code for a $5 discount (any other code is invalid)</small>
@@ -27,18 +39,7 @@
                     logout-form="logoutForm">
         </p4m-login>
 
-        <br/><h2>p4m-checkout : <a href="/index.html">go back</a></h2>
-
-        <div style="margin: 0 auto;">
-            <p4m-checkout 
-                use-paypal="true" 
-
-                use-gfs-checkout="true"
-                host-type="dev"
-                session-id="SessionA1"
-                gfs-access-token="[gfs-access-token]" >
-            </p4m-checkout>
-        </div>
+        <br/><h2>p4m-checkout : <a href="/index.html">go back</a></h2> -->
 
         
 
