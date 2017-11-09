@@ -671,6 +671,60 @@
 
             },
 
+            _updateGfsCartTotal: function (callback) {
+                if (!callback) {
+                    callback = function () { };
+                }
+
+                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+                    callback();
+                    return;
+                }
+
+                var self = this;
+
+                this._gfsCurrentAddrId = this._gfsCurrentAddrId || this.cartData.addressId || this.consumerData.prefDeliveryAddressId;
+                this._updateUiForAddress(this.getAddressById(this._gfsCurrentAddrId));
+
+                var orderValue = 0.0;
+                this.cartData.items.forEach(function (item) {
+                    orderValue += item.qty * item.price;
+                });
+                if (orderValue <= 0.0) {
+                    callback();
+                    return;
+                }
+
+                var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
+                var defAddr = this.getDefaultAddr();
+                var currAddr = this.getCartAddr();
+                var gfsPostConfig = {
+                    countryCode: currAddr.countryCode,
+                    town: currAddr.city,
+                    postCode: currAddr.postCode,
+                    addressLineCollection: [currAddr.street1, currAddr.street2],
+                    contactEmail: this.consumerData.email,
+                    recipientFirstName: this.consumerData.familyName,
+                    recipientLastName: this.consumerData.givenName,
+                    recipientTitle: this.consumerData.title || "",
+                    favDropPoints: self._getPreferredDropPoints() || [],
+                    favAddresses: self._getPreferredAddresses(currAddr) || [],
+                    defaultAddress: p4mAddressToGfsAddress(defAddr),
+                    cartValue: orderValue,
+                    addressPreferences: addrPrefs,
+                    deliveryPreferences: {
+                        preferSoonest: this.consumerData.preferSoonestDelivery
+                    },
+                    mapCenter: { 'lat': currAddr.latitude, 'lng': currAddr.longitude }
+                };
+                this.toggleLoading(true);
+                this.$.gfsCheckoutWidget.initCartTotalOnly(gfsPostConfig, function (err) {
+                    self.toggleLoading(false);
+                    callback(err);
+                });
+
+            },
+
             getDefaultAddr: function () {
                 return this.getAddressById(this.consumerData.prefDeliveryAddressId);
             },
@@ -716,7 +770,7 @@
                     if (this.$.cart.changes[sku] === "" || this.$.cart.changes[sku] === null) {
                         this.$.cart.changes[sku] = 0;
                     }
-                    changes.push({ItemCode: sku, Qty: this.$.cart.changes[sku]});
+                    changes.push({itemCode: sku, qty: this.$.cart.changes[sku]});
                 }
                 if (changes.length > 0) {
                     
@@ -725,8 +779,6 @@
                         orderValue += item.qty * item.price; 
                     }
 
-                    //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
-                    //self._showAsLoadingShipping(true);
                     self.toggleLoading(true);
 
                     self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
@@ -736,19 +788,8 @@
                         self.updCartTotals(newCartTotals, function (err) { //This will trigger GFS to trigger updateP4mCart, so no need to call it in the callback here. Commented out.
                             self.toggleLoading(false);
                             self.set("cartData.discounts", newCartTotals.discounts);
-                            /*self.updateP4mCart(function(err) {
-                                self.toggleLoading(false);
-                                //callback(err);
-                            });*/
-                            
                         });
-
                     });
-                    //})
-
-                }
-                else {
-                    //console.log("No changes to send");
                 }
             },
 
@@ -760,7 +801,7 @@
                 this.cartData.total = newCartTotals.total || 0;
                 if (!updDiscount && this.cartData.total > 0) {
                     var self = this;
-                    this._updateGfs(function () {
+                    this._updateGfsCartTotal(function () {
                         self.updateP4mCart(callback);
                     });
                 }
