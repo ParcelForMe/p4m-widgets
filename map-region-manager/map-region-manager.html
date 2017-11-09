@@ -116,6 +116,12 @@
                 return result;
             }
 
+            this.areaM = function () {
+                var htInM = 111320 * this.height;
+                var wdInM = (40075000 * Math.cos(this.bottom) / 360) * this.width;
+                return Math.abs(Math.round(htInM * wdInM));
+            }
+
             this.toGeoBox = function() {
                 return [[this.topLeft.x, this.topLeft.y], [this.bottomRight.x, this.bottomRight.y]];
             }
@@ -134,43 +140,12 @@
                 this.recurseDepth = 0;
             },
 
-            addRegion: function (geoBox) {
-                return;
-                var newRegion = new Rectangle(geoBox);
-                // check if the new region is already covered
-                for (var i = 0; i < this.coveredRectangles.length; i++)
-                    if (newRegion.isContainedBy(this.coveredRectangles[i]))
-                        return;
-                // remove any regions that this region covers
-                var i = 0;
-                while (i < this.coveredRectangles.length) {
-                    if (this.coveredRectangles[i].isContainedBy(newRegion))
-                        this.coveredRectangles.splice(i, 1);
-                    else
-                        i++;
-                }
-                // we only want to add newly queried areas so loop through the list of queried regions and remove them from the new region
-                var newRegions = []
-                for (var i = 0; i < this.coveredRectangles.length; i++) {
-                    var areasNotCovered = [];
-                    if (newRegions.length === 0)
-                        areasNotCovered = areasNotCovered.concat(newRegion.areasNotCoveredBy(this.coveredRectangles[i]));
-                    else
-                        for (var j = 0; j < newRegions.length; j++)
-                            areasNotCovered = areasNotCovered.concat(newRegions[j].areasNotCoveredBy(this.coveredRectangles[i]));
-                    newRegions = areasNotCovered;
-                }
-
-                this.coveredRectangles = this.coveredRectangles.concat(newRegions);
-            },
-
             /* "droppointSettings": {
                     "maxRadiusMeters": 5000,
                     "maxResults": 100,
                     "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
                 },*/
             recordQuery: function (droppointSettings, location, droppoints) {
-                return;
                 // record the area queried for droppoints
                 var radius = droppointSettings.maxRadiusMeters;
                 if (droppoints.length == droppointSettings.maxResults) {
@@ -181,7 +156,7 @@
                     radius = maxDP.distanceInMeters;
                 }
                 var region = this.largestSqrInCircle(location.lat, location.lng, radius);
-                this.addRegion(region);
+                this.coveredRectangles.push(new Rectangle(region));
             },
 
             largestSqrInCircle: function(lat, lng, radius) {
@@ -240,8 +215,9 @@
                             if (merged) break;
                         }
                     }
-                    //this.coveredRectangles = this.coveredRectangles.concat(result);
-                    this.coveredRectangles.push(viewPort);
+                    result = result.filter(function (item) { return item.areaM() > 70000 });
+                    this.coveredRectangles = this.coveredRectangles.concat(result);
+                    //this.coveredRectangles.push(viewPort);
                 }
                 return result;
             }

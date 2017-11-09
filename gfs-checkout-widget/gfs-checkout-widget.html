@@ -725,6 +725,7 @@
             },
 
             _requestDroppointsByGeoBoxes: function (boxes, callback) {
+                console.log('Request geo boxes');
                 var self = this;
                 var url = "///"+this.apiHost+"/api/CheckoutSession?sessionId=" + this._sessionId + "&regions=" + JSON.stringify(boxes);
                 var request = this._makeRequest('GET', url, (function (err, data) {
@@ -1588,7 +1589,7 @@
             
             _reloadDroppoints: function() {
                 if (this._sessionId) {
-                    //console.log('reloadDroppoints()');
+                    console.log('reloadDroppoints()');
 
                     //Get viewport rectangle
                     this._updateMapViewPort();
@@ -1597,14 +1598,14 @@
                     var boxes = [];
                     
                     this.$.regionManager.getUncoveredRectangles(this._mapViewPort).forEach(function (rect) {
+                        console.log('area: ', rect.areaM());
                         boxes.push(rect.toGeoBox());
                     });
 
-                    // console.log('Boxes to request:', JSON.stringify(boxes));
-                    // self._drawBoxes(boxes, 'green');
+                    //console.log('Boxes to request:', JSON.stringify(boxes));
+                    this._drawBoxes(boxes, 'green');
                     
                     if (boxes.length > 0 && this._mapViewPort) {
-                        this.$.regionManager.addRegion(this._mapViewPort);
                         this._requestDroppointsByGeoBoxes(boxes, function () { });
                     }
                     else {
