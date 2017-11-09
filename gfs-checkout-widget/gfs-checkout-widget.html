@@ -666,25 +666,31 @@
                         }
                         else {
                             this.set('_data', JSON.parse(data));
-                            if (!this._dropPoints) {
-                                this.set('_dropPoints', this._data.droppoints);
+                            if (this._data.droppoints && this._data.droppoints.length > 0) {
+                                if (!this._dropPoints) {
+                                    this.set('_dropPoints', this._data.droppoints);
+                                }
+                                else {
+                                    var newDPs = this._data.droppoints.sort(this.sortByDistance);
+                                    this._dropPoints = this._dropPoints.concat(newDPs);
+                                }
+                                /* record the region queried e.g.
+                                "droppointSettings": {
+                                    "maxRadiusMeters": 5000,
+                                    "maxResults": 100,
+                                    "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
+                                },*/
+                                this.$.regionManager.recordQuery(this.droppointSettings, mapCenter, this._data.droppoints);
+                                this._processAllDroppoints();
                             }
-                            else {
-                                var newDPs = this._data.droppoints.sort(this.sortByDistance);
-                                this._dropPoints = this._dropPoints.concat(newDPs);
+                            if (!this._favDPsProcessed) {
+                                this._requestDroppointList(this._favDropPoints, (function (err) {
+                                    this._delayedInit.bind(self)();
+                                    callback(err);
+                                }).bind(this));
                             }
-                            /* record the region queried e.g.
-                            "droppointSettings": {
-                                "maxRadiusMeters": 5000,
-                                "maxResults": 100,
-                                "useDroppointDays": false   // use droppointDays property instead of collectionSlots?
-                            },*/
-                            this.$.regionManager.recordQuery(this.droppointSettings, mapCenter, this._data.droppoints);
-                            this._processAllDroppoints();
-                            this._requestDroppointList(this._favDropPoints, (function (err) {
-                                this._delayedInit.bind(self)();
-                                callback(err);
-                            }).bind(this));
+                            else
+                                callback();
                         }
 
                     }
@@ -695,10 +701,10 @@
             _closeReq: function (callback) {
 
                 // temp hack to get around close session inconsistency
-                if (this.selectedServiceDetails.collectionPoint) {
-                    callback(null, "DPD"); // hard code the carrier to DPD for now
-                    return;
-                }
+                //if (this.selectedServiceDetails.collectionPoint) {
+                //    callback(null, "DPD"); // hard code the carrier to DPD for now
+                //    return;
+                //}
 
                 var data = {
                     closeSession: true,
@@ -819,53 +825,8 @@
                 }
                 else {
                     this.config = config;
-
-                    //==== Create post data
-                    var now = new Date();
-                    var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
-
-                    this._postData = {
-                        "request":
-                        {
-                            "dateRange": {
-                                "dateFrom": this._makeDateStr(now),
-                                "dateTo": this._makeDateStr(maxDate)
-                            },
-
-                            "droppointSettings": this.droppointSettings,
-
-                            "order": {
-                                "transit": {
-                                    "recipient": {
-                                        "location": {
-                                            "countryCode": {
-                                                "code": config.countryCode,
-                                                "encoding": "ccISO_3166_1_Alpha2"
-                                            },
-                                            "postCode": config.postCode,
-                                            "town": config.town,
-                                            "county": config.state,
-                                            "addressLineCollection": config.addressLineCollection
-                                        },
-                                        "contactDetails": {
-                                            "email": config.contactEmail
-                                        },
-                                        "person": {
-                                            "firstName": config.recipientFirstName,
-                                            "lastName": config.recipientLastName,
-                                            "title": config.recipientTitle || "Mr"
-                                        }
-                                    }
-                                },
-                                "value": {
-                                    "currencyCode": "GBP",
-                                    "value": config.cartValue
-                                }
-                            },
-                            "requestedDeliveryTypes": ["dmDropPoint", "dmStandard"],
-                            "session": { "sessionID": "" }
-                        }
-                    };
+                    var reqDeliveryTypes = config.skipDropPoints ? ["dmStandard"] : ["dmDropPoint", "dmStandard"];
+                    this.getPostDataFromConfig(config, reqDeliveryTypes);
 
                     if (selection && selection.address) {
                         var location = this._postData.request.order.transit.recipient.location;
@@ -913,6 +874,70 @@
                         }
                     });
                 }
+            },
+
+            initCartTotalOnly: function (config, finalCallback) {
+                var self = this;
+                //==== Create post data
+                this.getPostDataFromConfig(config, ["dmDropPoint", "dmStandard"]);
+                // Post, then select address and method - these can be previously chosen if the cart already exists
+                // or will be defaulted based on the consumer's preferences
+                this.postGfsData(config.mapCenter, function (err) {
+                    if (err) {
+                        self.initialised = false;
+                        console.error("postGfsData() returned: ", err);
+                        finalCallback(err);
+                        return;
+                    }
+                    self.initialised = true;
+                    finalCallback();
+                });
+            },
+
+            getPostDataFromConfig: function (config, reqDeliveryTypes) {
+                //==== Create post data
+                var now = new Date();
+                var maxDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 14));
+                this._postData = {
+                    "request":
+                    {
+                        "dateRange": {
+                            "dateFrom": this._makeDateStr(now),
+                            "dateTo": this._makeDateStr(maxDate)
+                        },
+                        droppointSettings: this.droppointSettings,
+                        "order": {
+                            "transit": {
+                                "recipient": {
+                                    "location": {
+                                        "countryCode": {
+                                            "code": config.countryCode,
+                                            "encoding": "ccISO_3166_1_Alpha2"
+                                        },
+                                        "postCode": config.postCode,
+                                        "town": config.town,
+                                        "county": config.state,
+                                        "addressLineCollection": config.addressLineCollection
+                                    },
+                                    "contactDetails": {
+                                        "email": config.contactEmail
+                                    },
+                                    "person": {
+                                        "firstName": config.recipientFirstName,
+                                        "lastName": config.recipientLastName,
+                                        "title": config.recipientTitle || "Mr"
+                                    }
+                                }
+                            },
+                            "value": {
+                                "currencyCode": "GBP",
+                                "value": config.cartValue
+                            }
+                        },
+                        "requestedDeliveryTypes": reqDeliveryTypes,
+                        "session": { "sessionID": this._sessionId ? this._sessionId : "" }
+                    }
+                };
             },
 
             //Select a delivery address based on the users preferences
@@ -1615,6 +1640,7 @@
                 }
             },
 
+            _favDPsProcessed: false,
             _requestDroppointList: function (droppointList, callback) {
                 //NOTE: This is temporary code, to be replaced by a dedicated API endpoint
                 if (droppointList.length === 0) {
@@ -1628,7 +1654,10 @@
                     droppointList.forEach(function (dp) {
                         boxes.push([[dp.geoLocation.coordinates.longitude - 0.000001, dp.geoLocation.coordinates.latitude - 0.000001], [dp.geoLocation.coordinates.longitude + 0.000001, dp.geoLocation.coordinates.latitude + 0.000001]]);
                     });
-                    this._requestDroppointsByGeoBoxes(boxes, callback);
+                    this._requestDroppointsByGeoBoxes(boxes, function () {
+                        self._favDPsProcessed = true;
+                        callback();
+                    });
                 }
 
             },
