@@ -294,10 +294,6 @@
                 }
                 else {
                     var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total, carrier: carrierName };
-                    /*postData.newDropPoint = null;
-                    if (this.newDropPoint) {
-                        postData.newDropPoint = this.newDropPoint;
-                    }*/
                     this.$.localApi.call('purchase', null, postData, this.onPurchase.bind(this));
                 }
             },
