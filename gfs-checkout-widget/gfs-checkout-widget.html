@@ -137,8 +137,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="selectedDropPointPanel" class="hidden" style="max-height: {{mapHeight}}px; display: block">
-                                <gfs-droppoint id="infobox-droppoint" panel-mode="true" on-droppoint-selected="_onDropPointSelectedEvent" droppoint-data="{{_selectedDropPoint}}" on-user-select="_onLocateDroppointEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                            <div id="selectedDropPointPanel" class="hidden" style="max-height: {{mapHeight}}px; display: none">
+                                <gfs-droppoint id="infobox_droppoint" panel-mode="true" on-droppoint-selected="_onDropPointSelectedEvent" droppoint-data="{{_selectedDropPoint}}" on-user-select="_onLocateDroppointEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                             </div>
                             
                         </div>
@@ -211,7 +211,7 @@
             #selectedDropPointPanel {
                 position: absolute;
                 height: auto;
-                display: flex;
+                display: none;
                 flex: 2;
                 padding: 10px;
                 margin: 10px;
@@ -1360,9 +1360,10 @@
                 var home = null;
                 var imgSrc = this.resolveUrl('images/gmap-icon-selected-shadow-32px.png');
                 var imgTag = '<img src="' + imgSrc + '" style="position:relative;top:40px;left:12px;">';
+                var selectDPPanel = this.$.infobox_droppoint;
                 self._infoWindow = new google.maps.InfoWindow({
                     //TIP: To use dynamic content here, use "droppoint_info" as shown in comment below. Then place a droppoint widget or similar into the droppoint_info element.
-                    content: imgTag
+                    content: this.$.infobox_droppoint
                 });
 
                 /* The infoWindow is the place marker attached to the currently selected drop point
@@ -1372,7 +1373,13 @@
                  * are applied.
                  */
                 google.maps.event.addListener(self._infoWindow, 'domready', function () {
-                    // Reference to the DIV which receives the contents of the infowindow using jQuery
+                    // To hide the close btn in the top right corner of the info box we hide the div after gm-style-iw
+                    var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
+                    if (iwOuter) {
+                        // hide the close button
+                        iwOuter.nextSibling.style.display = 'none';
+                    }
+                    /* this code is to display just an image with no other elements
                     var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
                     if (iwOuter) {
                         iwOuter.style.overflow = 'visible';
@@ -1385,7 +1392,7 @@
                         iwOuter.firstChild.firstChild.style.overflow = 'visible';
                         // hide the close button
                         iwOuter.nextSibling.style.display = 'none';
-                    }
+                    } */
                 });
 
                 var position = new google.maps.LatLng(37, 0);
@@ -1478,13 +1485,13 @@
 					        marker.addListener('click', function (clickedMarker) {
 					            self._selectDropPointMarker(this);
 					        });
-					        marker.addListener('mouseover', function (inspectedMarker) {
-					            var latlng = this.getPosition();
-					            self._inspectDropPointMarker(this);
-					        });
-					        marker.addListener('mouseout', function () {
-					            self._hideDropPointInspector();
-					        });
+					        //marker.addListener('mouseover', function (inspectedMarker) {
+					        //    var latlng = this.getPosition();
+					        //    self._inspectDropPointMarker(this);
+					        //});
+					        //marker.addListener('mouseout', function () {
+					        //    self._hideDropPointInspector();
+					        //});
 					        // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
 					        pointItem.marker = marker;
 					    }
@@ -1603,10 +1610,10 @@
                 //Display/hide things based on the current state
 
                 if (this._selectedDropPoint) {
-                    this.$.selectedDropPointPanel.classList.remove("hidden");
+                    //this.$.selectedDropPointPanel.classList.remove("hidden");
                 }
                 else {
-                    this.$.selectedDropPointPanel.classList.add("hidden");
+                    //this.$.selectedDropPointPanel.classList.add("hidden");
                 }
                 this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
             },
@@ -1635,8 +1642,15 @@
                     }
                     else {
                         console.log("Not requesting any regions");
-                    }                    
-                    this._resetMap(this._map);
+                    }
+                    var self = this;
+                    this._resetMap(this._map, function () {
+                        //if (self._currentMarker) {
+                        //    var reShowMarker = map.getBounds().contains(self._currentMarker.getPosition());
+                        //    if (reShowMarker)
+                        //        self._infoWindow.open(self._map, self._currentMarker);
+                        //}
+                    });
                 }
             },
 
@@ -1794,8 +1808,8 @@
                     if (!methodId) 
                         methodId = dp.deliveries[0].service.id;
                     //If we're selecting a new droppoint and/or method,
-                    this.$['infobox-droppoint'].select();
-                    this.$['infobox-droppoint'].selectMethod(methodId, true);      
+                    this.$['infobox_droppoint'].select();
+                    this.$['infobox_droppoint'].selectMethod(methodId, true);      
                     this.setDeliveryMethod(methodId);    
                     self._openSelectedDropPointInfoWindow();
                     self._updateUi();
@@ -1995,11 +2009,11 @@
             },
 
             _formatDayDefiniteDate: function(deliveryDate) {
-                return '(Est. arrival: ' + moment(deliveryDate).format("ddd, Do MMM") + ')';
+                return '(' + moment(deliveryDate).format("ddd, Do") + ')';
             },
 
             _formatNonDayDefiniteDate: function(startDate, endDate) {
-                return '(Est. arrival: ' + moment(startDate).format("ddd, Do MMM") + ' - ' + moment(endDate).format("ddd, Do MMM") + ')';
+                return '(' + moment(startDate).format("ddd, Do") + ' - ' + moment(endDate).format("ddd, Do") + ')';
             },
 
             _findDropPointDeliveries: function(providerId) {

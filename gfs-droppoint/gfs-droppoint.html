@@ -143,10 +143,7 @@
 			}
 
 			.droppoint-delivery-selection {
-				right: 0;
-				top: initial;
-				bottom: 0;
-				position: absolute;
+                margin-left: 10px;
 			}
 
 			.choose-droppoint {
@@ -205,7 +202,8 @@
 			    font-size: 14px;
 			}
 			.dpDescription {
-			    margin-top: 4px;
+                font-weight: bold;
+			    margin-bottom: 4px;
 			}
 
 			/* Hide until shown */
@@ -214,7 +212,8 @@
             .closed span.daterange,
             .closed #dp-address,
             .closed #dp-distance,
-            .closed .shippingOptions label {
+            /*.closed .shippingOptions label */
+            {
                 height: 0;
                 overflow: hidden;
                 margin: 0;
@@ -393,6 +392,11 @@
                 margin: 0px;
             }
 
+            .delivery-place {
+                display: flex;
+                align-items: center;
+            }
+
 		</style>
 
 
@@ -411,7 +415,7 @@
 						</template>
 					</div>
 					<div class="content">
-						<div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>
+						<div class="dpProviderName">{{droppointData.providerName}} <!---<template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>-->
 						</div>
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
                         <template is="dom-if" if="{{panelMode}}">
@@ -424,7 +428,7 @@
 							    </template>
 						    </div>
                         </template>
-
+                        <!--
                         <div id="dp-address">
                             <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
                                 <template is="dom-if" if="{{item}}">
@@ -434,13 +438,14 @@
                             </template>
                             {{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
                         </div>
+                            -->
 						<template is="dom-if" if="{{showDistance}}">
 							<div id="dp-distance">
 								<div class="font-weight-600">Distance:</div>
 								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
 							</div>
 						</template>
-
+                        <!--
 						<div id="dp-body">
 							<div id="dp-minor-info">
 								<div class="dp-opening-hours">
@@ -461,7 +466,7 @@
 								</div>
 							</div>
 						</div>
-
+                            -->
 						<template is="dom-if" if="{{showShippingOptions}}">
 							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
 								<div class="shippingOptions">
@@ -469,8 +474,9 @@
 										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
 											<li class="delivery-place">
 
-												<label for$="dp-{{item.service.id}}">
-													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
+												<label for$="dp-{{item.service.id}}" >
+													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>
+                                                    <!--<span class="info">{{item.service.methodTitle}}</span>-->
 													<span class="daterange">{{item.deliveryDateRange}}</span>
 												</label>
 
@@ -506,11 +512,11 @@
 								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
 							</template>
                         </div>
-
+                        <!--
                         <template is="dom-if" if="{{panelMode}}">
                             <a on-click="_toggleHours" class="feature open-hours">{{_expandText}}</a>
                         </template>
-                        
+                        -->
 					</div>
 				</div>
 			</div>
@@ -724,7 +730,7 @@
 			},
 
 			onClickOption: function (e) {
-			    this.selectMethod(e.target.value);
+			    //this.selectMethod(e.target.value);
 			},
 
             //Select a shipping option by ID
