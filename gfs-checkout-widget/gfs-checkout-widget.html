@@ -45,21 +45,21 @@
                 <iron-page id="pageDroppoints">
                     <div id="availableDropPoints">
                         <div id="mapTools" class="pageContent">
-
+                            <!--
                             <div class="toggleDropPointsViewControls">
                                 <a id="viewAsMap" on-tap="_toggleDroppointView">
                                     <i class="p4micon p4micon-map-with-marker"></i>
                                 </a>
 
-                                <!-- <a id="viewAsList" on-tap="_toggleDroppointView">
+                                <a id="viewAsList" on-tap="_toggleDroppointView">
                                     <i class="p4micon p4micon-list"></i>
-                                </a> -->
-                            </div>
-    					
+                                </a>
+                            </div>  
+                            -->  					
     					
                             <div class="location-points">
-    							<paper-dropdown-menu label="My Locations" noink no-animations>
-    								<paper-listbox class="dropdown-content">
+    						    <paper-dropdown-menu label="My Locations" noink no-animations>
+    							    <paper-listbox class="dropdown-content">
     									    <paper-item >
                                                 <gfs-location-button address-name="Current location" on-click="_locateMe" ></gfs-location-button>
                                             </paper-item>
@@ -70,63 +70,41 @@
                                                 </paper-item>
     			                            </template>                                    
     									
-    								</paper-listbox>
-    							</paper-dropdown-menu>
+    							    </paper-listbox>
+    						    </paper-dropdown-menu>
     							
                             </div>
-    						<div class="adjoiner"><p>or</p></div>
+    					    <div class="adjoiner"><p>or</p></div>
                           
                             <div class="search-postcode-wrap">
                                 <address-lookup-field id="droppointAddress" on-foundplace="_panToPlace"></address-lookup-field>
                                 <div type="submit" class="search-button" on-click="_panToPlaceOnClick"><iron-icon icon="icons:search"></iron-icon></div>
                             </div>
 
-    						<div class="adjoiner"><p>or</p></div>
-    							<div class="collection-points">
-    								<paper-dropdown-menu label="My Collection Points" noink no-animations>
-    									<paper-listbox class="dropdown-content">
-    									   <template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" xx-sort="sortByDistance">
-    					                     <paper-item label="{{item.droppointDescription}}">
-        										<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected="_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
-    	                            		 </paper-item>						
-    									  </template>
-    								   </paper-listbox>
-    								</paper-dropdown-menu>
-    							</div>
-                            </div>
+    					    <div class="adjoiner"><p>or</p></div>
+    						<div class="collection-points">
+    							<paper-dropdown-menu label="My Collection Points" noink no-animations>
+    								<paper-listbox class="dropdown-content">
+    									<template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}" xx-sort="sortByDistance">
+    					                    <paper-item label="{{item.droppointDescription}}">
+        									<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected="_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+    	                            		</paper-item>						
+    									</template>
+    								</paper-listbox>
+    							</paper-dropdown-menu>
+    						</div>
+                        </div>
 
+                        <div id="list-loading" class="loading">
+                            <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
+                            <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
+                        </div>
 
-                            <div id="list-loading" class="loading">
-                                <!-- <p4m-spinner species="shuffler" id="list-spinner"></p4m-spinner> -->
-                                <p4m-spinner species="progress" id="list-spinner"></p4m-spinner>
-                            </div>
-
-
-                            <div class="page" id="pageDroppoints">
-
-                            <div id="mapContainer">
-                                <div class="hidden" id="hiddenElements">
-                                    <div id="droppoint_info" class="noscroll">Selected</div>
-                                    <div id="inspectingDropPointPanel">
-                                        <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                                    </div>
-                                </div>                          
-                                <!--
-                                   <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
-                                -->
-                                <div id="mainMapArea">
-                                    <div id="gfsMapCanvas">
-                                        <div class="loading">
-                                            <!-- <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner> -->
-                                            <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="page" id="pageDroppoints">
 
                             <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
-                            <div id="dropPointListContainer" class="hidden">
-                                <div class="cardList">                           
+                            <div id="dropPointListContainer" xxstyle="max-height: {{mapHeight}}px;">
+                                <div class="cardList" style="height:{{mapHeight}}px!important;">
                                     <div id="mainDropPointListArea">
                                         <div id="dropPointList">
                                             <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
@@ -137,10 +115,29 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="mapContainer">
+                                <div class="hidden" id="hiddenElements">
+                                    <div id="droppoint_info" class="noscroll">Selected</div>
+                                    <div id="inspectingDropPointPanel">
+                                        <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                                    </div>
+                                </div>                          
+                                <!--
+                                    <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
+                                -->
+                                <div id="mainMapArea">
+                                    <div id="gfsMapCanvas">
+                                        <div class="loading">
+                                            <!-- <p4m-spinner species="shuffler" id="map-spinner"></p4m-spinner> -->
+                                            <p4m-spinner species="progress" id="map-spinner"></p4m-spinner>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="selectedDropPointPanel" class="hidden" style="max-height: {{mapHeight}}px; display: none">
                                 <gfs-droppoint id="infobox_droppoint" panel-mode="true" on-droppoint-selected="_onDropPointSelectedEvent" droppoint-data="{{_selectedDropPoint}}" on-user-select="_onLocateDroppointEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
-                            </div>
-                            
+                            </div>                            
                         </div>
                     </div>
                     <div id="noDropPoints" class="pageContent hidden">
@@ -195,6 +192,12 @@
                 margin: .65em 1em;
                 border-bottom: 2px solid #eaeaea;
             }
+            #dropPointList {
+                display: flex;
+                height: 100%;
+                overflow-y: scroll;
+                flex-wrap: wrap;
+            }
             #inspectingDropPointPanel {
                 /*position: absolute;
                 top: 327px !important;
@@ -207,6 +210,21 @@
                 background: rgba(255,255,255,0.9) !important;
                 padding: 15px !important;
                 box-sizing: border-box;
+            }
+            #dropPointListContainer {
+                max-width: 270px;
+                display: flex;
+                align-self: stretch;
+                height: initial;
+            }
+            .cardList {
+                display: flex;
+/*                flex: 1;
+                height: initial;
+                flex-direction: row;
+                align-self: stretch;
+                flex-wrap: wrap;
+                width: 100%;*/
             }
             #selectedDropPointPanel {
                 position: absolute;
@@ -1359,11 +1377,12 @@
 
                 var home = null;
                 var imgSrc = this.resolveUrl('images/gmap-icon-selected-shadow-32px.png');
-                var imgTag = '<img src="' + imgSrc + '" style="position:relative;top:40px;left:12px;">';
-                var selectDPPanel = this.$.infobox_droppoint;
+                var imgTag = '<img src="' + imgSrc + '">';// style="position:relative;top:40px;left:12px;">';
+                //var selectDPPanel = this.$.infobox_droppoint;
                 self._infoWindow = new google.maps.InfoWindow({
                     //TIP: To use dynamic content here, use "droppoint_info" as shown in comment below. Then place a droppoint widget or similar into the droppoint_info element.
-                    content: this.$.infobox_droppoint
+                    //content: this.$.infobox_droppoint
+                    content: imgTag
                 });
 
                 /* The infoWindow is the place marker attached to the currently selected drop point
@@ -1375,24 +1394,22 @@
                 google.maps.event.addListener(self._infoWindow, 'domready', function () {
                     // To hide the close btn in the top right corner of the info box we hide the div after gm-style-iw
                     var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
-                    if (iwOuter) {
-                        // hide the close button
-                        iwOuter.nextSibling.style.display = 'none';
-                    }
-                    /* this code is to display just an image with no other elements
+                    // this code is to display just an image with no other elements
                     var iwOuter = document.getElementsByClassName('gm-style-iw')[0];
                     if (iwOuter) {
                         iwOuter.style.overflow = 'visible';
-                        // the white bkg and shadow are grouped in the prev element
+                        iwOuter.style.top = '46px';
+                        iwOuter.style.left = '26px';
+                        //// the white bkg and shadow are grouped in the prev element
                         iwOuter.previousSibling.style.display = 'none';
-                        // reduce the size of the non-clickable area created by the info window
+                        //// reduce the size of the non-clickable area created by the info window
                         iwOuter.parentElement.style.width = 0;
-                        // remove the scroll bars from the img parent divs
+                        //// remove the scroll bars from the img parent divs
                         iwOuter.firstChild.style.overflow = 'visible';
                         iwOuter.firstChild.firstChild.style.overflow = 'visible';
-                        // hide the close button
+                        //// hide the close button
                         iwOuter.nextSibling.style.display = 'none';
-                    } */
+                    } 
                 });
 
                 var position = new google.maps.LatLng(37, 0);
@@ -1449,6 +1466,15 @@
                     self._mapMoved();
                 });
 
+                // 'bounds_changed' event is triggered when the user stopped zooming;
+                //google.maps.event.addListener(self._map, 'bounds_changed', function (event) {
+                //    if (self._currentMarker) {
+                //        var reShowMarker = map.getBounds().contains(self._currentMarker.getPosition());
+                //        if (reShowMarker)
+                //            self._infoWindow.open(self._map, self._currentMarker);
+                //    }
+                //});
+
                 //google.maps.event.addListener(self._map, 'click', function (event) {
                     //console.log('MAP EVENT click');
                     //self._unselectDropPoint();
@@ -1477,7 +1503,7 @@
 					            //title: pointItem.droppointDescription,
 					            customData: pointItem,
 					            icon: self._droppointIcon(getCountryCode) + '/' + pointItem.providerName.toLowerCase() + '.png',
-					            zIndex: google.maps.Marker.MAX_ZINDEX + 1
+					            zIndex: google.maps.Marker.MAX_ZINDEX
 					            //icon: url + '/' + pointItem.geoLocation.countryCode + '/' + pointItem.providerName + '.png'
 					        };
 					        //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
@@ -1692,8 +1718,8 @@
                 //this.fire('show-droppoints');
                 if (this._showingDroppointsMap) {
                     //Show droppoints
-                    this.$.dropPointListContainer.classList.add('hidden');
-                    this.$.mapContainer.classList.remove('hidden');
+                    //this.$.dropPointListContainer.classList.add('hidden');
+                    //this.$.mapContainer.classList.remove('hidden');
                     //this._makeMap();
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map, function() {
@@ -1701,15 +1727,15 @@
                         if (!self._currentMarker)
                             self.panToDefaultLocation();
                         // Switch classes on the Map/list toggle - help BAZ!
-                        self.$.viewAsMap.classList.add('active');
+                        //self.$.viewAsMap.classList.add('active');
                         //self.$.viewAsList.classList.remove('active');
                     });
                 }
                 else {
-                    this.$.dropPointListContainer.classList.remove('hidden');
-                    this.$.mapContainer.classList.add('hidden');
+                    //this.$.dropPointListContainer.classList.remove('hidden');
+                    //this.$.mapContainer.classList.add('hidden');
                     // Switch classes on the Map/list toggle_sel
-                    this.$.viewAsMap.classList.remove('active');
+                    //this.$.viewAsMap.classList.remove('active');
                     //this.$.viewAsList.classList.add('active');
                 }
 
@@ -1732,6 +1758,7 @@
                 if (map) {
                     window.setTimeout(function () {
                         google.maps.event.trigger(map, 'resize');
+                        self.mapHeight = self.$.gfsMapCanvas.clientHeight;
                         if (callback) callback();
                     }, 100);
                 }           
@@ -1751,7 +1778,10 @@
                     
                     if (dp) {
                         if (this._currentMarker == dp.marker) return;
-                        else this._currentMarker = dp.marker;
+                        else {
+                            this._currentMarker = dp.marker;
+                            this._currentMarker.zIndex = google.maps.Marker.MAX_ZINDEX + 1;
+                        }
                     }
                    
                     this.$.dropPointRadio.setAttribute('checked', 'true');
@@ -1903,6 +1933,7 @@
                     //this._hideDropPointDetails();
                     this._updateUi();
                     this._selectedDropPoint = null;
+                    this._currentMarker.zIndex = google.maps.Marker.MAX_ZINDEX;
                     this._currentMarker = null;
                 }
             },
