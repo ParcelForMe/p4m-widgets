@@ -55,7 +55,7 @@
 
             selectAddress: function () {
                 var place = this.autoComplete.getPlace();
-                this.dataHost.addressLookupLocation = place.geometry.location;
+                this.dataHost.addressLookupLocation = place;
                 this.fire('foundplace', place);
             }
         });

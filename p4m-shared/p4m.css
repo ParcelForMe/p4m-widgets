@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 .p4m-green {
   background-color: #37a553 !important; }
 
@@ -2518,7 +2518,7 @@ p4m-checkout {
     margin: 0;
     border-bottom: none; }
   p4m-checkout #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
-    background: #f8f8f8; }
+    xbackground: #f8f8f8; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
     width: 37%;
     float: right;

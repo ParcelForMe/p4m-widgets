@@ -5,6 +5,9 @@
 
 	<template>
 		<style>
+            :host {
+                 border-bottom: 1px solid #ccc;
+            }
             .content {
                  cursor: pointer;
                  width: 100%;
@@ -352,6 +355,7 @@
 			.dp-icon {
 				margin: 0 0 5px;
                 float: left;
+                max-width: 34px;
 			}
 
 			#dp-address, #dp-distance {
@@ -397,6 +401,11 @@
                 align-items: center;
             }
 
+            #preferredIcon {
+                line-height: 35px;
+                color: rgb(95, 186, 118);
+            }
+
 		</style>
 
 
@@ -413,11 +422,15 @@
 						<template is="dom-if" if="{{droppointData.providerName}}">
 							<local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
 						</template>
+                        <template is="dom-if" if="{{droppointData.preferred}}">
+                            <i id="preferredIcon" class="p4micon-heart-fill"></i>
+                        </template>
 					</div>
 					<div class="content">
 						<div class="dpProviderName">{{droppointData.providerName}} <!---<template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>-->
 						</div>
 						<div class="dpDescription">{{droppointData.droppointDescription}}</div>
+                        <!--
                         <template is="dom-if" if="{{panelMode}}">
 						    <div id="dp-address-line1">
 							    <template is="dom-repeat" initial-count="1" items="{{droppointData.geoLocation.addressLines}}">
@@ -428,96 +441,96 @@
 							    </template>
 						    </div>
                         </template>
-                        <!--
+                        -->
                         <div id="dp-address">
                             <template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
                                 <template is="dom-if" if="{{item}}">
-                                    {{item}}
-                                    <br />
+                                    {{item}},
                                 </template>
                             </template>
-                            {{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
+                            {{droppointData.geoLocation.town}}<!--, {{droppointData.geoLocation.postCode}}-->
                         </div>
-                            -->
+                           
 						<template is="dom-if" if="{{showDistance}}">
 							<div id="dp-distance">
 								<div class="font-weight-600">Distance:</div>
 								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
 							</div>
 						</template>
-                        <!--
-						<div id="dp-body">
-							<div id="dp-minor-info">
-								<div class="dp-opening-hours">
-									<table>
-										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
-											<tr>
-												<td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
-												<td class="dp-day-time-slots">
-													<ul class="testMe">
-														<template is="dom-repeat" items={{item.timeSlots}}>
-															<li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
-														</template>
-													</ul>
-												</td>
-											</tr>
-										</template>
-									</table>
-								</div>
-							</div>
-						</div>
-                            -->
-						<template is="dom-if" if="{{showShippingOptions}}">
-							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
-								<div class="shippingOptions">
-									<ul>
-										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
-											<li class="delivery-place">
+                        <template id="hours" is="dom-if" if="{{droppointData.selected}}">
+                            <div id="dp-body">
+                                <div id="dp-minor-info">
+                                    <div class="dp-opening-hours">
+                                        <table>
+                                            <template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
+                                                <tr>
+                                                    <td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
+                                                    <td class="dp-day-time-slots">
+                                                        <ul class="testMe">
+                                                            <template is="dom-repeat" items={{item.timeSlots}}>
+                                                                <li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
+                                                            </template>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                            
+                        <template is="dom-if" if="{{showShippingOptions}}">
+                            <template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
+                                <div class="shippingOptions">
+                                    <ul>
+                                        <template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
+                                            <li class="delivery-place">
 
-												<label for$="dp-{{item.service.id}}" >
-													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span>
-                                                    <!--<span class="info">{{item.service.methodTitle}}</span>-->
-													<span class="daterange">{{item.deliveryDateRange}}</span>
-												</label>
+                                                <label for$="dp-{{item.service.id}}">
+                                                    <span class="gfsmethodname">
+                                                        <span class="price">{{currencySymbol}}{{item.service.price}}</span>
+                                                        <!--<span class="info">{{item.service.methodTitle}}</span>-->
+                                                        <span class="daterange">{{item.deliveryDateRange}}</span>
+                                                </label>
 
-												<i name="shipping_method" 
-													on-click="onClickOption" 
-													value="{{item.service.id}}" 
-													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle link droppoint-delivery-selection {{item.className}}"
-													></i>
-												<!-- <i name="shipping_method" 
-													on-click="onClickOption" 
-													value="shipping_method_{{_id}}" 
-													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
-													></i> -->
-												<!--<input type="radio"
-													name="shipping_method_{{_id}}"
-													checked="{{item.selected}}"
-													value="{{item.service.id}}"
-													id="dp-{{item.service.id}}"
-													on-click="onClickOption"
-													class="radio droppoint-delivery-selection" /> -->
+                                                <i name="shipping_method"
+                                                    on-click="onClickOption"
+                                                    value="{{item.service.id}}"
+                                                    id="dp-{{item.service.id}}"
+                                                    class$="p4micon-check-circle link droppoint-delivery-selection {{item.className}}"></i>
+                                                <!-- <i name="shipping_method"
+                                on-click="onClickOption"
+                                value="shipping_method_{{_id}}"
+                                id="dp-{{item.service.id}}"
+                                class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
+                                ></i> -->
+                                                <!--<input type="radio"
+                                name="shipping_method_{{_id}}"
+                                checked="{{item.selected}}"
+                                value="{{item.service.id}}"
+                                id="dp-{{item.service.id}}"
+                                on-click="onClickOption"
+                                class="radio droppoint-delivery-selection" /> -->
 
-											</li>
-										</template>
-									</ul>
-								</div>
-							</template>
-						</template>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+                        </template>
 
-						<div class="actions">
-							<template is="dom-if" if="{{isStandardButton}}">
-								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
-							</template>
+                        <div class="actions">
+                            <template is="dom-if" if="{{isStandardButton}}">
+                                <div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
+                            </template>
                         </div>
                         <!--
-                        <template is="dom-if" if="{{panelMode}}">
-                            <a on-click="_toggleHours" class="feature open-hours">{{_expandText}}</a>
-                        </template>
-                        -->
-					</div>
+                            <template is="dom-if" if="{{panelMode}}">
+                                <a on-click="_toggleHours" class="feature open-hours">{{_expandText}}</a>
+                            </template>
+                            -->
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -628,12 +641,13 @@
 
 			initData: function () {
                 //Set a unique ID
-			    this._id = Math.floor(Math.random() * 99999) + (new Date().getDate()).toString()
+			    this._id = Math.floor(Math.random() * 99999) + (new Date().getDate()).toString();
+			    this.droppointData.listEntry = this;
 
                 //Ensure 'selected' has a value
 			    if (typeof (this.droppointData.selected) === "undefined") {
 				    this.droppointData.selected = false;
-				}
+			    }
 
                 //Build a nice week view of delivery methods
                 this.buildWeekCollection();
@@ -675,12 +689,9 @@
 				}
 			},
 
-			select: function() {
+			select: function () {
 			    this.set('droppointData.selected', true);
 			    this.buildWeekCollection();
-			    //this.autoSelectMethod();
-                
-			    //this.fire('droppoint-selected', this.droppointData);
 			},
             
 			unselect: function () {
