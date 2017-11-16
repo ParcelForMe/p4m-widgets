@@ -87,7 +87,7 @@
     								<paper-listbox class="dropdown-content">
     									<template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}">
     					                    <paper-item label="{{item.droppointDescription}}">
-        									<gfs-droppoint on-user-select="_selectFavDropPoint" on-droppoint-selected="_onDropPointSelectedEvent" container-class="" button-type="tick" disable-unchoose="true" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+        									<gfs-droppoint on-user-select="_selectFavDropPoint" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
     	                            		</paper-item>						
     									</template>
     								</paper-listbox>
@@ -108,7 +108,7 @@
                                     <div id="mainDropPointListArea">
                                         <div id="dropPointList">
                                             <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortDropPoints">
-                                                <gfs-droppoint on-droppoint-selected="_onDropPointSelectedEvent" show-opening-hours="true" show-distance="true" button-type="standard" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+                                                <gfs-droppoint panel-mode="true" on-user-select="_onDropPointSelectedEvent" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
                                             </template>
                                         </div>
                                     </div>
@@ -581,17 +581,24 @@
                 this._postReq(mapCenter, this._postData, callback);             
             },
 
-            _topDPExpanded: false,
+            _topDPPinned: false,
+            _topDPWasExpanded: false,
             dpListScrolled: function (event) {
                 // scrolling the DP list - keep the selected DP visible at the top of the list
                 if (this._selectedDropPoint) {
-                    if (!this._topDPExpanded && this.$.dropPointList.scrollTop < 10) {
-                        this.$.dropPointList.firstElementChild.classList.remove('pinned');
-                        this._topDPExpanded = true;
+                    var dpCard = this.$.dropPointList.firstElementChild;
+                    if (this._topDPPinned && this.$.dropPointList.scrollTop < 10) {
+                        dpCard.classList.remove('pinned');
+                        this._topDPPinned = false;
+                        if (this._topDPWasExpanded && !dpCard.expanded)
+                            dpCard.toggleExpanded();
                     }
-                    else if (this._topDPExpanded && this.$.dropPointList.scrollTop >= 10) {
-                        this.$.dropPointList.firstElementChild.classList.add('pinned');
-                        this._topDPExpanded = false;
+                    else if (!this._topDPPinned && this.$.dropPointList.scrollTop >= 10) {
+                        dpCard.classList.add('pinned');
+                        this._topDPPinned = true;
+                        this._topDPWasExpanded = dpCard.expanded;
+                        if (this._topDPWasExpanded)
+                            dpCard.toggleExpanded();
                     }
                 }
             },
@@ -803,11 +810,8 @@
 
             selectFavAddress: function (address) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
-                //this._unselectDropPoint();
-                //this.setMapHome({ 'lat': address.latitude, 'lng': address.longitude }, address.street1);
-                //this._postData.request.order.transit.recipient.location = address;
-                //this.autoSelectDeliveryMethod(callback);
-                this.requestDropPointsByAddress(address);
+                this._unselectDropPoint();
+                this.currentMapCenter = { 'lat': address.latitude, 'lng': address.longitude };
             },
 
 
@@ -1502,6 +1506,7 @@
 
                     // show or hide streetview control
                     streetViewControl: false,
+                    fullscreenControl: false,
 
                     // show or hide the google map UI
                     disableDefaultUI: self.hideMapUI,
@@ -1642,6 +1647,17 @@
                         callback("No results");
                     }
                 });
+            },
+            
+            _geoCodePosition: function (position, callback) {
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ location: position },
+                    function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK && results && results.length) 
+                            callback(null, results[0]);
+                        else 
+                            callback("No results");
+                    });
             },
 
             //_mapMoved: function () {
@@ -1852,13 +1868,10 @@
                 //.if (this._selectedDropPoint && this._selectedDropPoint.droppointId == e.detail.droppointId) return; //Already selected
                 //If there is no method, _completeDropPointSelection will choose one for us
                 var self = this;
+                self.fire('dp-selected-map', e.detail.droppointId);
                 //Get selected delivery method
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
-
-                    //Show on the map, pop up the info window
-                    //self._openSelectedDropPointInfoWindow();
-                    //self._updateUi();
-
+                    self.$.dropPointListTemplate.render();
                 });
 
             },
@@ -1878,20 +1891,6 @@
                     this.set("_selectedDropPoint.selected", true);
                     if (!methodId) 
                         methodId = dp.deliveries[0].service.id;
-                    //If we're selecting a new droppoint and/or method,
-                    //this.$['infobox_droppoint'].select();
-                    //this.$['infobox_droppoint'].selectMethod(methodId, true);      
-                    if (dp.listEntry) {
-                        for (var i = 0; i < this._dropPoints.length; i++) 
-                            if (this._dropPoints[i].selected && this._dropPoints[i].id !== droppointId) {
-                                this._dropPoints[i].selected = false;
-                                this._dropPoints[i].listEntry.unselect();
-                                break;
-                            }
-                        dp.listEntry.select();
-                        this.$.dropPointListTemplate.render();
-                    }
-                    //dp.selectMethod(methodId, true);
                     this.setDeliveryMethod(methodId);    
                     this._openSelectedDropPointInfoWindow();
                     this._updateUi();
@@ -1899,11 +1898,13 @@
                 }
             },
 
-            _selectDropPoint(dropPointId) {
+            _selectDropPoint(dropPointId, callback) {
                 var self = this;
+                self.fire('dp-selected-map', dropPointId);
                 this._completeDropPointSelection(dropPointId, null, function () {
-                    //self.$['infobox-droppoint'].select(); //The gfs-droppoint widget will fire droppoint-selected 
-                    //Next stop _onDropPointSelectedEvent() 
+                    self.$.dropPointListTemplate.render();
+                    if (callback)
+                        callback();
                 })
             },
 
@@ -1911,8 +1912,6 @@
             //Make it the 'selected' one
             //Select the infobox's gfs-droppoint widget.
             _selectDropPointMarker: function (marker) {
-                //var dp = this._droppointById(null, marker.customData.droppointId);
-                //marker.setIcon('/scripts/lib/p4m-widgets/p4m-shared/img/gmap-icon-selected-shadow-32px.png');
                 this._selectDropPoint(marker.customData.droppointId);
             },
 
@@ -1997,12 +1996,20 @@
                         this._currentMarker = null;
                     }
                 }
+                this.fire('dp-selected-map', null);
             },
            
+            _favAddrById: function (addrId) {
+                if (this._favAddresses) 
+                    for (var i = 0; i < this._favAddresses.length; i++)
+                        if (this._favAddresses[i].id === addrId)
+                            return this._favAddresses[i];
+            },
+
             _droppointById: function (droppointId) {
-                if (this._dropPoints) 
-                    for (var i = 0; i < this._dropPoints.length; i++) 
-                        if (this._dropPoints[i].droppointId === droppointId) 
+                if (this._dropPoints)
+                    for (var i = 0; i < this._dropPoints.length; i++)
+                        if (this._dropPoints[i].droppointId === droppointId)
                             return this._dropPoints[i];
             },
 
@@ -2016,7 +2023,9 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-                            self._panToGeoLocation(pos);
+                            self._geoCodePosition(pos, function (err, addr) {
+                                self.gotoGoogleAddress(addr);
+                            });
                         },
                         function(err) {
                             if (callback) {
@@ -2028,7 +2037,6 @@
                 } 
                 else {
                     console.error("Browser does not support geolocation");
-
                 }
             },
 
@@ -2101,11 +2109,16 @@
             },
 
             _formatDayDefiniteDate: function(deliveryDate) {
-                return '(' + moment(deliveryDate).format("ddd, Do") + ')';
+                return '(' + this._formatDate(deliveryDate, true) + ')';
             },
 
             _formatNonDayDefiniteDate: function(startDate, endDate) {
-                return '(' + moment(startDate).format("ddd, Do") + ' - ' + moment(endDate).format("ddd, Do") + ')';
+                return '(' + this._formatDate(startDate) + ' - ' + this._formatDate(endDate) + ')';
+            },
+
+            _formatDate: function(date, wantTime) {
+                var d = moment.utc(date);
+                return d.format("ddd, Do") + ((wantTime && d.hour() > 0) ? ' ' + d.format('h:mm a') : '');
             },
 
             _findDropPointDeliveries: function(providerId) {
@@ -2123,7 +2136,7 @@
                         if (item.service.maxDD == item.service.minDD) {
                             // day definite
                             var startDate = new Date(item.deliveryDate);
-                            item.deliveryDateRange = this._formatDayDefiniteDate(startDate);
+                            item.deliveryDateRange = this._formatDayDefiniteDate(item.service.deliveryTimeTo);
                         }
                         else {
                             // non day definite
