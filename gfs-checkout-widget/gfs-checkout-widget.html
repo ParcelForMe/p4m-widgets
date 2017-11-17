@@ -87,7 +87,7 @@
     								<paper-listbox class="dropdown-content">
     									<template id="mapPreferredDropPointList" is="dom-repeat" items="{{_favDropPoints}}">
     					                    <paper-item label="{{item.droppointDescription}}">
-        									<gfs-droppoint on-user-select="_selectFavDropPoint" droppoint-data="{{item}}" class="droppoint"></gfs-droppoint>
+        									<gfs-droppoint on-user-select="_selectFavDropPoint" droppoint-data="{{item}}" class="droppoint" container-class="preferredList"></gfs-droppoint>
     	                            		</paper-item>						
     									</template>
     								</paper-listbox>
@@ -578,6 +578,7 @@
             },
 
             postGfsData: function (mapCenter, callback) {
+                this.currentMapCenter = null;   // setting this to null will move the map when it is displayed
                 this._postReq(mapCenter, this._postData, callback);             
             },
 
@@ -600,6 +601,13 @@
                         if (this._topDPWasExpanded)
                             dpCard.toggleExpanded();
                     }
+                }
+                else if (this._topDPPinned) {
+                    var dpCard = this.$.dropPointList.firstElementChild;
+                    dpCard.classList.remove('pinned');
+                    this._topDPPinned = false;
+                    if (dpCard.expanded)
+                        dpCard.toggleExpanded();
                 }
             },
 
@@ -811,7 +819,7 @@
             selectFavAddress: function (address) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
                 this._unselectDropPoint();
-                this.currentMapCenter = { 'lat': address.latitude, 'lng': address.longitude };
+                //this.currentMapCenter = { 'lat': address.latitude, 'lng': address.longitude };
             },
 
 
@@ -819,14 +827,19 @@
                 // an address has changed within the context of the drop points
                 // here we need to get re-init the session, get the new DPs, 
                 // select a default if possible and display the new location and markers
+                this.config.id = address.id;
                 this.config.countryCode = address.countryCode.code;
+                this.config.county = address.county || address.state;
                 this.config.town = address.town;
                 this.config.postCode = address.postCode;
                 this.config.addressLineCollection = address.addressLineCollection;
                 this.config.mapCenter = { 'lat': address.lat, 'lng': address.lng };
-                if (!callback)
-                    callback = function () {};
-                this.queryForNewAddr(callback);
+                var self = this;
+                this.queryForNewAddr(function () {
+                    self._showDropPointsView();
+                    if (callback)
+                        callback();
+                });
 
                 /*var self = this;
                 this._geoCodeAddress(address, function (err, data) {
@@ -886,6 +899,7 @@
                         location.countryCode = selection.address.countryCode;
                         location.postCode = selection.address.postCode;
                         location.town = selection.address.town || "";
+                        location.county = selection.address.county || selection.address.state;
                         location.addressLineCollection = selection.address.addressLineCollection;
                     }
 
@@ -930,6 +944,8 @@
             },
 
             queryForNewAddr: function (finalCallback) {
+                // this is only called within the drop points tab, so we need to stay on the tab even if a non-DP address gets selected automatically
+                // can be called if the user: selects a fav addr, or a fav DP, or enters an address into the lookup
                 var self = this;
                 var reqDeliveryTypes = this.config.skipDropPoints ? ["dmStandard"] : ["dmDropPoint", "dmStandard"];
                 this.getPostDataFromConfig(this.config, reqDeliveryTypes);
@@ -944,7 +960,7 @@
                         return;
                     }
                     self.initialised = true;
-                    var selection = self.getDefaultDelivery();
+                    var selection = self.getDefaultDelivery(true);
                     if (selection.dropPointId) {
                         // try to select the drop point - need to force refresh of map
                         self._showingDroppoints = false;
@@ -956,10 +972,9 @@
                         if (!res) {
                             // this will only fail if a service was pre-selected on an existing cart and no longer exists
                             // or the consumer changes the delivery address manually
-                            selection = self.getDefaultDelivery();
+                            selection = self.getDefaultDelivery(true);
                             res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                         }
-                        //self.$.dropPointListTemplate.render();
                         if (res)
                             finalCallback();
                         else
@@ -1008,7 +1023,7 @@
                                         },
                                         "postCode": config.postCode,
                                         "town": config.town,
-                                        "county": config.state,
+                                        "county": config.county,
                                         "addressLineCollection": config.addressLineCollection
                                     },
                                     "contactDetails": {
@@ -1033,7 +1048,7 @@
             },
 
             //Select a delivery address based on the users preferences
-            getDefaultDelivery: function () {
+            getDefaultDelivery: function (stayOnTab) {
                 // select a default address or droppoint during initial load, or if loading
                 // an existing cart and the address / DP is no longer available
 
@@ -1060,7 +1075,7 @@
                         // a preferred DP is not being used, so check for next preference
                         if (prefs[0] === 'useMyDropPoints' && prefs[1] === 'useMyDeliveryAddress')
                             // delivery address is second pref
-                            return this.getDefaultServiceId();
+                            return this.getDefaultServiceId(stayOnTab);
                         // closest retailer DP is first or second pref
                         if (this._dropPoints && this._dropPoints.length > 0)
                             dp = this._dropPoints[0];
@@ -1071,15 +1086,15 @@
                         return {
                             dropPointId: dropPointId,
                             deliveryMethodId: serviceId,
-                            address: this.config.defaultAddress
+                            address: this._getCurrentDeliveryAddress()
                         };
                     }
                 }
                 // consumer prefers their own address or no DP could be used
-                return this.getDefaultServiceId();
+                return this.getDefaultServiceId(stayOnTab);
             },
 
-            getDefaultServiceId: function () {
+            getDefaultServiceId: function (stayOnTab) {
                 // Choose the most preferred standard delivery
                 var serviceId, delDate;
                 if (this.standardRates.length) {
@@ -1090,19 +1105,21 @@
                             this._data.dayDefinite[0].rates.sort(sortFunction);
                             serviceId = this._data.dayDefinite[0].rates[0].id;
                             delDate = this._data.dayDefinite[0].deliveryDate;
-                            this.showPage_Calendar();
+                            if (!stayOnTab)
+                                this.showPage_Calendar();
                         }
                         else {
                             this.standardRates.sort(sortFunction);
                             serviceId = this.standardRates[0].id;
-                            this.showPage_Standard();
+                            if (!stayOnTab)
+                                this.showPage_Standard();
                         }
                     }
                 }
                 return {
                     deliveryMethodId: serviceId,
                     deliveryDate: delDate,
-                    address: this.config.defaultAddress
+                    address: this._getCurrentDeliveryAddress()
                 }
             },
 
@@ -1232,7 +1249,7 @@
                             //So we don't need to autoselect one.
                             console.log("Not selecting a standard address automatically.")
                         }
-                        newSelectedServiceDetails.deliveryAddress = this._postData.request.order.transit.recipient.location;
+                        newSelectedServiceDetails.deliveryAddress = this._getCurrentDeliveryAddress();
                     }
                     this.set('selectedServiceDetails', newSelectedServiceDetails);                  
 
@@ -1244,33 +1261,16 @@
                     return this.selectedServiceDetails;
                 }
             },
-                        
-            /*selectNearestFavDropPoint: function(callback) {
-                if (this._favDropPoints.length) {
-                    this._selectDropPoint(this._favDropPoints[0].droppointId, callback);
+
+            _getCurrentDeliveryAddress: function() {
+                if (this.config.id) {
+                    var addr = this._favAddrById(this.config.id);
+                    if (addr)
+                        return addr;
                 }
-                else {
-                    callback("No favourite drop-points");
-                }
+                return this.config.defaultAddress;
             },
-
-            selectNearestDropPoint: function (callback) {
-                if (this._sessionId) {
-                    self = this;
-                    this.requestDropPointsByAddress(this.config.defaultAddress, function (dropPoints) {
-                        if (dropPoints && dropPoints.length) {
-                            var dropPoint = dropPoints[0];
-                            self._selectDropPoint(dropPoint.droppointId, callback);
-                        }
-                        else {
-                            callback("No supported drop-points found");
-                        }
-                    });
-                }
-                else
-                    callback();
-            },*/
-
+            
             //Index and tidy GFS rate data
             _processRateData: function () {
                 if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
@@ -1415,7 +1415,8 @@
                 if (this.config.deliveryPreferences) {
                     var sortFunction = this._getDeliveryMethodSortFunction();
                     this._dropPoints.map(
-                        function(item) {
+                        function (item) {
+                            item.preferred = false;
                             if (item.deliveries && item.deliveries.length) {
                                 item.deliveries = item.deliveries.sort(sortFunction);
                             }                           
@@ -1717,15 +1718,6 @@
             },
 
             _updateUi: function() {
-                //Display/hide things based on the current state
-
-                if (this._selectedDropPoint) {
-                    //this.$.selectedDropPointPanel.classList.remove("hidden");
-                }
-                else {
-                    //this.$.selectedDropPointPanel.classList.add("hidden");
-                }
-                //this.$.dropPointListTemplate.render(); //Re-sort the list of drop point cards
             },
 
             
@@ -1871,9 +1863,24 @@
                 self.fire('dp-selected-map', e.detail.droppointId);
                 //Get selected delivery method
                 this._completeDropPointSelection(e.detail.droppointId, e.detail.deliveryMethod, function () {
-                    self.$.dropPointListTemplate.render();
+                    self._redisplayDropPointList();
+                    self.panToDefaultLocation();
                 });
 
+            },
+
+            _redisplayDropPointList: function () {
+                // if there is no longer a DP selected then we need to make sure the first item is not pinned
+                if (!this._selectedDropPoint) {
+                    var dpCard = this.$.dropPointList.firstElementChild;
+                    if (this._topDPPinned) {
+                        dpCard.classList.remove('pinned');
+                        this._topDPPinned = false;
+                        if (this._topDPWasExpanded)
+                            dpCard.toggleExpanded();
+                    }
+                }
+                this.$.dropPointListTemplate.render();
             },
 
             //==== Make this droppoint the 'selected' one
@@ -1902,7 +1909,7 @@
                 var self = this;
                 self.fire('dp-selected-map', dropPointId);
                 this._completeDropPointSelection(dropPointId, null, function () {
-                    self.$.dropPointListTemplate.render();
+                    self._redisplayDropPointList();
                     if (callback)
                         callback();
                 })
@@ -2340,7 +2347,6 @@
 
 			_onClickFavAddress: function (e) {
 			    var addr = e.currentTarget;
-			    var loc = addr.geoLocation;
 			    var self = this;
 			    this.requestDropPointsByAddress(addr.addressData);
 			},

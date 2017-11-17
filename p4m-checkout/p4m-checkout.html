@@ -632,8 +632,10 @@
                 var defAddr = this.getDefaultAddr();
                 var currAddr = this.getCartAddr();
                 var gfsPostConfig = {
+                    id: currAddr.id,
                     countryCode: currAddr.countryCode,
                     town: currAddr.city,
+                    county: currAddr.state,
                     postCode: currAddr.postCode,
                     addressLineCollection: [currAddr.street1, currAddr.street2],
                     contactEmail: this.consumerData.email,
@@ -984,7 +986,8 @@
                 }
                 else {
                     self.toggleLoading(true);
-                    var addr = this.consumerData.addresses.find(a => a.id === this.cartData.addressId);
+                    var addrId = data.deliveryAddress.id || this.cartData.addressId;
+                    var addr = this.consumerData.addresses.find(a => a.id === addrId);
                     var shippingDetails = { 'service': data.service, 'amount': data.shipping, 'dueDate': data.expDeliveryDate, 'address': addr };
                     // got new shipping details so we need to get updated tax from the host
                     this.$.localApi.call('updShippingService', null, shippingDetails, function (err, cartTotals) {
@@ -1522,6 +1525,7 @@
                     },
                     postCode: item.postCode || "",
                     town: item.city,
+                    county: item.state,
                     addressLineCollection: [item.street1, item.street2],
                     addressLines: [item.street1, item.street2],
                     name: item.label
