@@ -399,6 +399,25 @@ body.fullbleed {
   bottom: 0;
   left: 0; }
 
+.SmallerThanDesktop, .Phablet, .Tablet, .LargerThanPhone {
+  display: none; }
+
+.edit-link {
+  font-weight: 400;
+  color: #38a552; }
+
+.button.inverse {
+  color: #fff;
+  background-color: transparent;
+  box-shadow: none;
+  border: solid 2px rgba(255, 255, 255, 0); }
+
+.button.inverse:hover {
+  color: #fff;
+  background-color: transparent;
+  box-shadow: none;
+  border: solid 2px rgba(255, 255, 255, 0.5); }
+
 .shadow {
   box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
   -webkit-transition: all 0.15s ease-in-out 0s;
@@ -777,6 +796,29 @@ i.link {
   transition: all 0.15s ease-in-out 0s; }
   i.link:hover {
     color: #555; }
+
+button {
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  font-family: "Lato", sans-serif; }
+  button.inverse {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38a552;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px #38a552;
+    border-radius: 24px;
+    height: 42px;
+    flex: 1;
+    cursor: pointer; }
+    button.inverse:hover {
+      color: #fff;
+      background-color: #38a552; }
+    button.inverse:active {
+      color: #fff;
+      background-color: #9cd3aa; }
 
 .flex {
   display: flex; }
@@ -3576,6 +3618,8 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
 SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
 @media (max-width: 767px) {
+  .SmallerThanDesktop {
+    display: none; }
   p4m-checkout #panelContainer .p4m-panel {
     width: 100%; }
   p4m-checkout .topPanel .logos {
@@ -3586,6 +3630,10 @@ SmallerThanDesktop <768px
 Smartphone <480px
 /////////////////////////////////////////////////////////////////////////// */
 @media screen and (max-width: 375px) {
+  .Phone {
+    display: block; }
+  .SmallerThanDesktop.edit-link {
+    display: inline; }
   p4m-checkout > #container {
     display: flex;
     width: 100%;
@@ -3613,6 +3661,28 @@ Smartphone <480px
       display: none; }
     p4m-checkout .topPanel #profileImage {
       display: flex !important; }
+  paper-tabs,
+  paper-tabs #tabsContainer,
+  paper-tabs paper-tab,
+  paper-tabs paper-tab .paper-tab,
+  .add-new {
+    height: 36px !important; }
+  ul.separated li {
+    padding: 0 10px; }
+  .action-button {
+    display: flex;
+    align-self: stretch;
+    padding: 10px; }
+  .button.inverse {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255, 255, 255, 0); }
+  .button.inverse:hover {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255, 255, 255, 0.5); }
   p4m-checkout #panelContainer {
     display: flex;
     border-radius: 0;
@@ -3626,7 +3696,10 @@ Smartphone <480px
     height: 100% !important;
     overflow: hidden; }
     iron-pages#mobilepages iron-page {
-      width: 100%; }
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; }
       iron-pages#mobilepages iron-page h4 {
         height: 32px; }
     iron-pages#mobilepages > iron-page {
@@ -3640,6 +3713,11 @@ Smartphone <480px
       iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase {
         width: 100%;
         box-sizing: border-box; }
+        iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase #p4mPurchaseContainer .select-payment-type .edit-link {
+          position: absolute;
+          right: 0;
+          display: flex;
+          align-items: flex-end; }
         iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase p4m-card > div#container {
           min-height: 125px; }
       iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel {
@@ -3652,6 +3730,8 @@ Smartphone <480px
           flex: 1; }
         iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-order-text {
           min-width: 100%; }
+          iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-order-text #container, iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-order-text p {
+            font-size: 13px; }
         iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel #downloadAppAd {
           padding: 0 10px;
           display: flex;
@@ -3666,6 +3746,22 @@ Smartphone <480px
             flex: 1;
             justify-content: center;
             position: relative; }
+      iron-pages#mobilepages > iron-page#cartPage p4m-cart {
+        flex: 1; }
+        iron-pages#mobilepages > iron-page#cartPage p4m-cart #container {
+          padding: 10px; }
+        iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
+          padding: 0; }
+        iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
+          font-size: 14px; }
+      iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
+        flex: 1; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address {
+          margin-bottom: 2px; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .p4m-address-label {
+          font-size: 14px; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .address-text {
+          font-size: 12px; }
       iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector {
         display: flex;
         flex: 1;
@@ -3712,6 +3808,31 @@ Smartphone <480px
             flex: 1;
             align-self: stretch;
             height: initial;
-            margin-bottom: 0; } }
+            margin-bottom: 0; }
+      iron-pages#mobilepages > iron-page#deliveryPage #pageStandard ul {
+        display: flex;
+        flex-direction: column;
+        flex: 1; }
+      iron-pages#mobilepages > iron-page#cardPage #cardList {
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+        align-content: flex-start;
+        width: 100%; }
+        iron-pages#mobilepages > iron-page#cardPage #cardList > #container {
+          height: initial;
+          flex: 1;
+          margin: 0;
+          max-height: initial;
+          margin-right: 0; }
+          iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-card {
+            width: calc(100% - 30px); }
+            iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-card #container {
+              max-height: initial;
+              margin-right: 0; }
+              iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-card #container .card-panel {
+                min-height: 125px;
+                max-height: 125px;
+                margin-right: 0; } }
 
 /* END  @media only screen and (max-width: 750px) */

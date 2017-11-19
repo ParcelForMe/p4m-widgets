@@ -403,6 +403,27 @@ left: 0;
 
 // Universal Styles
 
+.SmallerThanDesktop, .Phablet, .Tablet, .LargerThanPhone {
+  display: none;
+}
+
+.edit-link {
+    font-weight: 400;
+    color: #38a552;
+}
+
+.button.inverse {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,0);
+}
+.button.inverse:hover {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,.5);
+}
 .shadow {
   box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
   @include transition();
@@ -891,6 +912,34 @@ i.link {
   @include transition();
   &:hover {
     color: $grey-b4;
+  }
+}
+
+// buttons
+button {
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  font-family: "Lato", sans-serif;
+  &.inverse {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38a552;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px #38a552;
+    border-radius: 24px;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
+      background-color: #38a552;
+    }
+    &:active {
+      color: #fff;
+      background-color: #9cd3aa;
+    }
   }
 }
 
@@ -4635,6 +4684,11 @@ SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
 
 @media (max-width: 767px) {
+
+  .SmallerThanDesktop {
+    display: none;
+  }
+
   p4m-checkout #panelContainer .p4m-panel {
     width: 100%;
   }
@@ -4654,6 +4708,13 @@ Smartphone <480px
 /////////////////////////////////////////////////////////////////////////// */
 
 @media screen and (max-width: 375px) {
+
+  .Phone {
+    display: block ;
+  }
+  .SmallerThanDesktop.edit-link {
+    display: inline;
+  }
 
   p4m-checkout > #container {
     display: flex;
@@ -4693,6 +4754,35 @@ Smartphone <480px
     }
   }
 
+  paper-tabs, 
+  paper-tabs #tabsContainer, 
+  paper-tabs paper-tab, 
+  paper-tabs paper-tab .paper-tab, 
+  .add-new {
+    height: 36px !important;
+  }
+
+  ul.separated li {
+    padding: 0 10px;
+  }
+  .action-button {
+    display: flex;
+    align-self: stretch;
+    padding: 10px;
+  }
+  .button.inverse {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,0);
+  }
+  .button.inverse:hover {
+      color: #fff;
+      background-color: transparent;
+      box-shadow: none;
+      border: solid 2px rgba(255,255,255,.5);
+  }
+
   p4m-checkout #panelContainer {
     display: flex;
     border-radius: 0;
@@ -4711,6 +4801,9 @@ Smartphone <480px
     overflow: hidden;
     iron-page {
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       h4 {
         height: 32px;
       }
@@ -4727,6 +4820,16 @@ Smartphone <480px
         #p4mPurchase {
           width: 100%;
           box-sizing: border-box;
+          #p4mPurchaseContainer {
+            .select-payment-type {
+              .edit-link {
+                position: absolute;
+                right: 0;
+                display: flex;
+                align-items: flex-end;
+              }
+            }
+          }
           p4m-card > div#container {
             min-height: 125px;
           }
@@ -4742,6 +4845,9 @@ Smartphone <480px
           }
           p4m-order-text {
             min-width: 100%;
+            #container, p {
+              font-size: 13px;
+            }
           }
           #downloadAppAd {
               padding: 0 10px;
@@ -4761,6 +4867,38 @@ Smartphone <480px
               position: relative;
             }
           }
+        }
+      }
+
+      &#cartPage {
+        p4m-cart {
+          flex: 1;
+          #container {
+            padding: 10px;
+          }
+          p4m-cart-card #container {
+            padding: 0;
+          }
+          #details {
+            font-size: 14px;
+          }
+        }
+      }
+
+      &#addressPage {
+        p4m-address-list {
+            flex: 1;
+            p4m-address {
+              margin-bottom: 2px;
+            }
+            .address-list {
+              .p4m-address-label {
+                font-size: 14px;
+              }
+              .address-text {
+                font-size: 12px;
+              }
+            }
         }
       }
 
@@ -4834,7 +4972,44 @@ Smartphone <480px
             }
           }
         }
+        #pageStandard { 
+          ul {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+          }
+        }
       }
+
+      &#cardPage {
+        #cardList {
+          display: flex;
+          flex: 1;
+          justify-content: flex-start;
+          align-content: flex-start;
+          width: 100%;
+          > #container {
+            height: initial;
+            flex: 1;
+            margin: 0;
+            max-height: initial;
+            margin-right: 0;
+            p4m-card {
+              width: calc(100% - 30px);
+              #container {
+                max-height: initial;
+                margin-right: 0;
+                .card-panel {
+                  min-height: 125px;
+                  max-height: 125px;
+                  margin-right: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+
     }
   }
 

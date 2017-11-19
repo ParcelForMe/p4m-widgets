@@ -133,10 +133,10 @@
 
                     <!-- SmallerThanDesktop Tabs -->
 <!--                     <div id="nav">
-                      <span onclick="select(0);">Page 1</span>
-                      <span onclick="select(1);">Page 2</span>
-                      <span onclick="select(2);">Page 3</span>
-                      <span onclick="select(3);">Page 4</span>
+                      <span onclick="select(0);">S</span>
+                      <span onclick="select(1);">C</span>
+                      <span onclick="select(2);">A</span>
+                      <span onclick="select(3);">D</span>
                     </div> -->
                     <!-- END SmallerThanDesktop Tabs -->
 
@@ -341,11 +341,13 @@
                         <iron-page id="cartPage" class="page one">     
                             <p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner>
                             <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>
+                            <div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div>
                         </iron-page>
 
                         <iron-page id="addressPage" class="page two">
                             <p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner>
                             <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
+                            <div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div>
                         </iron-page>
 
                         <iron-page id="deliveryPage" class="page three">
@@ -360,11 +362,13 @@
 
                             <template is="dom-if" if="{{useGfsCheckout}}">
                             </template>
+                            <!-- Save Changes buttons are contextual and go in the loaded child iron-pages  --> 
                         </iron-page>
 
                         <iron-page id="cardPage" class="page four">
                             <p4m-spinner species="progress" id="payment_spinner"></p4m-spinner>
                             <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
+                            <div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div>
                         </iron-page>
 
                     </iron-pages>
@@ -565,12 +569,23 @@
             }
 */
             #nav {
-                display: block;
+                display: flex;
+                width: 84px;
+                align-self: flex-end;
+                text-align: right;
                 position: absolute;
                 z-index: 2;
                 height: 20px;
+                margin-top: -64px;
+            }
+            #nav span {
                 background: rgba(255,255,255,0.8);
-                margin-top: -20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 1px;
+                width: 20px;
+                max-width: 20px;
             }
             iron-pages#mobilepages {
                 position: relative;

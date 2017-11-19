@@ -11,10 +11,10 @@
                 Choose your <a on-click="requestAddress">Delivery address</a>.<br />
             </template>
             <template is="dom-if" if="{{cartData.addressId}}">
-                <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span>.</p>
+                <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span> <span class="edit-link SmallerThanDesktop" onclick="select(3);">Edit</span>.</div></p>
                 <p>to your {{addressTypeStr}}:
-                <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}}
-                <span class="p4m-label"><span>{{deliveryDateStr}}.</span></span></p>
+                <span class="p4m-label">{{deliveryAddressStr}}</span> <span class="edit-link SmallerThanDesktop" onclick="select(2);">Edit</span>.</div> {{deliveryDatePrefixStr}}
+                <span class="p4m-label"><span>{{deliveryDateStr}}</span> <span class="edit-link SmallerThanDesktop" onclick="select(5);">Edit</span>.</div></span></p>
                 
             </template>
             <template is="dom-if" if="{{isLoading}}">

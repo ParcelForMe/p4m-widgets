@@ -19,6 +19,7 @@
             <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab">
                 <paper-tab id="card" name="card" data-tooltip="Pay with credit card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
                 <paper-tab id="paypal" name="paypal" data-tooltip="Pay with PayPal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
+                <span class="edit-link SmallerThanDesktop" onclick="select(4);">Edit</span></div>
             </paper-tabs>
 
             <div class$="selectedPaymentMethod_{{selectedPaymentType}}">
