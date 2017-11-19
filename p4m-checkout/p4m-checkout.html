@@ -4,6 +4,7 @@
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 <link rel="import" href="../../paper-tabs/paper-tabs.html" />
 <link rel="import" href="../../iron-pages/iron-pages.html" />
+<link rel="import" href="../../iron-media-query/iron-media-query.html" />  
 
 <link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../p4m-shared/p4m-shared.html" />
@@ -35,153 +36,127 @@
 
     <template>
 
-        <iron-media-query query="(max-width: 375px)"
-                        query-matches="{{Phone}}"></iron-media-query>
-        <iron-media-query query="(min-width: 376px) and (max-width: 767px)"
-                        query-matches="{{Phablet}}"></iron-media-query>
-        <iron-media-query query="(min-width: 768px) and (max-width: 1024px)"
-                        query-matches="{{Tablet}}"></iron-media-query>
-        <iron-media-query query="(min-width: 1024px)"
-                        query-matches="{{Desktop}}"></iron-media-query>
-        <iron-media-query query="(min-width: 768px)"
-                        query-matches="{{LargerThanPhone}}"></iron-media-query>
-        <iron-media-query query="(max-width: 767px)"
-                        query-matches="{{SmallerThanDesktop}}"></iron-media-query>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
 
         <p4m-api id="p4mCheckoutApi" ssl="true" on-noservice="onP4mNoService" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
-        <div id="container" class$="{{_changeIndicatorClass}}">
 
-        <!-- Top Panel on devices larger than 768px wide -->
-        <template is="dom-if" if="{{LargerThanPhone}}">
-        <div hidden$="{{!LargerThanPhone}}">
-            <content select="[LargerThanPhone]">
-                <div id="topPanel" class="topPanel">
-                    <img class="p4m-register-logo" src="../p4m-shared/img/P4M-Top-Header.png" id="peli-icon-header" />
-                    <!-- Not using due to Variable font baselines screwing alignment across browsers, Including in logo image instead.
-                    <h2>Checkout &amp; Delivery</h2> -->
-                    <div class="flex-spacer"></div>
-                    <div><span class="font-weight-light">Welcome,</span> </div>
-                    <p4m-profile mode="basic"></p4m-profile>
+        <!-- P4m standard dom-if media-queries -->    
+<!--         <iron-media-query query="(max-width: 375px)" query-matches="{{Phone}}"></iron-media-query>
+        <iron-media-query query="(min-width: 376px) and (max-width: 767px)" query-matches="{{Phablet}}"></iron-media-query>
+        <iron-media-query query="(min-width: 768px) and (max-width: 1024px)" query-matches="{{Tablet}}"></iron-media-query>
+        <iron-media-query query="(min-width: 1024px)" query-matches="{{Desktop}}"></iron-media-query>
+        <iron-media-query query="(min-width: 768px)" query-matches="{{LargerThanPhone}}"></iron-media-query>
+        <iron-media-query query="(max-width: 767px)" query-matches="{{SmallerThanDesktop}}"></iron-media-query> -->
+
+        <!-- LargerThanPhone  --> 
+<!--         <template is="dom-if" if="{{LargerThanPhone}}">       
+        </template>  -->
+        <!-- / LargerThanPhone -->
+
+        <!-- SmallerThanDesktop -->
+<!--         <template is="dom-if" if="{{SmallerThanDesktop}}">
+        </template>  -->
+        <!-- / smallerThanDesktop -->
+
+        <div id="container" class$="{{_changeIndicatorClass}}"> 
+
+            <div id="topPanel" class="topPanel">
+                <div class="logos">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.2 91" style="enable-background:new 0 0 456.2 91;" xml:space="preserve" id="logo">
+                        <style type="text/css">
+                            .st0 {display: none;}
+                            .st1 {display: inline;}
+                            .st2 {fill: #ffffff;}
+                        </style>
+                        <g id="Layer_2" class="st0"><rect x="0.6" class="st1" width="480" height="91"></rect></g>
+                        <g id="Layer_1">
+                            <g id="Vector_Smart_Object_xA0_Image_1_"></g>
+                            <g id="Parcel_For_Me"></g>
+                            <g>
+                                <path class="st2" d="M157.8,32.8c0-0.2-0.4-0.4-0.6-0.4h-0.4c-0.2,0-0.4,0.2-0.6,0.4l-11.7,25.6c-0.2,0.4,0.2,1,0.9,0.8h2.4
+                                                                        c0.4,0,0.5-0.4,0.8-0.6c0.6-1.6,1.5-3.3,2.3-5.1h12.5l2.3,5.3c0,0.4,0.4,0.6,0.8,0.6h2.5c0.6,0,0.9-0.6,0.6-1L157.8,32.8z
+                                                                            M152.2,50.2l4.7-10.4h0.2l4.7,10.4H152.2z"></path>
+                                <path class="st2" d="M95.7,5.7c-4.1,1-12.2,4.5-19.8,1.3c-11.1-4.3-15.3,8-16.2,11.5C58.9,21.7,51.1,46,8.6,4.1
+                                                                        C7.4,2.8,5.6,3.7,5.8,5.4c0.5,14.4,13.6,28.3,13.6,28.3S49.9,67.5,6,75.3c-9,2-4.1,4.5-2,5.3c0.8,0.2,1.4,0.8,2,1.4
+                                                                        c0.8,0.8,1.3,2,0,3.5c-2.4,2.4-5.7,6.4,3.7,5.1c9.4-1.4,69.6-8.8,71.9-51.7C82.7,14.5,92,11.4,96.5,7.1
+                                                                        C97.1,6.5,96.5,5.4,95.7,5.7z M73.7,10.8c1,0,1.6,0.2,2.3,0.2c0.2,0.2,0.5,0.5,0.2,0.8l-1.3,1.7c0,0-3.5,4.1-5.5,1.8
+                                                                        c-0.2-0.2-0.2-0.4-0.4-0.6C67.8,11.8,71.9,10.4,73.7,10.8z M14.5,87.6c-0.2,0-0.4-0.2-0.6-0.2c-0.6-1.6-1.4-6.7,8.2-11.2
+                                                                        C49,66,56.8,45.7,59.5,38c3.3-9,7.4-15.8,13.5-10.2C89.7,43.1,69.3,79.4,14.5,87.6z"></path>
+                                <path class="st2" d="M132.4,32.6h-8.5c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h2.3c0.4,0,0.8-0.4,0.8-0.8v-9h5.5
+                                                                        c4.6,0,8.5-3.8,8.5-8.5C140.9,36.6,137.1,32.6,132.4,32.6z M132.2,45.9h-5.3v-9.4h5.3c2.7,0,4.9,1.8,4.9,4.5
+                                                                        C137.2,43.9,134.9,45.9,132.2,45.9z"></path>
+                                <path class="st2" d="M70.7,13.8c1,1.3,2.8-1,2.8-1l0.6-0.4c0.2-0.2,0-0.4-0.2-0.4s-0.6,0-1-0.2c-1-0.2-3.1,0.6-2.4,1.8
+                                                                        C70.5,13.8,70.7,13.8,70.7,13.8z"></path>
+                                <path class="st2" d="M40.1,22.6c0,0.6,0.4,0.9,0.8,1c2.3,0.8,10.4,3.5,13.1-1.6c0.6-1,0.2-2.3-0.6-3.1c-6.1-4.9-9-9.4-11.8-14.3
+                                                                        V4.4c-2.4-5.1-7.4-7.1-6.4,3.5C35.8,16.4,39.1,21.1,40.1,22.6z"></path>
+                                <path class="st2" d="M377.4,40.8c0-4.5-3.9-8.2-8.4-8.2h-10.4c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
+                                                                        c0.4,0,0.8-0.4,0.8-0.8v-9.6h5.7l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.1-9.6
+                                                                        C375.1,47.2,377.4,44.3,377.4,40.8z M368.5,45.7h-6.7v-9.2h6.7c2.4,0,4.7,2,4.7,4.5C373.2,43.7,370.9,45.7,368.5,45.7z"></path>
+                                <path class="st2" d="M313.6,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v25.3c0,0.4,0.4,0.8,0.8,0.8h2.4c0.4,0,0.8-0.4,0.8-0.8
+                                                                        v-10h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-8.8h12.1c0.5,0,0.8-0.4,0.8-0.8v-2
+                                                                                C314.4,33,314,32.6,313.6,32.6z"></path>
+                                <path class="st2" d="M196.8,40.8c0-4.5-3.9-8.2-8.4-8.2H178c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
+                                                                        c0.4,0,0.8-0.4,0.8-0.8v-9.6h6l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.3-9.6C194.5,47.2,196.8,44.3,196.8,40.8z
+                                                                            M188,45.7h-7v-9.2h7c2.4,0,4.7,2,4.7,4.5C192.7,43.7,190.4,45.7,188,45.7z"></path>
+                                <path class="st2" d="M334.7,32.4c-7.6,0-13.7,6.1-13.7,13.7s6.1,13.7,13.7,13.7c7.6,0,13.7-6.2,13.7-13.7
+                                                                        C348.5,38.5,342.3,32.4,334.7,32.4z M334.7,55.9c-5.3,0-9.8-4.5-9.8-9.8c0-5.6,4.5-10,9.8-10c5.3,0,9.8,4.7,9.8,10
+                                                                        S340.2,55.9,334.7,55.9z"></path>
+                                <path class="st2" d="M451.8,36.3c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-15.2c-0.5,0-0.8,0.4-0.8,0.8h0.1v25.2
+                                                                        c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2
+                                                                        c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8H451.8z"></path>
+                                <path class="st2" d="M252.5,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2
+                                                                        c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8h12.1c0.5,0,0.8-0.4,0.8-0.8
+                                                                        v-2C253.3,33,252.9,32.6,252.5,32.6z"></path>
+                                <path class="st2" d="M277,55.7h-10.2V33.4c0-0.4-0.4-0.8-0.8-0.8h-2.4c-0.5,0-0.8,0.4-0.8,0.8v25.1c0,0.4,0.4,0.8,0.8,0.8H277
+                                                                        c0.5,0,0.8-0.4,0.8-0.8v-2C277.8,56.1,277.4,55.7,277,55.7z"></path>
+                                <path class="st2" d="M218,36.1c2.2,0,4.7,0.8,6.5,2.4c0.4,0.4,0.8,0.4,1,0l1.6-1.6c0.4-0.2,0.4-0.8,0-1c-2.7-2.2-5.3-3.5-9.2-3.5
+                                                                        c-7.5,0-13.7,6.1-13.8,13.5c0,7.6,6.2,13.7,13.7,13.7c3.2,0,6.5-1.3,9.2-3.7c0.2-0.2,0.2-0.8,0-1l-1.8-1.6c-0.2-0.2-0.4-0.2-0.8,0
+                                                                        c-1.8,1.4-3.7,2.4-6.5,2.4c-5.5,0-9.6-4.5-9.6-9.8C208.5,40.6,212.5,36.1,218,36.1z"></path>
+                                <path class="st2" d="M421.9,32.8c0-0.4-0.4-0.6-0.6-0.6h-0.6c-0.2,0-0.6,0.2-0.6,0.4l-8,19.5h-0.2l-8-19.5c0-0.2-0.4-0.4-0.6-0.4
+                                                                                h-0.6c-0.2,0-0.6,0.4-0.6,0.6l-4.8,25.6c0,0.4,0.2,0.8,0.8,0.8h2.4c0.2,0,0.6-0.4,0.6-0.6l2.7-16.9h0.2l7,17.6
+                                                                                c0,0.2,0.4,0.4,0.6,0.4h0.6c0.4,0,0.6-0.2,0.6-0.4l7-17.6h0.2l2.8,16.9c0.2,0.4,0.4,0.6,0.8,0.6h2.4c0.4,0,0.9-0.2,0.6-0.8
+                                                                                L421.9,32.8z"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <h2>Checkout &amp; Delivery</h2>
                 </div>
-            </content>
-        </div>
-        </template>
-
-        <!-- Top Panel on devices less than than 768px wide -->
-        <template is="dom-if" if="{{LargerThanPhone}}">
-        <div hidden$="{{!LargerThanPhone}}">
-            <content select="[LargerThanPhone]">
-                <div id="topPanel" class="topPanel">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                     viewBox="0 0 456.2 91" style="enable-background:new 0 0 456.2 91;" xml:space="preserve" id="logo">
-                <style type="text/css">
-                    .st0{display:none;}
-                    .st1{display:inline;}
-                    .st2{fill:#37A553;}
-                </style>
-                <g id="Layer_2" class="st0">
-                    <rect x="0.6" class="st1" width="480" height="91"/>
-                </g>
-                <g id="Layer_1">
-                    <g id="Vector_Smart_Object_xA0_Image_1_">
-                    </g>
-                    <g id="Parcel_For_Me">
-                    </g>
-                    <g>
-                        <path class="st2" d="M157.8,32.8c0-0.2-0.4-0.4-0.6-0.4h-0.4c-0.2,0-0.4,0.2-0.6,0.4l-11.7,25.6c-0.2,0.4,0.2,1,0.9,0.8h2.4
-                            c0.4,0,0.5-0.4,0.8-0.6c0.6-1.6,1.5-3.3,2.3-5.1h12.5l2.3,5.3c0,0.4,0.4,0.6,0.8,0.6h2.5c0.6,0,0.9-0.6,0.6-1L157.8,32.8z
-                             M152.2,50.2l4.7-10.4h0.2l4.7,10.4H152.2z"/>
-                        <path class="st2" d="M95.7,5.7c-4.1,1-12.2,4.5-19.8,1.3c-11.1-4.3-15.3,8-16.2,11.5C58.9,21.7,51.1,46,8.6,4.1
-                            C7.4,2.8,5.6,3.7,5.8,5.4c0.5,14.4,13.6,28.3,13.6,28.3S49.9,67.5,6,75.3c-9,2-4.1,4.5-2,5.3c0.8,0.2,1.4,0.8,2,1.4
-                            c0.8,0.8,1.3,2,0,3.5c-2.4,2.4-5.7,6.4,3.7,5.1c9.4-1.4,69.6-8.8,71.9-51.7C82.7,14.5,92,11.4,96.5,7.1
-                            C97.1,6.5,96.5,5.4,95.7,5.7z M73.7,10.8c1,0,1.6,0.2,2.3,0.2c0.2,0.2,0.5,0.5,0.2,0.8l-1.3,1.7c0,0-3.5,4.1-5.5,1.8
-                            c-0.2-0.2-0.2-0.4-0.4-0.6C67.8,11.8,71.9,10.4,73.7,10.8z M14.5,87.6c-0.2,0-0.4-0.2-0.6-0.2c-0.6-1.6-1.4-6.7,8.2-11.2
-                            C49,66,56.8,45.7,59.5,38c3.3-9,7.4-15.8,13.5-10.2C89.7,43.1,69.3,79.4,14.5,87.6z"/>
-                        <path class="st2" d="M132.4,32.6h-8.5c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h2.3c0.4,0,0.8-0.4,0.8-0.8v-9h5.5
-                            c4.6,0,8.5-3.8,8.5-8.5C140.9,36.6,137.1,32.6,132.4,32.6z M132.2,45.9h-5.3v-9.4h5.3c2.7,0,4.9,1.8,4.9,4.5
-                            C137.2,43.9,134.9,45.9,132.2,45.9z"/>
-                        <path class="st2" d="M70.7,13.8c1,1.3,2.8-1,2.8-1l0.6-0.4c0.2-0.2,0-0.4-0.2-0.4s-0.6,0-1-0.2c-1-0.2-3.1,0.6-2.4,1.8
-                            C70.5,13.8,70.7,13.8,70.7,13.8z"/>
-                        <path class="st2" d="M40.1,22.6c0,0.6,0.4,0.9,0.8,1c2.3,0.8,10.4,3.5,13.1-1.6c0.6-1,0.2-2.3-0.6-3.1c-6.1-4.9-9-9.4-11.8-14.3
-                            V4.4c-2.4-5.1-7.4-7.1-6.4,3.5C35.8,16.4,39.1,21.1,40.1,22.6z"/>
-                        <path class="st2" d="M377.4,40.8c0-4.5-3.9-8.2-8.4-8.2h-10.4c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
-                            c0.4,0,0.8-0.4,0.8-0.8v-9.6h5.7l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.1-9.6
-                            C375.1,47.2,377.4,44.3,377.4,40.8z M368.5,45.7h-6.7v-9.2h6.7c2.4,0,4.7,2,4.7,4.5C373.2,43.7,370.9,45.7,368.5,45.7z"/>
-                        <path class="st2" d="M313.6,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v25.3c0,0.4,0.4,0.8,0.8,0.8h2.4c0.4,0,0.8-0.4,0.8-0.8
-                            v-10h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-8.8h12.1c0.5,0,0.8-0.4,0.8-0.8v-2
-                            C314.4,33,314,32.6,313.6,32.6z"/>
-                        <path class="st2" d="M196.8,40.8c0-4.5-3.9-8.2-8.4-8.2H178c-0.5,0-0.8,0.4-0.8,0.8l-0.2-0.1v24.9c0,0.4,0.4,0.8,0.8,0.8h2.4
-                            c0.4,0,0.8-0.4,0.8-0.8v-9.6h6l5.1,10c0,0.2,0.4,0.4,0.6,0.4h3.1c0.6,0,0.9-0.6,0.6-1l-5.3-9.6C194.5,47.2,196.8,44.3,196.8,40.8z
-                             M188,45.7h-7v-9.2h7c2.4,0,4.7,2,4.7,4.5C192.7,43.7,190.4,45.7,188,45.7z"/>
-                        <path class="st2" d="M334.7,32.4c-7.6,0-13.7,6.1-13.7,13.7s6.1,13.7,13.7,13.7c7.6,0,13.7-6.2,13.7-13.7
-                            C348.5,38.5,342.3,32.4,334.7,32.4z M334.7,55.9c-5.3,0-9.8-4.5-9.8-9.8c0-5.6,4.5-10,9.8-10c5.3,0,9.8,4.7,9.8,10
-                            S340.2,55.9,334.7,55.9z"/>
-                        <path class="st2" d="M451.8,36.3c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-15.2c-0.5,0-0.8,0.4-0.8,0.8h0.1v25.2
-                            c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2
-                            c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8H451.8z"/>
-                        <path class="st2" d="M252.5,32.6h-15.1c-0.5,0-0.8,0.4-0.8,0.8v25.2c0,0.4,0.4,0.8,0.8,0.8h15.1c0.5,0,0.8-0.4,0.8-0.8v-2
-                            c0-0.4-0.4-0.8-0.8-0.8h-12.1v-8.2h10.2c0.4,0,0.8-0.4,0.8-0.8v-2c0-0.4-0.4-0.8-0.8-0.8h-10.2v-7.8h12.1c0.5,0,0.8-0.4,0.8-0.8
-                            v-2C253.3,33,252.9,32.6,252.5,32.6z"/>
-                        <path class="st2" d="M277,55.7h-10.2V33.4c0-0.4-0.4-0.8-0.8-0.8h-2.4c-0.5,0-0.8,0.4-0.8,0.8v25.1c0,0.4,0.4,0.8,0.8,0.8H277
-                            c0.5,0,0.8-0.4,0.8-0.8v-2C277.8,56.1,277.4,55.7,277,55.7z"/>
-                        <path class="st2" d="M218,36.1c2.2,0,4.7,0.8,6.5,2.4c0.4,0.4,0.8,0.4,1,0l1.6-1.6c0.4-0.2,0.4-0.8,0-1c-2.7-2.2-5.3-3.5-9.2-3.5
-                            c-7.5,0-13.7,6.1-13.8,13.5c0,7.6,6.2,13.7,13.7,13.7c3.2,0,6.5-1.3,9.2-3.7c0.2-0.2,0.2-0.8,0-1l-1.8-1.6c-0.2-0.2-0.4-0.2-0.8,0
-                            c-1.8,1.4-3.7,2.4-6.5,2.4c-5.5,0-9.6-4.5-9.6-9.8C208.5,40.6,212.5,36.1,218,36.1z"/>
-                        <path class="st2" d="M421.9,32.8c0-0.4-0.4-0.6-0.6-0.6h-0.6c-0.2,0-0.6,0.2-0.6,0.4l-8,19.5h-0.2l-8-19.5c0-0.2-0.4-0.4-0.6-0.4
-                            h-0.6c-0.2,0-0.6,0.4-0.6,0.6l-4.8,25.6c0,0.4,0.2,0.8,0.8,0.8h2.4c0.2,0,0.6-0.4,0.6-0.6l2.7-16.9h0.2l7,17.6
-                            c0,0.2,0.4,0.4,0.6,0.4h0.6c0.4,0,0.6-0.2,0.6-0.4l7-17.6h0.2l2.8,16.9c0.2,0.4,0.4,0.6,0.8,0.6h2.4c0.4,0,0.9-0.2,0.6-0.8
-                            L421.9,32.8z"/>
-                    </g>
-                </g>
-                </svg>
                 <div class="flex-spacer"></div>
+                <div class="welcome"><span class="font-weight-light">Welcome,</span> </div>
                 <p4m-profile mode="basic"></p4m-profile>
             </div>
-            </content>
-        </div>
-        </template>
 
-            <div id="panelContainer" class="horizontal layout mobi">
-                <div id="detailPanel" class="p4m-panel flex-2">                   
+            <div id="panelContainer" class="horizontal layout">
 
-                    <!-- Desktop Tabs -->               
-<!--                     <paper-tabs selected="{{selectedTab}}" no-bar>
-                        <paper-tab>My Order<p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab>Addresses<p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab>Delivery Options<p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner></paper-tab>
-                        <paper-tab>Payment Options<p4m-spinner species="progress" id="payment_spinner"></p4m-spinner></paper-tab>                  
-                    </paper-tabs> -->
-                    <!-- END Desktop Tabs -->     
+                <div id="detailPanel" class="p4m-panel flex-2">    
+
+                    <!-- SmallerThanDesktop Tabs -->
+<!--                     <div id="nav">
+                      <span onclick="select(0);">Page 1</span>
+                      <span onclick="select(1);">Page 2</span>
+                      <span onclick="select(2);">Page 3</span>
+                      <span onclick="select(3);">Page 4</span>
+                    </div> -->
+                    <!-- END SmallerThanDesktop Tabs -->
 
 
-                    <!-- Mobile Tabs 2 -->
-                    <div id="nav">
-                          <span onclick="select(0);">Page 1</span>
-                          <span onclick="select(1);">Page 2</span>
-                          <span onclick="select(2);">Page 3</span>
-                          <span onclick="select(3);">Page 4</span>
-                        </div>
-                    <!-- END Mobile Tabs 2 -->
-
-
-
-                    <!-- Mobile pages 3 -->
+                    <!-- SmallerThanDesktop Pages -->
+                    
                     <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
                         <iron-page id="summaryPanel" class="p4m-panel smallSummary flex-1 page four">
                             <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
                             <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
 
-
                             <footer id="footerpPanel" class$="footerPanel {{_changeIndicatorClass}}">
-            
+
                                 <div class="left">
                                     <p4m-order-text cart-data="{{cartData}}" consumer-data="{{consumerData}}" on-request-address="goToAddresses"></p4m-order-text>
                                         <div id="downloadAppAd">
-                                                           <p class="p4m-info">Track your purchases in the free P4M App!</p>
-                                                           <div class="app-buttons"><a href="https://www.apple.com/ios/app-store/">
-                                                           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                             viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve">
+                                           <p class="p4m-info">Track your purchases in the free P4M App!</p>
+                                           <div class="app-buttons"><a href="https://www.apple.com/ios/app-store/">
+                                           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                            viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve">
                                         <style type="text/css">
                                             .st0{fill:#58595B;}
                                         </style>
@@ -258,7 +233,7 @@
                                         </svg>
                                         </a>
                                         <a href="https://play.google.com/store/apps">
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve" class="style-scope p4m-checkout">
+                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 170.9 57.3" style="enable-background:new 0 0 170.9 57.3;" xml:space="preserve" class="style-scope p4m-checkout">
                                         
                                         <g class="style-scope p4m-checkout">
                                             <path class="st0 style-scope p4m-checkout" d="M162.4,0H8.5C3.8,0,0,3.8,0,8.5v40.3c0,4.7,3.8,8.5,8.5,8.5h154c4.7,0,8.5-3.8,8.5-8.5V8.5
@@ -361,7 +336,6 @@
 
                             </footer>
 
-
                         </iron-page>
 
                         <iron-page id="cartPage" class="page one">     
@@ -394,17 +368,14 @@
                         </iron-page>
 
                     </iron-pages>
-                    <!-- END Mobile pages 3 -->
+
+                </div>  <!-- / #detailPanel --> 
+
+            </div>  <!-- / #panelContainer --> 
+        
+        </div>  <!-- / #container --> 
 
 
-                </div>
-                
-            </div> 
-
-
-
-
-        </div>
 
         <p4m-general-fault id="generalFault" no-cancel-on-outside-click with-backdrop></p4m-general-fault>
         <p4m-overlay id="screenOverlay" no-cancel-on-outside-click with-backdrop></p4m-overlay>
@@ -415,6 +386,9 @@
         <polymer-cookie id="p4mDefaultPostCode" name="p4mDefaultPostCode"></polymer-cookie>
         <polymer-cookie id="p4mDefaultCountry" name="p4mDefaultCountry"></polymer-cookie>
         -->
+
+
+    </template>
 
         <style include="p4m-shared">
             :host {
@@ -606,9 +580,11 @@
             iron-pages#mobilepages > iron-page {
                 position: absolute;
                 top: 0;
+                bottom: initial;
                 height: 375px;
-                display: block !important;
+                display: flex !important;
                 background: #fff;
+                align-items: flex-start;
             }
             .animated {
                 -webkit-transform: translateX(-0%);
@@ -619,8 +595,8 @@
             iron-pages#mobilepages  > .animated:not(.iron-selected) {
             }
             iron-pages#mobilepages  > :not(.iron-selected):not(#summaryPanel) {
-                -webkit-transform: translateX(-100%);
-                transform: translateX(-100%);
+                -webkit-transform: translateX(-110%);
+                transform: translateX(-110%);
                 transition: transform 300ms ease-out;
                 will-change: transform;
             }
@@ -651,7 +627,7 @@
                 font-size: 5vmin;*/
             }
 
-            .page#summaryPanel {
+/*            .page#summaryPanel {
                 border: 1px solid orange;
             }
             .page#cartPage {
@@ -665,11 +641,14 @@
             }
             .page#cardPage {
                 border: 1px solid green;
-            }
+            }*/
 
 
         </style>
+
     </template>
+
+
 
     <script>
 
@@ -677,6 +656,10 @@
             is: "p4m-checkout",
 
             properties: {
+                toggley: {
+                    type: String,
+                    value: true
+                },
                 sessionId: {
                     type: String
                 },
@@ -762,7 +745,7 @@
                 selected: {
                     type: Number,
                     notify: true,
-                    value: 0,
+                    // value: 0,
                     observer: '_newPageSelected',
                 },
 
@@ -792,18 +775,18 @@
                 }
 
                 this.init();
-                this.selected = 0;
+                // this.selected = 0;
             },
 
             // A member function of your src element
-            _newPageSelected (newVal, oldVal) {
-                let pages = this.$.mobilepages.children;
-                pages[newVal].style.opacity = 0;
-                setTimeout(
-                 ((node) => {
-                     node.style.opacity = 1;
-                 }).bind(this, pages[newVal]), 0);
-            },
+            // _newPageSelected (newVal, oldVal) {
+            //     let pages = this.$.mobilepages.children;
+            //     pages[newVal].style.opacity = 0;
+            //     setTimeout(
+            //      ((node) => {
+            //          node.style.opacity = 1;
+            //      }).bind(this, pages[newVal]), 0);
+            // },
 
             // Observers
             _newPageSelected (newVal, oldVal) {
@@ -1796,4 +1779,5 @@
 
 
     </script>
+
 </dom-module>
