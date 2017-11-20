@@ -37,6 +37,7 @@
     <template>
 
         <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
 
         <p4m-api id="p4mCheckoutApi" ssl="true" on-noservice="onP4mNoService" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
         <p4m-api id="localApi" is-local="true"></p4m-api>
@@ -61,6 +62,10 @@
 
         <div id="container" class$="{{_changeIndicatorClass}}"> 
 
+            <!-- RESP --><!-- SmallerThanDesktop  
+                Notes: Different logo (svg without the checkout text), 
+                Checkout text is an H2, 
+                css mediaqueries on profile widget text -->
             <div id="topPanel" class="topPanel">
                 <div class="logos">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.2 91" style="enable-background:new 0 0 456.2 91;" xml:space="preserve" id="logo">
@@ -126,22 +131,15 @@
                 <div class="welcome"><span class="font-weight-light">Welcome,</span> </div>
                 <p4m-profile mode="basic"></p4m-profile>
             </div>
+            <!-- RESP --><!-- / SmallerThanDesktop -->
 
             <div id="panelContainer" class="horizontal layout">
 
-                <div id="detailPanel" class="p4m-panel flex-2">    
+                <div id="detailPanel" class="p4m-panel flex-2"> 
 
-                    <!-- SmallerThanDesktop Tabs -->
-<!--                     <div id="nav">
-                      <span onclick="select(0);">S</span>
-                      <span onclick="select(1);">C</span>
-                      <span onclick="select(2);">A</span>
-                      <span onclick="select(3);">D</span>
-                    </div> -->
-                    <!-- END SmallerThanDesktop Tabs -->
-
-
-                    <!-- SmallerThanDesktop Pages -->
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: Considerable changes to the entire iron-pages. 
+                    The summary panel is now it's own page and as a result is removed from all others. 
+                    The paper-tabs nav has been removed and replaced by contextual 'Edit' links  -->
                     
                     <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
                         <iron-page id="summaryPanel" class="p4m-panel smallSummary flex-1 page four">
@@ -372,6 +370,7 @@
                         </iron-page>
 
                     </iron-pages>
+                    <!-- RESP --><!-- / SmallerThanDesktop -->
 
                 </div>  <!-- / #detailPanel --> 
 

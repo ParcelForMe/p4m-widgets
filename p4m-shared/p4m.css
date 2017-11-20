@@ -3710,6 +3710,8 @@ Smartphone <480px
       -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
       /* Saf3.0+, Chrome */
       box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4); }
+      iron-pages#mobilepages > iron-page#summaryPanel #orderSummary {
+        width: 100%; }
       iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase {
         width: 100%;
         box-sizing: border-box; }

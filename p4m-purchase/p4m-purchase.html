@@ -19,7 +19,10 @@
             <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab">
                 <paper-tab id="card" name="card" data-tooltip="Pay with credit card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
                 <paper-tab id="paypal" name="paypal" data-tooltip="Pay with PayPal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
-                <span class="edit-link SmallerThanDesktop" onclick="select(4);">Edit</span></div>
+                <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+                <span class="edit-link SmallerThanDesktop" onclick="select(4);">Edit</span>
+                <!-- RESP --><!-- / SmallerThanDesktop -->
+                </div>
             </paper-tabs>
 
             <div class$="selectedPaymentMethod_{{selectedPaymentType}}">
@@ -28,6 +31,7 @@
                 </template>
                 <template is="dom-if" if="{{_noCardSelected}}">
                     <div class="card-panel no-card"><p>You have not yet selected a payment method.</p>
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: The following requires a trigger for the mobile page as well  -->
                     <p><a on-click="requestPaymentMethod">Click here to select one.</a></p></div>
                 </template>  
             </div>
