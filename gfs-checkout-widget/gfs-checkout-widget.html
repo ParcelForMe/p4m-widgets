@@ -723,6 +723,8 @@
                         }
                         else {
                             this.set('_data', JSON.parse(data));
+                            if (this._data.droppoints && this._data.droppoints.length > 0) 
+                                this._data.droppoints.sort(this.sortByDistance);
                             this.set('_dropPoints', this._data.droppoints);
                             if (this._data.droppoints && this._data.droppoints.length > 0) {
                                 //if (!this._dropPoints) {
@@ -1311,12 +1313,10 @@
                 return dp.selected ? -1 : (dp.preferred ? dp.distanceInMeters : 10000 + dp.distanceInMeters);
             },
 
-            /*sortByDistance: function (a, b) {
-                if (a.selected) return -1
-                else if (b.selected) return 1
-                else if (a === b) return 0;
-                else return a.distanceInMeters < b.distanceInMeters ? -1 : 1;
-            },*/
+            sortByDistance: function (a, b) {
+                return a.distanceInMeters < b.distanceInMeters ? -1 :
+                        (a.distanceInMeters > b.distanceInMeters ? 1 : 0);
+            },
 
             /*filterToMap: function (item) {
                 if (this._map) {
