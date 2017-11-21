@@ -419,7 +419,9 @@
                         <template is="dom-if" if="{{_isPreferred(panelMode, droppointData.preferred)}}">
                             <i id="preferredIcon" class="p4micon-heart-fill"></i>
                         </template>
-                        <i id="selected_tick" class$="hidden p4micon-check-circle {{item.className}}" style="line-height: 1.3; color: rgb(95, 186, 118);"></i>
+                        <template is="dom-if" if="{{_showSelected(droppointData.selected)}}">
+                            <i class="p4micon-check-circle gfs-droppoint" style="line-height: 1.3; color: rgb(95, 186, 118);"></i>
+                        </template>
                     </div>
                     <div class="content">
                         <div class="dpProviderName">{{droppointData.providerName}}</div>
@@ -590,9 +592,11 @@
 
 			    //Listen for a droppoint being selected somewhere on the page
 			    //Window-level listener, to ensure that we get our peers
-				//window.addEventListener('droppoint-selected', this.onOtherDroppointSelected.bind(this), false);
-				window.addEventListener('dp-selected-map', this._onDPSelectedOnMap.bind(this), false);
-				window.addEventListener('selectedservicechanged', this._onMethodSelected.bind(this), false);
+			    //window.addEventListener('droppoint-selected', this.onOtherDroppointSelected.bind(this), false);
+				if (this.panelMode) {
+				    window.addEventListener('dp-selected-map', this._onDPSelectedOnMap.bind(this), false);
+				    window.addEventListener('selectedservicechanged', this._onMethodSelected.bind(this), false);
+				}
 			},
 
 
@@ -602,14 +606,14 @@
 			    this._dataChanged();
 			},
 
-            _dataChanged: function() {
-                //Ensure 'selected' has a value
+			_dataChanged: function() {
+			    //Ensure 'selected' has a value
 			    if (typeof (this.droppointData.selected) === "undefined") {
-				    this.droppointData.selected = false;
+			        this.droppointData.selected = false;
 			    }
 
-                //Build a nice week view of delivery methods
-                this.buildWeekCollection();
+			    //Build a nice week view of delivery methods
+			    this.buildWeekCollection();
 			},
             
 			_isPreferred: function(panelMode, preferred) {
@@ -694,45 +698,30 @@
 					});
 
 					this.set('_weekCollection', weekCollection);
-					//this.$.weekCollectionTemplate.render();
+					this.updateServicesUI(this.droppointData.deliveryMethod);
 				}
 			},
 
 			select: function () {
 			    this.set('droppointData.selected', true);
-			    this.$.selected_tick.classList.remove('hidden');
 			},
             
 			unselect: function () {
 			    this.set('droppointData.selected', false);
 			    this.selectMethod(null, true);
-			    this.$.selected_tick.classList.add('hidden');
 			},
-
-            //Update the button appearance based on whether this droppoint is selected or not
-			/*render: function () {
-
-			    //if (!this.droppointData) {;
-                //    console.error("No droppoint data")
-			    //    return;
-			    //}
-			    //else if (this.droppointData.selected) {
-				//    this.set('buttonClass', this.buttonSelectedClass);
-				//	this.buttonText = "Selected";
-				//}
-				//else {
-				//    this.set('buttonClass', this.buttonNotSelectedClass);
-				//	this.buttonText = "Select";
-				//}
-			},*/
 
 			onClickOption: function (e) {
 			    if (!this.droppointData.selected)
 			        this.select();
 			    this.selectMethod(e.target.value);
+			    this.updateServicesUI(e.target.value);
+			},
+
+            updateServicesUI: function(selServId) {
 			    var services = Polymer.dom(this.root).querySelectorAll('[name=shipping_method]');
 			    for (var i = 0; i < services.length; i++) {
-			        if (services[i].value === e.target.value) {
+			        if (services[i].value === selServId) {
 			            services[i].classList.remove('unchosen');
 			            services[i].classList.add('selected');
 			        }
@@ -753,17 +742,20 @@
             //Fire on-select-delivery-option to be received by parent
             //Set deliveries[n].selected to true on selected method, false on all others
 			selectMethod: function (shippingOptionId, supressEvent) {
+			    if (!this.panelMode)
+			        return;
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
 			        if (this.droppointData.deliveries[i].service.id == shippingOptionId) { //IMPORTANT: Don't use === here
-			        	this.set("droppointData.deliveries." + i + ".selected", true);
-			        	this.set("droppointData.deliveries." + i + ".className", "selected");
-			        }
+			            item.selected = true;
+			            item.className = "selected";
+                    }
 			        else {
-			        	this.set("droppointData.deliveries." + i + ".selected", false);
-			        	this.set("droppointData.deliveries." + i + ".className", "unchosen");
+			            item.selected = false;
+			            item.className = "unchosen";
 			        }
 			    }
+			    this.updateServicesUI(shippingOptionId);
 			    var method = this.getSelectedMethod();
 			    if (method) {
 			        this.droppointData.deliveryMethod = method.service.id;
