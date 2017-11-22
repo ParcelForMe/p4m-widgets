@@ -403,6 +403,27 @@ left: 0;
 
 // Universal Styles
 
+.SmallerThanDesktop, .Phablet, .Tablet, .LargerThanPhone {
+  display: none;
+}
+
+.edit-link {
+    font-weight: 400;
+    color: #38a552;
+}
+
+.button.inverse {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,0);
+}
+.button.inverse:hover {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,.5);
+}
 .shadow {
   box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
   @include transition();
@@ -755,6 +776,95 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 
 }
 
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-light-webfont.eot');
+    src: url('fonts/proximanova-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-light-webfont.woff') format('woff'),
+         url('fonts/proximanova-light-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-light-webfont.svg#ProximaNovaLight') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-lightitalic-webfont.eot');
+    src: url('fonts/proximanova-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-lightitalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-lightitalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-lightitalic-webfont.svg#ProximaNovaLightItalic') format('svg');
+    font-weight: 100;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-reg-webfont.eot');
+    src: url('fonts/proximanova-reg-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-reg-webfont.woff') format('woff'),
+         url('fonts/proximanova-reg-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-reg-webfont.svg#ProximaNovaRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-regitalic-webfont.eot');
+    src: url('fonts/proximanova-regitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-regitalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-regitalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-regitalic-webfont.svg#ProximaNovaRegularItalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-sbold-webfont.eot');
+    src: url('fonts/proximanova-sbold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-sbold-webfont.woff') format('woff'),
+         url('fonts/proximanova-sbold-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-sbold-webfont.svg#ProximaNovaSemibold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proximanova-sbolditalic-webfont.eot');
+    src: url('fonts/proximanova-sbolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-sbolditalic-webfont.woff') format('woff'),
+         url('fonts/proximanova-sbolditalic-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-sbolditalic-webfont.svg#ProximaNovaSemiboldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima_nova_black-webfont.eot');
+    src: url('fonts/proxima_nova_black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proxima_nova_black-webfont.woff') format('woff'),
+         url('fonts/proxima_nova_black-webfont.ttf') format('truetype'),
+         url('fonts/proxima_nova_black-webfont.svg#ProximaNovaBlack') format('svg');
+    font-weight: 800;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima_nova_extrabold-webfont.eot');
+    src: url('fonts/proxima_nova_extrabold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proxima_nova_extrabold-webfont.woff') format('woff'),
+         url('fonts/proxima_nova_extrabold-webfont.ttf') format('truetype'),
+         url('fonts/proxima_nova_extrabold-webfont.svg#ProximaNovaExtrabold') format('svg');
+    font-weight: 900;
+    font-style: normal;
+
+}
+
 
 
 
@@ -802,6 +912,34 @@ i.link {
   @include transition();
   &:hover {
     color: $grey-b4;
+  }
+}
+
+// buttons
+button {
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  font-family: "Lato", sans-serif;
+  &.inverse {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38a552;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px #38a552;
+    border-radius: 24px;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
+      background-color: #38a552;
+    }
+    &:active {
+      color: #fff;
+      background-color: #9cd3aa;
+    }
   }
 }
 
@@ -906,6 +1044,7 @@ p4m-spinner[species='progress'] {
     bottom: 0;
     left: 0;
     width: 100%;
+    height: 3px;
     #container {
       padding-bottom: 0;
       background-color: transparent;
@@ -1658,6 +1797,7 @@ p4m-checkout {
       label {
         font-family: 'Lato', sans-serif;
         pointer-events: none;
+        font-size: 9px;
       }
     }
   }
@@ -2954,7 +3094,7 @@ p4m-checkout {
                     background: rgba($p4m-green-100, .25);
                 }
             }
-		}
+		    }
 
         #detailPanel {
             .p4m-panel {
@@ -2989,7 +3129,134 @@ p4m-checkout {
             }
 
         }
-    } 
+    }
+
+    // Mobile pages
+    #panelContainer.mobi {
+        display: flex;
+        border-radius: 0;
+        background-color: white;
+        > div {
+            @include transition();
+        }
+
+        .p4m-panel {
+            border: none;
+            width: 100%;
+            align-self: stretch;
+            padding-right: 0;
+            box-sizing: border-box;
+            #mobilepages > iron-page {
+                display: block;
+                width: 100%;
+                align-self: stretch;
+                padding-right: 0;
+                box-sizing: border-box;
+                overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                &#deliveryPage {
+                    overflow-y: hidden;
+                    iron-pages > iron-page {
+                        display: block;
+                        width: 100%;
+                        align-self: stretch;
+                        overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                        &#pageDroppoints {
+                            overflow-y: hidden;
+                            iron-pages > iron-page {
+                                display: block;
+                                width: 100%;
+                                align-self: stretch;
+                                overflow-y: auto; // Overflow for all iron page content VERY IMPORTANT!
+                            }
+                        }
+                    }
+                }
+                &#summaryPanel {
+                  p4m-order-summary {
+                    min-width: 100%;
+                    max-width: initial;
+                    flex: 1;
+                  }
+                }
+            }
+            paper-tabs {
+                background: $pale-p4m-green;
+                color: $white;
+                font-weight: 600;
+                .iron-selected {
+                    // background: darken($pale-p4m-green, 8%);
+                }
+                paper-tab {
+                    font-family: 'Lato', sans-serif;
+                    font-weight: 600 !important;
+                    font-size: 14px;
+                    transform: initial !important;
+                    -webkit-transform: initial !important;
+                    -webkit-font-smoothing: antialiased !important;
+                    -webkit-animation: initial !important;
+                    -moz-animation: initial !important;
+                    -ms-animation: initial !important;
+                    animation: initial !important;
+                    .paper-tab {
+                        font-family: 'Lato', sans-serif;
+                        font-weight: 600 !important;
+                        font-size: 14px;
+                        transform: initial !important;
+                        -webkit-transform: initial !important;
+                        -webkit-font-smoothing: antialiased !important;
+                        -webkit-animation: initial !important;
+                        -moz-animation: initial !important;
+                        -ms-animation: initial !important;
+                        animation: initial !important;
+                    }
+                }
+            }
+        }
+
+        gfs-checkout#gfsCheckoutWidget {
+            paper-tabs {
+                background: $grey-h10;
+                color: $grey-b6;
+                .iron-selected {
+                    background: rgba($p4m-green-100, .25);
+                }
+            }
+        }
+
+        #detailPanel {
+            .p4m-panel {
+                width: 100%;
+                padding-right: 0;
+            }
+        }
+
+        #summaryPanel {
+          position: relative;
+            min-width: 100%;
+            flex: 1;
+          // &:before{
+          //  content:'';
+          //  height: 100%;
+          //  width: 2px;
+          //  background: rgba(235, 235, 235, 0.5);
+          //  display: flex;
+          //  flex-direction: column;
+          //  flex: 1;
+          //  position: absolute;
+          //  left: 0;
+          //  top: 0;
+          //  z-index: 1;
+          // }
+            .p4m-panel {
+                width: 100%;
+                border-left: solid 1px #E0E0E0;
+            } 
+            paper-tabs.select-payment-type {
+                background: transparent;
+            }
+
+        }
+    }
 
 
     h3 {
@@ -4409,6 +4676,347 @@ footer.p4m-checkout {
         }
     }
 }
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <768px
+/////////////////////////////////////////////////////////////////////////// */
+
+@media (max-width: 767px) {
+
+  .SmallerThanDesktop {
+    display: none;
+  }
+
+  p4m-checkout #panelContainer .p4m-panel {
+    width: 100%;
+  }
+  p4m-checkout .topPanel {
+    .logos {
+      flex-direction: column;
+      flex: 2;
+    }
+  }
+}
+
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+Smartphone <480px
+/////////////////////////////////////////////////////////////////////////// */
+
+@media screen and (max-width: 375px) {
+
+  .Phone {
+    display: block ;
+  }
+  .SmallerThanDesktop.edit-link {
+    display: inline;
+  }
+
+  p4m-checkout > #container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    margin: auto;
+    box-sizing: border-box;
+    position: static;
+  }
+
+  p4m-checkout .topPanel {
+    display: flex;
+    flex: initial;
+    height: 64px;
+    padding: 0 10px;
+    .logos {
+      flex-direction: column;
+      flex: 2;
+      svg#logo {
+        width: 128px;
+        margin-bottom: 3px;
+      }
+    }
+    .flex-spacer {
+      display: none;
+    }
+    .welcome {
+      display: none;
+    }
+    #profileName {
+      display: none;
+    }
+    #profileImage {
+      // not sure why this is hidden, needs to be resolved
+      display: flex !important;
+    }
+  }
+
+  paper-tabs, 
+  paper-tabs #tabsContainer, 
+  paper-tabs paper-tab, 
+  paper-tabs paper-tab .paper-tab, 
+  .add-new {
+    height: 36px !important;
+  }
+
+  ul.separated li {
+    padding: 0 10px;
+  }
+  .action-button {
+    display: flex;
+    align-self: stretch;
+    padding: 10px;
+  }
+  .button.inverse {
+    color: #fff;
+    background-color: transparent;
+    box-shadow: none;
+    border: solid 2px rgba(255,255,255,0);
+  }
+  .button.inverse:hover {
+      color: #fff;
+      background-color: transparent;
+      box-shadow: none;
+      border: solid 2px rgba(255,255,255,.5);
+  }
+
+  p4m-checkout #panelContainer {
+    display: flex;
+    border-radius: 0;
+    background-color: white;
+    flex: 1;
+  }
+
+  p4m-checkout #panelContainer #detailPanel .p4m-panel {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  iron-pages#mobilepages {
+    position: relative;
+    height: 100% !important;
+    overflow: hidden;
+    iron-page {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      h4 {
+        height: 32px;
+      }
+    }
+    > iron-page {
+      height: 100% !important;
+      box-sizing: border-box;
+      -moz-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* FF3.5+ */
+      -webkit-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* Saf3.0+, Chrome */
+      box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+      &#summaryPanel {
+        #orderSummary {
+          width: 100%;
+        }
+        #p4mPurchase {
+          width: 100%;
+          box-sizing: border-box;
+          #p4mPurchaseContainer {
+            .select-payment-type {
+              .edit-link {
+                position: absolute;
+                right: 0;
+                display: flex;
+                align-items: flex-end;
+              }
+            }
+          }
+          p4m-card > div#container {
+            min-height: 125px;
+          }
+        }
+        footer#footerpPanel {
+          display: flex;
+          flex-direction: column;
+          width: 100% !important;
+          min-width: 100% !important;
+          max-width: 100% !important;
+          .left {
+            flex: 1;
+          }
+          p4m-order-text {
+            min-width: 100%;
+            #container, p {
+              font-size: 13px;
+            }
+          }
+          #downloadAppAd {
+              padding: 0 10px;
+              display: flex;
+              flex-direction: row;
+              display: none;
+              p {
+                justify-content: center;
+              }
+          }
+          p4m-purchase-btn {
+            display: flex;
+            flex: 1;
+            button {
+              flex: 1;
+              justify-content: center;
+              position: relative;
+            }
+          }
+        }
+      }
+
+      &#cartPage {
+        p4m-cart {
+          flex: 1;
+          #container {
+            padding: 10px;
+          }
+          p4m-cart-card #container {
+            padding: 0;
+          }
+          #details {
+            font-size: 14px;
+          }
+        }
+      }
+
+      &#addressPage {
+        p4m-address-list {
+            flex: 1;
+            p4m-address {
+              margin-bottom: 2px;
+            }
+            .address-list {
+              .p4m-address-label {
+                font-size: 14px;
+              }
+              .address-text {
+                font-size: 12px;
+              }
+            }
+        }
+      }
+
+      &#deliveryPage {
+        #shippingSelector {
+          display: flex;
+          flex: 1;
+          align-self: stretch;
+          #gfsCheckoutWidget {
+            flex: 1;
+          }
+        }
+
+        #widgetContainer {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        iron-pages {
+          display: flex;
+          flex: 1;
+        }
+
+        #pageDroppoints {
+          display: flex;
+          flex-direction: column;
+          padding: 0;
+          flex: 1;
+          #availableDropPoints {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+          }
+          #mapTools {
+            flex-direction: row;
+            flex-wrap: wrap;
+            height: auto;
+            padding: 7px 0;
+            align-items: flex-end;
+            .toggleDropPointsViewControls {
+              align-self: flex-start;
+            }
+            .collection-points, .location-points, .search-postcode-wrap {
+              // min-height: 48px;
+              // width: calc(100% - 68px);
+              // margin: 0 10px;
+              min-height: 36px;
+              width: calc(100% - 68px);
+              min-width: calc(100% - 68px);
+              margin: 0 10px 7px 10px;
+            }
+            .adjoiner {
+              min-width: 48px;
+            }
+            .paper-input .input-content.paper-input-container label {
+              font-size: 16px;
+            }
+          }
+          #list-loading {
+
+          }
+          #mainMapArea {
+            display: flex;
+            #gfsMapCanvas {
+              display: flex;
+              flex: 1;
+              align-self: stretch;
+              height: initial;
+              margin-bottom: 0;
+            }
+          }
+        }
+        #pageStandard { 
+          ul {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+          }
+        }
+      }
+
+      &#cardPage {
+        #cardList {
+          display: flex;
+          flex: 1;
+          justify-content: flex-start;
+          align-content: flex-start;
+          width: 100%;
+          > #container {
+            height: initial;
+            flex: 1;
+            margin: 0;
+            max-height: initial;
+            margin-right: 0;
+            p4m-card {
+              width: calc(100% - 30px);
+              #container {
+                max-height: initial;
+                margin-right: 0;
+                .card-panel {
+                  min-height: 125px;
+                  max-height: 125px;
+                  margin-right: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+
+} /* END  @media only screen and (max-width: 750px) */
+
 
 
 

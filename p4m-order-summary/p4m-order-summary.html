@@ -11,7 +11,11 @@
             <h4>Order Summary</h4>
             <div class="p4m-table vertical layout">
                 <div class="p4m-row horizontal layout">
-                    <div class="p4m-cell detail-col flex-2 self-start">{{_cartItemCount}} {{_collectiveNoun}}: {{_cartDescription}}</div>
+                    <div class="p4m-cell detail-col flex-2 self-start">{{_cartItemCount}} {{_collectiveNoun}}: {{_cartDescription}} 
+                        <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+                        <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(1);">Edit</span></template>
+                        <!-- RESP --><!-- / SmallerThanDesktop -->
+                    </div>
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-start">{{currencySymbol}}{{_cartItemsTotalPriceString}}</div>
                 </div>
                 <div class="p4m-row horizontal layout">
@@ -59,6 +63,11 @@
             is: "p4m-order-summary",
 
             properties: {
+			    mobile: { 
+				    type: Boolean,
+					value: false
+				},
+				
                 cartData: {
                     type: Object,
                     notify: true,

@@ -41,6 +41,9 @@
                     <div class="pageContent horizontal layout">
                         <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Save changes' button  -->
+                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div></template>
+                    <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
                 <iron-page id="pageDroppoints">
                     <div id="availableDropPoints">
@@ -114,17 +117,16 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div id="mapContainer">
                                 <div class="hidden" id="hiddenElements">
                                     <div id="droppoint_info" class="noscroll">Selected</div>
                                     <div id="inspectingDropPointPanel">
                                         <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                                     </div>
-                                </div>                          
+                                </div>
                                 <!--
-                                    <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
-                                -->
+            <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div>
+        -->
                                 <div id="mainMapArea">
                                     <div id="gfsMapCanvas">
                                         <div class="loading">
@@ -152,8 +154,11 @@
                         </div>
 
                     </div>
-
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Save changes' button  -->
+                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div></template>
+                    <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
+
                 <iron-page id="pageStandard">
                     <div id="standard-loading" class="loading">
                         <!-- <p4m-spinner species="shuffler" id="standard-spinner"></p4m-spinner> -->
@@ -172,6 +177,9 @@
                             </li>
                         </template>
                     </ul>
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="inverse" onclick="select(0);">Save changes</button></div></template>
+                    <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
             </iron-pages>
         </div>
@@ -274,7 +282,11 @@
 
             properties: {
                 //=== Element attributes ===//
-
+				mobile: { 
+				    type: Boolean,
+					value: false
+				},
+				
                 initialised: {
                     type: Boolean,
                     value: false

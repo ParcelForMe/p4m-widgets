@@ -11,10 +11,20 @@
                 Choose your <a on-click="requestAddress">Delivery address</a>.<br />
             </template>
             <template is="dom-if" if="{{cartData.addressId}}">
-                <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span>.</p>
+                <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span> 
+				<template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(3);">Edit</span></template>
+				</p>
                 <p>to your {{addressTypeStr}}:
-                <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}}
-                <span class="p4m-label"><span>{{deliveryDateStr}}.</span></span></p>
+                <span class="p4m-label">{{deliveryAddressStr}}</span> 
+                <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+                <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(2);">Edit</span></template>
+                <!-- RESP --><!-- / SmallerThanDesktop -->
+                {{deliveryDatePrefixStr}}
+                <span class="p4m-label"><span>{{deliveryDateStr}}</span> 
+                <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+                <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(5);">Edit</span></template>
+                <!-- RESP --><!-- / SmallerThanDesktop -->
+                </span></p>
                 
             </template>
             <template is="dom-if" if="{{isLoading}}">
@@ -36,6 +46,11 @@
             is: "p4m-order-text",
 
             properties: {
+			    mobile: {
+				    type: Object,
+				    notify: true
+			    },
+			
                 consumerData: {
                     type: Object
                 },
