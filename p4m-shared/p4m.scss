@@ -4601,80 +4601,78 @@ p4m-address {
 
 
 
-footer.p4m-checkout {
-    p4m-purchase-btn#p4mPurchaseBtn {
+p4m-purchase-btn#p4mPurchaseBtn {
+  display: flex;
+  flex: 2;
+  #p4mPurchaseBtnContainer {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    button {
+      cursor: pointer;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      background: $p4m-green;
+      color: $white;
+      font-size: 21px;
+      padding: 0 18px;
+      margin: 10px 18px 10px 10px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      border-radius: 24px;
+      border: 2px solid $p4m-green;
+      &:after {
+        content: '';
         display: flex;
-        flex: 2;
-        #p4mPurchaseBtnContainer {
-            display: flex;
-            flex: 1;
-            justify-content: flex-end;
-            align-items: center;
-            button {
-                cursor: pointer;
-                height: 42px;
-                display: flex;
-                align-items: center;
-                background: $p4m-green;
-                color: $white;
-                font-size: 21px;
-                padding: 0 18px;
-                margin: 10px 18px 10px 10px;
-                font-weight: 600;
-                letter-spacing: .02em;
-                border-radius: 24px;
-                border: 2px solid $p4m-green;
-                &:after {
-                    content: '';
-                    display: flex;
-                    width: 0;
-                    height: 32px;
-                    justify-content: flex-end;
-                    align-items: center;
-                    @include transition();
-                }
-                &.payWith_, &.payWith_card {
-                    &:after {
-                        content: '\e920';
-                        font-family: 'p4m' !important;
-                        speak: none;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-variant: normal;
-                        text-transform: none;
-                        line-height: 1;
-                        font-size: 32px;
-                        width: 32px;
-                        margin-left: 8px;
-                        -webkit-font-smoothing: antialiased;
-                        -moz-osx-font-smoothing: grayscale;
-                    }
-                }
-                &.payWith_paypal {
-                    &:after {
-                        content:'';
-                        width: 72px;
-                        margin-left: 8px;
-                        background-image: url('../p4m-card/assets/paypal-white.png');    
-                        background-size: 72px auto;
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                    }
-                }
-            }
-            &.invalid {
-              button, button:hover {
-                &:not(.payWith_paypal) {
-                  // background: #aaa;
-                  // border-color: #aaa;
-                  // color: #eaeaea;
-                  opacity:.5;
-                  cursor: not-allowed;
-                }
-              }
-            }
-        }
+        width: 0;
+        height: 32px;
+        justify-content: flex-end;
+        align-items: center;
+        @include transition();
     }
+    &.payWith_, &.payWith_card {
+      &:after {
+        content: '\e920';
+        font-family: 'p4m' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        font-size: 32px;
+        width: 32px;
+        margin-left: 8px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+    &.payWith_paypal {
+        &:after {
+          content:'';
+          width: 72px;
+          margin-left: 8px;
+          background-image: url('../p4m-card/assets/paypal-white.png');    
+          background-size: 72px auto;
+          background-repeat: no-repeat;
+          background-position: center center;
+        }
+      }
+    }
+    &.invalid {
+      button, button:hover {
+        &:not(.payWith_paypal) {
+          // background: #aaa;
+          // border-color: #aaa;
+          // color: #eaeaea;
+          opacity:.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
 }
 
 
@@ -4739,6 +4737,10 @@ Smartphone <480px
         margin-bottom: 3px;
       }
     }
+    h2 {
+      letter-spacing: 2px;
+      font-size: 5.4vw;
+    }
     .flex-spacer {
       display: none;
     }
@@ -4798,12 +4800,14 @@ Smartphone <480px
   iron-pages#mobilepages {
     position: relative;
     height: 100% !important;
+    height: initial !important;
     overflow: hidden;
     iron-page {
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
+      overflow: scroll !important;
       h4 {
         height: 32px;
       }
@@ -4811,12 +4815,20 @@ Smartphone <480px
     > iron-page {
       height: 100% !important;
       box-sizing: border-box;
-      -moz-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* FF3.5+ */
-      -webkit-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* Saf3.0+, Chrome */
-      box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+      &.animated {
+        -moz-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* FF3.5+ */
+        -webkit-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* Saf3.0+, Chrome */
+        box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+      }
       &#summaryPanel {
         #orderSummary {
           width: 100%;
+          h4 {
+            padding: 0 15px;
+          }
+          .p4m-table {
+            padding: 15px;
+          }
         }
         #p4mPurchase {
           width: 100%;
@@ -4841,6 +4853,8 @@ Smartphone <480px
           width: 100% !important;
           min-width: 100% !important;
           max-width: 100% !important;
+          padding-bottom: 64px;
+          overflow: visible;
           .left {
             flex: 1;
           }
@@ -4859,14 +4873,20 @@ Smartphone <480px
                 justify-content: center;
               }
           }
-          p4m-purchase-btn {
-            display: flex;
+        }
+        p4m-purchase-btn {
+          display: flex;
+          // flex: 1;
+          position: fixed;
+          z-index: 2;
+          bottom: 0;
+          top: initial;
+          width: 100%;
+          background: rgba(255,255,255,0.9);
+          button {
             flex: 1;
-            button {
-              flex: 1;
-              justify-content: center;
-              position: relative;
-            }
+            justify-content: center;
+            position: relative;
           }
         }
       }

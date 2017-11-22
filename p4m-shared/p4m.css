@@ -3553,15 +3553,15 @@ p4m-address address-lookup-field {
 p4m-address .address-form address-lookup-field {
   height: 39px; }
 
-footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
+p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
   flex: 2; }
-  footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer {
+  p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer {
     display: flex;
     flex: 1;
     justify-content: flex-end;
     align-items: center; }
-    footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button {
+    p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button {
       cursor: pointer;
       height: 42px;
       display: flex;
@@ -3575,7 +3575,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
       letter-spacing: .02em;
       border-radius: 24px;
       border: 2px solid #37a553; }
-      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button:after {
+      p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button:after {
         content: '';
         display: flex;
         width: 0;
@@ -3588,7 +3588,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
         -ms-transition: all 0.15s ease-in-out 0s;
         -o-transition: all 0.15s ease-in-out 0s;
         transition: all 0.15s ease-in-out 0s; }
-      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_:after, footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
+      p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_:after, p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
         content: '\e920';
         font-family: 'p4m' !important;
         speak: none;
@@ -3602,7 +3602,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
         margin-left: 8px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale; }
-      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_paypal:after {
+      p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_paypal:after {
         content: '';
         width: 72px;
         margin-left: 8px;
@@ -3610,7 +3610,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
         background-size: 72px auto;
         background-repeat: no-repeat;
         background-position: center center; }
-    footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
+    p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
       opacity: .5;
       cursor: not-allowed; }
 
@@ -3653,6 +3653,9 @@ Smartphone <480px
       p4m-checkout .topPanel .logos svg#logo {
         width: 128px;
         margin-bottom: 3px; }
+    p4m-checkout .topPanel h2 {
+      letter-spacing: 2px;
+      font-size: 5.4vw; }
     p4m-checkout .topPanel .flex-spacer {
       display: none; }
     p4m-checkout .topPanel .welcome {
@@ -3694,24 +3697,31 @@ Smartphone <480px
   iron-pages#mobilepages {
     position: relative;
     height: 100% !important;
+    height: initial !important;
     overflow: hidden; }
     iron-pages#mobilepages iron-page {
       width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; }
+      justify-content: flex-start;
+      overflow: scroll !important; }
       iron-pages#mobilepages iron-page h4 {
         height: 32px; }
     iron-pages#mobilepages > iron-page {
       height: 100% !important;
-      box-sizing: border-box;
-      -moz-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
-      /* FF3.5+ */
-      -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
-      /* Saf3.0+, Chrome */
-      box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4); }
+      box-sizing: border-box; }
+      iron-pages#mobilepages > iron-page.animated {
+        -moz-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
+        /* FF3.5+ */
+        -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
+        /* Saf3.0+, Chrome */
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4); }
       iron-pages#mobilepages > iron-page#summaryPanel #orderSummary {
         width: 100%; }
+        iron-pages#mobilepages > iron-page#summaryPanel #orderSummary h4 {
+          padding: 0 15px; }
+        iron-pages#mobilepages > iron-page#summaryPanel #orderSummary .p4m-table {
+          padding: 15px; }
       iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase {
         width: 100%;
         box-sizing: border-box; }
@@ -3727,7 +3737,9 @@ Smartphone <480px
         flex-direction: column;
         width: 100% !important;
         min-width: 100% !important;
-        max-width: 100% !important; }
+        max-width: 100% !important;
+        padding-bottom: 64px;
+        overflow: visible; }
         iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel .left {
           flex: 1; }
         iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-order-text {
@@ -3741,13 +3753,18 @@ Smartphone <480px
           display: none; }
           iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel #downloadAppAd p {
             justify-content: center; }
-        iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-purchase-btn {
-          display: flex;
-          flex: 1; }
-          iron-pages#mobilepages > iron-page#summaryPanel footer#footerpPanel p4m-purchase-btn button {
-            flex: 1;
-            justify-content: center;
-            position: relative; }
+      iron-pages#mobilepages > iron-page#summaryPanel p4m-purchase-btn {
+        display: flex;
+        position: fixed;
+        z-index: 2;
+        bottom: 0;
+        top: initial;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9); }
+        iron-pages#mobilepages > iron-page#summaryPanel p4m-purchase-btn button {
+          flex: 1;
+          justify-content: center;
+          position: relative; }
       iron-pages#mobilepages > iron-page#cartPage p4m-cart {
         flex: 1; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #container {
