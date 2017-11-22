@@ -41,7 +41,7 @@
         <p4m-api id="localApi" is-local="true"></p4m-api>
 
         <!-- P4m standard dom-if media-queries -->    
-        <iron-media-query query="(max-width: 375px)" query-matches="{{mobile}}"></iron-media-query>
+        <iron-media-query query="(max-width: 768px)" query-matches="{{mobile}}"></iron-media-query>
 <!--         <iron-media-query query="(max-width: 375px)" query-matches="{{Phone}}"></iron-media-query>
         <iron-media-query query="(min-width: 376px) and (max-width: 767px)" query-matches="{{Phablet}}"></iron-media-query>
         <iron-media-query query="(min-width: 768px) and (max-width: 1024px)" query-matches="{{Tablet}}"></iron-media-query>
@@ -229,6 +229,15 @@
             :host {
                 position: relative;
                 display: block;
+            }
+
+            @media (max-width: 768px)  {
+                :host {
+                    position: absolute;
+                    display: flex;
+                    top: 0;
+                    z-index: 9999;
+                }
             }
 
             p4m-general-fault {
@@ -427,7 +436,7 @@
             properties: {
                 mobile: {
                     type: Object,
-                    value: false
+                    value: false,
                 },
                 sessionId: {
                     type: String
@@ -542,11 +551,13 @@
                 if (!this.sessionId) {
                     this.sessionId = this.$.sessionCookie.readCookie();
                 }
-
+                if (this.mobile) {
+                    // move p4m-checkout to the end of the body tag so that we can make it full screen
+                    document.body.appendChild(this);
+                }
                 this.init();
             },
 
-            // Observers
             _newPageSelected (newVal, oldVal) {
                 let mobilepages = this._getWidget('mobilepages');
                 if (!mobilepages)
