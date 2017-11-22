@@ -13,7 +13,7 @@
         <content>
             <div class="checking">
 
-                <h3>Processing, please wait ...</h3>
+                <h3>{{message}}, please wait ...</h3>
                 <p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner>
                 <div class="powered-by-link">
                     <img class="powered-by" src="../p4m-shared/img/powered-by-parcel-for-me-green.png" id="powered-by" />
@@ -84,6 +84,7 @@
             behaviors: [Polymer.IronOverlayBehavior],
 
             properties: {
+                message: String
             },
 
             ready: function()
@@ -91,6 +92,11 @@
                 this.positionTarget = document.getElementsByTagName('p4m-checkout')[0];
                 window.addEventListener('generalFault', this.close.bind(this));
 
+            },
+
+            show: function (message) {
+                this.message = message;
+                this.open();
             }
         });
     </script>

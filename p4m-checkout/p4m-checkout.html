@@ -17,6 +17,7 @@
 <link rel="import" href="../p4m-purchase/p4m-purchase.html" />
 <link rel="import" href="../p4m-card-list/p4m-card-list.html" />
 <link rel="import" href="../p4m-delivery/p4m-delivery.html" />
+<link rel="import" href="../p4m-overlay/p4m-overlay.html" />
 <link rel="import" href="../p4m-overlay/p4m-general-fault.html" />
 
 <link rel="import" href="../p4m-discount-input/p4m-discount-input.html" />
@@ -575,6 +576,7 @@
                 }
             },
 
+            firstLoadComplete: false,
             init: function () {
                 var self = this;
                 self.initialising = true;
@@ -635,7 +637,7 @@
                                 console.error(err);
                                 console.error("Cancelled initialisation.");
                             }
-                            self.initialising = false;
+                            self.firstLoadComplete = true;
                             var checkout = self._getWidget('gfsCheckoutWidget');
                             self._getWidget('p4mPurchase').beforePurchase = checkout._closeReq.bind(checkout);
                             self.listen(self._getWidget('noShippingWarning'), 'tap', 'goToAddresses');
@@ -867,6 +869,7 @@
                         self.updCartTotals(newCartTotals, function (err) { //This will trigger GFS to trigger updateP4mCart, so no need to call it in the callback here. Commented out.
                             self.toggleLoading(false);
                             self.set("cartData.discounts", newCartTotals.discounts);
+                            if (self.mobile) select(0);
                         });
                     });
                 }
@@ -910,19 +913,17 @@
                 showAsLoading = (this._loadingStack > 0);
 
                 if (showAsLoading) {
-                    this.$.screenOverlay.open();
+                    var message = !this.firstLoadComplete ? "Getting things ready" : "Updating your cart";
+                    this.$.screenOverlay.show(message);
                     this._getWidget('orderSummary').showAsLoading();
                     this._showAsLoadingShipping(this.cartData && this.cartData.total > 0);
                     this._toggleCartEditing(false);
-
-                    //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
                     this.$.screenOverlay.close();
                     this._getWidget('orderSummary').showAsLoaded();
                     this._showAsLoadingShipping(false);
                     this._toggleCartEditing(true);
-                    //this.$.p4mPurchase.setLoadingState(false);
                 }
 
             },
@@ -1189,7 +1190,10 @@
                 this.set('cartData.payMethodId', e.detail.id);
                 this.selectedCard = e.detail;
                 if (updCart) {
-                    this.updateP4mCart();
+                    var self = this;
+                    this.updateP4mCart(function () {
+                        if (self.mobile) select(0);
+                    });
                 }
             },
 
@@ -1243,15 +1247,15 @@
                     //If changed billing address, tell P4M
                     if (e.detail.isBilling && self.cartData.billingAddressId != e.detail.id) {
                         self.set('cartData.billingAddressId', e.detail.id);
-                        self.updateP4mCart();
+                        self.updateP4mCart(function () {
+                            if (self.mobile) select(0);
+                        });
                     }
                     //If changed delivery address, tell GFS and P4M
                     else if (e.detail.isDelivery && self.cartData.addressId != e.detail.id) {
-                        self.selectDeliveryAddress(e.detail.id, true, function (err) {
-                            if (err) {
-                                console.error(err);
-                            }
-                        });                     
+                        self.selectDeliveryAddress(e.detail.id, true, function () {
+                            if (self.mobile) select(0);
+                        });
                     }
                 }
             },

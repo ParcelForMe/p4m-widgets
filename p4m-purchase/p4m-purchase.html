@@ -1,6 +1,5 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../p4m-api/p4m-api.html" />
-<link rel="import" href="../p4m-overlay/p4m-overlay.html" />
 
 <link rel="stylesheet" href="../p4m-shared/p4m.css" />
 
@@ -45,7 +44,6 @@
 
             <p class="p4m-error">{{errorMsg}}</p>   
         </div>
-        <p4m-overlay id="overlay" no-cancel-on-outside-click with-backdrop></p4m-overlay>
     </template>
     
     <style> 
@@ -540,15 +538,13 @@
             showOverlay: function () {
                 var overlay = document.getElementById('screenOverlay'); 
                 if (overlay)
-                    overlay.open();
-//                this.$.overlay.open();
+                    overlay.show("Processing your payment");
             },
 
             hideOverlay: function () {
                 var overlay = document.getElementById('screenOverlay');
                 if (overlay)
                     overlay.close();
-//                this.$.overlay.close();
             },
 
             requestPaymentMethod: function () {
