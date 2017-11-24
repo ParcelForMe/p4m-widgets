@@ -18,6 +18,7 @@
                     <div class="calendar-cell calendar-delivery-label"><div>Before</div><div>{{item}}</div></div>
                 </template>
             </div>
+            <div class="calendar-day-wrap">
             <template id="calendarTemplate" is="dom-repeat" items="{{_calendar}}" as="calendarItem" filter="_filterBySelectedWeek">
                 <div class="calendar-col calendar-day">
                     <div class="calendar-cell calendar-day-label"><div>{{calendarItem.deliveryDowLabel}}</div><div>{{calendarItem.deliveryDateLabel}}</div></div>
@@ -35,9 +36,16 @@
                     </template>                
                 </div>
             </template>
+        </div> <!-- / .calendar-day-wrap -->
+
+<!--             <div class="calendar-buttons flex self-stretch">
+                <div on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}}">
+                    <i class="p4micon-chevron-right"></i>
+                </div>
+            </div> -->
 
             <div class="calendar-buttons flex self-stretch">
-                <div on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}}">
+                <div on-click="seeNextDay" class$="gfs-button transition {{_nextDayClass}}">
                     <i class="p4micon-chevron-right"></i>
                 </div>
             </div>
@@ -196,11 +204,18 @@
                 },
                 _previousWeekClass: {
                     type: String
+                },
+                _nextDayClass: {
+                    type: String
+                },
+                _previousDayClass: {
+                    type: String
                 }
             },
             observers: [
                  "onDataChange(dayDefiniteData)",
-                 "onWeekChange(selectedWeek)"
+                 "onWeekChange(selectedWeek)",
+                 "onDayChange(selectedDay)"
             ],
             listeners: {
 

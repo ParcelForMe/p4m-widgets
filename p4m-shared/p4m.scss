@@ -4601,7 +4601,7 @@ p4m-address {
 
 
 
-footer.p4m-checkout {
+footer {
     p4m-purchase-btn#p4mPurchaseBtn {
         display: flex;
         flex: 2;
@@ -4688,7 +4688,6 @@ SmallerThanDesktop <768px
   .SmallerThanDesktop {
     display: none;
   }
-
   p4m-checkout #panelContainer .p4m-panel {
     width: 100%;
   }
@@ -4739,6 +4738,9 @@ Smartphone <480px
         margin-bottom: 3px;
       }
     }
+    h2 {
+      font-size: 5vw;
+    }
     .flex-spacer {
       display: none;
     }
@@ -4760,6 +4762,10 @@ Smartphone <480px
   paper-tabs paper-tab .paper-tab, 
   .add-new {
     height: 36px !important;
+  }
+
+  p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
+    font-size: 11px;
   }
 
   ul.separated li {
@@ -4814,13 +4820,18 @@ Smartphone <480px
       -moz-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* FF3.5+ */
       -webkit-box-shadow: 0px 0px 30px rgba(0,0,0,0.4); /* Saf3.0+, Chrome */
       box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+      overflow: scroll;
       &#summaryPanel {
         #orderSummary {
           width: 100%;
+          flex: initial;
         }
         #p4mPurchase {
           width: 100%;
           box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          flex-shrink: 0;
           #p4mPurchaseContainer {
             .select-payment-type {
               .edit-link {
@@ -4835,37 +4846,62 @@ Smartphone <480px
             min-height: 125px;
           }
         }
-        footer#footerpPanel {
+        p4m-footer {
           display: flex;
-          flex-direction: column;
-          width: 100% !important;
-          min-width: 100% !important;
-          max-width: 100% !important;
-          .left {
-            flex: 1;
-          }
-          p4m-order-text {
-            min-width: 100%;
-            #container, p {
-              font-size: 13px;
-            }
-          }
-          #downloadAppAd {
-              padding: 0 10px;
-              display: flex;
-              flex-direction: row;
-              display: none;
-              p {
-                justify-content: center;
-              }
-          }
-          p4m-purchase-btn {
+          flex: 1;
+          flex-shrink: 0;
+          display: block; // solves 'no height' issue - should be solved by flex-shrink: 0; but it's not for some unknown reason
+          footer#footerpPanel {
             display: flex;
-            flex: 1;
-            button {
+            flex-direction: column;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            height: initial;
+            flex-grow: 1;
+            flex-shrink: 0;
+            .left {
               flex: 1;
-              justify-content: center;
-              position: relative;
+              flex-shrink: 0;
+              display: block;
+            }
+            p4m-order-text {
+              display: flex;
+              flex: 1;
+              flex-shrink: 0;
+              min-width: 100%;
+              height: initial;
+              #container {
+                display: flex;
+                flex: 1;
+                flex-shrink: 0;
+                overflow: visible;
+                display: block;
+              }
+              #container, p {
+                font-size: 13px;
+              }
+            }
+            #downloadAppAd {
+                padding: 0 10px;
+                display: flex;
+                flex-direction: row;
+                display: none;
+                p {
+                  justify-content: center;
+                }
+            }
+            p4m-purchase-btn {
+              display: flex;
+              flex: 1;
+              flex-shrink: 0;
+              min-height: 64px;
+              button {
+                flex: 1;
+                flex-shrink: 0;
+                justify-content: center;
+                position: relative;
+              }
             }
           }
         }
@@ -4891,13 +4927,16 @@ Smartphone <480px
             flex: 1;
             p4m-address {
               margin-bottom: 2px;
+              .toggle-button {
+                font-size: 11px;
+              }
             }
             .address-list {
               .p4m-address-label {
-                font-size: 14px;
+                font-size: 12px;
               }
               .address-text {
-                font-size: 12px;
+                font-size: 11px;
               }
             }
         }
@@ -4924,6 +4963,41 @@ Smartphone <480px
           flex: 1;
         }
 
+        #pageCalendar {
+          .pageContent {
+            display: flex;
+            align-items: flex-start;
+            flex: 1;
+          }
+          #calendar-body .calendar-day-wrap {
+            display: flex;
+            /* flex: 3; */
+            overflow: scroll;
+            width: 52vw;
+            position: relative;
+            max-width: 52vw;
+            // #calendar-body .calendar-col:nth-of-type(2) {
+            //   display: flex;
+            //   flex: 3;
+            // }
+            // #calendar-body .calendar-col:nth-of-type(3) {
+            //   display: flex;
+            //   flex: 6;
+            // }
+          }
+          #calendar-body .calendar-buttons {
+            min-width: 24px;
+            > div {
+              width: 100%;
+            }
+          }
+          #calendar-body .calendar-col {
+            width: 26vw;
+            min-width: 26vw;
+          }
+          
+        }
+
         #pageDroppoints {
           display: flex;
           flex-direction: column;
@@ -4933,6 +5007,13 @@ Smartphone <480px
             display: flex;
             flex-direction: column;
             flex: 1;
+            #dropPointListContainer {
+                max-width: initial !important;
+                max-height: 125px;
+                #dpListScroller {
+                  max-height: 125px;
+                }
+            }
           }
           #mapTools {
             flex-direction: row;
