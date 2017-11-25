@@ -3611,7 +3611,8 @@ footer p4m-purchase-btn#p4mPurchaseBtn {
         background-repeat: no-repeat;
         background-position: center center; }
     footer p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), footer p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
-      opacity: .5;
+      background: #9cd3aa;
+      border: 2px solid #9cd3aa;
       cursor: not-allowed; }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -3642,6 +3643,9 @@ Smartphone <480px
     margin: auto;
     box-sizing: border-box;
     position: static; }
+  #pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+    position: relative;
+    padding: 0; }
   p4m-checkout .topPanel {
     display: flex;
     flex: initial;
@@ -3676,17 +3680,43 @@ Smartphone <480px
   .action-button {
     display: flex;
     align-self: stretch;
-    padding: 10px; }
-  .button.inverse {
+    padding: 0; }
+  button.inverse {
+    font-size: 16px;
+    font-weight: 600;
     color: #fff;
-    background-color: transparent;
+    background-color: #98d3a7;
     box-shadow: none;
-    border: solid 2px rgba(255, 255, 255, 0); }
-  .button.inverse:hover {
-    color: #fff;
-    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 15px 0 30px; }
+    button.inverse i {
+      position: absolute;
+      left: 10px; }
+  button.secondary {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6d6d6d;
+    background-color: #eeeeee;
     box-shadow: none;
-    border: solid 2px rgba(255, 255, 255, 0.5); }
+    border: none;
+    border-radius: 0;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 15px 0 30px; }
+    button.secondary i {
+      position: absolute;
+      left: 10px; }
   p4m-checkout #panelContainer {
     display: flex;
     border-radius: 0;
@@ -3744,7 +3774,8 @@ Smartphone <480px
           max-width: 100% !important;
           height: initial;
           flex-grow: 1;
-          flex-shrink: 0; }
+          flex-shrink: 0;
+          padding-bottom: 64px; }
           iron-pages#mobilepages > iron-page#summaryPanel p4m-footer footer#footerpPanel .left {
             flex: 1;
             flex-shrink: 0;
@@ -3774,7 +3805,10 @@ Smartphone <480px
             display: flex;
             flex: 1;
             flex-shrink: 0;
-            min-height: 64px; }
+            min-height: 64px;
+            position: fixed;
+            width: 100%;
+            bottom: 0; }
             iron-pages#mobilepages > iron-page#summaryPanel p4m-footer footer#footerpPanel p4m-purchase-btn button {
               flex: 1;
               flex-shrink: 0;
@@ -3829,40 +3863,91 @@ Smartphone <480px
       iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-col {
         width: 26vw;
         min-width: 26vw; }
-      iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints {
+      iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints,
+      iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView {
         display: flex;
         flex-direction: column;
         padding: 0;
         flex: 1; }
-        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints {
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints,
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #availableDropPoints {
           display: flex;
           flex-direction: column;
           flex: 1; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #availableDropPoints #dropPointListContainer {
             max-width: initial !important;
             max-height: 125px; }
-            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer #dpListScroller {
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer #dpListScroller,
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #availableDropPoints #dropPointListContainer #dpListScroller {
               max-height: 125px; }
-        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools {
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList,
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList {
+                overflow: hidden; }
+                iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint,
+                iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint {
+                  min-width: 100% !important; }
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints,
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints {
+          overflow: hidden; }
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer {
+            height: initial;
+            min-height: initial;
+            max-height: initial;
+            flex: 1; }
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller,
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller {
+              max-height: 500px;
+              height: 500px !important; }
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea,
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea {
+                height: 500px; }
+                iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList,
+                iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList {
+                  overflow: hidden;
+                  flex: 1;
+                  min-height: initial;
+                  max-height: initial;
+                  height: initial; }
+                  iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint,
+                  iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint {
+                    min-width: 100% !important; }
+                    iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned,
+                    iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned {
+                      position: static; }
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #mapContainer,
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #mapContainer {
+          display: none; }
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools,
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools {
           flex-direction: row;
           flex-wrap: wrap;
           height: auto;
           padding: 7px 0;
           align-items: flex-end; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .toggleDropPointsViewControls {
             align-self: flex-start; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .collection-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .location-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .search-postcode-wrap {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .collection-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .location-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .search-postcode-wrap,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .collection-points,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .location-points,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .search-postcode-wrap {
             min-height: 36px;
             width: calc(100% - 68px);
             min-width: calc(100% - 68px);
             margin: 0 10px 7px 10px; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .adjoiner {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .adjoiner,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .adjoiner {
             min-width: 48px; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .paper-input .input-content.paper-input-container label {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .paper-input .input-content.paper-input-container label,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .paper-input .input-content.paper-input-container label {
             font-size: 16px; }
-        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mainMapArea {
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mainMapArea,
+        iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mainMapArea {
           display: flex; }
-          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mainMapArea #gfsMapCanvas {
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mainMapArea #gfsMapCanvas,
+          iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mainMapArea #gfsMapCanvas {
             display: flex;
             flex: 1;
             align-self: stretch;

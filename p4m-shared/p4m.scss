@@ -4668,7 +4668,8 @@ footer {
                   // background: #aaa;
                   // border-color: #aaa;
                   // color: #eaeaea;
-                  opacity:.5;
+                  background: #9cd3aa;
+                  border: 2px solid #9cd3aa;
                   cursor: not-allowed;
                 }
               }
@@ -4725,6 +4726,11 @@ Smartphone <480px
     position: static;
   }
 
+  #pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
+    position: relative;
+    padding: 0;
+  }
+
   p4m-checkout .topPanel {
     display: flex;
     flex: initial;
@@ -4774,19 +4780,49 @@ Smartphone <480px
   .action-button {
     display: flex;
     align-self: stretch;
-    padding: 10px;
+    padding: 0;
+    .button {
+    }
   }
-  .button.inverse {
+  button.inverse {
+    font-size: 16px;
+    font-weight: 600;
     color: #fff;
-    background-color: transparent;
+    background-color: #98d3a7;
     box-shadow: none;
-    border: solid 2px rgba(255,255,255,0);
+    border: none;
+    border-radius: 0;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 15px 0 30px;
+    i {
+      position: absolute;
+      left: 10px;
+    }
   }
-  .button.inverse:hover {
-      color: #fff;
-      background-color: transparent;
-      box-shadow: none;
-      border: solid 2px rgba(255,255,255,.5);
+  button.secondary {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6d6d6d;
+    background-color: #eeeeee;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    height: 42px;
+    flex: 1;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 15px 0 30px;
+    i {
+      position: absolute;
+      left: 10px;
+    }
   }
 
   p4m-checkout #panelContainer {
@@ -4860,6 +4896,7 @@ Smartphone <480px
             height: initial;
             flex-grow: 1;
             flex-shrink: 0;
+            padding-bottom: 64px;
             .left {
               flex: 1;
               flex-shrink: 0;
@@ -4896,6 +4933,9 @@ Smartphone <480px
               flex: 1;
               flex-shrink: 0;
               min-height: 64px;
+              position: fixed;
+              width: 100%;
+              bottom: 0;
               button {
                 flex: 1;
                 flex-shrink: 0;
@@ -4998,7 +5038,8 @@ Smartphone <480px
           
         }
 
-        #pageDroppoints {
+        #pageDroppoints,
+        #pageDroppoints.mapView {
           display: flex;
           flex-direction: column;
           padding: 0;
@@ -5012,7 +5053,51 @@ Smartphone <480px
                 max-height: 125px;
                 #dpListScroller {
                   max-height: 125px;
+                  #mainDropPointListArea {
+                    #dropPointList {
+                      overflow: hidden;
+                      gfs-droppoint {
+                        min-width: 100% !important;
+                      }
+                    }
+                  }
                 }
+            }
+          }
+          &.listView {
+            #availableDropPoints {
+              overflow: hidden;
+              #dropPointListContainer {
+                height: initial;
+                min-height: initial;
+                max-height: initial;
+                flex: 1;
+                #dpListScroller {
+                  max-height: 500px;
+                  height: 500px !important;
+                  #mainDropPointListArea {
+                    height: 500px;
+                    #dropPointList {
+                      overflow: hidden;
+                      flex: 1;
+                      min-height: initial;
+                      max-height: initial;
+                      height: initial;
+                      gfs-droppoint {
+                        min-width: 100% !important;
+                        &.pinned {
+                          position: static;
+                          + gfs-droppoint {
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            #mapContainer {
+              display: none;
             }
           }
           #mapTools {
