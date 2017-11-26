@@ -48,9 +48,10 @@
                 <iron-page id="pageDroppoints">
                     <div id="availableDropPoints">
                         <div id="mapTools" class="pageContent">
-                            <!--
+                            
                             <div class="toggleDropPointsViewControls">
-                                <a id="viewAsMap" on-tap="_toggleDroppointView">
+                                <!-- !Michael - we need _toggleDroppointView to add/remove .listView to iron-page#pageDroppoints and also add a class of .selected to the a tags below -->
+                                <a id="viewAsMap" on-tap="_toggleDroppointView" class="selected">
                                     <i class="p4micon p4micon-map-with-marker"></i>
                                 </a>
 
@@ -58,7 +59,7 @@
                                     <i class="p4micon p4micon-list"></i>
                                 </a>
                             </div>  
-                            -->  					
+                              					
     					
                             <div class="location-points">
     						    <paper-dropdown-menu label="My Locations" noink no-animations>

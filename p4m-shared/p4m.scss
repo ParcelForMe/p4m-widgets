@@ -4686,6 +4686,11 @@ SmallerThanDesktop <768px
 
 @media (max-width: 767px) {
 
+  button, .button, a {
+    // -webkit-tap-highlight-color: #38a552;
+    -webkit-highlight: none;
+    outline: none;
+  }
   .SmallerThanDesktop {
     display: none;
   }
@@ -4788,7 +4793,7 @@ Smartphone <480px
     font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background-color: #98d3a7;
+    background-color: #5eba75;
     box-shadow: none;
     border: none;
     border-radius: 0;
@@ -4798,7 +4803,7 @@ Smartphone <480px
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 0 15px 0 30px;
+    padding: 0 16px 0 32px;
     i {
       position: absolute;
       left: 10px;
@@ -4818,7 +4823,7 @@ Smartphone <480px
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 0 15px 0 30px;
+    padding: 0 16px 0 32px;
     i {
       position: absolute;
       left: 10px;
@@ -5013,9 +5018,9 @@ Smartphone <480px
             display: flex;
             /* flex: 3; */
             overflow: scroll;
-            width: 52vw;
+            width: 64vw;
+            max-width: 64vw;
             position: relative;
-            max-width: 52vw;
             // #calendar-body .calendar-col:nth-of-type(2) {
             //   display: flex;
             //   flex: 3;
@@ -5032,8 +5037,12 @@ Smartphone <480px
             }
           }
           #calendar-body .calendar-col {
-            width: 26vw;
-            min-width: 26vw;
+            width: 32vw;
+            min-width: 32vw;
+            &.calendar-delivery-label {
+              width: 21vw;
+              min-width: 21vw;
+            }
           }
           
         }
@@ -5108,6 +5117,19 @@ Smartphone <480px
             align-items: flex-end;
             .toggleDropPointsViewControls {
               align-self: flex-start;
+              a {
+                display: none;
+                &.selected {
+                  display: flex;
+                  color: #555;
+                }
+                &#viewAsMap {
+
+                }
+                &#viewAsList {
+                  
+                }
+              }
             }
             .collection-points, .location-points, .search-postcode-wrap {
               // min-height: 48px;

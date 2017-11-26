@@ -3619,6 +3619,9 @@ footer p4m-purchase-btn#p4mPurchaseBtn {
 SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
 @media (max-width: 767px) {
+  button, .button, a {
+    -webkit-highlight: none;
+    outline: none; }
   .SmallerThanDesktop {
     display: none; }
   p4m-checkout #panelContainer .p4m-panel {
@@ -3685,7 +3688,7 @@ Smartphone <480px
     font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background-color: #98d3a7;
+    background-color: #5eba75;
     box-shadow: none;
     border: none;
     border-radius: 0;
@@ -3695,7 +3698,7 @@ Smartphone <480px
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 0 15px 0 30px; }
+    padding: 0 16px 0 32px; }
     button.inverse i {
       position: absolute;
       left: 10px; }
@@ -3713,7 +3716,7 @@ Smartphone <480px
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 0 15px 0 30px; }
+    padding: 0 16px 0 32px; }
     button.secondary i {
       position: absolute;
       left: 10px; }
@@ -3853,16 +3856,19 @@ Smartphone <480px
         display: flex;
         /* flex: 3; */
         overflow: scroll;
-        width: 52vw;
-        position: relative;
-        max-width: 52vw; }
+        width: 64vw;
+        max-width: 64vw;
+        position: relative; }
       iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-buttons {
         min-width: 24px; }
         iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-buttons > div {
           width: 100%; }
       iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-col {
-        width: 26vw;
-        min-width: 26vw; }
+        width: 32vw;
+        min-width: 32vw; }
+        iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-col.calendar-delivery-label {
+          width: 21vw;
+          min-width: 21vw; }
       iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints,
       iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView {
         display: flex;
@@ -3929,6 +3935,13 @@ Smartphone <480px
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls,
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .toggleDropPointsViewControls {
             align-self: flex-start; }
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls a,
+            iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .toggleDropPointsViewControls a {
+              display: none; }
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls a.selected,
+              iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .toggleDropPointsViewControls a.selected {
+                display: flex;
+                color: #555; }
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .collection-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .location-points, iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .search-postcode-wrap,
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .collection-points,
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .location-points,
