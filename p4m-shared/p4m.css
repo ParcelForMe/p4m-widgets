@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 .p4m-green {
   background-color: #37a553 !important; }
 
@@ -2662,7 +2662,7 @@ p4m-checkout {
   p4m-checkout #mainDropPointListArea gfs-droppoint {
     display: flex;
     flex: 1;
-    min-width: 100% !important; }
+    xmin-width: 100% !important; }
   p4m-checkout #selectedDropPointPanel {
     -webkit-transition: .2s ease-in-out;
     -moz-transition: .2s ease-in-out;
@@ -2704,7 +2704,7 @@ p4m-checkout {
     margin: 0;
     border-bottom: none; }
   p4m-checkout #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
-    background: #f8f8f8; }
+    xbackground: #f8f8f8; }
   p4m-checkout #mainDropPointListArea.showPreferredDroppoints .preferredDroppoints {
     width: 37%;
     float: right;
