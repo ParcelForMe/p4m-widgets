@@ -1606,6 +1606,7 @@ p4m-card {
     display: flex;
     max-width: 100%;
     height: 125px;
+    width: 320px;
     > div#container {
         width: 50%;
         flex: 1;
@@ -3364,7 +3365,7 @@ p4m-checkout {
 		// height: 100%; 
 		display: flex;
 		flex:1;
-		min-width: 100%;
+		min-width: 100% !important;
     }
     #selectedDropPointPanel {
       -webkit-transition: .2s ease-in-out;
@@ -4251,8 +4252,14 @@ p4m-checkout {
 gfs-calendar {
 	.gfs-calendar {
 		border: none !important;
+    .calendar-buttons {
+      display: flex;
+      flex-direction: row;
+      max-width: 24px;
+    }
 		.calendar-col {
 			// background: rgba(200,200,200,0.15);
+      flex: 1;
 			&:nth-of-type(even) {
 				background: rgba(200,200,200,0.02);
 				.calendar-cell {
@@ -4353,6 +4360,10 @@ gfs-calendar {
             text-transform: uppercase;
           }
        }
+    }
+    .calendar-day-wrap {
+      flex: 7;
+      display: flex;
     }
 	}
 }
@@ -4681,10 +4692,28 @@ footer {
 
 
 /* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <1024px
+/////////////////////////////////////////////////////////////////////////// */
+
+@media (max-width: 1024px) {
+
+  #pageCalendar {
+    #calendar-body .calendar-day-wrap {
+      font-size: 13px;
+    }
+  }
+
+}
+
+
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
   button, .button, a {
     // -webkit-tap-highlight-color: #38a552;
@@ -4701,18 +4730,39 @@ SmallerThanDesktop <768px
     .logos {
       flex-direction: column;
       flex: 2;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      display: flex;
+      svg#logo {
+        width: 128px;
+        margin-bottom: 3px;
+        display: flex;
+        flex: initial;
+        margin-right: 15px;
+      }
+      h2 {
+        font-size: 3vw;
+        display: flex;
+      }
+    }
+    .select-payment-type paper-tab {
+        max-height: 36px;
     }
   }
+
 }
 
 
 
 
 /* ///////////////////////////////////////////////////////////////////////////
-Smartphone <480px
+Smartphone <375px
 /////////////////////////////////////////////////////////////////////////// */
 
-@media screen and (max-width: 375px) {
+// AA 27.11.17 - I changed my mind. I think this works well for all devices below 768px
+// @media screen and (max-width: 375px) {
+@media screen and (max-width: 768px) {
 
   .Phone {
     display: block ;
@@ -4970,6 +5020,7 @@ Smartphone <480px
       &#addressPage {
         p4m-address-list {
             flex: 1;
+            width: 100%;
             p4m-address {
               margin-bottom: 2px;
               .toggle-button {
@@ -5021,6 +5072,7 @@ Smartphone <480px
             width: 64vw;
             max-width: 64vw;
             position: relative;
+            font-size: 16px;
             // #calendar-body .calendar-col:nth-of-type(2) {
             //   display: flex;
             //   flex: 3;
@@ -5081,23 +5133,33 @@ Smartphone <480px
                 min-height: initial;
                 max-height: initial;
                 flex: 1;
+                overflow: hidden;
                 #dpListScroller {
-                  max-height: 500px;
-                  height: 500px !important;
+                  max-height: initial;
+                  height: initial !important;
+                  min-height: initial;
+                  overflow: hidden;
+                  flex: 1;  
+                  display: flex;
                   #mainDropPointListArea {
-                    height: 500px;
+                    position: relative;
+                    display: flex;
                     #dropPointList {
-                      overflow: hidden;
                       flex: 1;
+                      overflow: scroll;
                       min-height: initial;
                       max-height: initial;
                       height: initial;
                       gfs-droppoint {
                         min-width: 100% !important;
                         &.pinned {
-                          position: static;
+                          position: absolute;
                           + gfs-droppoint {
+                            margin-top: 125px;
                           }
+                        }
+                        &:last-of-type {
+                            margin-bottom: 237px;
                         }
                       }
                     }
@@ -5206,5 +5268,13 @@ Smartphone <480px
 } /* END  @media only screen and (max-width: 750px) */
 
 
+/* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <768px
+/////////////////////////////////////////////////////////////////////////// */
 
+@media (max-width: 375px) {
+  p4m-checkout .topPanel .logos h2 {
+    font-size: 5vw;
+  }
+}
 

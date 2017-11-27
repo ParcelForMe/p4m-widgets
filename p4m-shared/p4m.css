@@ -1316,7 +1316,8 @@ p4m-checkout > #container {
 p4m-card {
   display: flex;
   max-width: 100%;
-  height: 125px; }
+  height: 125px;
+  width: 320px; }
   p4m-card > div#container {
     width: 50%;
     flex: 1;
@@ -2661,7 +2662,7 @@ p4m-checkout {
   p4m-checkout #mainDropPointListArea gfs-droppoint {
     display: flex;
     flex: 1;
-    min-width: 100%; }
+    min-width: 100% !important; }
   p4m-checkout #selectedDropPointPanel {
     -webkit-transition: .2s ease-in-out;
     -moz-transition: .2s ease-in-out;
@@ -3295,33 +3296,39 @@ p4m-checkout {
 
 gfs-calendar .gfs-calendar {
   border: none !important; }
-  gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) {
-    background: rgba(200, 200, 200, 0.02); }
-    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell {
-      cursor: pointer;
-      -webkit-transition: all 0.15s ease-in-out 0s;
-      -khtml-transition: all 0.15s ease-in-out 0s;
-      -moz-transition: all 0.15s ease-in-out 0s;
-      -ms-transition: all 0.15s ease-in-out 0s;
-      -o-transition: all 0.15s ease-in-out 0s;
-      transition: all 0.15s ease-in-out 0s; }
-      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(even) {
-        background: rgba(200, 200, 200, 0.15); }
-      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(1) {
-        background: #7bc78f;
-        color: #fff;
-        font-weight: 600;
-        text-transform: uppercase;
-        cursor: default; }
-      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(even) {
-        background: rgba(55, 165, 83, 0.15); }
-      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(odd) {
-        background: rgba(55, 165, 83, 0.15); }
-      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(1) {
-        background: #7bc78f;
-        color: #fff;
-        font-weight: 600;
-        text-transform: uppercase; }
+  gfs-calendar .gfs-calendar .calendar-buttons {
+    display: flex;
+    flex-direction: row;
+    max-width: 24px; }
+  gfs-calendar .gfs-calendar .calendar-col {
+    flex: 1; }
+    gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) {
+      background: rgba(200, 200, 200, 0.02); }
+      gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell {
+        cursor: pointer;
+        -webkit-transition: all 0.15s ease-in-out 0s;
+        -khtml-transition: all 0.15s ease-in-out 0s;
+        -moz-transition: all 0.15s ease-in-out 0s;
+        -ms-transition: all 0.15s ease-in-out 0s;
+        -o-transition: all 0.15s ease-in-out 0s;
+        transition: all 0.15s ease-in-out 0s; }
+        gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(even) {
+          background: rgba(200, 200, 200, 0.15); }
+        gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:nth-of-type(1) {
+          background: #7bc78f;
+          color: #fff;
+          font-weight: 600;
+          text-transform: uppercase;
+          cursor: default; }
+        gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(even) {
+          background: rgba(55, 165, 83, 0.15); }
+        gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(odd) {
+          background: rgba(55, 165, 83, 0.15); }
+        gfs-calendar .gfs-calendar .calendar-col:nth-of-type(even) .calendar-cell:hover:nth-of-type(1) {
+          background: #7bc78f;
+          color: #fff;
+          font-weight: 600;
+          text-transform: uppercase; }
   gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.05); }
     gfs-calendar .gfs-calendar .calendar-col:nth-of-type(odd) .calendar-cell {
@@ -3363,6 +3370,9 @@ gfs-calendar .gfs-calendar {
       color: #fff;
       font-weight: 600;
       text-transform: uppercase; }
+  gfs-calendar .gfs-calendar .calendar-day-wrap {
+    flex: 7;
+    display: flex; }
 
 #p4m-address-list > #container.p4m-address-list, p4m-address-list > #container.p4m-address-list {
   height: 423px;
@@ -3616,9 +3626,16 @@ footer p4m-purchase-btn#p4mPurchaseBtn {
       cursor: not-allowed; }
 
 /* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <1024px
+/////////////////////////////////////////////////////////////////////////// */
+@media (max-width: 1024px) {
+  #pageCalendar #calendar-body .calendar-day-wrap {
+    font-size: 13px; } }
+
+/* ///////////////////////////////////////////////////////////////////////////
 SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   button, .button, a {
     -webkit-highlight: none;
     outline: none; }
@@ -3628,12 +3645,27 @@ SmallerThanDesktop <768px
     width: 100%; }
   p4m-checkout .topPanel .logos {
     flex-direction: column;
-    flex: 2; } }
+    flex: 2;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    display: flex; }
+    p4m-checkout .topPanel .logos svg#logo {
+      width: 128px;
+      margin-bottom: 3px;
+      display: flex;
+      flex: initial;
+      margin-right: 15px; }
+    p4m-checkout .topPanel .logos h2 {
+      font-size: 3vw;
+      display: flex; }
+  p4m-checkout .topPanel .select-payment-type paper-tab {
+    max-height: 36px; } }
 
 /* ///////////////////////////////////////////////////////////////////////////
-Smartphone <480px
+Smartphone <375px
 /////////////////////////////////////////////////////////////////////////// */
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 768px) {
   .Phone {
     display: block; }
   .SmallerThanDesktop.edit-link {
@@ -3826,7 +3858,8 @@ Smartphone <480px
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
           font-size: 14px; }
       iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
-        flex: 1; }
+        flex: 1;
+        width: 100%; }
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address {
           margin-bottom: 2px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address .toggle-button {
@@ -3858,7 +3891,8 @@ Smartphone <480px
         overflow: scroll;
         width: 64vw;
         max-width: 64vw;
-        position: relative; }
+        position: relative;
+        font-size: 16px; }
       iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-buttons {
         min-width: 24px; }
         iron-pages#mobilepages > iron-page#deliveryPage #pageCalendar #calendar-body .calendar-buttons > div {
@@ -3901,18 +3935,24 @@ Smartphone <480px
             height: initial;
             min-height: initial;
             max-height: initial;
-            flex: 1; }
+            flex: 1;
+            overflow: hidden; }
             iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller,
             iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller {
-              max-height: 500px;
-              height: 500px !important; }
+              max-height: initial;
+              height: initial !important;
+              min-height: initial;
+              overflow: hidden;
+              flex: 1;
+              display: flex; }
               iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea,
               iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea {
-                height: 500px; }
+                position: relative;
+                display: flex; }
                 iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList,
                 iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList {
-                  overflow: hidden;
                   flex: 1;
+                  overflow: scroll;
                   min-height: initial;
                   max-height: initial;
                   height: initial; }
@@ -3921,7 +3961,13 @@ Smartphone <480px
                     min-width: 100% !important; }
                     iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned,
                     iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned {
-                      position: static; }
+                      position: absolute; }
+                      iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned + gfs-droppoint,
+                      iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned + gfs-droppoint {
+                        margin-top: 125px; }
+                    iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint:last-of-type,
+                    iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint:last-of-type {
+                      margin-bottom: 237px; }
         iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #mapContainer,
         iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #mapContainer {
           display: none; }
@@ -3993,3 +4039,9 @@ Smartphone <480px
                 margin-right: 0; } }
 
 /* END  @media only screen and (max-width: 750px) */
+/* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <768px
+/////////////////////////////////////////////////////////////////////////// */
+@media (max-width: 375px) {
+  p4m-checkout .topPanel .logos h2 {
+    font-size: 5vw; } }
