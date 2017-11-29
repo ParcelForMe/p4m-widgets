@@ -3424,7 +3424,7 @@ p4m-checkout {
     }
 
     #mainDropPointListArea #dropPointList gfs-droppoint:nth-child(odd) .content-container {
-        background: #f8f8f8;
+        xbackground: #f8f8f8;
     }
 
 
@@ -4165,7 +4165,8 @@ p4m-checkout {
 		> #container {
         overflow-y: auto;
         overflow-x: hidden;
-        height: 260px;
+        xheight: 260px;
+        min-height: 100%;
         box-sizing: border-box;
         background-color: #fff !important;  // HACK FIX easytees container class conflict
         box-shadow: none !important;  // HACK FIX easytees container class conflict
@@ -5151,7 +5152,7 @@ Smartphone <375px
                       max-height: initial;
                       height: initial;
                       gfs-droppoint {
-                        min-width: 100% !important;
+                        xmin-width: 100% !important;
                         &.pinned {
                           position: absolute;
                           + gfs-droppoint {

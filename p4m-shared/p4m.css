@@ -3239,7 +3239,8 @@ p4m-checkout {
   p4m-checkout p4m-cart > #container {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 260px;
+    xheight: 260px;
+    min-height: 100%;
     box-sizing: border-box;
     background-color: #fff !important;
     box-shadow: none !important; }
