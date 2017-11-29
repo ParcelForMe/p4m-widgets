@@ -690,15 +690,19 @@
                 };
             },
 
+            _queryingServer: false,
+
             _postReq: function (mapCenter, data, callback) {
                 if (typeof (callback) !== "function") {
                     throw "No callback provided";
                 }
+                this._queryingServer = true;
                 var request = this._makeRequest('POST', "///"+this.apiHost+"/api/CheckoutSession",
                     ///rest-checkout.justshoutgfs.com/api/CheckoutSession/
                     (function (err, data) {
                         if (err) {
                             this.fire('noservice');
+                            this._queryingServer = false;
                             callback(err);
                         }
                         else {
@@ -724,6 +728,7 @@
                 var request = this._makeRequest('GET', url, (function (err, data) {
 
                     console.log("GFS Checkout GET response", new Date().getTime());
+                    this._queryingServer = false;
 
                     if (err) {
                         this.fire('noservice');
@@ -887,16 +892,16 @@
                     'postCode',
                     'town',
                     'addressLineCollection',
-                    'contactEmail',
-                    'recipientFirstName',
-                    'recipientLastName',
-                    'recipientTitle',
+                    //'contactEmail',
+                    //'recipientFirstName',
+                    //'recipientLastName',
+                    //'recipientTitle',
                     'cartValue',
                     //'addressPreferences',
                     'deliveryPreferences',
-                    'favDropPoints',
-                    'favAddresses',
-                    'defaultAddress'
+                    //'favDropPoints',
+                    //'favAddresses',
+                    //'defaultAddress'
                 ];
                 var missingFields = requiredFields.filter(function (f) {
                     return (typeof (config[f]) == "undefined" || (config[f] == null));
@@ -919,8 +924,8 @@
                     }
 
                     //==== Set fav address data
-                    this.setFavDropPoints(this.config.favDropPoints);
-                    this.setFavAddresses(this.config.favAddresses);
+                    //this.setFavDropPoints(this.config.favDropPoints);
+                    //this.setFavAddresses(this.config.favAddresses);
 
                     // Post, then select address and method - these can be previously chosen if the cart already exists
                     // or will be defaulted based on the consumer's preferences
@@ -1041,12 +1046,12 @@
                                         "county": config.county,
                                         "addressLineCollection": config.addressLineCollection
                                     },
-                                    "contactDetails": {
-                                        "email": config.contactEmail
-                                    },
+                                    //"contactDetails": {
+                                    //    "email": config.contactEmail
+                                    //},
                                     "person": {
-                                        "firstName": config.recipientFirstName,
-                                        "lastName": config.recipientLastName,
+                                        "firstName": config.recipientFirstName || "First",
+                                        "lastName": config.recipientLastName || "Last",
                                         "title": config.recipientTitle || "Mr"
                                     }
                                 }
@@ -1079,10 +1084,10 @@
                 if (prefs[0] !== 'useMyDeliveryAddress') {
                     // consumer wants to use a DP by preference - either their preferred or the closest
                     var dp;
-                    if (prefs[0] === 'useMyDropPoints' && this.config.favDropPoints && this.config.favDropPoints.length > 0)
+                    if (prefs[0] === 'useMyDropPoints' && this._favDropPoints && this._favDropPoints.length > 0)
                         // they want to use one of their preferred DPs if possible
-                        for (var i = 0; i < this.config.favDropPoints.length; i++) {
-                            dp = this._droppointById(this.config.favDropPoints[i].droppointId);
+                        for (var i = 0; i < this._favDropPoints.length; i++) {
+                            dp = this._droppointById(this._favDropPoints[i].droppointId);
                             if (dp)
                                 break;
                         }
@@ -1452,17 +1457,19 @@
 
             _processFavDroppoints: function()
             {
-                //Now replace preferred items with real data
-                var self = this;
-                this._favDropPoints = this._favDropPoints.map(function (item) {
-                    var existingItem = self._droppointById(item.droppointId);
-                    if (existingItem) {
-                        existingItem.selected = item.selected;
-                        existingItem.preferred = true;
-                        existingItem.prefOrder = item.prefOrder;
-                    }
-                    return existingItem || item;
-                });//.sort(this.sortByDistance);
+                if (!this._queryingServer) {
+                    //Now replace preferred items with real data
+                    var self = this;
+                    this._favDropPoints = this._favDropPoints.map(function (item) {
+                        var existingItem = self._droppointById(item.droppointId);
+                        if (existingItem) {
+                            existingItem.selected = item.selected;
+                            existingItem.preferred = true;
+                            existingItem.prefOrder = item.prefOrder;
+                        }
+                        return existingItem || item;
+                    });//.sort(this.sortByDistance);
+                }
             },
             
             _makeMap: function () {

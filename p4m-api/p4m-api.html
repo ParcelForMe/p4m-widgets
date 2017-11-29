@@ -14,8 +14,13 @@
             "consumer": {
                 "stub": "consumer",
                 "method": "GET",
-                "params": []
-            },
+                "params": [
+                    {
+                        "name": "checkHasOpenCart",
+                        "required": false
+                    }
+                ]
+            },            
             "consumerExtras": {
                 "stub": "consumerExtras",
                 "method": "POST",
@@ -109,6 +114,10 @@
         };
         apiEndpoints.local = {
             "localLogin": {
+                "stub": "localLogin",
+                "method": "POST"
+            },
+            "localLoginGet": {
                 "stub": "localLogin",
                 "method": "GET",
                 "params": [{
@@ -331,7 +340,7 @@
                                 if (e.stack) {
                                     console.error(e.stack);
                                 }
-                                                               
+                                this.fire('noservice', e);
                                 //console.error("JSON response error: " + httpRequest.responseText);
                                 //intermediateCallback(JSON.parse(httpRequest.responseText));
                             }
@@ -379,7 +388,7 @@
                     }
                     else {
                         console.log(responseData);
-                        
+                        throw err;
                     }
                     if (finalCallback)
                         finalCallback(err, responseData);

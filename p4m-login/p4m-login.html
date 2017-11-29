@@ -41,10 +41,8 @@
 
             <div id="p4m-menu-wrapper" class="p4m-menu hidden" on-mouseleave="_mouseOutMenu" on-mouseover="_mouseOverMenu">
                 <paper-menu id="p4m-menu" on-iron-select="_selectMenuItem">
-                    <paper-item>Sign out:</paper-item>
-                    <paper-item> - this site</paper-item>
-                    <paper-item> - this device</paper-item>
-                    <paper-item> - all devices</paper-item>
+                    <paper-item>Sign out</paper-item>
+                    <paper-item>Sign out all devices</paper-item>
                     <paper-item>Restore last cart</paper-item>
                     <paper-item>Saved items</paper-item>
                     <paper-item>P4M Account</paper-item>
@@ -71,6 +69,8 @@
             <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
             <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
+            <polymer-cookie id="p4mConsumerCookie" name="p4mConsumer"></polymer-cookie>
+            <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
             <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
@@ -133,6 +133,7 @@
                 logoutForm: {
                     type: String,
                 },
+                sessionId: String,
                 class: {
                   reflectToAttribute: true
                 },
@@ -155,6 +156,9 @@
                 },
                 _authCompletionInterval: {
                     type: Object
+                },
+                consumerData: {
+                    type: Object
                 }
             },
             listeners: {
@@ -163,32 +167,33 @@
 
             ready: function () {
                 window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+                //Close down the dialog if there is a general fault
+                window.addEventListener('generalFault', this._useNewCart.bind(this));
+                //Move dialog out into the body
+                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
+                this.processLogin();
+            },
 
+            processLogin: function() {
+                var self = this;
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
                     this._showAsLoggedIn();
-                    // if the P4M Consumer is logged in, then check if they are logged in locally
-                    var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
-                    if (!localLogin || localLogin === "") {
-                        // state is unknown so check first
-                        this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
+                    if (!this.hasConsumer()) {
+                        this._getConsumer(function (err) {
+                            self._doLocalLogin();
+                        });
                     }
-                    else if (localLogin === "false") {
-                        //alert("AuthComp: "+localLogin);
-                        // definitely not logged in so do it now
-                        this._onAuthCompletion();
+                    else if (!this.isLocallyLoggedIn()) {
+                        this._doLocalLogin();
                     }
                     else {
                         var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
                         var p4mCheckout = document.getElementsByTagName('p4m-checkout');
-                        if (offerRestore === "true" && (!p4mCheckout || p4mCheckout.length === 0))
-                        {
+                        if (offerRestore === "true" && (!p4mCheckout || p4mCheckout.length === 0)) {
                             this.$.p4mOfferCartRestoreCookie.eraseCookie();
                             this.$.lastCartDlg.open();
-                            //alert("Do you want to restore your last cart?");
-                            // state is unknown so check first
-                            
                         }
                     }
                 }
@@ -201,11 +206,83 @@
                     	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
-                //Close down the dialog if there is a general fault
-                window.addEventListener('generalFault', this._useNewCart.bind(this));
+            },
 
-                //Move dialog out into the body
-                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
+            hasConsumer: function() {
+                var consumer = this.$.p4mTokenCookie.readCookie();
+                if (!consumer)
+                    return false;
+                if (!this.consumerData)
+                    this.getConsumerFromCookie();
+                return true;
+            },
+
+            _getConsumer: function (callback) {
+                var self = this;
+                self.$.p4mLoginApi.call('consumer', { checkHasOpenCart: true }, null, function (err, data) {
+                    if (!data.success) {
+                        if (callback)
+                            callback(data.error);
+                    }
+                    else {
+                        self.set('consumerData', data.consumer);
+                        self.updateConsumerCookie();
+                        if (data.hasOpenCart)
+                            document.cookie = "p4mOfferCartRestore=true; path=/";
+                        else
+                            self.$.p4mOfferCartRestoreCookie.eraseCookie();
+                        if (callback)
+                            callback(err, data);
+                    }
+                });
+            },
+
+            getConsumerFromCookie: function () {
+                // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
+                var consumer = this.consumerData;
+                var parts = consumer.split('|');
+                if (parts.length != 11)
+                    this.consumerData = { id: null, prefDeliveryAddressId: null, deliveryPreferences: null, addresses: [] };
+                else {
+                    var addr = {
+                        consumerId: parts[0], id: parts[1], street1: parts[2], street2: parts[3],
+                        city: parts[4], postCode: parts[5], state: parts[6], countryCode: parts[7],
+                        latitude: parts[8], longitude: parts[9], deliveryPreferences: parts[10]
+                    };
+                    this.consumerData = { id: parts[0], prefDeliveryAddressId: parts[1], deliveryPreferences: parts[10], addresses: [addr] };
+                }
+            },
+
+            updateConsumerCookie: function () {
+                // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
+                var consumer = this.consumerData;
+                var addr = this.getDefaultAddr();
+                var d = new Date();
+                var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
+                document.cookie = "p4mConsumer=" +
+                    consumer.id + "|" + addr.id + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
+                    addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
+                    addr.latitude + "|" + addr.longitude + "|" + consumer.deliveryPreferences + "; path=/; expires=" + expires;
+            },
+
+            _getDefaultAddr: function () {
+                if (!this.consumerData || !this.consumerData.prefDeliveryAddressId)
+                    this.setConsumerDefaultsFromCookie();
+                if (this.consumerData)
+                    return this.getAddressById(this.consumerData.prefDeliveryAddressId);
+            },
+
+            isLocallyLoggedIn: function() {
+                // if the P4M Consumer is logged in, then check if they are logged in locally
+                var localLogin = this.$.p4mLocalLoginCookie.readCookie();
+                return localLogin && localLogin === "true";
+            },
+
+            loginLocally: function() {
+                // send consumer details to retailer and get back the local user id
+                if (this.hasConsumer()) {
+
+                }
             },
 
             _onGotLocale: function (err, data) {
@@ -239,21 +316,21 @@
                     this._waitForAuthCompletion();
             },
 			
-            logoutThisSite: function () {
-                this.clearCookies();
-                if (this.logoutForm && this.logoutForm != '') {
-                    var formElem = document.getElementById(this.logoutForm);
-                    if (formElem) {
-                        formElem.submit();
-                    }
-                    else {
-                        window.location.reload(true); 
-                    }
-                }
-                else {
-                    window.location.reload(true);
-                }
-            },
+            //logoutThisSite: function () {
+            //    this.clearCookies();
+            //    if (this.logoutForm && this.logoutForm != '') {
+            //        var formElem = document.getElementById(this.logoutForm);
+            //        if (formElem) {
+            //            formElem.submit();
+            //        }
+            //        else {
+            //            window.location.reload(true); 
+            //        }
+            //    }
+            //    else {
+            //        window.location.reload(true);
+            //    }
+            //},
 
             logoutThisDevice: function () {
                 var logoutUrl = this.idSrvUrl + "/connect/endsession";
@@ -298,6 +375,8 @@
                 this.$.p4mNonceCookie.eraseCookie();
                 this.$.p4mLocalLoginCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
+                this.$.p4mConsumerCookie.eraseCookie();
+                this.$.p4mCartCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
                 this.$.p4mGivenNameCookie.eraseCookie();
                 this.$.gfsCheckoutTokenCookie.eraseCookie();
@@ -349,15 +428,15 @@
                     if (this._authCompletionInterval) {
                         window.clearTimeout(this._authCompletionInterval);
                     }
-                    this._onAuthCompletion();
+                    this.processLogin();
                 }
 
             },
 
-            _onAuthCompletion: function () {
-                var currentPage = { "currentPage": window.location.href };
+            _doLocalLogin: function () {
+                var data = { consumer: this.consumerData, currentPage: window.location.href };
                 this._showAsLoggingIn();
-                this.$.localApi.call('localLogin', currentPage, null, this._onLocalLogin.bind(this));
+                this.$.localApi.call('localLogin', null, data, this._onLocalLogin.bind(this));
             },
 
             _onLocalLogin: function (err, data) {
@@ -373,11 +452,23 @@
                     window.location.reload(true);
                 }
             },
+        
+            saveLocalId: function(token, id) {
+                // save the local consumer Id as an "extra" in P4M 
+                //_httpClient.SetBearerToken(token);
+                //string json = "{'LocalId':'"+id+"','Tags':'tag1,tag2'}";
+                //var content = new StringContent(json, Encoding.UTF8, "application/json");
+                //var result = await _httpClient.PostAsync(_urls.BaseApiAddress + "consumerExtras", content);
+                //var messageString = await result.Content.ReadAsStringAsync();
+                //var message = JsonConvert.DeserializeObject<P4MBaseMessage>(messageString);
+                //if (!message.Success)
+                //    throw new Exception(message.Error);
+            },
 
             _onCheckLocalLogin: function (err, data) {
                 //console.log(JSON.stringify(data));
                 if (!data.success)
-                    this._onAuthCompletion();
+                    this._doLocalLogin();
             },
 
             _onConsumerDetails: function(data) {
@@ -405,13 +496,13 @@
             _selectMenuItem: function() {
                 var selectedItemIndex = this.$['p4m-menu'].selected;
                 switch (selectedItemIndex) {
-                    case 0: break;
-                    case 1: this.logoutThisSite(); break;
-                    case 2: this.logoutThisDevice(); break;
-                    case 3: this.logoutAllDevices(); break;
-                    case 4: this._useLastCart(); break;
-                    case 5: break;
-                    case 6:
+                    //case 0: break;
+                    //case 1: this.logoutThisSite(); break;
+                    case 0: this.logoutThisDevice(); break;
+                    case 1: this.logoutAllDevices(); break;
+                    case 2: this._useLastCart(); break;
+                    case 3: break;
+                    case 4:
                         if(this.idSrvUrl.indexOf('ids.') > 0) 
                             window.open(this.idSrvUrl.replace('ids.', 'my.')); 
                         else
