@@ -72,7 +72,7 @@
                 </svg>
 
                 <h1>Hmm... Looks like something went wrong</h1>
-                <p>We're having trouble connecting to our shipping service</p>
+                <p>We're having trouble connecting to {{service}}</p>
                 <div class="layout horizontal center buttons">
                     <button class="p4m-button inverse auto" on-click="tryAgain"><i class="p4micon-refresh"></i>Try again</button>
                     <template is="dom-if" if="shared-mode">
@@ -320,6 +320,7 @@
                     type: Object,
                     value: false
                 },
+                service: String,
                 basicCheckoutUrl: {
                     type: String,
                     value: "/"
@@ -335,6 +336,11 @@
             },
 
             onOpen: function(e) {
+            },
+
+            show: function(serviceDesc) {
+                this.service = serviceDesc;
+                this.open();
             },
 
             tryAgain: function() {
