@@ -76,6 +76,15 @@
                 ]
             },
 
+            "restoreLastCart": {
+                "stub": "restoreLastCart/{sessionId}",
+                "method": "GET",
+                "params": [{
+                    "name": "sessionId",
+                    "required": true
+                }]
+            },
+
             "getLocale": {
                 "stub": "getLocale",
                 "method": "GET"
@@ -133,13 +142,13 @@
                 "stub": "getP4MCart",
                 "method": "GET"
             },
-            "restoreLastCart": {
-                "stub": "restoreLastCart",
-                "method": "GET"
-            },
             "shippingSelector": {
                 "stub": "shippingSelector",
                 "method": "GET"
+            },
+            "restoreLastCart": {
+                "stub": "restoreLastCart",
+                "method": "POST"
             },
             "renewShippingToken": {
                 "stub": "renewShippingToken",
@@ -326,6 +335,7 @@
                                 if (httpRequest.status === 401 || httpRequest.responseText.includes('Access has expired')) {
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
                                     loginWidget.clearCookies();
+                                    this.consumerToken = null;
                                     this.fire('p4m-request-login');
                                 }
                                 else if (httpRequest.status === 0) { //Timeout
