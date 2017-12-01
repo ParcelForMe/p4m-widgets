@@ -1,5 +1,4 @@
 <link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 
 <dom-module id="p4m-api">
@@ -11,6 +10,16 @@
     <script>
         var apiEndpoints = {};
         apiEndpoints.v2 = {
+            "consumerNeedsUpdating": {
+                "stub": "consumerNeedsUpdating/{lastUpdated}",
+                "method": "GET",
+                "params": [
+                    {
+                        "name": "lastUpdated",
+                        "required": true
+                    }
+                ]
+            },            
             "consumer": {
                 "stub": "consumer",
                 "method": "GET",
@@ -20,7 +29,7 @@
                         "required": false
                     }
                 ]
-            },            
+            },
             "consumerExtras": {
                 "stub": "consumerExtras",
                 "method": "POST",

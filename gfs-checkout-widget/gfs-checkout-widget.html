@@ -204,7 +204,7 @@
             #dropPointList {
                 display: flex;
                 height: 100%;
-                overflow-y: scroll;
+                overflow-y: auto;
                 flex-wrap: wrap;
             }
             #inspectingDropPointPanel {
@@ -763,9 +763,9 @@
                             this._processRateData();
                             if (this.useDropPoints && !this._map) 
                                 this._makeMap();
+                            this.enableCalendarDelivery(this.hasDayDefinite());
                             callback();
                         }
-
                     }
                 }).bind(this));
                 request.send("");
@@ -801,6 +801,20 @@
                     }
                 }).bind(this));
                 request.send(JSON.stringify(data));
+            },
+
+            hasDayDefinite: function () {
+                var hasDayDef = false;
+                if (this._data.dayDefinite && this._data.dayDefinite.length > 0) {
+                    this._data.dayDefinite.forEach(function (day) {
+                        if (!hasDayDef)
+                            day.rates.forEach(function(rate) {
+                                if (!hasDayDef && rate.serviceType.type !== 'dmStandardDropPoint')
+                                    hasDayDef = true;
+                            });
+                    });
+                }
+                return hasDayDef;
             },
 
             /*_requestDroppointsByGeoBoxes: function (boxes, callback) {
@@ -924,8 +938,10 @@
                     }
 
                     //==== Set fav address data
-                    //this.setFavDropPoints(this.config.favDropPoints);
-                    //this.setFavAddresses(this.config.favAddresses);
+                    if (this.config.favDropPoints && this.config.favDropPoints.length > 0)
+                        this.setFavDropPoints(this.config.favDropPoints);
+                    if (this.config.favAddresses && this.config.favAddresses.length > 0)
+                        this.setFavAddresses(this.config.favAddresses);
 
                     // Post, then select address and method - these can be previously chosen if the cart already exists
                     // or will be defaulted based on the consumer's preferences
@@ -946,6 +962,8 @@
                             self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                         }
                         else {
+                            // which tab should be selected?
+                            self.hasDayDefinite() ? self.showPage_Calendar() : self.showPage_Standard();
                             // try to select the physical address delivery method (e.g. std, international, day def, etc)
                             var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                             if (!res) {
@@ -1046,9 +1064,9 @@
                                         "county": config.county,
                                         "addressLineCollection": config.addressLineCollection
                                     },
-                                    //"contactDetails": {
-                                    //    "email": config.contactEmail
-                                    //},
+                                    "contactDetails": {
+                                        "email": config.contactEmail || "email@example.com"
+                                    },
                                     "person": {
                                         "firstName": config.recipientFirstName || "First",
                                         "lastName": config.recipientLastName || "Last",
@@ -1296,9 +1314,7 @@
                 if (this._data.nonDayDefinite.constructor === Array && this._data.nonDayDefinite.length > 0) {
                     this._data.standardRates = this._getStandardServices();
                     this.set('standardRates', this._data.standardRates);
-                    //console.log(this.standardRates);
                 }
-                //this.notifyPath('_data.dayDefinite'); //??? Needed?
             },
 
             _showAsLoading: function (loading) {
@@ -2422,18 +2438,18 @@
 			    }
 			},
 
-            enableClickAndCollect: function(enable) {
-                enable = true; //TODO: Forcing on for the time being. Remove this line when the travelling user UI is to be finished.
-                if (enable) {
-                    this.$.availableDropPoints.classList.remove('hidden');
-                    this.$.noDropPoints.classList.add('hidden');
+            //enableClickAndCollect: function(enable) {
+            //    enable = true; //TODO: Forcing on for the time being. Remove this line when the travelling user UI is to be finished.
+            //    if (enable) {
+            //        this.$.availableDropPoints.classList.remove('hidden');
+            //        this.$.noDropPoints.classList.add('hidden');
   
-                }
-                else {
-                    this.$.availableDropPoints.classList.add('hidden');
-                    this.$.noDropPoints.classList.remove('hidden');
-                }
-            },
+            //    }
+            //    else {
+            //        this.$.availableDropPoints.classList.add('hidden');
+            //        this.$.noDropPoints.classList.remove('hidden');
+            //    }
+            //},
 
             enableCalendarDelivery: function(enable) {
                 if (enable) {

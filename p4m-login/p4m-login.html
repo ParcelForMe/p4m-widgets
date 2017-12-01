@@ -70,9 +70,9 @@
             <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
             <polymer-cookie id="p4mConsumerCookie" name="p4mConsumer"></polymer-cookie>
-            <polymer-cookie id="p4mAddressCookie" name="p4mConsumer"></polymer-cookie>
+            <polymer-cookie id="p4mAddressCookie" name="p4mAddress"></polymer-cookie>
             <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
-            <polymer-cookie id="p4mCartAddressCookie" name="p4mConsumer"></polymer-cookie>
+            <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
             <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
@@ -263,19 +263,19 @@
             getConsumerFromCookie: function (consumerFromCookie) {
                 // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
                 var parts = consumerFromCookie.split('|');
-                if (parts.length !== 3)
-                    this.consumerData = { id: null, prefDeliveryAddressId: null, deliveryPreferences: null, addresses: [] };
+                if (parts.length !== 4)
+                    this.consumerData = { id: null, prefDeliveryAddressId: null, deliveryPreferences: null, addresses: [], lastChanged: null };
                 else {
                     var addrStr = this.$.p4mAddressCookie.readCookie();
                     var addrParts = addrStr.split('|');
                     var addr;
-                    if (addrParts.length === 9)
+                    if (addrParts.length === 10)
                         addr = {
-                            id: addrParts[0], street1: addrParts[1], street2: addrParts[2],
-                            city: addrParts[3], postCode: addrParts[4], state: addrParts[5], countryCode: addrParts[6],
-                            latitude: addrParts[7], longitude: addrParts[8]
+                            id: addrParts[0], dropPointId: addrParts[1], street1: addrParts[2], street2: addrParts[3],
+                            city: addrParts[4], postCode: addrParts[5], state: addrParts[6], countryCode: addrParts[7],
+                            latitude: addrParts[8], longitude: addrParts[9]
                         };
-                    this.consumerData = { id: parts[0], prefDeliveryAddressId: addrParts[0], deliveryPreferences: parts[1], addresses: [addr], extras: { localId: parts[2] } };
+                    this.consumerData = { id: parts[0], prefDeliveryAddressId: addrParts[0], deliveryPreferences: parts[1], addresses: [addr], extras: { localId: parts[2] }, lastChanged: parts[3] };
                 }
             },
 
@@ -286,9 +286,9 @@
                 var d = new Date();
                 var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" +
-                    consumer.id + "|" + consumer.deliveryPreferences + "|" + consumer.extras.localId + "; path=/;";
+                    consumer.id + "|" + consumer.deliveryPreferences + "|" + consumer.extras.localId + "|" + consumer.lastChanged + "; path=/;";
                 document.cookie = "p4mAddress=" +
-                    addr.id + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
+                    addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
                     addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
                     addr.latitude + "|" + addr.longitude + "; path=/;";
                 document.cookie = "p4mAvatarUrl=" + (consumer.profilePicUrl ? consumer.profilePicUrl : "") + "; path=/;";
@@ -530,7 +530,7 @@
                     var addr = data.deliverTo;
                     document.cookie = "p4mCart=" + cart.id + "|" + cart.addressId + "|" + addr.dropPointId + "|" + cart.serviceId + "|" + cart.expDeliveryDate + "; path=/;";
                     document.cookie = "p4mCartAddress=" +
-                        addr.id + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
+                        addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
                         addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
                         addr.latitude + "|" + addr.longitude + "; path=/;";
                     this.$.localApi.call('restoreLastCart', null, cart, this.closeRestoreDlg.bind(this));
