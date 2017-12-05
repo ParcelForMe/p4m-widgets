@@ -711,12 +711,6 @@
                                 console.log('...Initialisation complete.');
                                 self.firstLoadComplete = true;
                             })
-
-                            //console.log('init: First updateP4mCart() start');
-                            //self.updateP4mCart(function(err) {
-                            //    console.log('init: First updateP4mCart() finished');
-                            //    callback(err);
-                            //});
                         }
                     });
                 }
@@ -793,9 +787,10 @@
                 // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
                 var cart = this.cartData;
                 var addr = this.getCartAddr();
-                document.cookie = "p4mCart=" + cart.id + "|" + cart.addressId + "|" + addr.dropPointId + "|" + cart.serviceId + "|" + cart.expDeliveryDate + "; path=/;";
+                var dpId = (addr.dropPointId ? addr.dropPointId : "");
+                document.cookie = "p4mCart=" + cart.id + "|" + cart.addressId + "|" + dpId + "|" + cart.serviceId + "|" + cart.expDeliveryDate + "; path=/;";
                 document.cookie = "p4mCartAddress=" +
-                    addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
+                    addr.id + "|" + dpId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
                     addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
                     addr.latitude + "|" + addr.longitude + "; path=/;";
             },
@@ -933,7 +928,7 @@
                 var addr;
                 if (addrParts.length === 10)
                     addr = {
-                        id: addrParts[0], dropPointId: addrParts[1], street1: addrParts[2], street2: addrParts[3],
+                        id: addrParts[0], dropPointId: (addrParts[1] === '' ? null : addrParts[1]), street1: addrParts[2], street2: addrParts[3],
                         city: addrParts[4], postCode: addrParts[5], state: addrParts[6], countryCode: addrParts[7],
                         latitude: addrParts[8], longitude: addrParts[9]
                     };
@@ -947,7 +942,7 @@
                 if (parts.length === 5) {
                     this.cartData.id = parts[0];
                     this.cartData.addressId = parts[1];
-                    this.cartData.dropPointId = parts[2];
+                    this.cartData.dropPointId = parts[2] === '' ? null : parts[2];
                     this.cartData.serviceId = parts[3];
                     this.cartData.expDeliveryDate = parts[4];
                     var addr = this.getAddressFromString(this.$.p4mCartAddressCookie.readCookie());
