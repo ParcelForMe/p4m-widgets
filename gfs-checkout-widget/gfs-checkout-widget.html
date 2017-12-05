@@ -686,7 +686,8 @@
 
             _computeHeader: function () {
                 return {
-                    "Authorization": "Bearer " + atob(this.accessToken)
+            //        "Authorization": "Bearer " + atob(this.accessToken)
+                    "Authorization": "Bearer " + this.accessToken
                 };
             },
 
