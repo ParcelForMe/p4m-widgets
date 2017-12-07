@@ -764,7 +764,9 @@
                             this._processRateData();
                             if (this.useDropPoints && !this._map) 
                                 this._makeMap();
-                            this.enableCalendarDelivery(this.hasDayDefinite());
+                            var loadedForDP = this.config.dropPointId;
+                            this.enableCalendarDelivery(this.hasDayDefinite() || !loadedForDP);
+                            this.enableStandardDelivery(!loadedForDP);
                             callback();
                         }
                     }
@@ -1602,6 +1604,7 @@
             },
 
             _loadDroppointMarkers: function (dropPointsArray) {
+                console.log('Setting DP markers');
                 var self = this;
                 if (!dropPointsArray) return;
                 //=== Drop point markers
@@ -1620,7 +1623,7 @@
 					            zIndex: google.maps.Marker.MAX_ZINDEX
 					        };
 					        //console.log(pointItem.geoLocation.coordinates.longitude, pointItem.geoLocation.coordinates.latitude);
-					        marker = new google.maps.Marker(markerConfig);
+					        var marker = new google.maps.Marker(markerConfig);
 					        marker.addListener('click', function (clickedMarker) {
 					            self._selectDropPointMarker(this);
 					        });
@@ -2095,7 +2098,7 @@
                     html: label,
                     icon: this._getHomeIcon()
                 };
-                marker = new google.maps.Marker(homeMarkerConfig);
+                new google.maps.Marker(homeMarkerConfig);
                 this.currentMapCenter = location;
                 //this._map.setCenter(homeMarkerConfig.position);
             },
@@ -2461,6 +2464,24 @@
                 }
             },
             
+            enableClickAndCollect: function (enable) {
+                if (enable) {
+                    this.$.clickandcollect_tab.classList.remove('hidden');
+                }
+                else {
+                    this.$.clickandcollect_tab.classList.add('hidden');
+                }
+            },
+
+            enableStandardDelivery: function (enable) {
+                if (enable) {
+                    this.$.standarddelivery_tab.classList.remove('hidden');
+                }
+                else {
+                    this.$.standarddelivery_tab.classList.add('hidden');
+                }
+            },
+
             hasLatLng: function (item) {
                 //return true;
                 return (item.lat && item.lng)

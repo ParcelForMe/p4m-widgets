@@ -2086,9 +2086,15 @@ p4m-login #loginWidget {
     justify-content: center;
     width: 156px;
     margin-right: 8px; }
+  p4m-login #loginWidget #loginReqMessage {
+    display: none;
+    justify-content: center;
+    width: 156px;
+    margin-right: 8px; }
   p4m-login #loginWidget #profileName {
     display: none; }
 
+/* logging in mode */
 p4m-login.loggingIn #loginWidget #loggingInMessage {
   display: flex;
   flex: 1;
@@ -2097,10 +2103,29 @@ p4m-login.loggingIn #loginWidget #loggingInMessage {
 p4m-login.loggingIn #loginWidget #loginMessage {
   display: none; }
 
+p4m-login.loggingIn #loginWidget #loginReqMessage {
+  display: none; }
+
+/* login required mode */
+p4m-login.loginRequired #loginWidget #loggingInMessage {
+  display: none; }
+
+p4m-login.loginRequired #loginWidget #loginMessage {
+  display: none; }
+
+p4m-login.loginRequired #loginWidget #loginReqMessage {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+
+/* logged in mode */
 p4m-login.loggedIn #loginWidget #loggingInMessage {
   display: none; }
 
 p4m-login.loggedIn #loginWidget #loginMessage {
+  display: none; }
+
+p4m-login.loggedIn #loginWidget #loginReqMessage {
   display: none; }
 
 p4m-login.loggedIn #loginWidget #profileName {

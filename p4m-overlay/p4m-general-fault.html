@@ -354,7 +354,8 @@
             signInAgain: function() {
                 this.$.p4mToken.eraseCookie();
                 this.$.gfsCheckoutToken.eraseCookie();
-
+                var loginWidget = document.getElementsByTagName("p4m-login")[0];
+                loginWidget.clearCookies();
                 window.location.href = "/";
             },
 

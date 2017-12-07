@@ -34,10 +34,10 @@
                 </div>
                 <div id="loginMessage">Use 1 Click Checkout</div>
                 <div id="loggingInMessage">Logging in ...</div>
+                <div id="loginReqMessage">Please login again</div>
                 <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
                 <p4m-spinner id="spinner" species="progress" class="login_widget_spinner"></p4m-spinner>
-            </div>
-            
+            </div>            
 
             <div id="p4m-menu-wrapper" class="p4m-menu hidden" on-mouseleave="_mouseOutMenu" on-mouseover="_mouseOverMenu">
                 <paper-menu id="p4m-menu" on-iron-select="_selectMenuItem">
@@ -182,13 +182,15 @@
                 if (this.p4mToken) 
                 {
                     if (!this.hasConsumer()) {
-                        this._showAsLoggingIn();
-                        this._getConsumer(function (err) {
-                            if (err)
-                                self._onError(err);
-                            else
-                                self._doLocalLogin();
-                        });
+                        if (!this.$.spinner.active) {
+                            this._showAsLoggingIn();
+                            this._getConsumer(function (err) {
+                                if (err)
+                                    self._onError(err);
+                                else
+                                    self._doLocalLogin();
+                            });
+                        }
                     }
                     else {
                         this._showAsLoggedIn();
@@ -271,11 +273,14 @@
                     var addr;
                     if (addrParts.length === 10)
                         addr = {
-                            id: addrParts[0], dropPointId: addrParts[1], street1: addrParts[2], street2: addrParts[3],
-                            city: addrParts[4], postCode: addrParts[5], state: addrParts[6], countryCode: addrParts[7],
-                            latitude: addrParts[8], longitude: addrParts[9]
+                            id: fldOrNull(addrParts[0]), dropPointId: fldOrNull(addrParts[1]), street1: fldOrNull(addrParts[2]), street2: fldOrNull(addrParts[3]),
+                            city: fldOrNull(addrParts[4]), postCode: fldOrNull(addrParts[5]), state: fldOrNull(addrParts[6]), countryCode: fldOrNull(addrParts[7]),
+                            latitude: fldOrNull(addrParts[8]), longitude: fldOrNull(addrParts[9])
                         };
-                    this.consumerData = { id: parts[0], prefDeliveryAddressId: addrParts[0], deliveryPreferences: parts[1], addresses: [addr], extras: { localId: parts[2] }, lastChanged: parts[3] };
+                    this.consumerData = {
+                        id: fldOrNull(parts[0]), prefDeliveryAddressId: fldOrNull(addrParts[0]), deliveryPreferences: fldOrNull(parts[1]),
+                        addresses: [addr], extras: { localId: fldOrNull(parts[2]) }, lastChanged: fldOrNull(parts[3])
+                    };
                 }
             },
 
@@ -286,13 +291,13 @@
                 var d = new Date();
                 var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" +
-                    consumer.id + "|" + consumer.deliveryPreferences + "|" + consumer.extras.localId + "|" + consumer.lastChanged + "; path=/;";
+                    fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
                 document.cookie = "p4mAddress=" +
-                    addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
-                    addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
-                    addr.latitude + "|" + addr.longitude + "; path=/;";
-                document.cookie = "p4mAvatarUrl=" + (consumer.profilePicUrl ? consumer.profilePicUrl : "") + "; path=/;";
-                document.cookie = "p4mGivenName=" + consumer.givenName + "; path=/;";
+                    fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                    fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
+                    fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
+                document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
+                document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
             },
 
             getDefaultAddr: function () {
@@ -422,7 +427,15 @@
             popupCenter: function(url, title, w, h) {
                 var left = (screen.width/2)-(w/2);
                 var top = (screen.height/2)-(h/2);
-                return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+                var win = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+                try {
+                    win.focus();
+                    return win;
+                }
+                catch (e) {
+                    this._showAsLoginRequired();
+                    this.fire('popup-blocked');
+                }
             },
 
             _makeState: function() {
@@ -528,11 +541,11 @@
                 if (data.success) {
                     var cart = data.cart;
                     var addr = data.deliverTo;
-                    document.cookie = "p4mCart=" + cart.id + "|" + cart.addressId + "|" + addr.dropPointId + "|" + cart.serviceId + "|" + cart.expDeliveryDate + "; path=/;";
+                    document.cookie = "p4mCart=" + fldStr(cart.id) + fldStr(cart.addressId) + fldStr(addr.dropPointId) + fldStr(cart.serviceId) + fldStr(cart.expDeliveryDate, true) + "; path=/;";
                     document.cookie = "p4mCartAddress=" +
-                        addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
-                        addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
-                        addr.latitude + "|" + addr.longitude + "; path=/;";
+                        fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                        fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
+                        fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
                     this.$.localApi.call('restoreLastCart', null, cart, this.closeRestoreDlg.bind(this));
                 }
                 else
@@ -597,6 +610,7 @@
 
             onRequestForLogin: function () {
                 //If we hear a global event calling for a login
+                this.clearCookies();
                 this._showAsLoggingIn();
                 this.launchPopup();
 
@@ -612,6 +626,7 @@
                 this.toggleClass("loggedIn", false);
                 this.toggleClass("loggedOut", false);
                 this.toggleClass("loggingIn", true);
+                this.toggleClass("loginRequired", false);
                 this.$.spinner.active = true;
             },
 
@@ -620,17 +635,35 @@
                 this.toggleClass("loggedOut", false);
                 this.toggleClass("loggingIn", false);
                 this.toggleClass("loggedIn", true);
+                this.toggleClass("loginRequired", false);
                 this.$.spinner.active = false;
             },
-
-
+            
             _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
                 this.toggleClass("loggedIn", false);
                 this.toggleClass("loggingIn", false);
                 this.toggleClass("loggedOut", true);
+                this.toggleClass("loginRequired", false);
+                this.$.spinner.active = false;
+            },
+            
+            _showAsLoginRequired: function() {
+                this.$.p4mProfile.classList.add("hidden");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loginRequired", true);
                 this.$.spinner.active = false;
             }
         });
+
+        function fldStr(field, last) {
+            return (field ? field : "") + (!last ? "|" : "");
+        }
+
+        function fldOrNull(fld) {
+            return fld === '' ? null : fld;
+        }
     </script>
 </dom-module>

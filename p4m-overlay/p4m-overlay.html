@@ -13,7 +13,7 @@
         <content>
             <div class="checking">
 
-                <h3>{{message}}, please wait ...</h3>
+                <h3>{{message}}</h3>
                 <p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner>
                 <div class="powered-by-link">
                     <img class="powered-by" src="../p4m-shared/img/powered-by-parcel-for-me-green.png" id="powered-by" />
@@ -94,8 +94,11 @@
 
             },
 
-            show: function (message) {
-                this.message = message;
+            show: function (message, dontAddWait) {
+                if (dontAddWait)
+                    this.message = message;
+                else
+                    this.message = message + ', please wait ...';
                 this.open();
             }
         });

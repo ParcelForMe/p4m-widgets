@@ -593,6 +593,7 @@
                 console.log('Initialising...');
                 window.addEventListener('discount', this.onDiscount.bind(this));
                 window.addEventListener('discountdelete', this.onDiscountDelete.bind(this));
+                window.addEventListener('popup-blocked', this.onPopupBlocked.bind(this));
 
                 self.sessionAddressId = hashThis(this.sessionId);   // default P4M Id for a DP
 
@@ -774,25 +775,25 @@
                 var d = new Date();
                 var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" + 
-                    consumer.id + "|" + consumer.deliveryPreferences + "|" + consumer.extras.localId + "|" + consumer.lastChanged + "; path=/;";
+                    fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
                 document.cookie = "p4mAddress=" +
-                    addr.id + "|" + addr.dropPointId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
-                    addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
-                    addr.latitude + "|" + addr.longitude + "; path=/;";
-                document.cookie = "p4mAvatarUrl=" + (consumer.profilePicUrl ? consumer.profilePicUrl : "") + "; path=/;";
-                document.cookie = "p4mGivenName=" + consumer.givenName + "; path=/;";
+                    fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                    fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) + fldStr(addr.latitude) +
+                    fldStr(addr.longitude, true) + "; path=/;";
+                document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
+                document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
             },
 
             updateCartCookie: function () {
                 // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
                 var cart = this.cartData;
                 var addr = this.getCartAddr();
-                var dpId = (addr.dropPointId ? addr.dropPointId : "");
-                document.cookie = "p4mCart=" + cart.id + "|" + cart.addressId + "|" + dpId + "|" + cart.serviceId + "|" + cart.expDeliveryDate + "; path=/;";
+                document.cookie = "p4mCart=" + fldStr(cart.id) + fldStr(cart.addressId) + fldStr(addr.dropPointId) +
+                                               fldStr(cart.serviceId) + fldStr(cart.expDeliveryDate, true) + "; path=/;";
                 document.cookie = "p4mCartAddress=" +
-                    addr.id + "|" + dpId + "|" + addr.street1 + "|" + addr.street2 + "|" + addr.city + "|" +
-                    addr.postCode + "|" + addr.state + "|" + addr.countryCode + "|" +
-                    addr.latitude + "|" + addr.longitude + "; path=/;";
+                    fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                    fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) + fldStr(addr.latitude) +
+                    fldStr(addr.longitude, true) + "; path=/;";
             },
 
             //Send all cart information to shipping plugin
@@ -928,9 +929,10 @@
                 var addr;
                 if (addrParts.length === 10)
                     addr = {
-                        id: addrParts[0], dropPointId: (addrParts[1] === '' ? null : addrParts[1]), street1: addrParts[2], street2: addrParts[3],
-                        city: addrParts[4], postCode: addrParts[5], state: addrParts[6], countryCode: addrParts[7],
-                        latitude: addrParts[8], longitude: addrParts[9]
+                        id: fldOrNull(addrParts[0]), dropPointId: fldOrNull(addrParts[1]), street1: fldOrNull(addrParts[2]),
+                        street2: fldOrNull(addrParts[3]), city: fldOrNull(addrParts[4]), postCode: fldOrNull(addrParts[5]),
+                        state: fldOrNull(addrParts[6]), countryCode: fldOrNull(addrParts[7]), 
+                        latitude: fldOrNull(addrParts[8]), longitude: fldOrNull(addrParts[9])
                     };
                 return addr;
             },
@@ -940,11 +942,11 @@
                 // cart.Id + "|" + cart.AddressId + "|" + cart.DropPointId + "|" + cart.ServiceId + "|" + dateStr;
                 var parts = cartDetails.split('|');
                 if (parts.length === 5) {
-                    this.cartData.id = parts[0];
-                    this.cartData.addressId = parts[1];
-                    this.cartData.dropPointId = parts[2] === '' ? null : parts[2];
-                    this.cartData.serviceId = parts[3];
-                    this.cartData.expDeliveryDate = parts[4];
+                    this.cartData.id = fldOrNull(parts[0]);
+                    this.cartData.addressId = fldOrNull(parts[1]);
+                    this.cartData.dropPointId = fldOrNull(parts[2]);
+                    this.cartData.serviceId = fldOrNull(parts[3]);
+                    this.cartData.expDeliveryDate = fldOrNull(parts[4]);
                     var addr = this.getAddressFromString(this.$.p4mCartAddressCookie.readCookie());
                     if (addr)
                         this.addOrUpdAddress(addr);
@@ -1056,6 +1058,12 @@
             
             _toggleAddressesLoading: function(loading) {
                 this._getWidget('addresses_spinner').active = loading;  
+            },
+
+            onPopupBlocked: function() {
+                // the consumer needs to login again but the browser blocked the login popup
+                if (!this.showingGeneralFault) 
+                    this.$.screenOverlay.show('You must login again to continue', true);
             },
             
             toggleLoading: function (loading) {
@@ -1740,6 +1748,14 @@
                 this.$.generalFault.close();
             },
         });
+        
+        function fldStr (field, last) {
+            return (field ? field : "") + (!last ? "|" : "");
+        }
+
+        function fldOrNull (fld) {
+            return fld === '' ? null : fld;
+        }
 
         function p4mDroppointToGfsDroppoint(item) {
            var gfsAddress = {
