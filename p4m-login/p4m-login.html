@@ -70,6 +70,7 @@
             <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
             <polymer-cookie id="p4mConsumerCookie" name="p4mConsumer"></polymer-cookie>
+            <polymer-cookie id="p4mPrefAddressCookie" name="p4mPrefAddress"></polymer-cookie>
             <polymer-cookie id="p4mAddressCookie" name="p4mAddress"></polymer-cookie>
             <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
             <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
@@ -287,24 +288,19 @@
             updateConsumerCookie: function () {
                 // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
                 var consumer = this.consumerData;
-                var addr = this.getDefaultAddr();
+                var addr = this.getAddressById(this.consumerData.prefDeliveryAddressId);
                 var d = new Date();
                 var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" +
                     fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
-                document.cookie = "p4mAddress=" +
+                var addrStr =
                     fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
                     fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
                     fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
+                document.cookie = "p4mPrefAddress=" + addrStr;
+                document.cookie = "p4mAddress=" + addrStr;
                 document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
                 document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
-            },
-
-            getDefaultAddr: function () {
-                if (!this.consumerData || !this.consumerData.prefDeliveryAddressId)
-                    this.setConsumerDefaultsFromCookie();
-                if (this.consumerData)
-                    return this.getAddressById(this.consumerData.prefDeliveryAddressId);
             },
 
             getAddressById: function (id) {
@@ -413,6 +409,7 @@
                 this.$.p4mLocalLoginCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mConsumerCookie.eraseCookie();
+                this.$.p4mPrefAddressCookie.eraseCookie();
                 this.$.p4mAddressCookie.eraseCookie();
                 this.$.p4mCartCookie.eraseCookie();
                 this.$.p4mCartAddressCookie.eraseCookie();
