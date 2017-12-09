@@ -592,7 +592,7 @@
 
             postGfsData: function (mapCenter, callback) {
                 this.currentMapCenter = null;   // setting this to null will move the map when it is displayed
-                this._postReq(mapCenter, this._postData, callback);             
+                this._postReq(mapCenter, this._postData, callback);
             },
 
             _topDPPinned: false,
@@ -764,9 +764,6 @@
                             this._processRateData();
                             if (this.useDropPoints && !this._map) 
                                 this._makeMap();
-                            var loadedForDP = this.config.dropPointId;
-                            this.enableCalendarDelivery(this.hasDayDefinite() || !loadedForDP);
-                            this.enableStandardDelivery(!loadedForDP);
                             callback();
                         }
                     }
@@ -818,6 +815,31 @@
                     });
                 }
                 return hasDayDef;
+            },
+
+            hasNearAddress: function (dp) {
+                // called when a DP is selected to show / hide calendar and standard tabs
+                var retAddr, minDist = this.droppointSettings.maxRadiusMeters / 1000;
+                const qLat = dp.geoLocation.coordinates.latitude, qLng = dp.geoLocation.coordinates.longitude;
+                var self = this;
+                this._favAddresses.forEach(function (addr) {
+                    var dist = self.kmsBetweenPts(qLat, qLng, addr.lat, addr.lng);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        retAddr = addr;
+                    }
+                });
+                this.config.defaultAddress = retAddr;
+                return retAddr ? true : false;
+            },
+
+            kmsBetweenPts: function (lat1, lon1, lat2, lon2) {
+                var p = 0.017453292519943295;    // Math.PI / 180
+                var c = Math.cos;
+                var a = 0.5 - c((lat2 - lat1) * p) / 2 +
+                        c(lat1 * p) * c(lat2 * p) *
+                        (1 - c((lon2 - lon1) * p)) / 2;
+                return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
             },
 
             /*_requestDroppointsByGeoBoxes: function (boxes, callback) {
@@ -930,7 +952,6 @@
                     this.config = config;
                     var reqDeliveryTypes = config.skipDropPoints ? ["dmStandard"] : ["dmDropPoint", "dmStandard"];
                     this.getPostDataFromConfig(config, reqDeliveryTypes);
-
                     if (selection && selection.address) {
                         var location = this._postData.request.order.transit.recipient.location;
                         location.countryCode = selection.address.countryCode;
@@ -965,6 +986,8 @@
                             self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                         }
                         else {
+                            self.enableCalendarDelivery(self.hasDayDefinite());
+                            self.enableStandardDelivery(true);
                             // which tab should be selected?
                             self.hasDayDefinite() ? self.showPage_Calendar() : self.showPage_Standard();
                             // try to select the physical address delivery method (e.g. std, international, day def, etc)
@@ -1008,6 +1031,8 @@
                         self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                     }
                     else {
+                        self.enableCalendarDelivery(self.hasDayDefinite());
+                        self.enableStandardDelivery(true);
                         // try to select the physical address delivery method (e.g. std, international, day def, etc)
                         var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                         if (!res) {
@@ -1927,13 +1952,16 @@
             //If no method chosen, auto-choose one
             _completeDropPointSelection: function(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
-                this.showPage_Droppoints();
                 var self = this;
+                var dp = this._droppointById(droppointId)
+                var hasAddr = this.hasNearAddress(dp);
+                this.enableCalendarDelivery(this.hasDayDefinite() && hasAddr);
+                this.enableStandardDelivery(hasAddr);
+                this.showPage_Droppoints();
                 if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
                     callback(null); 
                 } 
                 else {
-                    var dp = this._droppointById(droppointId)            
                     this.set("_selectedDropPoint", dp);
                     this.set("_selectedDropPoint.selected", true);
                     if (!methodId) 
