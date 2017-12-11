@@ -3,7 +3,6 @@
     "error": null,
     "cart" : {
         "sessionId"	    : "SessionA1",
-        "reference"	    : "ORD01",
         "currency"	    : "GBP",    
         "tax"             : 10.00,
         "total"           : 100.00,

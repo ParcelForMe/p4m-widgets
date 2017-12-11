@@ -5006,14 +5006,27 @@ Smartphone <375px
       &#cartPage {
         p4m-cart {
           flex: 1;
-          #container {
+          display: flex;
+          width: 100%;
+          > #container {
             padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            align-content: flex-start;
+            img#image {
+              max-width: 60px;
+            }
           }
           p4m-cart-card #container {
             padding: 0;
           }
           #details {
-            font-size: 14px;
+            font-size: 13px;
+            #price {
+              margin-bottom: 0;
+            }
           }
         }
       }

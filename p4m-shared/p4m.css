@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 .p4m-green {
   background-color: #37a553 !important; }
 
@@ -2086,15 +2086,9 @@ p4m-login #loginWidget {
     justify-content: center;
     width: 156px;
     margin-right: 8px; }
-  p4m-login #loginWidget #loginReqMessage {
-    display: none;
-    justify-content: center;
-    width: 156px;
-    margin-right: 8px; }
   p4m-login #loginWidget #profileName {
     display: none; }
 
-/* logging in mode */
 p4m-login.loggingIn #loginWidget #loggingInMessage {
   display: flex;
   flex: 1;
@@ -2103,29 +2097,10 @@ p4m-login.loggingIn #loginWidget #loggingInMessage {
 p4m-login.loggingIn #loginWidget #loginMessage {
   display: none; }
 
-p4m-login.loggingIn #loginWidget #loginReqMessage {
-  display: none; }
-
-/* login required mode */
-p4m-login.loginRequired #loginWidget #loggingInMessage {
-  display: none; }
-
-p4m-login.loginRequired #loginWidget #loginMessage {
-  display: none; }
-
-p4m-login.loginRequired #loginWidget #loginReqMessage {
-  display: flex;
-  flex: 1;
-  justify-content: center; }
-
-/* logged in mode */
 p4m-login.loggedIn #loginWidget #loggingInMessage {
   display: none; }
 
 p4m-login.loggedIn #loginWidget #loginMessage {
-  display: none; }
-
-p4m-login.loggedIn #loginWidget #loginReqMessage {
   display: none; }
 
 p4m-login.loggedIn #loginWidget #profileName {
@@ -2687,7 +2662,7 @@ p4m-checkout {
   p4m-checkout #mainDropPointListArea gfs-droppoint {
     display: flex;
     flex: 1;
-    xmin-width: 100% !important; }
+    min-width: 100% !important; }
   p4m-checkout #selectedDropPointPanel {
     -webkit-transition: .2s ease-in-out;
     -moz-transition: .2s ease-in-out;
@@ -3876,13 +3851,24 @@ Smartphone <375px
               justify-content: center;
               position: relative; }
       iron-pages#mobilepages > iron-page#cartPage p4m-cart {
-        flex: 1; }
-        iron-pages#mobilepages > iron-page#cartPage p4m-cart #container {
-          padding: 10px; }
+        flex: 1;
+        display: flex;
+        width: 100%; }
+        iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container {
+          padding: 10px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          align-items: flex-start;
+          align-content: flex-start; }
+          iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container img#image {
+            max-width: 60px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
           padding: 0; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
-          font-size: 14px; }
+          font-size: 13px; }
+          iron-pages#mobilepages > iron-page#cartPage p4m-cart #details #price {
+            margin-bottom: 0; }
       iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
         flex: 1;
         width: 100%; }
@@ -3984,7 +3970,7 @@ Smartphone <375px
                   height: initial; }
                   iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint,
                   iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint {
-                    min-width: 100% !important; }
+                    xmin-width: 100% !important; }
                     iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned,
                     iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView.listView #availableDropPoints #dropPointListContainer #dpListScroller #mainDropPointListArea #dropPointList gfs-droppoint.pinned {
                       position: absolute; }
