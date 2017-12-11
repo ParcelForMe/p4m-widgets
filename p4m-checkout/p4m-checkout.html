@@ -377,17 +377,23 @@
                 background: #fff;
                 align-items: flex-start;
             }
-            .animated {
-                -webkit-transform: translateX(-0%);
-                transform: translateX(-0%);
+            /*.animated {
+                -webkit-transform: translateY(-0%);
+                transform: translateY(-0%);
+                transition: transform 300ms ease-out;
+                will-change: transform;
+            }*/
+            iron-pages#mobilepages  > .iron-selected:not(#summaryPanel) {
+                -webkit-transform: translateY(0%);
+                transform: translateY(0%);
                 transition: transform 300ms ease-out;
                 will-change: transform;
             }
             iron-pages#mobilepages  > .animated:not(.iron-selected) {
             }
             iron-pages#mobilepages  > :not(.iron-selected):not(#summaryPanel) {
-                -webkit-transform: translateX(-110%);
-                transform: translateX(-110%);
+                -webkit-transform: translateY(110%);
+                transform: translateY(110%);
                 transition: transform 300ms ease-out;
                 will-change: transform;
             }

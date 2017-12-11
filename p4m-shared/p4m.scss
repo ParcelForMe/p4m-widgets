@@ -2590,6 +2590,58 @@ p4m-login {
     }
 
 
+    /* logging in mode */
+    #loggingInMessage {
+      display: flex;
+      flex: 1;
+      justify-content: center; 
+    }
+
+    #loginMessage {
+      display: none; 
+    }
+
+    #loginReqMessage {
+      display: none; 
+    }
+
+    /* login required mode */
+    #loggingInMessage {
+      display: none; 
+    }
+
+    #loginMessage {
+      display: none; 
+    }
+
+    #loginReqMessage {
+      display: flex;
+      flex: 1;
+      justify-content: center; 
+    }
+
+    /* logged in mode */
+    #loggingInMessage {
+      display: none; 
+    }
+
+    #loginMessage {
+      display: none; 
+    }
+
+    #loginReqMessage {
+      display: none; 
+    }
+
+    #profileName {
+      display: flex;
+      flex: 1;
+      max-width: 100px;
+      overflow: hidden;
+      justify-content: flex-start; 
+    }
+
+
     // Sizes
 
     // Medium - 32px
@@ -5009,7 +5061,7 @@ Smartphone <375px
           display: flex;
           width: 100%;
           > #container {
-            padding: 10px;
+            padding: 0;
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
@@ -5020,10 +5072,15 @@ Smartphone <375px
             }
           }
           p4m-cart-card #container {
-            padding: 0;
+            padding: 10px 10px 0 10px;
+            &:after {
+              bottom: -6px;
+            }
           }
           #details {
             font-size: 13px;
+            padding-top: 0;
+            padding-bottom: 0;
             #price {
               margin-bottom: 0;
             }

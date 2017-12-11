@@ -2034,124 +2034,147 @@ p4m-login #loginWidget, p4m-login #p4m-menu-wrapper {
   text-transform: none;
   letter-spacing: normal; }
 
-p4m-login #loginWidget {
-  cursor: pointer;
-  background: #37a553;
-  width: initial;
-  height: 40px;
-  color: #fff;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 3px;
-  position: relative;
-  text-transform: none;
-  letter-spacing: normal; }
-  p4m-login #loginWidget #p4m-logo {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
-    margin-left: 12px; }
-    p4m-login #loginWidget #p4m-logo svg {
-      fill: #fff; }
-  p4m-login #loginWidget p4m-profile {
-    display: flex;
-    flex: 1;
-    min-width: 100px; }
-  p4m-login #loginWidget #p4m-profile-container {
-    display: flex;
-    flex: 1;
-    flex-direction: row-reverse;
-    min-width: 100px; }
-  p4m-login #loginWidget #profileImage {
-    display: none;
-    width: 40px;
+p4m-login {
+  /* logging in mode */
+  /* login required mode */
+  /* logged in mode */ }
+  p4m-login #loginWidget {
+    cursor: pointer;
+    background: #37a553;
+    width: initial;
     height: 40px;
-    margin-right: 0;
-    margin-left: 12px; }
-    p4m-login #loginWidget #profileImage #profileImg {
+    color: #fff;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    position: relative;
+    text-transform: none;
+    letter-spacing: normal; }
+    p4m-login #loginWidget #p4m-logo {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+      margin-left: 12px; }
+      p4m-login #loginWidget #p4m-logo svg {
+        fill: #fff; }
+    p4m-login #loginWidget p4m-profile {
       display: flex;
+      flex: 1;
+      min-width: 100px; }
+    p4m-login #loginWidget #p4m-profile-container {
+      display: flex;
+      flex: 1;
+      flex-direction: row-reverse;
+      min-width: 100px; }
+    p4m-login #loginWidget #profileImage {
+      display: none;
       width: 40px;
       height: 40px;
-      border-radius: 0 3px 3px 0; }
-    p4m-login #loginWidget #profileImage svg {
+      margin-right: 0;
+      margin-left: 12px; }
+      p4m-login #loginWidget #profileImage #profileImg {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 0 3px 3px 0; }
+      p4m-login #loginWidget #profileImage svg {
+        display: none; }
+    p4m-login #loginWidget #loggingInMessage {
+      display: none;
+      justify-content: center;
+      width: 156px;
+      margin-right: 8px; }
+    p4m-login #loginWidget #loginMessage {
+      display: flex;
+      justify-content: center;
+      width: 156px;
+      margin-right: 8px; }
+    p4m-login #loginWidget #profileName {
       display: none; }
-  p4m-login #loginWidget #loggingInMessage {
-    display: none;
-    justify-content: center;
-    width: 156px;
-    margin-right: 8px; }
-  p4m-login #loginWidget #loginMessage {
+  p4m-login.loggingIn #loginWidget #loggingInMessage {
     display: flex;
-    justify-content: center;
-    width: 156px;
-    margin-right: 8px; }
-  p4m-login #loginWidget #profileName {
+    flex: 1;
+    justify-content: center; }
+  p4m-login.loggingIn #loginWidget #loginMessage {
     display: none; }
-
-p4m-login.loggingIn #loginWidget #loggingInMessage {
-  display: flex;
-  flex: 1;
-  justify-content: center; }
-
-p4m-login.loggingIn #loginWidget #loginMessage {
-  display: none; }
-
-p4m-login.loggedIn #loginWidget #loggingInMessage {
-  display: none; }
-
-p4m-login.loggedIn #loginWidget #loginMessage {
-  display: none; }
-
-p4m-login.loggedIn #loginWidget #profileName {
-  display: flex;
-  flex: 1;
-  max-width: 100px;
-  overflow: hidden;
-  justify-content: flex-start; }
-
-p4m-login.loggedIn #loginWidget #profileImage {
-  display: flex; }
-
-p4m-login.med #loginWidget {
-  height: 32px; }
-  p4m-login.med #loginWidget #p4m-logo {
-    width: 21px;
-    height: 21px; }
-  p4m-login.med #loginWidget #profileImage {
-    width: 32px;
+  p4m-login.loggedIn #loginWidget #loggingInMessage {
+    display: none; }
+  p4m-login.loggedIn #loginWidget #loginMessage {
+    display: none; }
+  p4m-login.loggedIn #loginWidget #profileName {
+    display: flex;
+    flex: 1;
+    max-width: 100px;
+    overflow: hidden;
+    justify-content: flex-start; }
+  p4m-login.loggedIn #loginWidget #profileImage {
+    display: flex; }
+  p4m-login #loggingInMessage {
+    display: flex;
+    flex: 1;
+    justify-content: center; }
+  p4m-login #loginMessage {
+    display: none; }
+  p4m-login #loginReqMessage {
+    display: none; }
+  p4m-login #loggingInMessage {
+    display: none; }
+  p4m-login #loginMessage {
+    display: none; }
+  p4m-login #loginReqMessage {
+    display: flex;
+    flex: 1;
+    justify-content: center; }
+  p4m-login #loggingInMessage {
+    display: none; }
+  p4m-login #loginMessage {
+    display: none; }
+  p4m-login #loginReqMessage {
+    display: none; }
+  p4m-login #profileName {
+    display: flex;
+    flex: 1;
+    max-width: 100px;
+    overflow: hidden;
+    justify-content: flex-start; }
+  p4m-login.med #loginWidget {
     height: 32px; }
-    p4m-login.med #loginWidget #profileImage #profileImg {
+    p4m-login.med #loginWidget #p4m-logo {
+      width: 21px;
+      height: 21px; }
+    p4m-login.med #loginWidget #profileImage {
       width: 32px;
       height: 32px; }
-  p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #loginMessage {
-    width: 146px; }
-  p4m-login.med #loginWidget #loginMessage, p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #profileName {
-    font-size: 14px; }
-
-p4m-login.sml #loginWidget {
-  height: 24px; }
-  p4m-login.sml #loginWidget #p4m-logo {
-    width: 18px;
-    height: 18px; }
-  p4m-login.sml #loginWidget #profileImage {
-    width: 24px;
+      p4m-login.med #loginWidget #profileImage #profileImg {
+        width: 32px;
+        height: 32px; }
+    p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #loginMessage {
+      width: 146px; }
+    p4m-login.med #loginWidget #loginMessage, p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #profileName {
+      font-size: 14px; }
+  p4m-login.sml #loginWidget {
     height: 24px; }
-    p4m-login.sml #loginWidget #profileImage #profileImg {
+    p4m-login.sml #loginWidget #p4m-logo {
+      width: 18px;
+      height: 18px; }
+    p4m-login.sml #loginWidget #profileImage {
       width: 24px;
       height: 24px; }
-  p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #loginMessage {
-    width: 136px; }
-  p4m-login.sml #loginWidget #loginMessage, p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #profileName {
-    font-size: 12px; }
-
-p4m-login.white #loginWidget {
-  background: #fff;
-  color: #37a553; }
-  p4m-login.white #loginWidget #p4m-logo svg {
-    fill: #37a553; }
-  p4m-login.white #loginWidget #loginMessage, p4m-login.white #loginWidget #loggingInMessage, p4m-login.white #loginWidget #profileName {
+      p4m-login.sml #loginWidget #profileImage #profileImg {
+        width: 24px;
+        height: 24px; }
+    p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #loginMessage {
+      width: 136px; }
+    p4m-login.sml #loginWidget #loginMessage, p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #profileName {
+      font-size: 12px; }
+  p4m-login.white #loginWidget {
+    background: #fff;
     color: #37a553; }
+    p4m-login.white #loginWidget #p4m-logo svg {
+      fill: #37a553; }
+    p4m-login.white #loginWidget #loginMessage, p4m-login.white #loginWidget #loggingInMessage, p4m-login.white #loginWidget #profileName {
+      color: #37a553; }
 
 p4m-register #p4mRegisterContainer {
   display: flex;
@@ -3855,7 +3878,7 @@ Smartphone <375px
         display: flex;
         width: 100%; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container {
-          padding: 10px;
+          padding: 0;
           display: flex;
           flex-wrap: wrap;
           justify-content: flex-start;
@@ -3864,9 +3887,13 @@ Smartphone <375px
           iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container img#image {
             max-width: 60px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
-          padding: 0; }
+          padding: 10px 10px 0 10px; }
+          iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container:after {
+            bottom: -6px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
-          font-size: 13px; }
+          font-size: 13px;
+          padding-top: 0;
+          padding-bottom: 0; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart #details #price {
             margin-bottom: 0; }
       iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
