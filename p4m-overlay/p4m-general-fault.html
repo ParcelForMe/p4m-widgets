@@ -70,18 +70,31 @@
                     </g>
                 </g>
                 </svg>
-
-                <h1>Hmm... Looks like something went wrong</h1>
-                <p>We're having trouble connecting to {{service}}</p>
-                <div class="layout horizontal center buttons">
-                    <button class="p4m-button inverse auto" on-click="tryAgain"><i class="p4micon-refresh"></i>Try again</button>
-                    <template is="dom-if" if="shared-mode">
-                        <span>Or,</span> <a on-click="basicCheckout">Use basic checkout</a>
-                    </template>
-                </div>
-                <div class="layout horizontal center buttons" style="margin-top:2.4em;">
-                    <span>Still having trouble?</span> <a on-click="signInAgain">Try logging into Parcel For Me again</a>
-                </div>
+                <template is="dom-if" if="{{loginBlocked}}">
+                    <h1>You're not logged in</h1>
+                    <p>Please login again</p>
+                    <div class="layout horizontal center buttons">
+                        <button class="p4m-button inverse auto" on-click="requestLogin"><i class="p4micon-refresh"></i>Login again</button>
+                        <template is="dom-if" if="shared-mode">
+                            <span>Or,</span>
+                            <a on-click="basicCheckout">Use basic checkout</a>
+                        </template>
+                    </div>
+                </template>
+                <template is="dom-if" if="{{!loginBlocked}}">
+                    <h1>Hmm... Looks like something went wrong</h1>
+                    <p>We're having trouble connecting to {{service}}</p>
+                    <div class="layout horizontal center buttons">
+                        <button class="p4m-button inverse auto" on-click="tryAgain"><i class="p4micon-refresh"></i>Try again</button>
+                        <template is="dom-if" if="shared-mode">
+                            <span>Or,</span>
+                            <a on-click="basicCheckout">Use basic checkout</a>
+                        </template>
+                    </div>
+                    <div class="layout horizontal center buttons" style="margin-top:2.4em;">
+                        <span>Still having trouble?</span> <a on-click="logOut">Try logging into Parcel For Me again</a>
+                    </div>
+                </template>
             </div>
         </content> 
 
@@ -321,6 +334,7 @@
                     value: false
                 },
                 service: String,
+                loginBlocked: false,
                 basicCheckoutUrl: {
                     type: String,
                     value: "/"
@@ -351,7 +365,12 @@
                 window.location.href =  this.basicCheckoutUrl;
             },
 
-            signInAgain: function() {
+            requestLogin: function () {
+                var event = new CustomEvent('p4m-request-login');
+                window.dispatchEvent(event);
+            },
+
+            logOut: function() {
                 this.$.p4mToken.eraseCookie();
                 this.$.gfsCheckoutToken.eraseCookie();
                 var loginWidget = document.getElementsByTagName("p4m-login")[0];

@@ -1108,8 +1108,10 @@
 
             onPopupBlocked: function() {
                 // the consumer needs to login again but the browser blocked the login popup
-                if (!this.showingGeneralFault) 
-                    this.$.screenOverlay.show('You must login again to continue', true);
+                this.$.generalFault.loginBlocked = true;
+                this.showGeneralFault();
+                //if (!this.showingGeneralFault) 
+                //    this.$.screenOverlay.show('You must login again to continue', true);
             },
             
             toggleLoading: function (loading) {
