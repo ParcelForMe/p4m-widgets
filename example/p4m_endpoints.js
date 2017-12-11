@@ -77,57 +77,49 @@ exports.localLogin = function(req, res) {
 	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
 	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
 	cookies.set('p4mGivenName', 		'Hugo', cookieConf);
-	cookies.set('p4mDefaultPostCode', 	'4000', cookieConf);
-	cookies.set('p4mDefaultCountryCode', 'AU', cookieConf);
 	cookies.set('p4mOfferCartRestore', 	'true', cookieConf);
 	cookies.set('p4mLocalLogin', 		'true', cookieConf); 
 
-	res.status(200).json({ "RedirectUrl": null, "Success": true, "Error": null});
+	res.status(200).json({ "localId": "1234567", "redirectUrl": null, "success": true, "error": null});
 	res.end(); // needed for cookies to save !
 };
 
 
 exports.checkout = function(req, res) {
+	returnTemplateFile('checkout.html', null, null, res);
+}
+
+
+exports.renewShippingToken = function(req, res) {
 
 	var cookies = new Cookies( req, res );
+	var url = "https://identity.justshoutgfs.com/connect/token";
 
-	if (true)
-	//if ( (cookies.get('gfsCheckoutToken')==null) || (cookies.get('gfsCheckoutToken')=='') ) 
-	{
-	    
-		var url = "https://identity.justshoutgfs.com/connect/token";
-
-		var data = {
-			grant_type	: "client_credentials",
-			scope 		: "read checkout-api"
-		}
-
-		var options = {
-			url: url,
-			headers: {
-				"Authorization": "Basic " + Buffer.from("parcel_4_me:needmoreparcels").toString('base64'),
-				//"Authorization": "Basic " + Buffer.from("michael.strong@justshoutgfs.com:MScheckout!").toString('base64'),
-				"Content-Type": "application/x-www-form-urlencoded"
-			},
-			form : data
-		}
-
-		request.post(options, function(error, response, body) {
-			console.log(body);
-			var data = JSON.parse(body);
-			var now = new Date();
-			var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-			var base64Token = Buffer.from(data.access_token).toString('base64');
-			cookies.set('gfsCheckoutToken', base64Token, cookieConf);
-
-			returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
-			
-		});
-	} 
-	else {	
-		console.log('THIS NEVER HAPPENS CURRENTLY.. but if i stored the gfs-access-token somewhere then I could do this logic ..');
-		returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
+	var data = {
+		grant_type	: "client_credentials",
+		scope 		: "read checkout-api"
 	}
+
+	var options = {
+		url: url,
+		headers: {
+			"Authorization": "Basic " + Buffer.from("parcel_4_me:needmoreparcels").toString('base64'),
+			//"Authorization": "Basic " + Buffer.from("michael.strong@justshoutgfs.com:MScheckout!").toString('base64'),
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		form : data
+	}
+
+	request.post(options, function(error, response, body) {
+		console.log(body);
+		var data = JSON.parse(body);
+		var now = new Date();
+		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
+		cookies.set('gfsCheckoutToken', data.access_token, cookieConf);
+
+		res.status(200).json({ "token": data.access_token, "success": true, "error": null});
+		res.end(); // needed for cookies to save !		
+	});
 }
 
 
@@ -145,7 +137,8 @@ function returnTemplateFile(file, find, replace, res) {
 			res.status(500).send(err);
 		}
 		// IMPLEMENTING ONLY THE MOST BASIC FIND REPLACE, OF ONE SHORT CODE AND ONLY ONE OCCURANCE
-		file_contents = file_contents.toString('utf8').replace(find, replace);  
+		if (find)
+			file_contents = file_contents.toString('utf8').replace(find, replace);  
 
 		res.set('Content-Type', 'text/html');
 		res.status(200).send(file_contents);
