@@ -817,10 +817,9 @@
                 return hasDayDef;
             },
 
-            hasNearAddress: function (dp) {
+            hasNearAddress: function (qLat, qLng) {
                 // called when a DP is selected to show / hide calendar and standard tabs
                 var retAddr, minDist = this.droppointSettings.maxRadiusMeters / 1000;
-                const qLat = dp.geoLocation.coordinates.latitude, qLng = dp.geoLocation.coordinates.longitude;
                 var self = this;
                 this._favAddresses.forEach(function (addr) {
                     var dist = self.kmsBetweenPts(qLat, qLng, addr.lat, addr.lng);
@@ -1127,7 +1126,8 @@
                     prefs = defaultPrefs;
                 var dropPointId = null, delDate = null;
                 var serviceId;
-                if (prefs[0] !== 'useMyDeliveryAddress') {
+                var hasAddr = this.hasNearAddress(this.config.mapCenter.lat, this.config.mapCenter.lng);
+                if (prefs[0] !== 'useMyDeliveryAddress' || !hasAddr) {
                     // consumer wants to use a DP by preference - either their preferred or the closest
                     var dp;
                     if (prefs[0] === 'useMyDropPoints' && this._favDropPoints && this._favDropPoints.length > 0)
@@ -1954,7 +1954,7 @@
                 if (!callback) { callback = function () { }; }
                 var self = this;
                 var dp = this._droppointById(droppointId)
-                var hasAddr = this.hasNearAddress(dp);
+                var hasAddr = this.hasNearAddress(dp.geoLocation.coordinates.latitude, dp.geoLocation.coordinates.longitude);
                 this.enableCalendarDelivery(this.hasDayDefinite() && hasAddr);
                 this.enableStandardDelivery(hasAddr);
                 this.showPage_Droppoints();
