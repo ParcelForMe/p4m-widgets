@@ -512,10 +512,6 @@
                     type: String,
                     value: "GB"
                 },
-                //localCountries: {
-                //    type: Array,
-                //    value: []
-                //},
                 onSessionExpiry: {
                     type: String
                 },
@@ -607,87 +603,22 @@
                 // check if the consumer details have changed since last retrieved
                 var lastChanged = this.getConsumerLastChanged();
                 this.$.p4mCheckoutApi.call('consumerNeedsUpdating', { lastUpdated: lastChanged }, null, function (err, data) {
-                    if (!data.result) 
+                    if (!data.result)
                         async.parallel([
                             function _consumer(callback) { self._getConsumer(callback) },
                             function _cart(callback) { self.getCartFromRetailer(callback) }
                         ]);
-                    else
+                    else {
+                        self.$.p4mCartAddressCookie.eraseCookie();  // this will force the cart address to be reassigned
                         self._getConsumer(function (err, data) {
                             if (!err) {
                                 self.isNew = true;
                                 self.getCartFromRetailer();
                             }
                         });
+                    }
                 });
             },
-
-            //Set local countries -- this determins if Calendar and Click and Collect tabs are available
-            // ???
-            //this.localCountries.push(this.initialCountryCode);
-            //for (var i=0; i<this.localCountries.length; i++) {
-            //    this.localCountries[i] = this.localCountries[i].toLowerCase();
-            //}
-
-            consumerIsCurrent: function() {
-                async.parallel(
-                    [
-                        function _consumer(callback) {
-                            console.log('getting consumer');
-                            self._getConsumer(callback)
-                        },
-
-                        //Get local cart
-                        function _localCart(callback) {
-                            console.log('getting local cart');
-                            if (self.sessionId) {
-                                self.getLocalCart(function (err) {
-                                    if (err) {
-                                        callback(err)
-                                    }
-                                    else {
-                                        if (err) {
-                                            self.initialising = false;
-                                            console.error(err);
-                                            console.log('...Initialisation aborted.');
-                                            throw err;
-                                        }
-                                        //Send info from cart and consumer to GFS
-                                        console.log('_gfs()');
-                                        self._runGFS_IfReady(function (err) {
-                                            self.initialising = false;
-                                            if (err) {
-                                                console.error(err);
-                                                console.error("Cancelled initialisation.");
-                                            }
-                                            var checkout = self._getWidget('gfsCheckoutWidget');
-                                            self._getWidget('p4mPurchase').beforePurchase = checkout._closeReq.bind(checkout);
-                                            self.listen(self._getWidget('noShippingWarning'), 'tap', 'goToAddresses');
-                                            console.log('...Initialisation complete.');
-                                            self.firstLoadComplete = true;
-                                        })
-
-                                        //console.log('init: First updateP4mCart() start');
-                                        //self.updateP4mCart(function(err) {
-                                        //    console.log('init: First updateP4mCart() finished');
-                                        //    callback(err);
-                                        //});
-                                    }
-                                });
-                            }
-                            else {
-                                callback("No cart");
-                                //self.getP4mCart(callback);
-                            }
-                        }
-                    ]
-                )
-            },
-
-            //function _consumer(callback) {
-            //                console.log('getting consumer');
-            //self._getConsumer(callback)
-            //},
 
             //Get local cart
             getCartFromRetailer: function (callback) {
@@ -953,16 +884,20 @@
             updateCartDataFromCookie: function () {
                 var cartDetails = this.$.p4mCartCookie.readCookie();
                 // cart.Id + "|" + cart.AddressId + "|" + cart.DropPointId + "|" + cart.ServiceId + "|" + dateStr;
+                // if there is no cart address cookie then we can skip updating most details
+                var idOnly = this.$.p4mCartAddressCookie.readCookie() ? false : true;
                 var parts = cartDetails.split('|');
                 if (parts.length === 5) {
                     this.cartData.id = fldOrNull(parts[0]);
-                    this.cartData.addressId = fldOrNull(parts[1]);
-                    this.cartData.dropPointId = fldOrNull(parts[2]);
-                    this.cartData.serviceId = fldOrNull(parts[3]);
-                    this.cartData.expDeliveryDate = fldOrNull(parts[4]);
-                    var addr = this.getAddressFromString(this.$.p4mCartAddressCookie.readCookie());
-                    if (addr)
-                        this.addOrUpdAddress(addr);
+                    if (!idOnly) {
+                        this.cartData.addressId = fldOrNull(parts[1]);
+                        this.cartData.dropPointId = fldOrNull(parts[2]);
+                        this.cartData.serviceId = fldOrNull(parts[3]);
+                        this.cartData.expDeliveryDate = fldOrNull(parts[4]);
+                        var addr = this.getAddressFromString(this.$.p4mCartAddressCookie.readCookie());
+                        if (addr)
+                            this.addOrUpdAddress(addr);
+                    }
                 }
             },
 
@@ -1632,17 +1567,6 @@
 
             },
 
-            //_updateUiForAddress: function (address) {
-            //    if (address && address.countryCode) {
-            //        //var localDelivery = this.localCountries && this.localCountries.constructor == Array && this.localCountries.length && (this.localCountries.indexOf(address.countryCode.toLowerCase()) > -1);
-            //        var checkout = this._getWidget('gfsCheckoutWidget');
-            //        checkout.enableClickAndCollect(localDelivery);
-            //        checkout.enableCalendarDelivery(localDelivery);
-            //        if (!localDelivery) {
-            //            checkout.showPage_Standard(); //Show the standard tab, which is now the only available one.
-            //        }
-            //    }
-            //},
             /*
             preselectDeliveryMethod: function () {
                 //Select delivery details based on selected address and user's preferences
