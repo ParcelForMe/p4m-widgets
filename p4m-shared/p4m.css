@@ -3886,14 +3886,18 @@ Smartphone <375px
           align-content: flex-start; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container img#image {
             max-width: 60px; }
-        iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
-          padding: 10px 10px 0 10px; }
-          iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container:after {
-            bottom: -6px; }
+        iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card {
+          margin-bottom: 0;
+          border-bottom: 2px solid #f5f5f5; }
+          iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
+            padding: 10px 10px 0 10px;
+            padding: 0; }
+            iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container:after {
+              bottom: -6px;
+              display: none; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
-          font-size: 13px;
-          padding-top: 0;
-          padding-bottom: 0; }
+          font-size: 12px;
+          padding: 0 5px; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart #details #price {
             margin-bottom: 0; }
       iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
@@ -3903,16 +3907,20 @@ Smartphone <375px
           margin-bottom: 2px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address .toggle-button {
             font-size: 11px; }
-        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .p4m-address-label {
-          font-size: 12px; }
-        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .address-text {
-          font-size: 11px; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list {
+          margin: 0; }
+          iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .p4m-address-label {
+            font-size: 12px; }
+          iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .address-text {
+            font-size: 11px; }
       iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector {
         display: flex;
         flex: 1;
         align-self: stretch; }
         iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector #gfsCheckoutWidget {
           flex: 1; }
+        iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector .gfsStd {
+          margin: 1px 0; }
       iron-pages#mobilepages > iron-page#deliveryPage #widgetContainer {
         display: flex;
         flex-direction: column;
@@ -4075,7 +4083,14 @@ Smartphone <375px
               iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-card #container .card-panel {
                 min-height: 125px;
                 max-height: 125px;
-                margin-right: 0; } }
+                margin-right: 0; }
+          iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-new-card p.new-card-notice {
+            display: block; }
+            iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-new-card p.new-card-notice a {
+              display: inline; }
+            iron-pages#mobilepages > iron-page#cardPage #cardList > #container p4m-new-card p.new-card-notice img {
+              display: block;
+              margin: .5em auto 0 auto; } }
 
 /* END  @media only screen and (max-width: 750px) */
 /* ///////////////////////////////////////////////////////////////////////////
