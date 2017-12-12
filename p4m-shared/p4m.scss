@@ -2261,6 +2261,9 @@ p4m-checkout {
     //       margin-left: 5px;
     //     }
     // }
+    .save {
+      border-width: 0 !important;
+    }
 }
 
 paper-input paper-input-container .floated-label-placeholder {
@@ -4880,6 +4883,14 @@ Smartphone <375px
 
   p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
     font-size: 11px;
+  }
+
+  .paper-input {
+    .input-content.paper-input-container {
+      label {
+        font-size: 16px !important;
+      }
+    }
   }
 
   ul.separated li {

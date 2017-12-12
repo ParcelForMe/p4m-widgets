@@ -1822,6 +1822,8 @@ p4m-checkout .floating-labels {
           border-color: #fff !important;
           color: #fff !important;
           background-color: #37a553 !important; }
+  .p4m-button .save {
+    border-width: 0 !important; }
 
 paper-input paper-input-container .floated-label-placeholder {
   font-family: 'Lato', sans-serif !important;
@@ -3734,6 +3736,8 @@ Smartphone <375px
     height: 36px !important; }
   p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
     font-size: 11px; }
+  .paper-input .input-content.paper-input-container label {
+    font-size: 16px !important; }
   ul.separated li {
     padding: 0 10px; }
   .action-button {
