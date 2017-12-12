@@ -3386,6 +3386,8 @@ gfs-calendar .gfs-calendar {
     background: rgba(200, 200, 200, 0.02); }
   gfs-calendar .gfs-calendar .calendar-cell:nth-of-type(odd) {
     background: rgba(200, 200, 200, 0.3); }
+  gfs-calendar .gfs-calendar .calendar-col .makeFollowingSelected .calendar-cell {
+    background: #5ebb74 !important; }
   gfs-calendar .gfs-calendar .calendar-delivery-label {
     background: rgba(55, 165, 83, 0.04) !important; }
     gfs-calendar .gfs-calendar .calendar-delivery-label .calendar-cell:nth-of-type(odd) {
@@ -3435,7 +3437,7 @@ p4m-address p {
 
 p4m-address i {
   color: #c5c5c5;
-  margin-left: 6px; }
+  margin-left: 2px; }
   p4m-address i.p4micon-map-marker {
     margin-left: 0;
     margin-right: 6px;
@@ -3738,6 +3740,8 @@ Smartphone <375px
     font-size: 11px; }
   .paper-input .input-content.paper-input-container label {
     font-size: 16px !important; }
+  [data-tooltip]:hover:before, [data-tooltip]:hover:after {
+    visibility: hidden; }
   ul.separated li {
     padding: 0 10px; }
   .action-button {
@@ -3916,7 +3920,8 @@ Smartphone <375px
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .p4m-address-label {
             font-size: 12px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .address-text {
-            font-size: 11px; }
+            font-size: 11px;
+            line-height: 1em; }
       iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector {
         display: flex;
         flex: 1;

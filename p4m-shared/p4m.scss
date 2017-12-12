@@ -4397,6 +4397,9 @@ gfs-calendar {
 				background: rgba(200,200,200,0.3);
 			}
 		}
+    .calendar-col .makeFollowingSelected .calendar-cell {
+      background: #5ebb74 !important;
+    }
     // The Time Column
     .calendar-delivery-label {
       background: rgba(55, 165, 83, 0.04) !important;
@@ -4469,7 +4472,7 @@ p4m-address {
     }
     i {
     	color: $grey-h2;
-    	margin-left: 6px;
+    	margin-left: 2px;
     	&.p4micon-map-marker {
     		margin-left: 0;
     		margin-right: 6px;
@@ -4893,6 +4896,10 @@ Smartphone <375px
     }
   }
 
+  [data-tooltip]:hover:before, [data-tooltip]:hover:after {
+    visibility: hidden;
+  }
+
   ul.separated li {
     padding: 0 10px;
   }
@@ -5121,6 +5128,7 @@ Smartphone <375px
               }
               .address-text {
                 font-size: 11px;
+                line-height: 1em;
               }
             }
         }
