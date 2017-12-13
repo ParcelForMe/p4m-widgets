@@ -3262,6 +3262,7 @@ p4m-checkout {
       p4m-checkout .select-payment-type paper-tab[aria-selected="true"] {
         border-color: #37a553; }
   p4m-checkout p4m-cart > #container {
+    padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
     xheight: 260px;
@@ -3269,23 +3270,26 @@ p4m-checkout {
     box-sizing: border-box;
     background-color: #fff !important;
     box-shadow: none !important; }
-  p4m-checkout p4m-cart p4m-cart-card #container {
-    padding: 10px;
-    box-sizing: border-box;
-    position: relative;
-    background-color: #fff !important; }
-    p4m-checkout p4m-cart p4m-cart-card #container:after {
-      content: '';
-      width: calc(100% - 1rem);
-      height: 2px;
-      background: #f5f5f5;
-      display: flex;
-      position: absolute;
-      bottom: 0; }
-    p4m-checkout p4m-cart p4m-cart-card #container #quantity input {
-      width: 40px;
-      min-width: 40px;
-      text-align: right; }
+  p4m-checkout p4m-cart p4m-cart-card {
+    display: block;
+    background: #f8f8f8;
+    margin: 0 0 3px 0; }
+    p4m-checkout p4m-cart p4m-cart-card #container {
+      box-sizing: border-box;
+      position: relative;
+      background-color: #fff !important;
+      padding: 0 10px 0 0; }
+      p4m-checkout p4m-cart p4m-cart-card #container:after {
+        width: calc(100% - 1rem);
+        height: 2px;
+        background: #f5f5f5;
+        display: flex;
+        position: absolute;
+        bottom: 0; }
+      p4m-checkout p4m-cart p4m-cart-card #container #quantity input {
+        width: 40px;
+        min-width: 40px;
+        text-align: right; }
   p4m-checkout p4m-cart img#image {
     max-width: 64px; }
   p4m-checkout p4m-cart #details {
@@ -3305,7 +3309,7 @@ p4m-checkout {
 .gfs-checkout .gfsStd {
   box-sizing: border-box;
   padding: 0 15px;
-  margin-bottom: 5px; }
+  margin-bottom: 3px; }
   .gfs-checkout .gfsStd p {
     font-weight: 600;
     margin: 3px 0; }
@@ -3416,7 +3420,7 @@ p4m-address #container {
   box-sizing: border-box; }
   p4m-address #container ul {
     padding: 0;
-    margin: 0 10px 0 10px; }
+    margin: 0 10px 3px 10px; }
 
 p4m-address .side-action {
   float: right; }
@@ -3895,14 +3899,11 @@ Smartphone <375px
           iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container img#image {
             max-width: 60px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card {
-          margin-bottom: 0;
-          border-bottom: 2px solid #f5f5f5; }
+          background: #f8f8f8;
+          margin: 1px 0; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
             padding: 10px 10px 0 10px;
             padding: 0; }
-            iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container:after {
-              bottom: -6px;
-              display: none; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart #details {
           font-size: 12px;
           padding: 0 5px; }

@@ -153,7 +153,7 @@
                                     <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsCheckoutToken}}" on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}"></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
-                                    Please <a class="link" href="#">enter an address</a> to continue.
+                                    <p>Please <a class="link green" href="#">enter an address</a> to continue.</p>
                                 </div>
 
                                 <template is="dom-if" if="{{useGfsCheckout}}">
@@ -202,7 +202,7 @@
                                     <gfs-checkout id="gfsCheckoutWidget" mobile="true" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsCheckoutToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
-                                    Please <a class="link" href="#">enter an address</a> to continue.
+                                    <p>Please <a class="link" href="#">enter an address</a> to continue</p>
                                 </div>
 
                                 <template is="dom-if" if="{{useGfsCheckout}}">
@@ -439,6 +439,15 @@
             .page#cardPage {
                 border: 1px solid green;
             }*/
+
+            #noShippingWarning {
+                display: flex;
+                height: 100%;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+            }
 
 
         </style>

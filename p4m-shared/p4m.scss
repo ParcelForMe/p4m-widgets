@@ -4218,6 +4218,7 @@ p4m-checkout {
     
 	p4m-cart {
 		> #container {
+        padding: 10px; // Now standardising the display of listed items no matter what context
         overflow-y: auto;
         overflow-x: hidden;
         xheight: 260px;
@@ -4227,13 +4228,16 @@ p4m-checkout {
         box-shadow: none !important;  // HACK FIX easytees container class conflict
 		}
 		p4m-cart-card {
+      display: block;
+      background: #f8f8f8;
+      margin: 0 0 3px 0;
 			#container {
-				padding: 10px;
 				box-sizing: border-box;
 				position: relative;
         background-color: #fff !important;  // HACK FIX easytees container class conflict
+        padding: 0 10px 0 0;
 				&:after {
-					content: '';
+					// content: '';
 					width: calc(100% - 1rem);
 					height: 2px;
 					background: $grey-h8;
@@ -4241,13 +4245,13 @@ p4m-checkout {
 					position: absolute;
 					bottom: 0;
 				}
-                #quantity {
-                    input {
-                        width: 40px;
-                        min-width: 40px;
-                        text-align: right;
-                    }
-                }
+        #quantity {
+            input {
+                width: 40px;
+                min-width: 40px;
+                text-align: right;
+            }
+        }
 			}
 		}
 		img#image  {
@@ -4281,7 +4285,7 @@ p4m-checkout {
 	.gfsStd {
 		box-sizing: border-box;
 		padding: 0 15px;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
 		p {
 			font-weight: 600;
 			margin: 3px 0;
@@ -4448,7 +4452,7 @@ p4m-address {
         box-sizing: border-box;
         ul {
             padding: 0;
-            margin: 0 10px 0 10px;
+            margin: 0 10px 3px 10px;
         }
     }
     .side-action {
@@ -5090,15 +5094,17 @@ Smartphone <375px
             }
           }
           p4m-cart-card {
-            margin-bottom: 0;
-            border-bottom: 2px solid #f5f5f5;
+            // margin-bottom: 0;
+            // border-bottom: 2px solid #f5f5f5;
+            background: #f8f8f8;
+            margin: 1px 0;
             #container {
               padding: 10px 10px 0 10px;
               padding: 0;
-              &:after {
-                bottom: -6px;
-                display: none;
-              }
+              // &:after {
+              //   bottom: -6px;
+              //   display: none;
+              // }
             }
           }
           #details {
