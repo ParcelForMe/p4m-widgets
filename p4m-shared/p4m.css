@@ -3744,6 +3744,8 @@ Smartphone <375px
     font-size: 11px; }
   .paper-input .input-content.paper-input-container label {
     font-size: 16px !important; }
+  .toggle-button {
+    margin-left: 3px; }
   [data-tooltip]:hover:before, [data-tooltip]:hover:after {
     visibility: hidden; }
   ul.separated li {
@@ -3753,7 +3755,7 @@ Smartphone <375px
     align-self: stretch;
     padding: 0; }
   button.inverse {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #fff;
     background-color: #5eba75;
@@ -3771,7 +3773,7 @@ Smartphone <375px
       position: absolute;
       left: 10px; }
   button.secondary {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #6d6d6d;
     background-color: #eeeeee;
@@ -3890,7 +3892,7 @@ Smartphone <375px
         display: flex;
         width: 100%; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container {
-          padding: 0;
+          padding: 5px;
           display: flex;
           flex-wrap: wrap;
           justify-content: flex-start;
@@ -3900,7 +3902,7 @@ Smartphone <375px
             max-width: 60px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card {
           background: #f8f8f8;
-          margin: 1px 0; }
+          margin: 0 0 3px 0; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
             padding: 10px 10px 0 10px;
             padding: 0; }
@@ -3913,9 +3915,13 @@ Smartphone <375px
         flex: 1;
         width: 100%; }
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address {
-          margin-bottom: 2px; }
+          margin-bottom: 3px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address .toggle-button {
             font-size: 11px; }
+          iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address i.p4micon-map-marker {
+            margin-left: -4px; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list #addressSelectionPages {
+          padding: 0 5px 5px 5px; }
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list {
           margin: 0; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .p4m-address-label {
@@ -3923,6 +3929,9 @@ Smartphone <375px
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list .address-list .address-text {
             font-size: 11px;
             line-height: 1em; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list .toggle-button.chosen i {
+          color: #fff;
+          width: 20px; }
       iron-pages#mobilepages > iron-page#deliveryPage #shippingSelector {
         display: flex;
         flex: 1;
@@ -4072,7 +4081,8 @@ Smartphone <375px
       iron-pages#mobilepages > iron-page#deliveryPage #pageStandard ul {
         display: flex;
         flex-direction: column;
-        flex: 1; }
+        flex: 1;
+        padding: 5px; }
       iron-pages#mobilepages > iron-page#cardPage #cardList {
         display: flex;
         flex: 1;
