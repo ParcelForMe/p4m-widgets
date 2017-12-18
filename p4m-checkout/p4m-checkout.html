@@ -144,13 +144,13 @@
                             <iron-page id="cartPage">
                                 <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>
                             </iron-page>
-                            <iron-page id="addressPage">
+                            <iron-page id="addressPage" style="overflow-x: hidden;">
                                 <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
                             </iron-page>
                             <iron-page id="deliveryPage">
                                 <div id="shippingSelector" class="hidden">
 
-                                    <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsCheckoutToken}}" on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}"></gfs-checkout>
+                                    <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsCheckoutToken}}" on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}"></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
                                     <p>Please <a class="link green" href="#">enter an address</a> to continue.</p>
@@ -167,7 +167,7 @@
                     </div>
                     <div id="summaryPanel" class="p4m-panel smallSummary flex-1">
                         <p4m-order-summary id="orderSummary" cart-data="{{cartData}}"></p4m-order-summary>
-                        <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
+                        <p4m-purchase id="p4mPurchase" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" ></p4m-purchase>
                     </div>
                 </div>
                 <p4m-footer consumer-data="{{consumerData}}" cart-data="{{cartData}}" change-indicator-class="{{_changeIndicatorClass}}"></p4m-footer>
@@ -199,7 +199,7 @@
                                 <p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner>
                                 <div id="shippingSelector" class="hidden">
 
-                                    <gfs-checkout id="gfsCheckoutWidget" mobile="true" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsCheckoutToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                                    <gfs-checkout id="gfsCheckoutWidget" mobile="true" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsCheckoutToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
                                     <p>Please <a class="link" href="#">enter an address</a> to continue</p>
@@ -606,6 +606,7 @@
                 window.addEventListener('discount', this.onDiscount.bind(this));
                 window.addEventListener('discountdelete', this.onDiscountDelete.bind(this));
                 window.addEventListener('popup-blocked', this.onPopupBlocked.bind(this));
+                window.addEventListener('cvv-enter-key', this.clickBuyNow.bind(this));
 
                 self.sessionAddressId = hashThis(this.sessionId);   // default P4M Id for a DP
 
@@ -752,7 +753,7 @@
             //Send all cart information to shipping plugin
             _gfsCurrentAddrId: null,
             gfsPostConfig: {},
-            _updateGfs: function (selectAddr, callback) {
+            _updateGfs: function (selectAddr, callback, showingOverlay) {
                 if (!callback) {
                     callback = function(){};
                 }
@@ -781,7 +782,8 @@
                         deliveryDate: self.cartData.expDeliveryDate ? new Date(self.cartData.expDeliveryDate) : null
                     }
                 }
-                this.toggleLoading(true);
+                if (!showingOverlay)
+                    this.toggleLoading(true);
                 this._getWidget('gfsCheckoutWidget').init(this.gfsPostConfig, selection, function (err) {
                     //self.updateCartCookie();
                     self.toggleLoading(false);
@@ -919,7 +921,14 @@
                     this.setConsumerDefaultsFromCookie();
                 if (!this.consumerData || !this.consumerData.addresses || this.consumerData.addresses.length === 0)
                     return;
+
                 var prefAddr = this.getAddressById(this.consumerData.prefDeliveryAddressId);
+                if (prefAddr)
+                    prefAddr.prefDelivery = true;
+                var prefBillAddr = this.getAddressById(this.consumerData.billingAddressId);
+                if (prefBillAddr)
+                    prefBillAddr.prefBilling = true;
+
                 if (!cartAddr && this.cartData && this.cartData.addressId)
                     cartAddr = this.getCartAddr();
                 if (skipNearest || !cartAddr || !cartAddr.dropPointId || cartAddr.dropPointId === '')
@@ -1064,7 +1073,7 @@
                 //    this.$.screenOverlay.show('You must login again to continue', true);
             },
             
-            toggleLoading: function (loading) {
+            toggleLoading: function (loading, newMessage) {
                 var showAsLoading;
                 if (loading === 'reset' || this.showingGeneralFault) {
                     this._loadingStack = 0;
@@ -1078,7 +1087,7 @@
                 showAsLoading = (this._loadingStack > 0);
 
                 if (showAsLoading) {
-                    var message = !this.firstLoadComplete ? "Getting things ready" : "Updating your cart";
+                    var message = newMessage ? newMessage : (!this.firstLoadComplete ? "Getting things ready" : "Updating your cart");
                     this.$.screenOverlay.show(message);
                     this._getWidget('orderSummary').showAsLoading();
                     this._showAsLoadingShipping(this.cartData && this.cartData.total > 0);
@@ -1479,7 +1488,8 @@
                         self.cartData.expDeliveryDate = null;
                         self._gfsCurrentAddrId = addressId;
                         this._updateGfs(true, function (err) {
-                            self._getWidget('gfsCheckoutWidget').selectFavAddress(address);
+                            if (!err)
+                                self._getWidget('gfsCheckoutWidget').selectFavAddress(address);
                             callback(err, address);
                         });
                     }
@@ -1649,7 +1659,11 @@
                 }
                 console.log("p4m widget: onGfsServiceChanged():", e);
                 this.triggerChangeIndicator();
-                this.updateShippingService(e.detail, function () { console.log("onGfsServiceChanged: updateShippingService complete")});
+                var self = this;
+                this.updateShippingService(e.detail, function () {
+                    self.notifyPath('consumerData.addresses');
+                    console.log("onGfsServiceChanged: updateShippingService complete");
+                });
             },
 
             triggerChangeIndicator: function() {
@@ -1660,9 +1674,9 @@
 
             },
 
-            onGfsServicePreselect: function (e) {
-                this.updateShippingService(e.detail, function () { console.log("onGfsServicePreselect: updateShippingService complete") });
-            },
+            //onGfsServicePreselect: function (e) {
+            //    this.updateShippingService(e.detail, function () { console.log("onGfsServicePreselect: updateShippingService complete") });
+            //},
 
             onGfsNoService: function (e) {
                 // this.preselectDeliveryMethod();
@@ -1670,15 +1684,23 @@
                 this.showGeneralFault("our shipping service");
             },
 
+            onNoDeliveryOpts: function (e) {
+                // no delivery options are available for the selected address so revert to last
+                console.warn('No delivery options for this address');
+                var self = this;
+                this.updateCartDataFromCookie();
+                this.notifyPath('cartData.addressId');
+                this.toggleLoading(true, 'No delivery options for this address');
+                this._updateGfs(false, function () { self.toggleLoading('reset'); }, true);
+            },
+
             onP4mNoService: function (e) {
                 console.error('No P4M service');
-
                 this.showGeneralFault("Parcel for Me");
             },
 
             onRetailerNoService: function (e) {
                 console.error('No retailer service');
-
                 this.showGeneralFault("our server");
             },
 
@@ -1764,6 +1786,12 @@
                 this.showingGeneralFault = false;
                 this.$.generalFault.close();
             },
+
+            clickBuyNow: function () {
+                // user pressed enter key in the CVV field
+                var btn = document.getElementById('p4mPurchaseBtn');
+                btn.onClick();
+            }
         });
         
         function fldStr (field, last) {
