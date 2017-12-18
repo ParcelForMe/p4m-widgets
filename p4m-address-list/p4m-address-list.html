@@ -16,7 +16,7 @@
                 </div>
                 <iron-pages id="addressSelectionPages" selected="0"> 
                     <iron-page>
-                        <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOrEdit">
+                        <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOrEdit" sort="sortAddresses">
                         
                             <p4m-address show-cancel="true" address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" xmode="view" on-begin-edit="beginEdit" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
                         </template>
@@ -111,6 +111,19 @@
                 
             },
 
+            sortAddresses: function (a, b) {
+                if (this.cartData) {
+                    if (a.id === this.cartData.addressId)
+                        return -1;
+                    else if (b.id === this.cartData.addressId)
+                        return 1;
+                    else if (a.id === this.cartData.billingAddressId)
+                        return -1;
+                    else if (b.id === this.cartData.billingAddressId)
+                        return 1;
+                }
+                return a.label < b.label ? -1 : 1;
+            },
 
             toggleAddressMode: function () {
 
@@ -204,7 +217,7 @@
                 //if (this.editAddressId)
                 //    return (e.addressType == "Address" && e.id == this.editAddressId);
                 //else
-                    return (e && typeof (e.label) === "string" && e.addressType == "Address");
+                    return (e && typeof (e.label) === "string" && (e.addressType == "Address" || (this.cartData && e.id === this.cartData.addressId)));
             },
 
             showAsLoaded: function () {
