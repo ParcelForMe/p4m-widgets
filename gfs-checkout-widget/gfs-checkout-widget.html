@@ -987,7 +987,7 @@
                         if (err) {
                             self.initialised = false;
                             console.error("postGfsData() returned: ", err);
-                            finalCallback(err);
+                            self.fire('noservice');
                             return;
                         }
                         self.initialised = true;
@@ -995,7 +995,13 @@
                             selection = self.getDefaultDelivery();
                         else if (!selection.deliveryMethodId && !selection.deliveryDate)
                             self.autoSelectDeliveryMethod(selection);
-                        if (selection.dropPointId) {
+                        if (!selection.address && !selection.dropPointId) {
+                            self.enableCalendarDelivery(false);
+                            self.enableStandardDelivery(false);
+                            self.fire('no-delivery-opts', selection);
+                            return;
+                        }
+                        else if (selection.dropPointId) {
                             // try to select the drop point
                             self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                         }
@@ -1015,7 +1021,7 @@
                             if (res)
                                 finalCallback();
                             else
-                                finalCallback("Could not select a delivery method");
+                                self.fire('no-delivery-opts', selection);
                         }
                     });
                 }
@@ -1034,19 +1040,25 @@
                     if (err) {
                         self.initialised = false;
                         console.error("postGfsData() returned: ", err);
-                        finalCallback(err);
+                        self.fire('noservice');
                         return;
                     }
                     self.initialised = true;
                     var selection = self.getDefaultDelivery(true);
-                    if (selection.dropPointId) {
+                    if (!selection.address && !selection.dropPointId) {
+                        self.enableCalendarDelivery(false);
+                        self.enableStandardDelivery(false);
+                        self.fire('no-delivery-opts');
+                        return;
+                    }
+                    else if (selection.dropPointId) {
                         // try to select the drop point - need to force refresh of map
                         self._showingDroppoints = false;
                         self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                     }
                     else {
                         self.enableCalendarDelivery(self.hasDayDefinite());
-                        self.enableStandardDelivery(true);
+                        self.enableStandardDelivery(selection.address);
                         // try to select the physical address delivery method (e.g. std, international, day def, etc)
                         var res = self.setDeliveryMethod(selection.deliveryMethodId, selection.deliveryDate);
                         if (!res) {
@@ -1058,7 +1070,7 @@
                         if (res)
                             finalCallback();
                         else
-                            finalCallback("Could not select a delivery method");
+                            self.fire('no-delivery-opts');
                     }
                 });
             },
@@ -1142,7 +1154,15 @@
                 var dropPointId = null, delDate = null;
                 var serviceId;
                 var hasAddr = this.hasNearAddress(this.config.mapCenter.lat, this.config.mapCenter.lng);
-                if (prefs[0] !== 'useMyDeliveryAddress' || !hasAddr) {
+                // it's possible that we don't have an address or any DPs
+                if (!hasAddr && (!this._dropPoints || this._dropPoints.length === 0)) {
+                    return {
+                        deliveryMethodId: null,
+                        deliveryDate: null,
+                        address: null
+                    }
+                }
+                else if (prefs[0] !== 'useMyDeliveryAddress' || !hasAddr) {
                     // consumer wants to use a DP by preference - either their preferred or the closest
                     var dp;
                     if (prefs[0] === 'useMyDropPoints' && this._favDropPoints && this._favDropPoints.length > 0)
@@ -1859,7 +1879,6 @@
 
             _showDropPointsView: function () {
                 var self = this;
-                //this.fire('show-droppoints');
                 if (this._showingDroppointsMap) {
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map, function() {
@@ -2452,30 +2471,48 @@
 			    this.gotoGoogleAddress(e.detail);
 			},
 
-            gotoGoogleAddress: function(details) {
-			    var googleAddressComponents = details.address_components; 
-			    var googleAddress = googleAddressComponents.reduce(function(accumulator, item){
-			        item.types.forEach(function(itemType) {
-			            if (itemType == 'country') {
-			                accumulator.country = item.short_name;
-			            }
-			            else {
-			                accumulator[itemType] = item.long_name;
-			            }
-			        });
-			        return accumulator;
-			    }, {});
-			    var addr = {
-			        addressLineCollection: [(((googleAddress.premise ? (googleAddress.premise + " ") : "") + (googleAddress.street_number ? (googleAddress.street_number + " ") : "") + (googleAddress.route || googleAddress.locality || "")) || ""),
+			gotoGoogleAddress: function (details) {
+			    var addr = this.getAddrFromGoogleAddr(details);
+                // if there is no post code then GFS Checkout won't find anything
+			    if (!addr.postCode) {
+			        if (addr.lat && addr.lng) {
+			            var self = this;
+			            addr = this._geoCodePosition({ lat: addr.lat, lng: addr.lng }, function (err, result) {
+			                addr = self.getAddrFromGoogleAddr(result);
+			                self.requestDropPointsByAddress(addr);
+			            });
+			        }
+			        else
+			            alert('Please enter a full address');
+                }
+                else
+                    this.requestDropPointsByAddress(addr);
+            },
+
+            getAddrFromGoogleAddr: function (details) {
+                var googleAddressComponents = details.address_components;
+                var googleAddress = googleAddressComponents.reduce(function (accumulator, item) {
+                    item.types.forEach(function (itemType) {
+                        if (itemType == 'country') {
+                            accumulator.country = item.short_name;
+                        }
+                        else {
+                            accumulator[itemType] = item.long_name;
+                        }
+                    });
+                    return accumulator;
+                }, {});
+                var addr = {
+                    addressLineCollection: [(((googleAddress.premise ? (googleAddress.premise + " ") : "") + (googleAddress.street_number ? (googleAddress.street_number + " ") : "") + (googleAddress.route || googleAddress.locality || "")) || ""),
                  			                 (googleAddress.neighbourhood || googleAddress.sublocality_level_2 || "")],
-			        town: googleAddress.locality || googleAddress.postal_town || "",
-			        postCode: googleAddress.postal_code || "",
-			        countryCode: { code: googleAddress.country },
+                    town: googleAddress.locality || googleAddress.postal_town || "",
+                    postCode: googleAddress.postal_code || "",
+                    countryCode: { code: googleAddress.country },
                     lat: details.geometry.location.lat(),
                     lng: details.geometry.location.lng(),
-			    };
-			    this.requestDropPointsByAddress(addr);
-			},
+                };
+                return addr;
+            },
 
             addressLookupLocation: null,
 			_panToPlaceOnClick: function (e) {
