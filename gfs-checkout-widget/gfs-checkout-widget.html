@@ -42,7 +42,12 @@
                         <gfs-calendar id="calendar" class="flex" on-select-shipping-option="_selectCalendarShippingOption" day-definite-data="{{_data.dayDefinite}}"></gfs-calendar>
                     </div>
                     <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Save changes' button  -->
-                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div></template>
+                    <template is="dom-if" if="{{mobile}}">
+                        <div class="action-button">
+                            <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                        </div>
+                        <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
+                    </template>
                     <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
                 <iron-page id="pageDroppoints">
@@ -156,7 +161,12 @@
 
                     </div>
                     <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Save changes' button  -->
-                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div></template>
+                    <template is="dom-if" if="{{mobile}}">
+                        <div class="action-button">
+                            <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                        </div>
+                        <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
+                    </template>
                     <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
 
@@ -179,7 +189,12 @@
                         </template>
                     </ul>
                     <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
-                    <template is="dom-if" if="{{mobile}}"><div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div></template>
+                    <template is="dom-if" if="{{mobile}}">
+                        <div class="action-button">
+                            <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                        </div>
+                        <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
+                    </template>
                     <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
             </iron-pages>

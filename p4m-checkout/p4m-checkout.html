@@ -186,13 +186,19 @@
                             <iron-page id="cartPage" class="page one">     
                                 <p4m-spinner species="progress" id="myorder_spinner"></p4m-spinner>
                                 <p4m-cart id="cart" cart-data="{{cartData}}"></p4m-cart>
-                                <div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div>
+                                <div class="action-button">
+                                    <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                                </div>
+                                <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
                             </iron-page>
 
                             <iron-page id="addressPage" class="page two">
                                 <p4m-spinner species="progress" id="addresses_spinner"></p4m-spinner>
                                 <p4m-address-list id="addressList" address-list-data="{{consumerData.addresses}}" cart-data="{{cartData}}" on-select="onSelectAddressFromList" on-add="onAddAddress" on-update="onUpdateAddress"></p4m-address-list>
-                                <div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div>
+                                <div class="action-button">
+                                    <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                                </div>
+                                <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
                             </iron-page>
 
                             <iron-page id="deliveryPage" class="page three">
@@ -212,7 +218,10 @@
                             <iron-page id="cardPage" class="page four">
                                 <p4m-spinner species="progress" id="payment_spinner"></p4m-spinner>
                                 <p4m-card-list id="cardList" consumer-data="{{consumerData}}" cart-data="{{cartData}}" platform="{{hostType}}" on-selected="onSelectPaymentMethod" on-gotnewcard="onGotNewCard"></p4m-card-list>
-                                <div class="action-button"><button class="secondary" onclick=""><i class="p4micon-chevron-left style-scope gfs-calendar"></i>Back to site</button><button class="inverse" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Finish editing</button></div>
+                                <div class="action-button">
+                                    <button class="grey" onclick="select(0);"><i class="p4micon-delete style-scope gfs-calendar gfs-checkout"></i>Cancel</button>
+                                </div>
+                                <div class="notification success shadow hidden">Changes saved<i class="p4micon-check style-scope gfs-calendar gfs-checkout"></i></div>
                             </iron-page>
                         </iron-pages>
                     </div>  
