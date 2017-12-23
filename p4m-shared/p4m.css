@@ -1926,6 +1926,11 @@ paper-input paper-input-container .floated-label-placeholder {
   color: #fff; }
   .toggle-button.chosen i {
     color: #fff; }
+  .toggle-button.chosen#defBilling, .toggle-button.chosen#defDelivery {
+    display: none; }
+
+.edit {
+  margin-left: 3px; }
 
 .toggle-button.chosen iron-icon {
   color: white; }

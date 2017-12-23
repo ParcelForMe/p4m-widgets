@@ -2381,6 +2381,12 @@ paper-input paper-input-container .floated-label-placeholder {
     i {
         color: $white;
     }
+    &#defBilling, &#defDelivery {
+      display: none;
+    }
+}
+.edit {
+  margin-left: 3px;
 }
 
 .toggle-button.chosen iron-icon {
