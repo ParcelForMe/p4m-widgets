@@ -4274,15 +4274,17 @@ SmallerThanDesktop <320px
   p4m-card > div#container .card-panel .card-body .card-content {
     flex-direction: row;
     flex-wrap: wrap; }
-    p4m-card > div#container .card-panel .card-body .card-content .inputs [data-tooltip].tooltip-right:before {
+    p4m-card > div#container .card-panel .card-body .card-content .inputs[data-tooltip].tooltip-right:before {
       transform: translateX(-100%) translateY(0);
       margin-bottom: 0 !important;
       bottom: 0;
       left: initial;
+      right: initial;
       left: -1px; }
-    p4m-card > div#container .card-panel .card-body .card-content .inputs [data-tooltip].tooltip-right:hover:before {
-      left: -4px; }
-    p4m-card > div#container .card-panel .card-body .card-content .inputs [data-tooltip].tooltip-right:after {
+    p4m-card > div#container .card-panel .card-body .card-content .inputs[data-tooltip].tooltip-right:hover:before {
+      left: -4px;
+      top: 4px !important; }
+    p4m-card > div#container .card-panel .card-body .card-content .inputs[data-tooltip].tooltip-right:after {
       transform: initial;
       border-top: 4px solid transparent;
       border-bottom: 4px solid transparent;
@@ -4296,10 +4298,10 @@ SmallerThanDesktop <320px
       margin-left: initial;
       margin-right: initial;
       margin-top: -2px; }
-    p4m-card > div#container .card-panel .card-body .card-content .inputs [data-tooltip].tooltip-right:hover:after {
+    p4m-card > div#container .card-panel .card-body .card-content .inputs[data-tooltip].tooltip-right:hover:after {
       left: -4px;
       margin-bottom: initial !important; }
-    p4m-card > div#container .card-panel .card-body .card-content .inputs [data-tooltip].instruction.tooltip-left:after {
+    p4m-card > div#container .card-panel .card-body .card-content .inputs[data-tooltip].instruction.tooltip-right:after {
       border-top: 4px solid transparent;
       border-bottom: 4px solid transparent;
       border-left-color: #37a553;

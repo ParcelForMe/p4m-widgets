@@ -5591,17 +5591,20 @@ SmallerThanDesktop <320px
     flex-direction: row;
     flex-wrap: wrap;
     .inputs {
-      [data-tooltip] {
+      &[data-tooltip] {
         &.tooltip-right {
           &:before {
             transform: translateX(-100%) translateY(0);
             margin-bottom: 0 !important;
             bottom: 0;
             left: initial;
+            right: initial;
             left: -1px;
+
           }
           &:hover:before {
             left: -4px;
+            top: 4px !important;
           }
           &:after {
             // transform: rotate(90deg) translateX(0%);
@@ -5618,19 +5621,22 @@ SmallerThanDesktop <320px
             margin-left: initial;
             margin-right: initial;
             margin-top: -2px;
+
           }
           &:hover:after {
             left: -4px;
             margin-bottom: initial !important;
+
           }
         }
         &.instruction {
-          &.tooltip-left {
+          &.tooltip-right {
             &:after {
               border-top: 4px solid transparent;
               border-bottom: 4px solid transparent;
               border-left-color: #37a553;
               border-right: none;
+
             }
           }
         }
