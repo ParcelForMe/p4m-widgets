@@ -50,17 +50,17 @@
                     </template>
                     <!-- RESP --><!-- / SmallerThanDesktop -->
                 </iron-page>
-                <iron-page id="pageDroppoints">
+                <iron-page id="pageDroppoints" class="mapView">
                     <div id="availableDropPoints">
                         <div id="mapTools" class="pageContent">
                             
                             <div class="toggleDropPointsViewControls">
                                 <!-- !Michael - we need _toggleDroppointView to add/remove .listView to iron-page#pageDroppoints and also add a class of .selected to the a tags below -->
-                                <a id="viewAsMap" on-tap="_toggleDroppointView" class="selected">
+                                <a id="viewAsMap" on-tap="_toggleDroppointView">
                                     <i class="p4micon p4micon-map-with-marker"></i>
                                 </a>
 
-                                <a id="viewAsList" on-tap="_toggleDroppointView">
+                                <a id="viewAsList" on-tap="_toggleDroppointView" class="selected">
                                     <i class="p4micon p4micon-list"></i>
                                 </a>
                             </div>  
@@ -636,6 +636,26 @@
                     this._topDPPinned = false;
                     if (dpCard.expanded)
                         dpCard.toggleExpanded();
+                }
+            },
+
+            _toggleDroppointView: function () {
+                // we need _toggleDroppointView to add/remove .listView .mapView to iron-page#pageDroppoints and also add a class of .selected to the a tags below -->
+                var page = this.$$('#pageDroppoints');
+                var mapBtn = this.$$('#viewAsList');
+                var listBtn = this.$$('#viewAsMap');
+                var mapView = page.classList.contains('mapView')
+                if (mapView) {
+                    page.classList.remove('mapView');
+                    page.classList.add('listView');
+                    mapBtn.classList.remove('selected');
+                    listBtn.classList.add('selected');
+                }
+                else {
+                    page.classList.add('mapView');
+                    page.classList.remove('listView');
+                    mapBtn.classList.add('selected');
+                    listBtn.classList.remove('selected');
                 }
             },
 
