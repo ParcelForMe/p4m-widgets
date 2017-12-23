@@ -2858,7 +2858,7 @@ p4m-checkout {
   p4m-checkout #droppoint-delivery-options {
     clear: both; }
   p4m-checkout .toggleDropPointsViewControls {
-    display: flex;
+    display: none;
     flex-direction: row; }
   p4m-checkout #mapTools, p4m-checkout #listTools {
     display: flex;
@@ -3780,7 +3780,9 @@ SmallerThanDesktop <768px
       font-size: 3vw;
       display: flex; }
   p4m-checkout .topPanel .select-payment-type paper-tab {
-    max-height: 36px; } }
+    max-height: 36px; }
+  .toggleDropPointsViewControls {
+    display: flex !important; } }
 
 /* ///////////////////////////////////////////////////////////////////////////
 Smartphone <375px

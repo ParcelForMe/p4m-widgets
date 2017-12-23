@@ -3640,7 +3640,7 @@ p4m-checkout {
         clear: both;
     }
     .toggleDropPointsViewControls {
-      display: flex;
+      display: none;
       flex-direction: row;
     }
     #mapTools, #listTools {
@@ -4911,6 +4911,10 @@ SmallerThanDesktop <768px
         max-height: 36px;
     }
   }
+
+  .toggleDropPointsViewControls {
+      display: flex !important;
+    }
 
 }
 
