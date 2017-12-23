@@ -426,7 +426,7 @@ button.inverse:hover, .button.inverse:hover, .p4m-button.inverse:hover {
 }
 button.grey, .button.grey, .p4m-button.grey {
     color: #777;
-    background-color: #f5f5f5;
+    background-color: #f8f8f8;
     border-color: #eaeaea;
 }
 button.grey:hover, .button.grey:hover, .p4m-button.grey:hover {
@@ -666,6 +666,15 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 }
 .p4micon-coupon3:before {
   content: "\e92b";
+}
+.icon-shipping:before {
+  content: "\e92c";
+}
+.p4micon-shipping2:before {
+  content: "\e92d";
+}
+.p4micon-shipping3:before {
+  content: "\e92e";
 }
 
 //////////////////////////////////////////////////
@@ -4559,6 +4568,9 @@ p4m-address {
     		color: $grey-b4;
     	}
     }
+    .icon {
+      margin-right: 6px;
+    }
     .address-tag {
         color: #D0D0D0;
         letter-spacing: 3px;
@@ -4999,11 +5011,12 @@ Smartphone <375px
     height: 42px;
     min-height: 42px;
     flex: initial;
+    z-index: 1;
     button, .button, .p4m-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       height: 42px;
       flex: 1;
       border: none;
@@ -5014,6 +5027,7 @@ Smartphone <375px
         margin-right: 8px;
         font-size: 22px;
         margin-top: -2px;
+        margin-left: -6px;
       }
 
       &.back-to-site {
@@ -5241,6 +5255,7 @@ Smartphone <375px
             }
           }
           p4m-cart-card {
+            flex: 1;
             // margin-bottom: 0;
             // border-bottom: 2px solid #f5f5f5;
             background: #f8f8f8;
@@ -5272,6 +5287,7 @@ Smartphone <375px
             margin-bottom: 3px;
             .toggle-button {
               font-size: 11px;
+              white-space: nowrap;
             }
             i.p4micon-map-marker {
               margin-left: -4px;
@@ -5439,6 +5455,7 @@ Smartphone <375px
             height: auto;
             padding: 7px 0;
             align-items: flex-end;
+            border-bottom: 3px solid #f8f8f8;
             .toggleDropPointsViewControls {
               align-self: flex-start;
               a {

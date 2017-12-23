@@ -22,12 +22,10 @@
                                 <i class="p4micon-map-marker"></i>
                             </template>
                             <template is="dom-if" if="{{isDP(addressData)}}">
-                                <img src="{{dpIcon}}" />
+                                <img src="{{dpIcon}}" class="icon" />
                             </template>
                             <div class="address-content">
-                                <p class="p4m-address-label lg">{{addressData.label}} 
-                                <span id="defDelivery" class="hidden chosen toggle-button" style="background-color: #37a5538f; padding: 4px 7px;">Shipping</span> 
-                                <span id="defBilling" class="hidden chosen toggle-button" style="background-color: #37a5538f; padding: 4px 7px;">Billing</span></p>
+                                <p class="p4m-address-label lg">{{addressData.label}}</p>
                                 <p class="address-text lg font-weight-regular">{{addressData.street1}}</p>
                             </div>
                             <div class="flex-spacer"></div>
@@ -42,6 +40,8 @@
                                         <i class="p4micon-check"></i>
                                     </template>
                                 </div>
+                                <div id="defDelivery" class="hidden chosen toggle-button defaults"><i class="p4micon-shipping"></i></div> 
+                                <div id="defBilling" class="hidden chosen toggle-button defaults"><i class="p4micon-credit-card"></i></div>
                                 <div data-tooltip="Edit">
                                     <i on-tap="edit" class="p4micon-edit-circle link"></i>
                                 </div>

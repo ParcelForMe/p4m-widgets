@@ -420,7 +420,7 @@ button.inverse:hover, .button.inverse:hover, .p4m-button.inverse:hover {
 
 button.grey, .button.grey, .p4m-button.grey {
   color: #777;
-  background-color: #f5f5f5;
+  background-color: #f8f8f8;
   border-color: #eaeaea; }
 
 button.grey:hover, .button.grey:hover, .p4m-button.grey:hover {
@@ -643,6 +643,15 @@ div > p4m-checkout > p4m-general-fault + iron-overlay-backdrop {
 
 .p4micon-coupon3:before {
   content: "\e92b"; }
+
+.icon-shipping:before {
+  content: "\e92c"; }
+
+.p4micon-shipping2:before {
+  content: "\e92d"; }
+
+.p4micon-shipping3:before {
+  content: "\e92e"; }
 
 @font-face {
   font-family: 'Lato';
@@ -3514,6 +3523,9 @@ p4m-address i {
     margin-right: 6px;
     color: #555; }
 
+p4m-address .icon {
+  margin-right: 6px; }
+
 p4m-address .address-tag {
   color: #D0D0D0;
   letter-spacing: 3px;
@@ -3828,12 +3840,13 @@ Smartphone <375px
     box-shadow: rgba(128, 128, 128, 0.4) 0px 0 12px 0px;
     height: 42px;
     min-height: 42px;
-    flex: initial; }
+    flex: initial;
+    z-index: 1; }
     .action-button button, .action-button .button, .action-button .p4m-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       height: 42px;
       flex: 1;
       border: none;
@@ -3843,7 +3856,8 @@ Smartphone <375px
       .action-button button i, .action-button .button i, .action-button .p4m-button i {
         margin-right: 8px;
         font-size: 22px;
-        margin-top: -2px; }
+        margin-top: -2px;
+        margin-left: -6px; }
   button.inverse {
     font-size: 14px;
     font-weight: 600;
@@ -4027,6 +4041,7 @@ Smartphone <375px
           iron-pages#mobilepages > iron-page#cartPage p4m-cart > #container img#image {
             max-width: 60px; }
         iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card {
+          flex: 1;
           background: #f8f8f8;
           margin: 0 0 3px 0; }
           iron-pages#mobilepages > iron-page#cartPage p4m-cart p4m-cart-card #container {
@@ -4043,7 +4058,8 @@ Smartphone <375px
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address {
           margin-bottom: 3px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address .toggle-button {
-            font-size: 11px; }
+            font-size: 11px;
+            white-space: nowrap; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address i.p4micon-map-marker {
             margin-left: -4px; }
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list #addressSelectionPages {
@@ -4166,7 +4182,8 @@ Smartphone <375px
           flex-wrap: wrap;
           height: auto;
           padding: 7px 0;
-          align-items: flex-end; }
+          align-items: flex-end;
+          border-bottom: 3px solid #f8f8f8; }
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints #mapTools .toggleDropPointsViewControls,
           iron-pages#mobilepages > iron-page#deliveryPage #pageDroppoints.mapView #mapTools .toggleDropPointsViewControls {
             align-self: flex-start; }
