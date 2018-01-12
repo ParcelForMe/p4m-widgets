@@ -1,11 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 
 <dom-module id="p4m-api">
-
-    <template>
-        <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
-    </template>
 
     <script>
         var apiEndpoints = {};
@@ -96,7 +91,8 @@
 
             "getLocale": {
                 "stub": "getLocale",
-                "method": "GET"
+                "method": "GET",
+                "skipToken": true
             },
 
             "cardTokenHash": {
@@ -231,10 +227,6 @@
                     type: Object,
                     value: apiEndpoints
                 },
-                _queue: {
-                    type: Array,
-                    value: []
-                }
             },
             listeners: {
 
@@ -274,21 +266,32 @@
                     if (typeof (callback) == "undefined") {
                         callback = function () { };
                     }
-                    this._performApiCall(apiRequest, callback);
+                    if (endPoint.skipToken) {
+                        this._performApiCall(apiRequest, callback);
+                    }
+                    else {
+                        var loginWidget = document.getElementsByTagName("p4m-login")[0];
+                        if (!loginWidget) {
+                            alert('No p4m-login widget!!');
+                            throw 'No p4m-login widget';
+                        }
+                        var self = this;
+                        loginWidget.getConsumerToken(function (err, token) {
+                            if (err) {
+                                console.error('Token error: ', err);
+                                self.requestLogin();
+                            }
+                            else if (!token) {
+                                console.error('No consumer token!!');
+                                self.requestLogin();
+                            }
+                            else {
+                                self.consumerToken = token;
+                                self._performApiCall(apiRequest, callback);
+                            }
+                        });
+                    }
                 }
-
-            },
-
-            _processNextRequest: function () {
-
-                var request = this._queue.pop();
-                if (request) {
-                    this._performApiCall(request.apiRequest, request.callback);
-                }
-                else {
-                    console.log("Finished queue");
-                }
-         
             },
 
             _performApiCall: function (apiRequest, callback) {
@@ -329,12 +332,6 @@
 
                     var intermediateCallback = this._handleResponse.bind(this, apiRequest, callback);
 
-                    if (!this.consumerToken) {
-                        this.consumerToken = this.$.p4mTokenCookie.readCookie();
-                    }
-                    if (!this.consumerToken) {
-                        return;
-                    }
                     httpRequest.setRequestHeader('Authorization', 'Bearer ' + this.consumerToken);
                     httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -342,10 +339,7 @@
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             try {
                                 if (httpRequest.status === 401 || httpRequest.responseText.includes('Access has expired')) {
-                                    var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                                    loginWidget.clearCookies();
-                                    this.consumerToken = null;
-                                    this.fire('p4m-request-login');
+                                    this.requestLogin();
                                 }
                                 else if (httpRequest.status === 0) { //Timeout
                                     this.fire('noservice');
@@ -366,12 +360,26 @@
                         }
                         
                     }).bind(this);
-                    if (apiRequest.data) {
-                        httpRequest.send(JSON.stringify(apiRequest.data));
+                    if (!this.requestingLogin) {
+                        if (apiRequest.data) {
+                            httpRequest.send(JSON.stringify(apiRequest.data));
+                        }
+                        else {
+                            httpRequest.send("");
+                        }
                     }
-                    else {
-                        httpRequest.send("");
-                    }  
+                }
+            },
+
+            requestingLogin: false,
+            requestLogin: function () {
+                if (!this.requestingLogin) {
+                    this.requestingLogin = true;
+                    var loginWidget = document.getElementsByTagName("p4m-login")[0];
+                    if (loginWidget)
+                        loginWidget.clearCookies();
+                    this.consumerToken = null;
+                    this.fire('p4m-request-login');
                 }
             },
 

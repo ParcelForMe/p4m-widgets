@@ -64,6 +64,7 @@
             </paper-dialog>
 
             <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
+            <polymer-cookie id="p4mTokenExpiresCookie" name="p4mTokenExpires"></polymer-cookie>
             <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
             <polymer-cookie id="p4mNonceCookie" name="p4mNonce" path="/" value="{{_nonce}}"></polymer-cookie>
             <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
@@ -71,7 +72,6 @@
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
             <polymer-cookie id="p4mConsumerCookie" name="p4mConsumer"></polymer-cookie>
             <polymer-cookie id="p4mPrefAddressCookie" name="p4mPrefAddress"></polymer-cookie>
-            <polymer-cookie id="p4mAddressCookie" name="p4mAddress"></polymer-cookie>
             <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
             <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
@@ -151,6 +151,9 @@
                 p4mToken: {
                     type: String
                 },
+                p4mTokenExpires: {
+                    type: Object
+                },
                 _state: {
                     type: String
                 },
@@ -174,47 +177,147 @@
                 window.addEventListener('generalFault', this._useNewCart.bind(this));
                 //Move dialog out into the body
                 Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
+                this._showAsLoggedOut();
                 this.processLogin();
             },
 
-            processLogin: function() {
+            processLogin: function(forceLogin) {
                 var self = this;
-                this._getTokenCookie();
-                if (this.p4mToken) 
-                {
-                    if (!this.hasConsumer()) {
-                        if (!this.$.spinner.active) {
-                            this._showAsLoggingIn();
-                            this._getConsumer(function (err) {
-                                if (err)
-                                    self._onError(err);
-                                else
-                                    self._doLocalLogin();
-                            });
+                this.getConsumerToken(function (err, token) {
+                    if (!err && token) 
+                    {
+                        if (!self.hasConsumer()) {
+                            if (!self.$.spinner.active) {
+                                self._showAsLoggingIn();
+                                self._getConsumer(function (err) {
+                                    if (err)
+                                        self._onError(err);
+                                    else
+                                        self._doLocalLogin();
+                                });
+                            }
+                        }
+                        else {
+                            self._showAsLoggedIn();
+                            var offerRestore = self.$.p4mOfferCartRestoreCookie.readCookie();
+                            var p4mCheckout = document.getElementsByTagName('p4m-checkout');
+                            if (offerRestore === "true") {
+                                self.$.p4mOfferCartRestoreCookie.eraseCookie();
+                                if (!p4mCheckout || p4mCheckout.length === 0)
+                                    self.$.lastCartDlg.open();
+                            }
+                            if (!self.hasGfsToken())
+                                self.getGfsToken();
                         }
                     }
+                    else if (err === "Await refresh from p4m-checkout")
+                        self._showAsLoggedIn();
                     else {
-                        this._showAsLoggedIn();
-                        var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
-                        var p4mCheckout = document.getElementsByTagName('p4m-checkout');
-                        if (offerRestore === "true") {
-                            this.$.p4mOfferCartRestoreCookie.eraseCookie();
-                            if (!p4mCheckout || p4mCheckout.length === 0)
-                                this.$.lastCartDlg.open();
+                        self._showAsLoggedOut();
+                        self.clearCookies();
+                        var locale = self.$.p4mLocaleCookie.readCookie();
+                        if (!locale || locale === "") {
+                            // not logged in so we get the closest P4M server
+                            self.$.p4mLoginApi.call("getLocale", null, null, self._onGotLocale.bind(self));
                         }
-                        if (!this.hasGfsToken()) 
-                            this.getGfsToken();
                     }
+                }, !forceLogin)
+            },
+
+            getConsumerToken: function (callback, localCall) {
+                // if the local token is missing then the consumer needs to login, otherwise
+                // if the local token is about to expire then we need to get one via a hidden iframe
+                if (!this._tokenHasExpired())
+                    callback(null, this.p4mToken)
+                else {
+                    console.log('Consumer token has expired');
+                    // if we're on the checkout page then let p4m-checkout refresh the token otherwise... chaos!
+                    var checkingOut = document.getElementsByTagName('p4m-checkout')[0];
+                    if (!checkingOut || !localCall)
+                        this.getAccessToken(callback);
+                    else
+                        callback("Await refresh from p4m-checkout");
+                }
+            },
+
+            gettingAccessToken: false,
+            getAccessToken: function (callback) {
+                if (this.gettingAccessToken)
+                    console.warn("Already getting access token!");
+                else {
+                    this.gettingAccessToken = true;
+                    // create iframe and inject into dom
+                    var iframe = document.createElement("iframe");
+                    iframe.setAttribute("width", "1");
+                    iframe.setAttribute("height", "1");
+                    var url = this._makeAuthUrl(true);
+                    iframe.setAttribute("src", url);
+                    document.body.appendChild(iframe);
+                    var self = this;
+                    iframe.onload = function (iframeData) {
+                        self.getAccessTokenFromIframe(iframeData, callback);
+                    };
+                }
+            },
+
+            getAccessTokenFromIframe: function (iframeData, callback) {
+                // read the iframe href
+                var frameHref = "";
+                try {
+                    frameHref = iframeData.currentTarget.contentWindow.location.href;
+                    var parts = frameHref.split('#');
+                    frameHref = parts.length > 1 ? parts[1] : frameHref;
+                    if (frameHref.indexOf('error') >= 0) {
+                        var params = this.parseQueryString(frameHref);
+                        throw params['error'];
+                    }
+                    document.body.removeChild(iframeData.currentTarget);
+                }
+                catch (error) {
+                    this.gettingAccessToken = false;
+                    console.log('Access token via iframe: ', error);
+                    document.body.removeChild(iframeData.currentTarget);
+                    callback(error);
+                    return;
+                }
+
+                /* https://localhost/myapp/#
+                    access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik5HVEZ2ZEstZnl0aEV1Q...
+                    &token_type=Bearer
+                    &expires_in=3599
+                    &scope=https%3a%2f%2fgraph.microsoft.com%2fmail.read 
+                    &id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik5HVEZ2ZEstZnl0aEV1Q...
+                    &state=12345 
+                */
+                var params = this.parseQueryString(frameHref);
+                this.gettingAccessToken = false;
+                if (this._state !== params["state"]) {
+                    console.log("Token state does not match");
+                    callback("Token state does not match");
                 }
                 else {
-                    this._showAsLoggedOut();
-                    this.clearCookies();
-                	var locale = this.$.p4mLocaleCookie.readCookie();
-                    if (!locale || locale === "") {
-                    	// not logged in so we get the closest P4M server
-                    	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
-                    }
+                    var accessToken = params["access_token"];
+                    console.log('Got new access token');
+                    var expiresSecs = 0 + params["expires_in"];
+                    var expiresAt = new Date(Date.now() + expiresSecs * 1000);
+                    document.cookie = "p4mToken=" + accessToken + "; path=/;";
+                    document.cookie = "p4mTokenExpires=" + expiresAt.toUTCString() + "; path=/;";
+                    this.p4mToken = accessToken;
+                    this.p4mTokenExpires = expiresAt;
+                    callback(null, accessToken);
                 }
+            },
+
+            parseQueryString: function (queryString) {
+                var params = {}, queries, temp, i, l;
+                // Split into key/value pairs
+                queries = queryString.split("&");
+                // Convert the array of strings into an object
+                for ( i = 0, l = queries.length; i < l; i++ ) {
+                    temp = queries[i].split('=');
+                    params[temp[0]] = temp[1];
+                }
+                return params;
             },
 
             hasGfsToken: function() {
@@ -269,7 +372,7 @@
                 if (parts.length !== 4)
                     this.consumerData = { id: null, prefDeliveryAddressId: null, deliveryPreferences: null, addresses: [], lastChanged: null };
                 else {
-                    var addrStr = this.$.p4mAddressCookie.readCookie();
+                    var addrStr = this.$.p4mPrefAddressCookie.readCookie();
                     var addrParts = addrStr.split('|');
                     var addr;
                     if (addrParts.length === 10)
@@ -298,7 +401,6 @@
                     fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
                     fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
                 document.cookie = "p4mPrefAddress=" + addrStr;
-                document.cookie = "p4mAddress=" + addrStr;
                 document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
                 document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
             },
@@ -341,12 +443,11 @@
             },
 			
             showPopup: function(){
-                    //Make AuthUrl
-                    this._showAsLoggingIn();
-                    this._makeState();
-                    this._makeAuthUrl();
-                    this.popupCenter(this._authUrl, "Login", 480, 560);
-                    this._waitForAuthCompletion();
+                //Make AuthUrl
+                this._showAsLoggingIn();
+                this._makeAuthUrl();
+                this.popupCenter(this._authUrl, "Login", 480, 560);
+                this._waitForAuthCompletion();
             },
 			
             //logoutThisSite: function () {
@@ -404,13 +505,13 @@
             clearCookies: function() {
                 // clear the local P4M cookies
                 this.$.p4mTokenCookie.eraseCookie();
+                this.$.p4mTokenExpiresCookie.eraseCookie();
                 this.$.p4mStateCookie.eraseCookie();
                 this.$.p4mNonceCookie.eraseCookie();
                 this.$.p4mLocalLoginCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mConsumerCookie.eraseCookie();
                 this.$.p4mPrefAddressCookie.eraseCookie();
-                this.$.p4mAddressCookie.eraseCookie();
                 this.$.p4mCartCookie.eraseCookie();
                 this.$.p4mCartAddressCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
@@ -442,24 +543,41 @@
                 this.$.p4mNonceCookie.createCookie();
             },
 
-            _makeAuthUrl: function () {
-                var authBaseUrl = this.idSrvUrl + "/connect/authorize";
+            _makeAuthUrl: function (hidden) {
+                this._makeState();
                 this._authUrl =
-                    authBaseUrl
-                    + "?response_type=code&client_id=" + this.clientId
+                    this.idSrvUrl
+                    + "/connect/authorize?"
+                    + "response_type=token"
+                    + "&response_mode=" + (hidden ? "fragment" : "form_post")
+                    + "&client_id=" + this.clientId
                     + "&redirect_uri=" + this.redirectUrl
-                    + "&scope=openid%20p4mApi%20p4mRetail"
+                    + "&scope=p4mApi%20p4mRetail"
                     + "&state=" + this._state
                     + "&nonce=" + this._nonce
+                    + "&prompt=" + (hidden ? "none" : "login")
                     + "&display=popup";
+                return this._authUrl;
             },
 
             _getTokenCookie: function() {
-                this.p4mToken = this.$.p4mTokenCookie.readCookie();
+                this.p4mToken = (this.p4mToken && this.p4mToken !== '') ? this.p4mToken : this.$.p4mTokenCookie.readCookie();
+                this.p4mTokenExpires = (this.p4mTokenExpires && this.p4mTokenExpires !== '') ? this.p4mTokenExpires : this.$.p4mTokenExpiresCookie.readCookie();
                 return this.p4mToken;
             },
 
-            _waitForAuthCompletion: function() {
+            _tokenHasExpired: function () {
+                this._getTokenCookie();
+                var expiresCookie = this.p4mTokenExpires;
+                var expires;
+                if (expiresCookie) {
+                    expires = new Date(expiresCookie); // this is in UTC but the browser will put in the local offset
+                }
+                var nowPlus30 = new Date(Date.now() + 30000);
+                return !this.p4mToken || !expires || (expires < nowPlus30);
+            },
+
+            _waitForAuthCompletion: function () {
                 if (!this._authCompletionInterval) {
                     this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
                 }
@@ -471,7 +589,7 @@
                     if (this._authCompletionInterval) {
                         window.clearTimeout(this._authCompletionInterval);
                     }
-                    this.processLogin();
+                    this.processLogin(true);
                 }
 
             },
@@ -576,7 +694,7 @@
             },
 
             _mouseOverMenu: function() {                
-                if (this.$.p4mTokenCookie.readCookie() !== "") {
+                if (this.p4mToken && this.p4mToken !== "") {
                     this.showMenu();
                 }            
             },

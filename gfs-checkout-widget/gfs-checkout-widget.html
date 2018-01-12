@@ -606,7 +606,7 @@
             },
 
             postGfsData: function (mapCenter, callback) {
-                this.currentMapCenter = null;   // setting this to null will move the map when it is displayed
+                this.currentMapCenter = mapCenter;
                 this._postReq(mapCenter, this._postData, callback);
             },
 
@@ -912,7 +912,7 @@
             selectFavAddress: function (address) {
                 // the user has selected a physical address for delivery so unselect any drop point - called from p4mCheckout
                 this._unselectDropPoint();
-                //this.currentMapCenter = { 'lat': address.latitude, 'lng': address.longitude };
+                this.currentMapCenter = { lat: address.latitude, lng: address.longitude };
             },
 
 
@@ -926,12 +926,22 @@
                 this.config.town = address.town;
                 this.config.postCode = address.postCode;
                 this.config.addressLineCollection = address.addressLineCollection;
-                this.config.mapCenter = { 'lat': address.lat, 'lng': address.lng };
+                this.config.mapCenter = { lat: address.lat, lng: address.lng };
                 var self = this;
-                this.queryForNewAddr(function () {
-                    self._showDropPointsView();
-                    if (callback)
-                        callback();
+                // we don't need the token yet, but best to get it up front before the long GFS call
+                var loginWidget = document.getElementsByTagName('p4m-login')[0];
+                loginWidget.getConsumerToken(function (err, token) {
+                    if (err) {
+                        console.error(err);
+                        throw err;
+                    }
+                    else {
+                        self.queryForNewAddr(function () {
+                            self._showDropPointsView();
+                            if (callback)
+                                callback();
+                        });
+                    }
                 });
 
                 /*var self = this;
@@ -1023,9 +1033,16 @@
                         }
                         else if (selection.dropPointId) {
                             // try to select the drop point
+                            if (config.nearestAddress) {
+                                var addr = config.nearestAddress;
+                                var loc = { lat: addr.latitude, lng: addr.longitude };
+                                self.setMapHome(loc, addr.label);
+                            }
+                            self.currentMapCenter = config.mapCenter;
                             self._completeDropPointSelection(selection.dropPointId, selection.deliveryMethodId, finalCallback);
                         }
                         else {
+                            self.setMapHome(config.mapCenter, config.label);
                             self.enableCalendarDelivery(self.hasDayDefinite());
                             self.enableStandardDelivery(true);
                             // which tab should be selected?
@@ -1095,23 +1112,23 @@
                 });
             },
 
-            initCartTotalOnly: function (config, finalCallback) {
-                var self = this;
-                //==== Create post data
-                this.getPostDataFromConfig(config, ["dmDropPoint", "dmStandard"]);
-                // Post, then select address and method - these can be previously chosen if the cart already exists
-                // or will be defaulted based on the consumer's preferences
-                this.postGfsData(config.mapCenter, function (err) {
-                    if (err) {
-                        self.initialised = false;
-                        console.error("postGfsData() returned: ", err);
-                        finalCallback(err);
-                        return;
-                    }
-                    self.initialised = true;
-                    finalCallback();
-                });
-            },
+            //initCartTotalOnly: function (config, finalCallback) {
+            //    var self = this;
+            //    //==== Create post data
+            //    this.getPostDataFromConfig(config, ["dmDropPoint", "dmStandard"]);
+            //    // Post, then select address and method - these can be previously chosen if the cart already exists
+            //    // or will be defaulted based on the consumer's preferences
+            //    this.postGfsData(config.mapCenter, function (err) {
+            //        if (err) {
+            //            self.initialised = false;
+            //            console.error("postGfsData() returned: ", err);
+            //            finalCallback(err);
+            //            return;
+            //        }
+            //        self.initialised = true;
+            //        finalCallback(self.selectedServiceDetails.shipping);
+            //    });
+            //},
 
             getPostDataFromConfig: function (config, reqDeliveryTypes) {
                 //==== Create post data
@@ -1740,35 +1757,35 @@
                 }
             },
 
-            _geoCodeAddress: function (address, callback) {
-                if (address.lat && address.lng) {
-                    callback(null, { 'lat': address.lat, 'lng': address.lng });
-                    return;
-                }
-                if (!address.addressLineCollection || address.addressLineCollection.length == 0) {
-                    callback("No results");
-                    return;
-                }
-                var addressStr = address.addressLineCollection[0] + "," + address.postCode;
-                var geocoder = new google.maps.Geocoder();
-                geocoder.geocode({
-                    componentRestrictions: {
-                        country: address.countryCode.code || this.countryCode
-                    },
-                    address: addressStr
-                },
-                function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        if (results && results.length) {
-                            var geoLocation = results[0].geometry.location;
-                            callback(null, { 'lat': geoLocation.lat(), 'lng': geoLocation.lng() });
-                        }
-                    }
-                    else {
-                        callback("No results");
-                    }
-                });
-            },
+            //_geoCodeAddress: function (address, callback) {
+            //    if (address.lat && address.lng) {
+            //        callback(null, { 'lat': address.lat, 'lng': address.lng });
+            //        return;
+            //    }
+            //    if (!address.addressLineCollection || address.addressLineCollection.length == 0) {
+            //        callback("No results");
+            //        return;
+            //    }
+            //    var addressStr = address.addressLineCollection[0] + "," + address.postCode;
+            //    var geocoder = new google.maps.Geocoder();
+            //    geocoder.geocode({
+            //        componentRestrictions: {
+            //            country: address.countryCode.code || this.countryCode
+            //        },
+            //        address: addressStr
+            //    },
+            //    function (results, status) {
+            //        if (status == google.maps.GeocoderStatus.OK) {
+            //            if (results && results.length) {
+            //                var geoLocation = results[0].geometry.location;
+            //                callback(null, { 'lat': geoLocation.lat(), 'lng': geoLocation.lng() });
+            //            }
+            //        }
+            //        else {
+            //            callback("No results");
+            //        }
+            //    });
+            //},
             
             _geoCodePosition: function (position, callback) {
                 var geocoder = new google.maps.Geocoder();
@@ -2012,8 +2029,8 @@
                 this.enableCalendarDelivery(this.hasDayDefinite() && hasAddr);
                 this.enableStandardDelivery(hasAddr);
                 this.showPage_Droppoints();
-                if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
-                    callback(null); 
+                if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId)) {
+                    callback(null, dp); 
                 } 
                 else {
                     this.set("_selectedDropPoint", dp);
@@ -2178,34 +2195,36 @@
                     //animation: google.maps.Animation.DROP,
                     title: label,
                     html: label,
-                    icon: this._getHomeIcon()
+                    icon: this._getHomeIcon(),
+                    zIndex: google.maps.Marker.MAX_ZINDEX + 1
                 };
                 new google.maps.Marker(homeMarkerConfig);
                 this.currentMapCenter = location;
-                //this._map.setCenter(homeMarkerConfig.position);
             },
 
             currentMapCenter: null,
             panToDefaultLocation: function () {
                 var self = this;
+                // move to the selected DP
                 if (this._currentMarker) {
                     self._infoWindow.open(self._map, self._currentMarker);
                     self._panToGeoLocation(this._currentMarker.getPosition());
                 }
+                // or move to the current map center if set
                 else if (this.currentMapCenter) {
                     self._panToGeoLocation(this.currentMapCenter);
                 }
-                else if (this._postData.request.order.transit.recipient.location) {
-                    var loc = this._postData.request.order.transit.recipient.location;
-                    this._geoCodeAddress(loc, function (err, data) {
-                        if (err)
-                            console.error('panToDefaultLocation():', err);
-                        else {
-                            self.setMapHome(data, loc.addressLineCollection[0]);
-                            self._panToGeoLocation(data);
-                        }
-                    });
-                }
+                //else if (this._postData.request.order.transit.recipient.location) {
+                //    var loc = this._postData.request.order.transit.recipient.location;
+                //    this._geoCodeAddress(loc, function (err, data) {
+                //        if (err)
+                //            console.error('panToDefaultLocation():', err);
+                //        else {
+                //            self.setMapHome(data, loc.addressLineCollection[0]);
+                //            self._panToGeoLocation(data);
+                //        }
+                //    });
+                //}
                 else if (this._favAddresses.length) {
                     if (this._favAddresses[0].geoLocation.coordinates.latitude && this._favAddresses[0].geoLocation.coordinates.longitude) {
                         var geoLocation = {
@@ -2468,9 +2487,10 @@
             },
 
 			_onClickFavAddress: function (e) {
-			    var addr = e.currentTarget;
+			    var addr = e.currentTarget.addressData;
 			    var self = this;
-			    this.requestDropPointsByAddress(addr.addressData);
+			    this.setMapHome({ lat: addr.lat, lng: addr.lng}, 'asd');
+			    this.requestDropPointsByAddress(addr);
 			},
 
             /*

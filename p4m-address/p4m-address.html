@@ -263,8 +263,7 @@
             ready: function()
             {
                 if (this.addressData) {
-                    Polymer.dom(this).setAttribute('addressid', this.addressData.id);
-                    this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
+                    this.updateUi();
                 }
             },
 
@@ -284,10 +283,8 @@
                 }               
             },
             markAsBilling: function () { 
-                //this.set('cartData.billingAddressId', this.addressData.id);    
                 if (this.cartData.billingAddressId !== this.addressData.id) {
                     this.isBilling = true;
-                    //console.log("Marking as billing");
                     this.fire('select-address', { 'isBilling': true, 'id': this.addressData.id });
                 }
             },
@@ -402,15 +399,20 @@
 
             updateUi: function()
             {
+                this.notifyPath('addressData.label');
+                this.notifyPath('addressData.street1');
                 if (!this.addressData || !this.cartData)
                     return;
+                //Polymer.dom(this).setAttribute('addressid', this.addressData.id);
+                //this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
                 if (this.addressData.addressType === 'Collect')
                     this.dpIcon = this.resolveUrl('../gfs-droppoint/images/' + this.addressData.dropPointProviderId + '.png');
                 this.addressData.prefDelivery ? this.$.defDelivery.classList.remove('hidden') : this.$.defDelivery.classList.add('hidden');
                 this.addressData.prefBilling ? this.$.defBilling.classList.remove('hidden') : this.$.defBilling.classList.add('hidden');
                 this.isBilling = (this.cartData.billingAddressId === this.addressData.id);
                 if (this.isBilling) {
-                    this.$$('#billingToggle').classList.add('chosen');
+                    if (this.$$('#billingToggle')) 
+                        this.$$('#billingToggle').classList.add('chosen');
                 }
                 else if (this.$$('#billingToggle')) {
                     this.$$('#billingToggle').classList.remove('chosen');
