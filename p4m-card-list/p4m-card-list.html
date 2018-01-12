@@ -14,14 +14,13 @@
                 </div>
             </div>
             <iron-pages id="cardSelectionPages" selected="1"> 
-
                 <iron-page id="newCardPage">
-                    <p4m-new-card id="newCard" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>
+                    <p4m-new-card id="newCard" response-url="https://{{platform}}-api.parcelfor.me/realex/v2/cardTokenResponse" consumer-data="{{consumerData}}" on-gotnewcard="onGotNewCard"></p4m-new-card>
                 </iron-page>
 
                 <iron-page id="cardListPage"> 
                     <div class="cardList">
-                        <template is="dom-repeat" items="{{consumerData.PaymentMethods}}">
+                        <template is="dom-repeat" items="{{consumerData.paymentMethods}}">
                             <p4m-card card-data="{{item}}" on-selected="onCardSelected" show-cvv="false" container-class="card-list-item" selected-card-id="{{selectedCardId}}"></p4m-card>
                         </template>
                     </div>
@@ -58,6 +57,12 @@
                     type: String,
                     notify: true
                 },
+                newCardId: {
+                    type: String,
+                },
+                platform: {
+                    type: String
+                },
                 labelText: {
                     type: String,
                     value: "Add new card",
@@ -66,8 +71,8 @@
             },
 
             observers: [
-                "onConsumerDataChange(consumerData.DefaultPayMethodId)",
-                "onCartDataChange(cartData.PayMethodId)"
+                "onConsumerDataChange(consumerData.defaultPayMethodId)",
+                "onCartDataChange(cartData.payMethodId)"
             ],
 
             ready: function()
@@ -75,58 +80,48 @@
             },
 
             onCardSelected(e) {
-                this.set("selectedCardId", e.detail.Id); //This should now trigger the other cards to update their UI
+                this.set("selectedCardId", e.detail.id); //This should now trigger the other cards to update their UI
             },
 
             addNewCard: function () {
-                //var ctrl = this.$.newCardCollapse;
-
-                //var lbl = this.$.addNewCardLink;
-
                 if (this.$.cardSelectionPages.selected == 1) {
                     this.$.cardSelectionPages.select(0);
                     this.$.newCard.loadRealexForm();
                     this.set("labelText","Cancel");
-                    
                     this.$.addNewCardLink.classList.add("cancel");
                     this.$.addNewCardLink.classList.remove("add");
-
                 }
                 else {
                     this.$.cardSelectionPages.select(1);
                     this.set("labelText", "Add a New Card");
-                    
                     this.$.addNewCardLink.classList.add("add");
                     this.$.addNewCardLink.classList.remove("cancel");
                 }
 
-
             },
 
-
-            onGotNewCard: function () {
+            onGotNewCard: function (data) {
+                this.newCardId = data.detail;
                 this.addNewCard();
             },
-
-
-
+            
             onConsumerDataChange: function () {
-                if (false && !this.selectedCardId && this.consumerData) {
-                    //console.log("Setting selectedCardId to", this.consumerData.DefaultPayMethodId);
-                    var foundDefaultCard = this.getCardDataById(this.consumerData.DefaultPayMethodId);
+                // got the card list from the consumer so check if we need to select a newly added card
+                if (this.newCardId && (this.selectedCardId !== this.newCardId) && this.consumerData) {
+                    var foundDefaultCard = this.getCardDataById(this.newCardId);
                     if (foundDefaultCard) {
-                        this.set('selectedCardId', this.consumerData.DefaultPayMethodId);
+                        this.set('selectedCardId', this.newCardId);
                         this.fire('selected', foundDefaultCard);
                     }
                 }
             },
 
             onCartDataChange: function () {
-                if (!this.selectedCardId && this.cartData && this.cartData.PayMethodId && this.consumerData) {
+                if (!this.selectedCardId && this.cartData && this.cartData.payMethodId && this.consumerData) {
                     //console.log("Setting selectedCardId to", this.cartData.PayMethodId);
-                    var foundCard = this.getCardDataById(this.cartData.PayMethodId || this.consumerData.PayMethodId);
+                    var foundCard = this.getCardDataById(this.cartData.payMethodId || this.consumerData.payMethodId);
                     if (foundCard) {
-                        this.set('selectedCardId', this.cartData.PayMethodId);
+                        this.set('selectedCardId', this.cartData.payMethodId);
                         this.fire('selected', foundCard);
                     }
                 }
@@ -134,16 +129,16 @@
 
             getCardDataById: function (id) {
                 var item;
-                for (var i = 0; i < this.consumerData.PaymentMethods.length; i++) {
-                    item = this.consumerData.PaymentMethods[i];
-                    if (item.Id === id) {
+                for (var i = 0; i < this.consumerData.paymentMethods.length; i++) {
+                    item = this.consumerData.paymentMethods[i];
+                    if (item.id === id) {
                         return item;
                     }
                 }
             },
 
             _cardsOnly: function (item) {
-                return true;// (item && item.AccountType && item.AccountType === "Card");
+                return true;// (item && item.accountType && item.accountType === "Card");
             }
 
 

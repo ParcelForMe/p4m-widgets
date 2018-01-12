@@ -2,9 +2,19 @@
 
 <dom-module id="address-lookup-field">
     <template>
-        <input type="text" name="alfField" id="alfField" />
+        <paper-input label="Enter an address" name="alfField" id="alfField" type="text" value="" required>
+        <label>Enter an address</label>
     </template>
     <style>
+    :host {
+        
+    }
+    label {
+        z-index: 1;
+        width: 100%;
+        pointer-events: none;
+    }
+    
 
     </style>
 
@@ -27,15 +37,14 @@
 
             ready: function()
             {
-                this.fire('ready1');
                 this.initAutoComplete();
-                this.fire('ready2');
             },
 
             initAutoComplete() {
                 // Create the autocomplete object, restricting the search to geographical location types.
+                var input = this.$.alfField.querySelector('input');
                 this.autoComplete = new google.maps.places.Autocomplete(
-                    this.$.alfField,
+                    input,
                     {
                         types: ['geocode']
                     }
@@ -46,6 +55,7 @@
 
             selectAddress: function () {
                 var place = this.autoComplete.getPlace();
+                this.dataHost.addressLookupLocation = place;
                 this.fire('foundplace', place);
             }
         });

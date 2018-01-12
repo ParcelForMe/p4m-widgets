@@ -7,7 +7,7 @@
         <div id="calendar-body" class="horizontal layout center">
 
             <div class="calendar-buttons flex self-stretch">
-                <div data-tooltip="Previous Week" on-click="seePreviousWeek" class$="gfs-button transition {{_previousWeekClass}} tooltip-top">
+                <div on-click="seePreviousWeek" class$="gfs-button transition {{_previousWeekClass}}">
                     <i class="p4micon-chevron-left"></i>
                 </div>
             </div>
@@ -18,6 +18,7 @@
                     <div class="calendar-cell calendar-delivery-label"><div>Before</div><div>{{item}}</div></div>
                 </template>
             </div>
+            <div class="calendar-day-wrap">
             <template id="calendarTemplate" is="dom-repeat" items="{{_calendar}}" as="calendarItem" filter="_filterBySelectedWeek">
                 <div class="calendar-col calendar-day">
                     <div class="calendar-cell calendar-day-label"><div>{{calendarItem.deliveryDowLabel}}</div><div>{{calendarItem.deliveryDateLabel}}</div></div>
@@ -27,15 +28,24 @@
                         </template>
                         <template restamp="true" is="dom-if" if="{{_calendarShippingOptionIsSelected(shippingOption)}}">
                             <div class="makeFollowingSelected">
-                            <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell"><div>{{shippingOption.localizedPrice}}</div>
+                                <div class="calendar-cell calendar-delivery-option" shipping-option-id$="{{shippingOption.id}}" delivery-date$="{{calendarItem.data.deliveryDate}}" day-index$="{{shippingOption.dayIndex}}" on-click="selectShippingOptionCell">
+                                    <div>{{shippingOption.localizedPrice}}</div>
+                                </div>
                             </div>
                         </template>
                     </template>                
                 </div>
             </template>
+        </div> <!-- / .calendar-day-wrap -->
+
+<!--             <div class="calendar-buttons flex self-stretch">
+                <div on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}}">
+                    <i class="p4micon-chevron-right"></i>
+                </div>
+            </div> -->
 
             <div class="calendar-buttons flex self-stretch">
-                <div data-tooltip="Next Week" on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}} tooltip-top">
+                <div on-click="seeNextDay" class$="gfs-button transition {{_nextDayClass}}">
                     <i class="p4micon-chevron-right"></i>
                 </div>
             </div>
@@ -194,11 +204,18 @@
                 },
                 _previousWeekClass: {
                     type: String
+                },
+                _nextDayClass: {
+                    type: String
+                },
+                _previousDayClass: {
+                    type: String
                 }
             },
             observers: [
                  "onDataChange(dayDefiniteData)",
-                 "onWeekChange(selectedWeek)"
+                 "onWeekChange(selectedWeek)",
+                 "onDayChange(selectedDay)"
             ],
             listeners: {
 
@@ -295,11 +312,13 @@
 
                 //Make buckets  
                 this._buckets = [];
-                bucketTemplate.forEach(function (rateData) {
-                    self._buckets.push(dateToTimeMinutes(new Date(rateData.deliveryTimeTo)));
-                })
-                this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 }).filter((item, pos) => { return this._buckets.indexOf(item) == pos; }); //sort and remove dups
-                
+                if (bucketTemplate) {
+                    bucketTemplate.forEach(function (rateData) {
+                        self._buckets.push(dateToTimeMinutes(new Date(rateData.deliveryTimeTo)));
+                    })
+                    this._buckets = this._buckets.sort(function (a, b) { return a > b ? 1 : -1 }).filter((item, pos) => { return this._buckets.indexOf(item) == pos; }); //sort and remove dups
+                }
+
                 //Fill buckets
                 this._calendar = [];
                 var dayIndex = 0;
@@ -320,10 +339,9 @@
                         if (bucketIndex == -1) {
                             //stretch out the top bucket to accomodate this one
                             self._buckets[self._buckets.length - 1] = minutes;
+                            bucketIndex = self._buckets.length - 1;
                         }
-                        else {
-                            today.slots[bucketIndex] = rateData;
-                        }
+                        today.slots[bucketIndex] = rateData;
                     });
                     today.slots = today.slots.map(function (item) {
                         if (!item) item = { localizedPrice: "" }
@@ -483,8 +501,9 @@
 
         function getDateLabel(date) {
             var suffixes = ["th", "st", "nd", "rd", "th"];
-            var domStr = date.getDate().toString();
-            var lastNumeral = Number(domStr[domStr.length-1]);
+            var day = date.getDate();
+            var domStr = day.toString();
+            var lastNumeral = (day > 10 && day < 20) ? 0 : Number(domStr[domStr.length - 1]);
             var suffix = suffixes[Math.min(lastNumeral, suffixes.length-1)];
             return domStr + suffix;
         }

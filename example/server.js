@@ -22,8 +22,8 @@ function addJsonHeaders(req, res, next) {
 };
 
 function simulateDelay(req, res, next) {
-	console.log('Waiting for 3 seconds..');
-	setTimeout(next, 3000);
+	console.log('Waiting for 1 second..');
+	setTimeout(next, 1000);
 }
 
 function logRoute(req, res, next) {
@@ -55,13 +55,13 @@ that the widgets will actually work
 
 */
 site.use('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
-site.use('/p4m/localLogin', p4mEndpoint.localLogin); 
+site.post('/p4m/localLogin', p4mEndpoint.localLogin); 
+site.use('/p4m/renewShippingToken', p4mEndpoint.renewShippingToken); 
 site.use('/p4m/checkout', p4mEndpoint.checkout);
 site.post('/p4m/updShippingService', p4mEndpoint.updShippingService);
 site.post('/p4m/itemQtyChanged', p4mEndpoint.itemQtyChanged);
 
-// TODO : check if discount code is valid or not ("AAA" is valid !)
-site.use('/p4m/applyDiscountCode', simulateDelay); // and then continue on to static file
+site.post('/p4m/applyDiscountCode', simulateDelay, p4mEndpoint.applyDiscountCode);
 
 /*
 

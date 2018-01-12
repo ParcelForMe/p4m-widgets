@@ -34,17 +34,15 @@
                 </div>
                 <div id="loginMessage">Use 1 Click Checkout</div>
                 <div id="loggingInMessage">Logging in ...</div>
+                <div id="loginReqMessage">Please login again</div>
                 <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
                 <p4m-spinner id="spinner" species="progress" class="login_widget_spinner"></p4m-spinner>
-            </div>
-            
+            </div>            
 
             <div id="p4m-menu-wrapper" class="p4m-menu hidden" on-mouseleave="_mouseOutMenu" on-mouseover="_mouseOverMenu">
                 <paper-menu id="p4m-menu" on-iron-select="_selectMenuItem">
-                    <paper-item>Sign out:</paper-item>
-                    <paper-item> - this site</paper-item>
-                    <paper-item> - this device</paper-item>
-                    <paper-item> - all devices</paper-item>
+                    <paper-item>Sign out</paper-item>
+                    <paper-item>Sign out all devices</paper-item>
                     <paper-item>Restore last cart</paper-item>
                     <paper-item>Saved items</paper-item>
                     <paper-item>P4M Account</paper-item>
@@ -60,8 +58,8 @@
                 <p4m-api id="localApi" is-local="true"></p4m-api>
                 <p4m-api id="p4mLoginApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
                 <div class="buttons">
-                    <div class="p4m-button" on-click="_useNewCart">No</div>
                     <div class="p4m-button p4m-button-active" on-click="_useLastCart">Yes</div>
+                    <div><a class="" on-click="_useNewCart">No thanks</a></div>
                 </div>
             </paper-dialog>
 
@@ -71,9 +69,12 @@
             <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
             <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
             <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
+            <polymer-cookie id="p4mConsumerCookie" name="p4mConsumer"></polymer-cookie>
+            <polymer-cookie id="p4mPrefAddressCookie" name="p4mPrefAddress"></polymer-cookie>
+            <polymer-cookie id="p4mAddressCookie" name="p4mAddress"></polymer-cookie>
+            <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
+            <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
-            <polymer-cookie id="p4mDefaultCountryCodeCookie" name="p4mDefaultCountryCode"></polymer-cookie>
-            <polymer-cookie id="p4mDefaultPostCodeCookie" name="p4mDefaultPostCode"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
             <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
 
@@ -107,8 +108,13 @@
         .hidden {
             display: none;
         }
+/*        iron-overlay-backdrop {
+            --iron-overlay-backdrop-background-color: #37a553;
+            --iron-overlay-backdrop-opacity: 0.95;
+        }*/
         
     </style>
+
 
     <script>
         Polymer({
@@ -130,9 +136,7 @@
                 logoutForm: {
                     type: String,
                 },
-                p4mToken: {
-                    type: String
-                },
+                sessionId: String,
                 class: {
                   reflectToAttribute: true
                 },
@@ -144,6 +148,9 @@
                     type: String
                 },
 
+                p4mToken: {
+                    type: String
+                },
                 _state: {
                     type: String
                 },
@@ -151,6 +158,9 @@
                     type: String
                 },
                 _authCompletionInterval: {
+                    type: Object
+                },
+                consumerData: {
                     type: Object
                 }
             },
@@ -160,32 +170,40 @@
 
             ready: function () {
                 window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+                //Close down the dialog if there is a general fault
+                window.addEventListener('generalFault', this._useNewCart.bind(this));
+                //Move dialog out into the body
+                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
+                this.processLogin();
+            },
 
+            processLogin: function() {
+                var self = this;
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
-                    this._showAsLoggedIn();
-                    // if the P4M Consumer is logged in, then check if they are logged in locally
-                    var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
-                    if (!localLogin || localLogin === "") {
-                        // state is unknown so check first
-                        this.$.localApi.call('isLocallyLoggedIn', null, null, this._onCheckLocalLogin.bind(this));
-                    }
-                    else if (localLogin === "false") {
-                        //alert("AuthComp: "+localLogin);
-                        // definitely not logged in so do it now
-                        this._onAuthCompletion();
+                    if (!this.hasConsumer()) {
+                        if (!this.$.spinner.active) {
+                            this._showAsLoggingIn();
+                            this._getConsumer(function (err) {
+                                if (err)
+                                    self._onError(err);
+                                else
+                                    self._doLocalLogin();
+                            });
+                        }
                     }
                     else {
+                        this._showAsLoggedIn();
                         var offerRestore = this.$.p4mOfferCartRestoreCookie.readCookie();
-                        if (offerRestore === "true")
-                        {
+                        var p4mCheckout = document.getElementsByTagName('p4m-checkout');
+                        if (offerRestore === "true") {
                             this.$.p4mOfferCartRestoreCookie.eraseCookie();
-                            this.$.lastCartDlg.open();
-                            //alert("Do you want to restore your last cart?");
-                            // state is unknown so check first
-                            
+                            if (!p4mCheckout || p4mCheckout.length === 0)
+                                this.$.lastCartDlg.open();
                         }
+                        if (!this.hasGfsToken()) 
+                            this.getGfsToken();
                     }
                 }
                 else {
@@ -197,21 +215,119 @@
                     	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
-
-                //Move dialog out into the body
-                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
             },
+
+            hasGfsToken: function() {
+                return this.$.gfsCheckoutTokenCookie.readCookie();
+            },
+
+            getGfsToken: function (callback) {
+                console.log("Getting GFS token");
+                var self = this;
+                this.$.localApi.call('renewShippingToken', null, null, function (err, data) {
+                    if (!err) 
+                        document.cookie = "gfsCheckoutToken=" + data.token + "; path=/;";
+                    if (callback)
+                        callback(err);
+                });
+            },
+
+            hasConsumer: function() {
+                var consumer = this.$.p4mConsumerCookie.readCookie();
+                if (!consumer)
+                    return false;
+                if (!this.consumerData)
+                    this.getConsumerFromCookie(consumer);
+                return true;
+            },
+
+            _getConsumer: function (callback) {
+                var self = this;
+                self.$.p4mLoginApi.call('consumer', { checkHasOpenCart: true }, null, function (err, data) {
+                    if (!data.success || err) {
+                        self._onError(err);
+                        if (callback)
+                            callback(data.error || err);
+                    }
+                    else {
+                        self.set('consumerData', data.consumer);
+                        self.updateConsumerCookie();
+                        var hasCheckout = document.getElementsByTagName('p4m-checkout');
+                        if (data.hasOpenCart && (!hasCheckout || hasCheckout.length === 0))
+                            document.cookie = "p4mOfferCartRestore=true; path=/";
+                        else
+                            self.$.p4mOfferCartRestoreCookie.eraseCookie();
+                        if (callback)
+                            callback(null, data);
+                    }
+                });
+            },
+
+            getConsumerFromCookie: function (consumerFromCookie) {
+                // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
+                var parts = consumerFromCookie.split('|');
+                if (parts.length !== 4)
+                    this.consumerData = { id: null, prefDeliveryAddressId: null, deliveryPreferences: null, addresses: [], lastChanged: null };
+                else {
+                    var addrStr = this.$.p4mAddressCookie.readCookie();
+                    var addrParts = addrStr.split('|');
+                    var addr;
+                    if (addrParts.length === 10)
+                        addr = {
+                            id: fldOrNull(addrParts[0]), dropPointId: fldOrNull(addrParts[1]), street1: fldOrNull(addrParts[2]), street2: fldOrNull(addrParts[3]),
+                            city: fldOrNull(addrParts[4]), postCode: fldOrNull(addrParts[5]), state: fldOrNull(addrParts[6]), countryCode: fldOrNull(addrParts[7]),
+                            latitude: fldOrNull(addrParts[8]), longitude: fldOrNull(addrParts[9])
+                        };
+                    this.consumerData = {
+                        id: fldOrNull(parts[0]), prefDeliveryAddressId: fldOrNull(addrParts[0]), deliveryPreferences: fldOrNull(parts[1]),
+                        addresses: [addr], extras: { localId: fldOrNull(parts[2]) }, lastChanged: fldOrNull(parts[3])
+                    };
+                }
+            },
+
+            updateConsumerCookie: function () {
+                // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
+                var consumer = this.consumerData;
+                var addr = this.getAddressById(this.consumerData.prefDeliveryAddressId);
+                var d = new Date();
+                var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
+                document.cookie = "p4mConsumer=" +
+                    fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
+                var addrStr =
+                    fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                    fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
+                    fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
+                document.cookie = "p4mPrefAddress=" + addrStr;
+                document.cookie = "p4mAddress=" + addrStr;
+                document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
+                document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
+            },
+
+            getAddressById: function (id) {
+                if (id && this.consumerData && this.consumerData.addresses && this.consumerData.addresses.length > 0) {
+                    var foundItem = this.consumerData.addresses.find(function (item) { return item.id == id });
+                    if (foundItem)
+                        return foundItem;
+                }
+                return null;
+            },
+            
+            //isLocallyLoggedIn: function() {
+            //    // if the P4M Consumer is logged in, then check if they are logged in locally
+            //    var localLogin = this.$.p4mLocalLoginCookie.readCookie();
+            //    return localLogin && localLogin === "true";
+            //},
 
             _onGotLocale: function (err, data) {
                 //console.log(JSON.stringify(data));
-                if (data && !data.Success) {
+                if (data && !data.success) {
                     err = data.message;
                 }
                 if (err) {
                     throw err;
                 }
                 else {
-                    document.cookie = "p4mLocale=" + data.Token + "; path=/";
+                    document.cookie = "p4mLocale=" + data.token + "; path=/";
                 }
             },
 
@@ -233,21 +349,21 @@
                     this._waitForAuthCompletion();
             },
 			
-            logoutThisSite: function () {
-                this.clearCookies();
-                if (this.logoutForm && this.logoutForm != '') {
-                    var formElem = document.getElementById(this.logoutForm);
-                    if (formElem) {
-                        formElem.submit();
-                    }
-                    else {
-                        window.location.reload(true); 
-                    }
-                }
-                else {
-                    window.location.reload(true);
-                }
-            },
+            //logoutThisSite: function () {
+            //    this.clearCookies();
+            //    if (this.logoutForm && this.logoutForm != '') {
+            //        var formElem = document.getElementById(this.logoutForm);
+            //        if (formElem) {
+            //            formElem.submit();
+            //        }
+            //        else {
+            //            window.location.reload(true); 
+            //        }
+            //    }
+            //    else {
+            //        window.location.reload(true);
+            //    }
+            //},
 
             logoutThisDevice: function () {
                 var logoutUrl = this.idSrvUrl + "/connect/endsession";
@@ -292,17 +408,31 @@
                 this.$.p4mNonceCookie.eraseCookie();
                 this.$.p4mLocalLoginCookie.eraseCookie();
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
+                this.$.p4mConsumerCookie.eraseCookie();
+                this.$.p4mPrefAddressCookie.eraseCookie();
+                this.$.p4mAddressCookie.eraseCookie();
+                this.$.p4mCartCookie.eraseCookie();
+                this.$.p4mCartAddressCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
-                this.$.p4mDefaultCountryCodeCookie.eraseCookie();
-                this.$.p4mDefaultPostCodeCookie.eraseCookie();
                 this.$.p4mGivenNameCookie.eraseCookie();
-                this.$.gfsCheckoutTokenCookie.eraseCookie();
+                // clear local properties
+                this.p4mToken = null;
+                this._state = null;
+                this._nonce = null;
             },
 
             popupCenter: function(url, title, w, h) {
                 var left = (screen.width/2)-(w/2);
                 var top = (screen.height/2)-(h/2);
-                return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+                var win = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+                try {
+                    win.focus();
+                    return win;
+                }
+                catch (e) {
+                    this._showAsLoginRequired();
+                    this.fire('popup-blocked');
+                }
             },
 
             _makeState: function() {
@@ -332,7 +462,8 @@
             _waitForAuthCompletion: function() {
                 if (!this._authCompletionInterval) {
                     this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
-                }             
+                }
+                window.addEventListener("message", this._showAsLoggedOut.bind(this));
             },
 
             _checkAuthIsComplete: function() {
@@ -340,52 +471,85 @@
                     if (this._authCompletionInterval) {
                         window.clearTimeout(this._authCompletionInterval);
                     }
-                    this._onAuthCompletion();
+                    this.processLogin();
                 }
 
             },
 
-            _onAuthCompletion: function () {
-                var currentPage = { "currentPage": window.location.href };
+            _doLocalLogin: function () {
+                var data = { consumer: this.consumerData, currentPage: window.location.href };
                 this._showAsLoggingIn();
-                this.$.localApi.call('localLogin', currentPage, null, this._onLocalLogin.bind(this));
+                this.$.localApi.call('localLogin', null, data, this._onLocalLogin.bind(this));
             },
 
             _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
-                this._showAsLoggedIn();
-                if (data.RedirectUrl) {
-                    window.location.href = data.RedirectUrl;
-                }
-                else {
-                    if (err || data.Error) {
-                        console.error("A login error occurred:", err || data.Error);
-                    }
+                if (err || data.error) {
+                    console.error("A login error occurred:", err || data.error);
+                    this._onError(err || data.error);
                     window.location.reload(true);
                 }
+                else {
+                    var self = this;
+                    this.checkForGfsToken(function () {
+                        if (self.consumerData.localId !== data.localId)
+                            self.saveLocalId(data.localId, function (err) {
+                                self.reloadBrowser(data.redirectUrl);
+                            });
+                        else
+                            this.reloadBrowser(data.redirectUrl);
+                    });
+                }
             },
 
-            _onCheckLocalLogin: function (err, data) {
-                //console.log(JSON.stringify(data));
-                if (!data.Success)
-                    this._onAuthCompletion();
+            checkForGfsToken: function(callback) {
+                if (!this.hasGfsToken())
+                    this.getGfsToken(callback);
+                else if (callback)
+                    callback();
             },
 
-            _onConsumerDetails: function(data) {
-                console.log(JSON.stringify(data));
+            reloadBrowser: function(url) {
+                if (url) 
+                    window.location.href = url;
+                else 
+                    window.location.reload(true);
+            },
+        
+            saveLocalId: function(id, callback) {
+                // save the local consumer Id as an "extra" in P4M 
+                this.consumerData.extras.localId = id;
+                this.updateConsumerCookie();
+                this.$.p4mLoginApi.call('consumerExtras', null, { localId: id }, callback);
             },
 
             _useLastCart: function () {
                 this.showDlgSpinner();
                 this._restoreCartStatusMessage = "Restoring cart...";
-                this.$.localApi.call('restoreLastCart', null, null, this._onRestoreLastCart.bind(this));// this._onLocalLogin.bind(this));
+                this.$.p4mLoginApi.call('restoreLastCart', { sessionId: this.sessionId }, null, this._onRestoreLastCart.bind(this));
             },
 
             _useNewCart: function () {
                 this.$.lastCartDlg.close();
             },
 
-            _onRestoreLastCart: function () {
+            _onRestoreLastCart: function (err, data) {
+                // update the cart cookies
+                if (data.success) {
+                    var cart = data.cart;
+                    var addr = data.deliverTo;
+                    document.cookie = "p4mCart=" + fldStr(cart.id) + fldStr(cart.addressId) + fldStr(addr.dropPointId) + fldStr(cart.serviceId) + fldStr(cart.expDeliveryDate, true) + "; path=/;";
+                    document.cookie = "p4mCartAddress=" +
+                        fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                        fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
+                        fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
+                    this.$.localApi.call('restoreLastCart', null, cart, this.closeRestoreDlg.bind(this));
+                }
+                else
+                    closeRestoreDlg();
+            },
+
+            closeRestoreDlg: function() {
                 //Turn off dialog spinner
                 this.hideDlgSpinner();
                 this._restoreCartStatusMessage = "Restored cart";
@@ -396,11 +560,18 @@
             _selectMenuItem: function() {
                 var selectedItemIndex = this.$['p4m-menu'].selected;
                 switch (selectedItemIndex) {
-                    case 0: break;
-                    case 1: this.logoutThisSite(); break;
-                    case 2: this.logoutThisDevice(); break;
-                    case 3: this.logoutAllDevices(); break;
-                    case 4: this._useLastCart(); break;
+                    //case 0: break;
+                    //case 1: this.logoutThisSite(); break;
+                    case 0: this.logoutThisDevice(); break;
+                    case 1: this.logoutAllDevices(); break;
+                    case 2: this._useLastCart(); break;
+                    case 3: break;
+                    case 4:
+                        if(this.idSrvUrl.indexOf('ids.') > 0) 
+                            window.open(this.idSrvUrl.replace('ids.', 'my.')); 
+                        else
+                            window.open(this.idSrvUrl.replace('8089', '8080')); 
+                        break;
                 }
             },
 
@@ -436,28 +607,60 @@
 
             onRequestForLogin: function () {
                 //If we hear a global event calling for a login
+                this.clearCookies();
                 this._showAsLoggingIn();
                 this.launchPopup();
 
             },
 
+            _onError: function(err) {
+                this._showAsLoggedOut();
+                this.clearCookies();
+            },
+
             _showAsLoggingIn: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.set("class", "loggingIn");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loggingIn", true);
+                this.toggleClass("loginRequired", false);
                 this.$.spinner.active = true;
             },
 
             _showAsLoggedIn: function() {
                 this.$.p4mProfile.classList.remove("hidden");
-                this.set("class", "loggedIn");
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedIn", true);
+                this.toggleClass("loginRequired", false);
                 this.$.spinner.active = false;
             },
-
-
+            
             _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.set("class", "loggedOut");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedOut", true);
+                this.toggleClass("loginRequired", false);
+                this.$.spinner.active = false;
+            },
+            
+            _showAsLoginRequired: function() {
+                this.$.p4mProfile.classList.add("hidden");
+                this.toggleClass("loggedIn", false);
+                this.toggleClass("loggingIn", false);
+                this.toggleClass("loggedOut", false);
+                this.toggleClass("loginRequired", true);
+                this.$.spinner.active = false;
             }
         });
+
+        function fldStr(field, last) {
+            return (field ? field : "") + (!last ? "|" : "");
+        }
+
+        function fldOrNull(fld) {
+            return fld === '' ? null : fld;
+        }
     </script>
 </dom-module>

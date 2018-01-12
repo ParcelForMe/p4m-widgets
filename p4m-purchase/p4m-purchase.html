@@ -1,6 +1,5 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../p4m-api/p4m-api.html" />
-<link rel="import" href="../p4m-overlay/p4m-overlay.html" />
 
 <link rel="stylesheet" href="../p4m-shared/p4m.css" />
 
@@ -19,14 +18,21 @@
             <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab">
                 <paper-tab id="card" name="card" data-tooltip="Pay with credit card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
                 <paper-tab id="paypal" name="paypal" data-tooltip="Pay with PayPal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
+                <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
+				<template is="dom-if" if="{{mobile}}">
+                    <span class="edit-link SmallerThanDesktop" onclick="select(4);">Edit</span>
+                </template>
+                <!-- RESP --><!-- / SmallerThanDesktop -->
             </paper-tabs>
 
             <div class$="selectedPaymentMethod_{{selectedPaymentType}}">
                 <template is="dom-if" if="{{selectedCard}}">
-                    <p4m-card id="card" selected-card-id={{selectedCard.Id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
+                    <p4m-card id="card" selected-card-id={{selectedCard.id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
                 </template>
                 <template is="dom-if" if="{{_noCardSelected}}">
-                    You have not yet selected a payment method. <a on-click="requestPaymentMethod">Click here to select one.</a>
+                    <div class="card-panel no-card"><p>You have not yet selected a payment method.</p>
+                    <!-- RESP --><!-- SmallerThanDesktop  Notes: The following requires a trigger for the mobile page as well  -->
+                    <p><a on-click="requestPaymentMethod">Click here to select one.</a></p></div>
                 </template>  
             </div>
                                         
@@ -37,21 +43,17 @@
             </div-->        
 
             <p class="p4m-error">{{errorMsg}}</p>   
-      
         </div>
-        <p4m-overlay id="overlay" no-cancel-on-outside-click with-backdrop></p4m-overlay>
     </template>
-
+    
     <style> 
       
         .hidden {
             display: none;
         }
-        --iron-overlay-backdrop-opacity {
-            opacity: 0.9;
-        }
         paper-tabs {
             overflow: visible;
+            margin-bottom: 6px;
         }
         .p4m-error {
             color: red;
@@ -62,6 +64,48 @@
         .button-container {
             display: flex;
             flex-direction: row;
+        }
+
+        #p4mPurchaseContainer .card-panel {
+            border-radius: 6px;
+            box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+            display: flex;
+            align-self: stretch;
+            flex: 1;
+            color: #777;
+            min-height: 125px;
+            justify-content: center;
+            align-items: center;
+        }
+        #p4mPurchaseContainer .card-panel.no-card {
+            flex-direction: column;
+        }
+        p4mPurchaseContainer .card-panel.no-card p {
+            margin: 0;
+        }
+
+        #p4mPurchaseContainer .card-panel p {
+            text-align: center;
+            line-height: 1.5em;
+            font-size: 14px;
+            display: block;
+            font-size: 14px;
+        }
+        #p4mPurchaseContainer .card-panel.no-card p {
+            margin: .2em 0;
+        }
+
+        #p4mPurchaseContainer .card-panel p a {
+            border-bottom: 2px solid transparent;
+            display: block;
+        }
+
+        #p4mPurchaseContainer .card-panel p a:hover {
+            border-bottom: 2px solid #777;
+        }
+        #p4mPurchaseContainer .card-panel p a:hover {
+            color: #37a553;
+            border-bottom: 2px solid #37a553;
         }
 
         .p4m-button#p4mBuyNowButton {
@@ -91,6 +135,8 @@
 
         div[class*="selectedPaymentMethod"] {
             position: relative;
+            display: flex;
+            justify-content: center;
         }
         .selectedPaymentMethod_paypal {
             opacity: 0.5;
@@ -106,7 +152,8 @@
             NOT_PURCHASED: 1,
             PURCHASING: 2,
             FAILED_PURCHASE: 3,
-            PURCHASED: 4
+            PURCHASED: 4,
+            INVALID: -1
         };
 
         var PaymentTypes = {
@@ -118,6 +165,10 @@
             is: "p4m-purchase",
 
             properties: {
+			    mobile: { 
+				    type: Boolean,
+					value: false
+				},
                 cartData: {
                     type: Object,
                     notify: true,
@@ -196,8 +247,9 @@
 
             ready: function ()
             {
+                this._state = States.CVV_NEEDED;
                 this.selectedPaymentType = PaymentTypes.CARD;
-                window.addEventListener('buy', this.buyNow.bind(this), false);
+                window.addEventListener('buy', this.buyNow.bind(this), false); //From button
                 this.load();
             },
 
@@ -207,9 +259,7 @@
                 this.updateUi();
             },
 
-            onCvv: function (e) {
-
-                
+            onCvv: function (e) {                
                 var card = e.target; //.this.$$('#card');
                 if (!card || !card.cvv || card.cvv === "" || e.detail === false) {
                     this._state = States.CVV_NEEDED;
@@ -230,35 +280,40 @@
             buyNow: function (e) {
                 console.log(e);
                 this.errorMsg = "";
-                if (e.detail && e.detail.paymentType && e.detail.paymentType == "paypal") {
-                    this.buyViaPaypal();
+                var usePaypal = e.detail && e.detail.paymentType && e.detail.paymentType === "paypal";
+                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || (usePaypal && this._state === States.CVV_NEEDED)) {
+                    this._state = States.PURCHASING;
+                    if (usePaypal) {
+                        if (this.beforePurchase) {
+                            this.beforePurchase(this.buyViaPaypal.bind(this));
+                        }
+                        else this.buyViaPaypal();
+                    }
+                    else {
+                        if (this.beforePurchase) {
+                            this.beforePurchase(this.buyViaCard.bind(this));
+                        }
+                        else this.buyViaCard();
+                    }
                 }
-                else {
-                    this.buyViaCard();
-                }
-
             },
 
-            buyViaCard: function() {
-                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE) {
-                    this._state = States.PURCHASING;
-                    if (this.beforePurchase) {
-                        this.beforePurchase()
-                    }
-                    var postData = { cartId: this.cartData.Id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.Total };
-                    /*postData.newDropPoint = null;
-                    if (this.newDropPoint) {
-                        postData.newDropPoint = this.newDropPoint;
-                    }*/
+            buyViaCard: function(err, carrierName) {
+                if (err) {
+
+                }
+                else {
+                    var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total, carrier: carrierName };
                     this.$.localApi.call('purchase', null, postData, this.onPurchase.bind(this));
                 }
             },
 
-            buyViaPaypal: function () {
-                if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || this._state === States.CVV_NEEDED) {
-                    this._state = States.PURCHASING;
-                    debugger;
-                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.Id, cartTotal: this.cartData.Total }, null, this.onPaypalSetup.bind(this));
+            buyViaPaypal: function (err, carrierName) {
+                if (err) {
+
+                }
+                else {
+                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.id, cartTotal: this.cartData.total, carrier: carrierName }, null, this.onPaypalSetup.bind(this));
                 }
             },
 
@@ -269,27 +324,24 @@
                 this._state = States.CVV_NEEDED;                    
             },
 
+            setEnabled: function(enabled) {
+                this.set('_enabled', enabled);
+            },
+
             onPurchase: function (err, data) {
                 console.log('onPurchase', data);
-                if (data.Success == false) {
+                if (data.success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
                 }
                 else {
                     // check we need to launch the 3D Secure popup
-                    if (data.ACSUrl && data.ACSUrl !== '') {
-                        this.launch3DSecure(data.ACSUrl, data.PaReq, data.ACSResponseUrl, data.P4MData);
+                    if (data.ACSUrl && data.AcsUrl !== '') {
+                        this.launch3DSecure(data.acsUrl, data.paReq, data.acsResponseUrl, data.p4mData);
                     }
                     else {
                         this._state = States.PURCHASED;
-                        this.fire("payment-complete", {redirectUrl: data.RedirectUrl || this.redirectUrl || null});
-                        /*if (data.RedirectUrl) {
-
-                            window.location.href = data.RedirectUrl;
-                        }
-                        else if (this.redirectUrl) {
-                            window.location.href = this.redirectUrl;
-                        }*/
+                        this.fire("payment-complete", {redirectUrl: data.redirectUrl || this.redirectUrl || null});
                     }
                 }
             },
@@ -310,7 +362,7 @@
                 }
                 else {
                     // we have a token from PP so now we can launch PP in a popup
-                    this.openPopup(this.paypalUrl + result.Token, "paypalWindow", 650, 750);
+                    this.openPopup(this.paypalUrl + result.token, "paypalWindow", 650, 750);
                 }
             },
 
@@ -373,7 +425,7 @@
                     this._noCardSelected = true;
                 }
         
-                if (!this._loggedIn || !this.cartData) {                    
+                if (!this._loggedIn || !this.cartData || !this.cartData.addressId || !this.cartData.serviceId) {                    
                     this.showAsNotValid();
                 }
                 else if (this._state == States.CVV_NEEDED) {
@@ -392,19 +444,23 @@
                 else if (this._state == States.FAILED_PURCHASE) {
                     this.showAsFailed();
                 }
+
                 this.fire('p4mPaymentState', this._state);
                 
             },
 
-
+            buying: false,
             setLoadingState: function(loading) {
                 if (loading) {
+                    this.buying = true;
                     this.showOverlay();                  
                     this._topClass = "loading";
                 }
                 else {
-                    this.hideOverlay();
-
+                    if (this.buying) {
+                        this.hideOverlay();
+                        this.buying = false;
+                    }
                     this._topClass = "active";
                 }
             },
@@ -428,6 +484,7 @@
                 this.$.p4mPaypalButton.classList.remove('p4m-button-active');
                 this.$.p4mPaypalButton.classList.add('disabled');*/
                 this.setLoadingState(false);
+                this._state = States.INVALID;
                 this.topClass = "invalid";
             },
 
@@ -480,12 +537,16 @@
                 this.topClass = "failed";
             },
 
-            showOverlay: function() {
-                this.$.overlay.open();
+            showOverlay: function () {
+                var overlay = document.getElementById('screenOverlay'); 
+                if (overlay)
+                    overlay.show("Processing your payment");
             },
 
             hideOverlay: function () {
-                this.$.overlay.close();
+                var overlay = document.getElementById('screenOverlay');
+                if (overlay)
+                    overlay.close();
             },
 
             requestPaymentMethod: function () {

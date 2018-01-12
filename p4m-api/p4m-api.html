@@ -1,5 +1,4 @@
 <link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
 
 <dom-module id="p4m-api">
@@ -11,10 +10,25 @@
     <script>
         var apiEndpoints = {};
         apiEndpoints.v2 = {
+            "consumerNeedsUpdating": {
+                "stub": "consumerNeedsUpdating/{lastUpdated}",
+                "method": "GET",
+                "params": [
+                    {
+                        "name": "lastUpdated",
+                        "required": true
+                    }
+                ]
+            },            
             "consumer": {
                 "stub": "consumer",
                 "method": "GET",
-                "params": []
+                "params": [
+                    {
+                        "name": "checkHasOpenCart",
+                        "required": false
+                    }
+                ]
             },
             "consumerExtras": {
                 "stub": "consumerExtras",
@@ -71,6 +85,15 @@
                 ]
             },
 
+            "restoreLastCart": {
+                "stub": "restoreLastCart/{sessionId}",
+                "method": "GET",
+                "params": [{
+                    "name": "sessionId",
+                    "required": true
+                }]
+            },
+
             "getLocale": {
                 "stub": "getLocale",
                 "method": "GET"
@@ -110,6 +133,10 @@
         apiEndpoints.local = {
             "localLogin": {
                 "stub": "localLogin",
+                "method": "POST"
+            },
+            "localLoginGet": {
+                "stub": "localLogin",
                 "method": "GET",
                 "params": [{
                     "name": "currentPage",
@@ -124,12 +151,16 @@
                 "stub": "getP4MCart",
                 "method": "GET"
             },
-            "restoreLastCart": {
-                "stub": "restoreLastCart",
-                "method": "GET"
-            },
             "shippingSelector": {
                 "stub": "shippingSelector",
+                "method": "GET"
+            },
+            "restoreLastCart": {
+                "stub": "restoreLastCart",
+                "method": "POST"
+            },
+            "renewShippingToken": {
+                "stub": "renewShippingToken",
                 "method": "GET"
             },
             "updShippingService": {
@@ -185,10 +216,6 @@
                     type: String,
                     value: "dev" //local, dev, test, live
                 },
-                port: {
-                    type: Number,
-                    value: 44321
-                },
                 version: {
                     type: String,
                     value: "v2"
@@ -223,8 +250,11 @@
                 if (this.isLocal) {                   
                     return "//" + window.location.host + "/p4m/";                   
                 }
+                else if (this.hostType === 'local') {
+                    return "http://localhost:8088/api/" + this.version + "/";
+                }
                 else {
-                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "." + this.hostBaseDomain + ":" + this.port + "/api/" + this.version + "/";
+                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "-api." + this.hostBaseDomain +  "/api/" + this.version + "/";
                 }               
             },
 
@@ -307,12 +337,18 @@
                     }
                     httpRequest.setRequestHeader('Authorization', 'Bearer ' + this.consumerToken);
                     httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
                     httpRequest.onreadystatechange = (function () {
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             try {
-                                if (httpRequest.status === 401) {
+                                if (httpRequest.status === 401 || httpRequest.responseText.includes('Access has expired')) {
                                     var loginWidget = document.getElementsByTagName("p4m-login")[0];
-                                    loginWidget.logoutThisSite();
+                                    loginWidget.clearCookies();
+                                    this.consumerToken = null;
+                                    this.fire('p4m-request-login');
+                                }
+                                else if (httpRequest.status === 0) { //Timeout
+                                    this.fire('noservice');
                                 }
                                 else {
                                     intermediateCallback(JSON.parse(httpRequest.responseText));
@@ -323,12 +359,13 @@
                                 if (e.stack) {
                                     console.error(e.stack);
                                 }
-                                                               
+                                this.fire('noservice', e);
                                 //console.error("JSON response error: " + httpRequest.responseText);
                                 //intermediateCallback(JSON.parse(httpRequest.responseText));
                             }
                         }
-                    });
+                        
+                    }).bind(this);
                     if (apiRequest.data) {
                         httpRequest.send(JSON.stringify(apiRequest.data));
                     }
@@ -362,21 +399,23 @@
 
             _handleResponse: function (apiRequest, finalCallback, responseData) {
                 console.log("API response: ", apiRequest, responseData);
-                if (!responseData.Success) {
-                    var err = responseData.Error || responseData.Message;
-                    if (responseData.status == 401 || err.indexOf("expired") > -1 || err.indexOf("denied") > -1) {
+                if (!responseData.success) {
+                    var err = responseData.error || responseData.message;
+                    if (responseData.status == 401 || (err && (err.indexOf("expired") > -1 || err.indexOf("denied") > -1))) {
                         var loginWidget = document.getElementsByTagName("p4m-login")[0];
                         loginWidget.logoutThisSite();
                     }
                     else {
-                        console.error(responseData);
-                        
+                        console.log(responseData);
+                        throw err;
                     }
-                    finalCallback(err, responseData);
+                    if (finalCallback)
+                        finalCallback(err, responseData);
                 }
                 else {
                     this.fire("p4m_" + apiRequest.endPoint.stub, responseData, true);
-                    finalCallback(null, responseData);
+                    if (finalCallback)
+                        finalCallback(null, responseData);
                 }                           
             }
 

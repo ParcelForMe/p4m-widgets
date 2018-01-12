@@ -5,6 +5,9 @@
 
 	<template>
 		<style>
+            :host([panel-mode=true])  {
+                 border-bottom: 1px solid #ccc;
+            }
             .content {
                  cursor: pointer;
                  width: 100%;
@@ -26,11 +29,9 @@
 				line-height: 0.6em;
 			}
 			td {
-				padding: 0;
+				padding: 0 0 1px 0;
 			}
-			td li {
-				line-height: 14px;
-			}
+
 			.content-container {
 				cursor: pointer;
 				flex: 1;
@@ -144,6 +145,10 @@
 				margin-right: 0.2em;
 			}
 
+			.droppoint-delivery-selection {
+                margin-left: 10px;
+			}
+
 			.choose-droppoint {
 				border: none;
 				background: #eaeaea;
@@ -192,6 +197,39 @@
 				margin-top: 4px;
 				width: 100%;
 			}
+
+			.dpDescription, #dp-address-line1 {
+			    font-size: 14px;
+			}
+			.dpDescription {
+                font-weight: bold;
+			    margin-bottom: 4px;
+			}
+
+			/* Hide until shown */
+			.closed .dp-opening-hours, 
+            .closed span.info, 
+            .closed span.daterange
+            {
+                height: 0;
+                overflow: hidden;
+                margin: 0;
+            }
+            #dp-address-line1 {
+            	display: none;
+            }
+            .closed #dp-address-line1 {
+            	display: block;
+            }
+            a.open-hours {
+				font-size: 12px;
+				padding: 2px 0;
+				border-bottom: 2px solid transparent;
+				text-decoration: none;
+				margin: 8px 0 0 0;
+				display: inline-block;
+				cursor: pointer;
+            }
 
 			div.dp-day-name {
 				font-weight: bold;
@@ -311,6 +349,7 @@
 			.dp-icon {
 				margin: 0 0 5px;
                 float: left;
+                max-width: 34px;
 			}
 
 			#dp-address, #dp-distance {
@@ -351,110 +390,107 @@
                 margin: 0px;
             }
 
+            .delivery-place {
+                display: flex;
+                align-items: center;
+            }
+
+            #preferredIcon {
+                line-height: 1.3;
+                color: rgb(95, 186, 118);
+            }
+            .price {
+                float:right;
+            }
+
+            .preferredList {
+                max-width: 250px;
+                line-height: initial!important;
+            }
 		</style>
 
-
 		<div class$="{{containerClass}}" on-click="_onClick">
-			<template is="dom-if" if="{{title}}">
-				<h3>{{title}}</h3>
-			</template>
-
 			<div class="content">
-
 				<div class="dp-details">
+                    <div class="dp-icon">
+                        <template is="dom-if" if="{{droppointData.providerName}}">
+                            <local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45" ></local-image>
+                        </template>
+                        <template is="dom-if" if="{{_isPreferred(panelMode, droppointData.preferred)}}">
+                            <i id="preferredIcon" class="p4micon-heart-fill"></i>
+                        </template>
+                        <template is="dom-if" if="{{_showSelected(droppointData.selected)}}">
+                            <i class="p4micon-check-circle gfs-droppoint" style="line-height: 1.3; color: rgb(95, 186, 118);"></i>
+                        </template>
+                    </div>
+                    <div class="content">
+                        <div class="dpProviderName">{{droppointData.providerName}}</div>
+                        <div class="dpDescription">{{droppointData.droppointDescription}}</div>
+                        <div id="dp-address">{{_showAddress(droppointData)}}</div>
+                        <template is="dom-if" if="{{panelMode}}">
+                            <div id="dp-distance">
+                                <div class="font-weight-600">Distance:</div>
+                                <i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
+                            </div>
 
-					<div class="dp-icon">
-						<template is="dom-if" if="{{droppointData.providerName}}">
-							<local-image img-src="{{droppointData.providerName}}.png" local-folder="gfs-droppoint/images" class="imageicon" height="45"></local-image>
-						</template>
-					</div>
-					<div class="content">
-						<div class="dpProviderName">{{droppointData.providerName}} <template is="dom-if" if="{{isTickButton}}"><div class$="b-tick {{buttonClass}}"></div></template>
-						</div>
+                            <template is="dom-if" if="{{expanded}}">
+                                <div class="shippingOptions">
+                                    <ul>
+                                        <template id="serviceTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
+                                            <li class="delivery-place">
+                                                <label for$="dp-{{item.service.id}}">
+                                                    <span class="gfsmethodname">
+                                                        <span class="info">{{item.service.methodTitle}}</span>
+                                                        <span class="daterange">{{item.deliveryDateRange}}
+                                                        <span class="price">{{currencySymbol}}{{item.service.price}}</span></span>
+                                                    </span>
+                                                </label>
 
-						<div id="dp-address">
-							<template is="dom-repeat" items="{{droppointData.geoLocation.addressLines}}">
-								<template is="dom-if" if="{{item}}">
-									{{item}}
-									<br />
-								</template>
-							</template>
-							{{droppointData.geoLocation.town}}, {{droppointData.geoLocation.postCode}}
-						</div>
-						<template is="dom-if" if="{{showDistance}}">
-							<div id="dp-distance">
-								<div class="font-weight-600">Distance:</div>
-								<i class="p4micon-map-marker"></i>{{droppointData.localizedDistance}}
-							</div>
-						</template>
+                                                <i name="shipping_method"
+                                                    on-click="onClickOption"
+                                                    value="{{item.service.id}}"
+                                                    id="dp-{{item.service.id}}"
+                                                    class$="p4micon-check-circle link droppoint-delivery-selection {{_isServiceSelected(item)}}"></i>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
 
-						<div id="dp-body">
-							<div id="dp-minor-info">
-								<div class="dp-opening-hours">
-									<table>
-										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
-											<tr>
-												<td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
-												<td class="dp-day-time-slots">
-													<ul class="testMe">
-														<template is="dom-repeat" items={{item.timeSlots}}>
-															<li class="dp-day-time-slot">{{item.fromTime}} - {{item.toTime}}</li>
-														</template>
-													</ul>
-												</td>
-											</tr>
-										</template>
-									</table>
-								</div>
-							</div>
-						</div>
+                                <div id="dp-body">
+                                    <div id="dp-minor-info">
+                                        <div class="dp-opening-hours">
+                                            <table>
+                                                <template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
+                                                    <tr>
+                                                        <td class="dp-day-name"><ul><li>{{item.day}}</li></ul></td>
+                                                        <td class="dp-day-time-slots">
+                                                            <ul class="testMe">
+                                                                <template is="dom-repeat" items={{item.timeSlots}}>
+                                                                    <li class="dp-day-time-slot">{{_showTimes(item)}}</li>
+                                                                </template>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <!--
+                            <div class="actions">
+                                <template is="dom-if" if="{{isStandardButton}}">
+                                    <div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
+                                </template>
+                            </div>
+                            -->
 
-						<template is="dom-if" if="{{showShippingOptions}}">
-							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
-								<div class="shippingOptions">
-									<ul>
-										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
-											<li class="delivery-place">
-
-												<label for$="dp-{{item.service.id}}">
-													<span class="gfsmethodname"><span class="price">{{currencySymbol}}{{item.service.price}}</span><span class="info">{{item.service.methodTitle}}</span>
-													<span class="daterange">{{item.deliveryDateRange}}</span>
-												</label>
-
-												<i name="shipping_method" 
-													on-click="onClickOption" 
-													value="{{item.service.id}}" 
-													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle link droppoint-delivery-selection {{item.className}}"
-													></i>
-												<!-- <i name="shipping_method" 
-													on-click="onClickOption" 
-													value="shipping_method_{{_id}}" 
-													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
-													></i> -->
-												<!--<input type="radio"
-													name="shipping_method_{{_id}}"
-													checked="{{item.selected}}"
-													value="{{item.service.id}}"
-													id="dp-{{item.service.id}}"
-													on-click="onClickOption"
-													class="radio droppoint-delivery-selection" /> -->
-
-											</li>
-										</template>
-									</ul>
-								</div>
-							</template>
-						</template>
-
-						<div class="actions">
-							<template is="dom-if" if="{{isStandardButton}}">
-								<div on-click="toggleChooseDropPoint" class$="choose-droppoint {{buttonClass}}"><i class="p4micon p4micon-check"></i></div>
-							</template>
-						</div>
-					</div>
-				</div>
+                            <template is="dom-if" if="{{panelMode}}">
+                                <a on-click="toggleExpanded" class="feature open-hours">{{_expandText}}</a>
+                            </template>
+                        </template>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</template>
@@ -465,13 +501,16 @@
             is: "gfs-droppoint",
 
             properties: {
-                title: {
-                    type: String
+                panelMode: {
+                    type: Boolean,
+                    value: false,
                 },
 
                 droppointData: {
                     type: Object,
-                    value: {}
+                    value: {},
+                    notify: true,
+                    observer: '_dataChanged',
                 },
 
                 containerClass: {
@@ -518,6 +557,10 @@
                 _id: {
                     type: String,
                     value: Math.floor(Math.random() * 99999) + (new Date().getDate()).toString()
+                },
+                _expandText: {
+                    type: String,
+                    value: 'Show shipping options and details'
                 }
             },
 
@@ -531,8 +574,10 @@
 
 			ready: function () {
 
-				var self = this;
-				this.initData();
+			    if (this.panelMode) 
+			        this.toggleClass("closed", true, Polymer.dom(this).node.firstElementChild);
+
+			    this.initData();
 
                 //Set the button type, if any
 				if (this.buttonType === "none")
@@ -547,26 +592,83 @@
 
 			    //Listen for a droppoint being selected somewhere on the page
 			    //Window-level listener, to ensure that we get our peers
-				window.addEventListener('droppoint-selected', this.onOtherDroppointSelected.bind(this), false);
+			    //window.addEventListener('droppoint-selected', this.onOtherDroppointSelected.bind(this), false);
+				if (this.panelMode) {
+				    window.addEventListener('dp-selected-map', this._onDPSelectedOnMap.bind(this), false);
+				    window.addEventListener('selectedservicechanged', this._onMethodSelected.bind(this), false);
+				}
 			},
 
 
 			initData: function () {
-                //Set a unique ID
-			    this._id = Math.floor(Math.random() * 99999) + (new Date().getDate()).toString()
+			    //Set a unique ID
+			    this._id = Math.floor(Math.random() * 99999) + (new Date().getDate()).toString();
+			    this._dataChanged();
+			},
 
-                //Ensure 'selected' has a value
+			_dataChanged: function() {
+			    //Ensure 'selected' has a value
 			    if (typeof (this.droppointData.selected) === "undefined") {
-				    this.droppointData.selected = false;
-				}
+			        this.droppointData.selected = false;
+			    }
 
-                //Build a nice week view of delivery methods
-                this.buildWeekCollection();
+			    //Build a nice week view of delivery methods
+			    this.buildWeekCollection();
+			},
+            
+			_isPreferred: function(panelMode, preferred) {
+			    return panelMode && preferred;
+			},
 
+			_showSelected: function (selected) {
+			    return this.panelMode && selected;
+			},
+
+			_isServiceSelected: function(item) {
+			    return item.className === 'selected' && this.droppointData.selected ? 'selected' : 'unchosen';
+			},
+
+			_showAddress: function(data) {
+			    var addr = '';
+			    if (data && data.geoLocation && data.geoLocation.addressLines) {
+			        for (var i = 0; i < data.geoLocation.addressLines.length; i++) {
+			            if (data.geoLocation.addressLines[i] && data.geoLocation.addressLines[i] !== data.droppointDescription)
+			                addr += data.geoLocation.addressLines[i] + ', ';
+			        }
+			        if (data.geoLocation.town)
+			            addr += data.geoLocation.town;
+			    }
+			    return addr;
+			},
+
+			_showTimes: function (item) {
+			    var to = this._getTime(item.toTime);
+			    var from = this._getTime(item.fromTime);
+			    var hrsDiff = moment.duration(to.diff(from));
+			    if (hrsDiff._data.hours === 0)
+			        return "Closed";
+			    else if (hrsDiff._data.hours >= 23)
+			        return "24 hrs";
+			    return item.fromTime + ' - ' + item.toTime;
+			},
+
+			_getTime: function(timeStr) {
+			    var parts = timeStr.split(':');
+			    return moment().hour(parts[0]).minute(parts[1]);
+			},
+
+			_onDPSelectedOnMap: function(e) {
+			    // the user has selected a DP from the map
+			    if (!this.droppointData) return;
+			    var dpId = e.detail;
+			    if (this.droppointData.droppointId === dpId)
+			        this.select();
+			    else if (this.droppointData.selected)
+			        this.unselect();
 			},
 
 			buildWeekCollection: function() {
-			    if (this.droppointData.collectionSlots) { // && this.droppointData.collectionSlots) {
+			    if (this.droppointData) { 
 			        this.droppointData.distanceInKm = (Math.round(this.droppointData.distanceInMeters / 100)) / 10;
 
 					var dayCount = 0;
@@ -579,7 +681,8 @@
 						dayCount++;
 						if (dayCount <= 7) {
 
-							collectionSlot.collectionDateTime = self._getUtcTime(new Date(collectionSlot.collectionDate));
+							//collectionSlot.collectionDateTime = self._getUtcTime(new Date(collectionSlot.collectionDate));
+							collectionSlot.collectionDateTime = new Date(collectionSlot.collectionDate);
 							collectionSlot.day = DOW_NAMES[collectionSlot.collectionDateTime.getDay()];
 
 							collectionSlot.timeSlots.forEach(function (timeSlot) {
@@ -595,94 +698,71 @@
 					});
 
 					this.set('_weekCollection', weekCollection);
-					//this.$.weekCollectionTemplate.render();
+					this.updateServicesUI(this.droppointData.deliveryMethod);
 				}
 			},
 
-			select: function() {
+			select: function () {
 			    this.set('droppointData.selected', true);
-			    this.buildWeekCollection();
-			    //this.autoSelectMethod();
-                
-			    //this.fire('droppoint-selected', this.droppointData);
 			},
-
-
+            
 			unselect: function () {
 			    this.set('droppointData.selected', false);
-			    this.render();
-			},
-
-            //== Global event handler
-            //Another droppoint widget has been selected. React to this, by:
-            // * selecting myself (if the other widget represents the same droppoint), or;
-			// * unselecting myself (otherwise).
-			onOtherDroppointSelected: function (e) {
-			    
-			    var dp = e.detail;
-			    if (!this.droppointData) return;
-
-                //If the droppoint selected was this one, make sure this "selected" value reflects the other one
-			    if (dp.droppointId == this.droppointData.droppointId) {
-			        if (this.droppointData.selected !== dp.selected) {
-			            this.set('droppointData', dp);
-			        }
-			        this.render();
-
-			        return;
-			    }
-                //If it's another one and it's been selected, unselect me
-			    else if (dp.selected) {
-			        this.unselect();
-			    }
-			},
-
-            //Update the button appearance based on whether this droppoint is selected or not
-			render: function () {
-
-			    if (!this.droppointData) {;
-                    console.error("No droppoint data")
-			        return;
-			    }
-			    else if (this.droppointData.selected) {
-				    this.set('buttonClass', this.buttonSelectedClass);
-					this.buttonText = "Selected";
-				}
-				else {
-				    this.set('buttonClass', this.buttonNotSelectedClass);
-					this.buttonText = "Select";
-				}
+			    this.selectMethod(null, true);
 			},
 
 			onClickOption: function (e) {
+			    if (!this.droppointData.selected)
+			        this.select();
 			    this.selectMethod(e.target.value);
+			    this.updateServicesUI(e.target.value);
+			},
+
+            updateServicesUI: function(selServId) {
+			    var services = Polymer.dom(this.root).querySelectorAll('[name=shipping_method]');
+			    for (var i = 0; i < services.length; i++) {
+			        if (services[i].value === selServId) {
+			            services[i].classList.remove('unchosen');
+			            services[i].classList.add('selected');
+			        }
+			        else {
+			            services[i].classList.add('unchosen');
+			            services[i].classList.remove('selected');
+			        }
+			    }
+			},
+
+			_onMethodSelected: function (e) {
+			    if (this.droppointData && this.droppointData.droppointId === e.detail.collectionPoint && this.droppointData.selected) {
+                    this.selectMethod(e.detail.serviceId, true);
+			    }
 			},
 
             //Select a shipping option by ID
             //Fire on-select-delivery-option to be received by parent
             //Set deliveries[n].selected to true on selected method, false on all others
 			selectMethod: function (shippingOptionId, supressEvent) {
-			    this.select();
+			    if (!this.panelMode)
+			        return;
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
 			        if (this.droppointData.deliveries[i].service.id == shippingOptionId) { //IMPORTANT: Don't use === here
-			        	this.set("droppointData.deliveries." + i + ".selected", true);
-			        	this.set("droppointData.deliveries." + i + ".className", "selected");
-			        }
+			            item.selected = true;
+			            item.className = "selected";
+                    }
 			        else {
-			        	this.set("droppointData.deliveries." + i + ".selected", false);
-			        	this.set("droppointData.deliveries." + i + ".className", "unchosen");
+			            item.selected = false;
+			            item.className = "unchosen";
 			        }
-			        //this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
-
-
 			    }
+			    this.updateServicesUI(shippingOptionId);
 			    var method = this.getSelectedMethod();
-			    this.droppointData.deliveryMethod = method.service.id;
-			    if (!supressEvent) {
-			    	this.fire('droppoint-selected', this.droppointData);
+			    if (method) {
+			        this.droppointData.deliveryMethod = method.service.id;
+			        if (!supressEvent) {
+			            this.fire('droppoint-selected', this.droppointData);
+			        }
 			    }
-			    
 			},
 
 			getSelectedMethod: function () {
@@ -698,25 +778,6 @@
 
 			},
 
-            //Autoselect a method if no method has been chosen yet
-			autoSelectMethod: function() {
-			    if (this.droppointData.deliveries) {
-			        if (!this.getSelectedMethod()) {
-			            this.selectMethod(this.droppointData.deliveries[0].id);
-			        }
-			        
-			    }
-			    else {
-			        console.error("No delivery options available");
-			    }
-			},
-
-            /*
-			_onShippingOptionsChanged: function() {
-			    this._onShippingOptionSelected();
-			},
-            */
-
 			_getUtcTime: function (d) {
 				var utc = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
 				return utc;
@@ -731,9 +792,24 @@
 
 			_onClick: function () {
 			    this.select();
-			    this.fire('user-select');
-			}
+			    this.fire('user-select', this.droppointData);
+			},
 
-		});
+			expanded: false,
+			toggleExpanded: function (e) {
+			    if (this.panelMode) {
+			        this.expanded = !this.expanded;
+			        if (!this.expanded) {
+			            Polymer.dom(this).node.firstElementChild.classList.add('closed');
+			            this._expandText = 'Show shipping options and details';
+			        }
+			        else {
+			            Polymer.dom(this).node.firstElementChild.classList.remove('closed');
+			            this._expandText = 'Hide shipping options and details';
+			        }
+			    }
+			    if (e) e.stopPropagation();
+			}
+        });
 	</script>
 </dom-module>

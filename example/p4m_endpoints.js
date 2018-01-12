@@ -21,8 +21,8 @@ exports.getP4MAccessToken = function(req, res) {
 	}
 
 
-	var url = "https://dev.parcelfor.me:44333/connect/token";
-	
+	var url = "https://dev-ids.parcelfor.me/connect/token";
+
 	var data = {
 		grant_type		: "authorization_code",
 		code			: req.query.code,
@@ -36,15 +36,28 @@ exports.getP4MAccessToken = function(req, res) {
 			"Authorization": "Basic " + new Buffer("10006:secret").toString('base64'),
 			"Content-Type": "application/x-www-form-urlencoded"
 		},
-		form : data
+		port: 443,
+
+		form : data,
+	
+		rejectUnauthorized : false
+
 	}
 
 
+	function isEmptyObject(obj) {
+		return !Object.keys(obj).length;
+	}
+
 	request.post(options, function(error, response, body) {
+
+		if (error && !isEmptyObject(error)) {
+			res.status(500).send(error);
+		}
 
 		var now = new Date();
 		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-
+console.log(body);
 		cookies.set('p4mToken', JSON.parse(body).access_token, cookieConf);
 
 		res.status(200).send('<script>window.close();</script>');
@@ -64,61 +77,55 @@ exports.localLogin = function(req, res) {
 	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
 	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
 	cookies.set('p4mGivenName', 		'Hugo', cookieConf);
-	cookies.set('p4mDefaultPostCode', 	'4000', cookieConf);
-	cookies.set('p4mDefaultCountryCode', 'AU', cookieConf);
 	cookies.set('p4mOfferCartRestore', 	'true', cookieConf);
 	cookies.set('p4mLocalLogin', 		'true', cookieConf); 
 
-	res.status(200).json({ "RedirectUrl": null, "Success": true, "Error": null});
+	res.status(200).json({ "localId": "1234567", "redirectUrl": null, "success": true, "error": null});
 	res.end(); // needed for cookies to save !
 };
 
 
 exports.checkout = function(req, res) {
+	returnTemplateFile('checkout.html', null, null, res);
+}
+
+
+exports.renewShippingToken = function(req, res) {
 
 	var cookies = new Cookies( req, res );
+	var url = "https://identity.justshoutgfs.com/connect/token";
 
-	if (true)
-	//if ( (cookies.get('gfsCheckoutToken')==null) || (cookies.get('gfsCheckoutToken')=='') ) 
-	{
-	    
-		var url = "https://identity.justshoutgfs.com/connect/token";
-
-		var data = {
-			grant_type	: "client_credentials",
-			scope 		: "read checkout-api"
-		}
-
-		var options = {
-			url: url,
-			headers: {
-				"Authorization": "Basic " + new Buffer("parcel_4_me:needmoreparcels").toString('base64'),
-				"Content-Type": "application/x-www-form-urlencoded"
-			},
-			form : data
-		}
-
-		request.post(options, function(error, response, body) {
-
-			var now = new Date();
-			var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-			var base64Token = new Buffer(JSON.parse(body).access_token).toString('base64');
-			cookies.set('gfsCheckoutToken', base64Token, cookieConf);
-
-			returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
-			
-		});
-	} 
-	else {	
-		console.log('THIS NEVER HAPPENS CURRENTLY.. but if i stored the gfs-access-token somewhere then I could do this logic ..');
-		returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
+	var data = {
+		grant_type	: "client_credentials",
+		scope 		: "read checkout-api"
 	}
+
+	var options = {
+		url: url,
+		headers: {
+			"Authorization": "Basic " + Buffer.from("parcel_4_me:needmoreparcels").toString('base64'),
+			//"Authorization": "Basic " + Buffer.from("michael.strong@justshoutgfs.com:MScheckout!").toString('base64'),
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		form : data
+	}
+
+	request.post(options, function(error, response, body) {
+		console.log(body);
+		var data = JSON.parse(body);
+		var now = new Date();
+		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
+		cookies.set('gfsCheckoutToken', data.access_token, cookieConf);
+
+		res.status(200).json({ "token": data.access_token, "success": true, "error": null});
+		res.end(); // needed for cookies to save !		
+	});
 }
 
 
 exports.itemQtyChanged = function(req, res) {
     var result = {
-        Success: true
+        success: true
     };
     res.status(200).json(result);
 }
@@ -130,7 +137,8 @@ function returnTemplateFile(file, find, replace, res) {
 			res.status(500).send(err);
 		}
 		// IMPLEMENTING ONLY THE MOST BASIC FIND REPLACE, OF ONE SHORT CODE AND ONLY ONE OCCURANCE
-		file_contents = file_contents.toString('utf8').replace(find, replace);  
+		if (find)
+			file_contents = file_contents.toString('utf8').replace(find, replace);  
 
 		res.set('Content-Type', 'text/html');
 		res.status(200).send(file_contents);
@@ -140,19 +148,43 @@ function returnTemplateFile(file, find, replace, res) {
 
 exports.updShippingService = function(req, res) {
     var result = {
-        Discount: 0,
-        Error: null,
-        Shipping: req.body.Amount,
-        Success: true
+        discount: 0,
+        error: null,
+        shipping: req.body.Amount,
+        success: true
     };
     try {
-    result.Tax = Math.floor(result.Shipping / 10);
-    result.Total = result.Tax + result.Shipping;
+		result.tax = Math.floor(result.shipping / 10);
+		result.total = result.tax + result.shipping;
     }
     catch(e) {
     	console.error(e);
-    	result.Tax = 0;
-    	result.Total = result.Shipping;
+    	result.tax = 0;
+    	result.total = result.shipping;
     }
     res.status(200).json(result);
+}
+
+exports.applyDiscountCode = function(req, res) {
+	if (req.body.discountCode && req.body.discountCode.length && req.body.discountCode[0].toLowerCase() == "f") {
+		res.status(200).json(
+			{
+				"code": req.body.discountCode,
+				"valid": true,
+				"amount": 10.0,
+				"description": "Special discount",
+				"note": "Special discount"
+			}
+		);
+	}
+	else {
+		res.status(200).json(
+			{
+				"code": req.body.discountCode,
+				"valid": false,
+				"error": "Not a valid code"
+			}
+		);
+
+	}
 }
