@@ -13,14 +13,32 @@ var fs				= require('fs');
 
 
 exports.getP4MAccessToken = function(req, res) {
+	res.status(200).send('<html><body></body></html>');
+	res.end(); 
+
+}
+
+exports.postP4MAccessToken = function(req, res) {
 	
 	var cookies = new Cookies( req, res );
 
 	if (cookies.get('p4mState') != req.query.state) {
 	    res.status(500).send('Authentication error (p4mState)');
 	}
+	else {
+		var values = JSON.parse(body);
+		var expiresSecs = 0 + values.expires_in;
+		var expiresAt = new Date(Date.now() + expiresSecs * 1000);
+		var cookieConf = { path : '/', expires: null, httpOnly: false };
+		console.log(body);
+		cookies.set('p4mToken', values.access_token, cookieConf);
+		cookies.set('p4mTokenExpires', expiresAt.toUTCString(), cookieConf);
+		
+		res.status(200).send('<script>window.close();</script>');
+		res.end(); // needed for cookies to save !
+	}
 
-
+/*
 	var url = "https://dev-ids.parcelfor.me/connect/token";
 
 	var data = {
@@ -57,13 +75,13 @@ exports.getP4MAccessToken = function(req, res) {
 
 		var now = new Date();
 		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-console.log(body);
+		console.log(body);
 		cookies.set('p4mToken', JSON.parse(body).access_token, cookieConf);
 
 		res.status(200).send('<script>window.close();</script>');
 		res.end(); // needed for cookies to save !
 	});
-
+*/
 
 };
 
@@ -73,14 +91,36 @@ exports.localLogin = function(req, res) {
 	var cookies = new Cookies( req, res );
 
 	// see these cookies that are used by the other p4m widgets
-	var now = new Date();
-	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
-	cookies.set('p4mGivenName', 		'Hugo', cookieConf);
-	cookies.set('p4mOfferCartRestore', 	'true', cookieConf);
-	cookies.set('p4mLocalLogin', 		'true', cookieConf); 
+	// var now = new Date();
+	// var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
+	// cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
+	// cookies.set('p4mGivenName', 		'Hugo', cookieConf);
+	// cookies.set('p4mOfferCartRestore', 	'true', cookieConf);
+	// cookies.set('p4mLocalLogin', 		'true', cookieConf); 
 
 	res.status(200).json({ "localId": "1234567", "redirectUrl": null, "success": true, "error": null});
+	res.end(); // needed for cookies to save !
+};
+
+
+exports.localLogout = function(req, res) {
+	
+	var cookies = new Cookies( req, res );
+	cookies.set("p4mToken", {expires: Date.now()});
+	cookies.set("p4mTokenExpires", {expires: Date.now()});
+	cookies.set("p4mAvatarUrl", {expires: Date.now()});
+	cookies.set("p4mGivenName", {expires: Date.now()});
+	cookies.set("p4mLocalLogin", {expires: Date.now()});
+	cookies.set("p4mState", {expires: Date.now()});
+	cookies.set("p4mNonce", {expires: Date.now()});
+	cookies.set("p4mOfferCartRestore", {expires: Date.now()});
+	cookies.set("p4mLocale", {expires: Date.now()});
+	cookies.set("p4mConsumer", {expires: Date.now()});
+	cookies.set("p4mPrefAddress", {expires: Date.now()});
+	cookies.set("p4mCart", {expires: Date.now()});
+	cookies.set("p4mCartAddress", {expires: Date.now()});
+	cookies.set("gfsCheckoutToken", {expires: Date.now()});
+	res.redirect("/");
 	res.end(); // needed for cookies to save !
 };
 

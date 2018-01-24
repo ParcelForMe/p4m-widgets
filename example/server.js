@@ -55,11 +55,13 @@ that the widgets will actually work
 
 */
 site.use('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
+site.post('/p4m/getP4MAccessToken', p4mEndpoint.postP4MAccessToken); 
 site.post('/p4m/localLogin', p4mEndpoint.localLogin); 
 site.use('/p4m/renewShippingToken', p4mEndpoint.renewShippingToken); 
 site.use('/p4m/checkout', p4mEndpoint.checkout);
 site.post('/p4m/updShippingService', p4mEndpoint.updShippingService);
 site.post('/p4m/itemQtyChanged', p4mEndpoint.itemQtyChanged);
+site.post('/p4m/localLogout', p4mEndpoint.localLogout);
 
 site.post('/p4m/applyDiscountCode', simulateDelay, p4mEndpoint.applyDiscountCode);
 
