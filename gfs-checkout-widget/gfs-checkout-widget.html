@@ -938,9 +938,13 @@
                     else {
                         self.queryForNewAddr(function () {
                             self._showDropPointsView();
-                            if (callback)
+                            self.toggleLoading('reset');
+                            if (address.dropPointId) {
+                                self._selectDropPoint(address.dropPointId, callback);
+                            }
+                            else if (callback)
                                 callback();
-                        });
+                        }, address.dropPointId);
                     }
                 });
 
@@ -1064,7 +1068,11 @@
                 }
             },
 
-            queryForNewAddr: function (finalCallback) {
+            toggleLoading: function (loading) {
+                this.domHost.toggleLoading(loading);
+            },
+
+            queryForNewAddr: function (finalCallback, dropPointId) {
                 // this is only called within the drop points tab, so we need to stay on the tab even if a non-DP address gets selected automatically
                 // can be called if the user: selects a fav addr, or a fav DP, or enters an address into the lookup
                 var self = this;
@@ -1073,6 +1081,7 @@
                 // Post, then select address and method - these can be previously chosen if the cart already exists
                 // or will be defaulted based on the consumer's preferences
                 this.initialised = false;
+                this.toggleLoading(true);
                 this.postGfsData(this.config.mapCenter, function (err) {
                     if (err) {
                         self.initialised = false;
@@ -1087,6 +1096,11 @@
                         self.enableStandardDelivery(false);
                         self.fire('no-delivery-opts');
                         return;
+                    }
+                    else if (dropPointId) {
+                        // selecting a new DP from a new query so don't do anything here
+                        if (finalCallback)
+                            finalCallback();
                     }
                     else if (selection.dropPointId) {
                         // try to select the drop point - need to force refresh of map
@@ -2116,10 +2130,11 @@
                                 postCode: dp.geoLocation.postCode,
                                 addressLineCollection: dp.geoLocation.addressLineCollection || dp.geoLocation.addressLines,
                                 lat: dp.geoLocation.coordinates.latitude,
-                                lng: dp.geoLocation.coordinates.longitude
+                                lng: dp.geoLocation.coordinates.longitude,
+                                dropPointId: dp.droppointId
                             };
                             this.requestDropPointsByAddress(addr, function () {
-                                self._selectDropPoint(dpId);
+                                //self._selectDropPoint(dpId);
                             });
                         }
                     }
@@ -2489,7 +2504,7 @@
 			_onClickFavAddress: function (e) {
 			    var addr = e.currentTarget.addressData;
 			    var self = this;
-			    this.setMapHome({ lat: addr.lat, lng: addr.lng}, 'asd');
+			    this.setMapHome({ lat: addr.lat, lng: addr.lng}, addr.label);
 			    this.requestDropPointsByAddress(addr);
 			},
 

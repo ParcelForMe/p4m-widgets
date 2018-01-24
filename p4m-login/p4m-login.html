@@ -63,6 +63,8 @@
                 </div>
             </paper-dialog>
 
+            <form id="p4mLogoutForm" method="post" action="/p4m/localLogout"><input type="hidden" name="logoutToken" value="{{logoutToken}}" /></form>
+
             <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
             <polymer-cookie id="p4mTokenExpiresCookie" name="p4mTokenExpires"></polymer-cookie>
             <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
@@ -133,7 +135,7 @@
                 redirectUrl: {
                     type: String,
                 },
-                logoutForm: {
+                logoutToken: {
                     type: String,
                 },
                 sessionId: String,
@@ -277,7 +279,11 @@
                     this.gettingAccessToken = false;
                     console.log('Access token via iframe: ', error);
                     document.body.removeChild(iframeData.currentTarget);
-                    callback(error);
+                    var checkingOut = document.getElementsByTagName('p4m-checkout')[0];
+                    if (!checkingOut)
+                        this.logoutThisSite();
+                    else
+                        callback(error);
                     return;
                 }
 
@@ -414,11 +420,11 @@
                 return null;
             },
             
-            //isLocallyLoggedIn: function() {
-            //    // if the P4M Consumer is logged in, then check if they are logged in locally
-            //    var localLogin = this.$.p4mLocalLoginCookie.readCookie();
-            //    return localLogin && localLogin === "true";
-            //},
+            p4mDidLocalLogin: function() {
+                // did we log this user in locally?
+                var localLogin = this.$.p4mLocalLoginCookie.readCookie();
+                return localLogin && localLogin === "true";
+            },
 
             _onGotLocale: function (err, data) {
                 //console.log(JSON.stringify(data));
@@ -450,56 +456,23 @@
                 this._waitForAuthCompletion();
             },
 			
-            //logoutThisSite: function () {
-            //    this.clearCookies();
-            //    if (this.logoutForm && this.logoutForm != '') {
-            //        var formElem = document.getElementById(this.logoutForm);
-            //        if (formElem) {
-            //            formElem.submit();
-            //        }
-            //        else {
-            //            window.location.reload(true); 
-            //        }
-            //    }
-            //    else {
-            //        window.location.reload(true);
-            //    }
-            //},
+            logoutThisSite: function () {
+                if (this.p4mDidLocalLogin()) 
+                    this.$.p4mLogoutForm.submit();
+                else
+                    this.clearCookies();
+            },
 
             logoutThisDevice: function () {
                 var logoutUrl = this.idSrvUrl + "/connect/endsession";
                 this.popupCenter(logoutUrl, "Logout", 480, 560);
-                this.clearCookies();
-                if (this.logoutForm && this.logoutForm != '') {
-                    var formElem = document.getElementById(this.logoutForm);
-                    if (formElem) {
-                        formElem.submit();
-                    }
-                    else {
-                        window.location.reload(true); 
-                    }
-                }
-                else {
-                    window.location.reload(true);
-                }
+                this.logoutThisSite();
             },
 			
             logoutAllDevices: function () {
                 var logoutUrl = this.idSrvUrl + "/ui/globalLogout";
                 this.popupCenter(logoutUrl, "Logout", 480, 560);
-                this.clearCookies();
-                if (this.logoutForm && this.logoutForm != '') {
-                    var formElem = document.getElementById(this.logoutForm);
-                    if (formElem) {
-                        formElem.submit();
-                    }
-                    else {
-                        window.location.reload(true); 
-                    }
-                }
-                else {
-                    window.location.reload(true);
-                }
+                this.logoutThisSite();
             },
 
             clearCookies: function() {
@@ -508,7 +481,7 @@
                 this.$.p4mTokenExpiresCookie.eraseCookie();
                 this.$.p4mStateCookie.eraseCookie();
                 this.$.p4mNonceCookie.eraseCookie();
-                this.$.p4mLocalLoginCookie.eraseCookie();
+                // this.$.p4mLocalLoginCookie.eraseCookie(); - don't clear this one here
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mConsumerCookie.eraseCookie();
                 this.$.p4mPrefAddressCookie.eraseCookie();
@@ -595,29 +568,37 @@
             },
 
             _doLocalLogin: function () {
-                var data = { consumer: this.consumerData, currentPage: window.location.href };
-                this._showAsLoggingIn();
-                this.$.localApi.call('localLogin', null, data, this._onLocalLogin.bind(this));
+                if (!this.p4mDidLocalLogin()) {
+                    var data = { consumer: this.consumerData, currentPage: window.location.href };
+                    this._showAsLoggingIn();
+                    this.$.localApi.call('localLogin', null, data, this._onLocalLogin.bind(this));
+                }
+                else {
+                    this.checkForGfsTokenAndReload();
+                }
             },
 
             _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
+                var self = this;
                 if (err || data.error) {
                     console.error("A login error occurred:", err || data.error);
                     this._onError(err || data.error);
                     window.location.reload(true);
                 }
-                else {
-                    var self = this;
-                    this.checkForGfsToken(function () {
-                        if (self.consumerData.localId !== data.localId)
-                            self.saveLocalId(data.localId, function (err) {
-                                self.reloadBrowser(data.redirectUrl);
-                            });
-                        else
-                            this.reloadBrowser(data.redirectUrl);
+                else if (self.consumerData.localId !== data.localId)
+                    this.saveLocalId(data.localId, function (err) {
+                        self.checkForGfsTokenAndReload(data.redirectUrl);
                     });
-                }
+                else
+                    this.checkForGfsTokenAndReload(data.redirectUrl);
+            },
+
+            checkForGfsTokenAndReload: function(url) {
+                var self = this;
+                this.checkForGfsToken(function () {
+                    self.reloadBrowser(url);
+                });
             },
 
             checkForGfsToken: function(callback) {

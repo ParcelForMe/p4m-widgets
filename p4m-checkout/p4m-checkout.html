@@ -806,12 +806,25 @@
                 }
                 if (!showingOverlay)
                     this.toggleLoading(true);
-                this._getWidget('gfsCheckoutWidget').init(this.gfsPostConfig, selection, function (err, data) {
-                    //self.updateCartCookie();
-                    self.toggleLoading(false);
-                    callback(err, data);
+                // check for token expiry before updating gfs
+                var loginWidget = document.getElementsByTagName("p4m-login")[0];
+                loginWidget.getConsumerToken(function (err, token) {
+                    if (err) {
+                        console.error('Token error: ', err);
+                        self.$.p4mCheckoutApi.requestLogin();
+                    }
+                    else if (!token) {
+                        console.error('No consumer token!!');
+                        self.$.p4mCheckoutApi.requestLogin();
+                    }
+                    else {
+                        self._getWidget('gfsCheckoutWidget').init(self.gfsPostConfig, selection, function (err, data) {
+                            //self.updateCartCookie();
+                            self.toggleLoading(false);
+                            callback(err, data);
+                        });
+                    }
                 });
-
             },
 
             setGfsConfigValues: function() {
@@ -829,6 +842,7 @@
                 var addrPrefs = this.consumerData.deliveryPreferences ? this.consumerData.deliveryPreferences.split(',') : null;
                 var currAddr = this.getCartAddr();
                 var defAddr = this.getDefaultAddr(currAddr);
+                this.gfsPostConfig.toggleLoading = this.toggleLoading;
                 this.gfsPostConfig.id = currAddr.id;
                 this.gfsPostConfig.countryCode = currAddr.countryCode;
                 this.gfsPostConfig.town = currAddr.city;
@@ -1638,7 +1652,7 @@
                         throw err;
                     }
                     else {
-                        addressElement.detail.addressData.id = result.address.id;
+                        //addressElement.detail.addressData.id = result.address.id;
                         self._ensureShippingVisible(true);
                     }
                 });
@@ -1721,6 +1735,7 @@
                 var self = this;
                 this.updateShippingService(e.detail, function () {
                     self.notifyPath('consumerData.addresses');
+                    self.toggleLoading('reset');
                     console.log("onGfsServiceChanged: updateShippingService complete");
                 });
             },
