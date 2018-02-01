@@ -105,6 +105,7 @@
 
             ready: function ()
             {
+                window.addEventListener('p4m-token-valid', this.load.bind(this));
                 this.load();
             },
 
@@ -115,23 +116,23 @@
                 this.set('_notLoggedIn', !this._loggedIn);
             },
 
-            onSignUp: function (e) {
-                // we have a token from PP so now we can launch PP in a popup
-                var signupUrl = "//" + window.location.host + "/p4m/signup";
-                this.openPopup(signupUrl, "signupWindow", 650, 750);
-            },
-
             requestLogin: function () {
                 var event = new CustomEvent('p4m-request-login');
                 window.dispatchEvent(event);
             },
 
-            openPopup: function(url, id, w, h) {
-                // open the popup
-                var left = (screen.width / 2) - (w / 2);
-                var top = (screen.height / 2) - (h / 2);
-                window.open(url, id, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-            },
+            //onSignUp: function (e) {
+            //    // we have a token from PP so now we can launch PP in a popup
+            //    var signupUrl = "//" + window.location.host + "/p4m/signup";
+            //    this.openPopup(signupUrl, "signupWindow", 650, 750);
+            //},
+
+            //openPopup: function (url, id, w, h) {
+            //    // open the popup
+            //    var left = (screen.width / 2) - (w / 2);
+            //    var top = (screen.height / 2) - (h / 2);
+            //    window.open(url, id, 'toolbar=no, location=no, directories=no, status=no, menubar=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+            //},
         });
     </script>
 </dom-module>

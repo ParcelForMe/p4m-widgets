@@ -280,11 +280,12 @@
                         loginWidget.getConsumerToken(function (err, token) {
                             if (err) {
                                 console.error('Token error: ', err);
-                                self.requestLogin();
+                                if (err === 'expired')
+                                    self.requestLogin();
                             }
                             else if (!token) {
                                 console.error('No consumer token!!');
-                                self.requestLogin();
+                                //self.requestLogin();
                             }
                             else {
                                 self.consumerToken = token;

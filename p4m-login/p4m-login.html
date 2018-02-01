@@ -200,6 +200,7 @@
                             }
                         }
                         else {
+                            self.notifyAccessToken();
                             self._showAsLoggedIn();
                             var offerRestore = self.$.p4mOfferCartRestoreCookie.readCookie();
                             var p4mCheckout = document.getElementsByTagName('p4m-checkout');
@@ -229,9 +230,10 @@
             getConsumerToken: function (callback, localCall) {
                 // if the local token is missing then the consumer needs to login, otherwise
                 // if the local token is about to expire then we need to get one via a hidden iframe
-                if (!this._tokenHasExpired())
+                var tokenState = this._checkTokenExpiry();
+                if (tokenState === 'valid')
                     callback(null, this.p4mToken)
-                else {
+                else if (tokenState === 'expired') {
                     console.log('Consumer token has expired');
                     // if we're on the checkout page then let p4m-checkout refresh the token otherwise... chaos!
                     var checkingOut = document.getElementsByTagName('p4m-checkout')[0];
@@ -240,6 +242,8 @@
                     else
                         callback("Await refresh from p4m-checkout");
                 }
+                else
+                    callback(tokenState);
             },
 
             gettingAccessToken: false,
@@ -252,13 +256,13 @@
                     var iframe = document.createElement("iframe");
                     iframe.setAttribute("width", "1");
                     iframe.setAttribute("height", "1");
-                    var url = this._makeAuthUrl(true);
-                    iframe.setAttribute("src", url);
-                    document.body.appendChild(iframe);
                     var self = this;
                     iframe.onload = function (iframeData) {
                         self.getAccessTokenFromIframe(iframeData, callback);
                     };
+                    document.body.appendChild(iframe);
+                    var url = this._makeAuthUrl(true);
+                    iframe.setAttribute("src", url);
                 }
             },
 
@@ -283,7 +287,7 @@
                     if (!checkingOut)
                         this.logoutThisSite();
                     else
-                        callback(error);
+                        callback('expired');
                     return;
                 }
 
@@ -310,8 +314,14 @@
                     document.cookie = "p4mTokenExpires=" + expiresAt.toUTCString() + "; path=/;";
                     this.p4mToken = accessToken;
                     this.p4mTokenExpires = expiresAt;
+                    this.notifyAccessToken();
                     callback(null, accessToken);
                 }
+            },
+
+            notifyAccessToken: function () {
+                var event = new CustomEvent('p4m-token-valid');
+                window.dispatchEvent(event);
             },
 
             parseQueryString: function (queryString) {
@@ -457,8 +467,10 @@
             },
 			
             logoutThisSite: function () {
-                if (this.p4mDidLocalLogin()) 
+                if (this.p4mDidLocalLogin()) {
+                    this.clearCookies(true);
                     this.$.p4mLogoutForm.submit();
+                }
                 else
                     this.clearCookies();
             },
@@ -475,13 +487,12 @@
                 this.logoutThisSite();
             },
 
-            clearCookies: function() {
+            clearCookies: function(loggingOut) {
                 // clear the local P4M cookies
                 this.$.p4mTokenCookie.eraseCookie();
                 this.$.p4mTokenExpiresCookie.eraseCookie();
                 this.$.p4mStateCookie.eraseCookie();
                 this.$.p4mNonceCookie.eraseCookie();
-                // this.$.p4mLocalLoginCookie.eraseCookie(); - don't clear this one here
                 this.$.p4mOfferCartRestoreCookie.eraseCookie();
                 this.$.p4mConsumerCookie.eraseCookie();
                 this.$.p4mPrefAddressCookie.eraseCookie();
@@ -489,6 +500,8 @@
                 this.$.p4mCartAddressCookie.eraseCookie();
                 this.$.p4mAvatarUrlCookie.eraseCookie();
                 this.$.p4mGivenNameCookie.eraseCookie();
+                if (loggingOut)
+                    this.$.p4mLocalLoginCookie.eraseCookie();
                 // clear local properties
                 this.p4mToken = null;
                 this._state = null;
@@ -539,7 +552,7 @@
                 return this.p4mToken;
             },
 
-            _tokenHasExpired: function () {
+            _checkTokenExpiry: function () {
                 this._getTokenCookie();
                 var expiresCookie = this.p4mTokenExpires;
                 var expires;
@@ -547,7 +560,8 @@
                     expires = new Date(expiresCookie); // this is in UTC but the browser will put in the local offset
                 }
                 var nowPlus30 = new Date(Date.now() + 30000);
-                return !this.p4mToken || !expires || (expires < nowPlus30);
+                var hasLoggedIn = this.p4mDidLocalLogin();
+                return (!this.p4mToken && !hasLoggedIn) ? 'no token' : (!expires || (expires < nowPlus30)) ? 'expired' : 'valid';
             },
 
             _waitForAuthCompletion: function () {

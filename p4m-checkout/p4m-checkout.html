@@ -811,11 +811,12 @@
                 loginWidget.getConsumerToken(function (err, token) {
                     if (err) {
                         console.error('Token error: ', err);
-                        self.$.p4mCheckoutApi.requestLogin();
+                        if (err === 'expired')
+                            self.$.p4mCheckoutApi.requestLogin();
                     }
                     else if (!token) {
                         console.error('No consumer token!!');
-                        self.$.p4mCheckoutApi.requestLogin();
+                        //self.$.p4mCheckoutApi.requestLogin();
                     }
                     else {
                         self._getWidget('gfsCheckoutWidget').init(self.gfsPostConfig, selection, function (err, data) {
@@ -1070,7 +1071,7 @@
                     return;
                 var updCart = { 'shippingDetails': null, 'items': changes };
                 var self = this;
-                this.$.localApi.call('itemQtyChanged', {}, updCart, function (err, newCartTotals) {
+                this.$.localApi.call('itemQtyChanged', null, updCart, function (err, newCartTotals) {
                     if (err) {
                         self.onRetailerNoService();
                         return;
