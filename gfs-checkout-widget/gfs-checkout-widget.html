@@ -610,6 +610,23 @@
                 this._postReq(mapCenter, this._postData, callback);
             },
 
+            clearSelectedService: function () {
+                this._showingDroppoints = false;
+                this.selectedServiceDetails = {
+                    type: Object,
+                    value: {
+                        service: null,
+                        serviceCode: null,
+                        carrier: null,
+                        shipping: null,
+                        deliveryAddress: null,
+                        expDeliveryDateStart: null,
+                        expDeliveryDateEnd: null,
+                        collectPoint: null
+                    }
+                };
+            },
+
             _topDPPinned: false,
             _topDPWasExpanded: false,
             dpListScrolled: function (event) {

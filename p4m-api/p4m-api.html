@@ -239,7 +239,7 @@
                 }             
             },
 
-            _baseUrl: function () {
+            baseUrl: function () {
                 if (this.isLocal) {                   
                     return "//" + window.location.host + "/p4m/";                   
                 }
@@ -302,7 +302,7 @@
                     
                     var httpRequest = new XMLHttpRequest();
                     var queryParams = {};
-                    var url = this._baseUrl() + apiRequest.endPoint.stub;
+                    var url = this.baseUrl() + apiRequest.endPoint.stub;
                     var queryParamCount = 0;
 
                     //=== Make URL

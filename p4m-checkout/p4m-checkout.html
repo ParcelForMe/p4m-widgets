@@ -615,6 +615,7 @@
                 window.addEventListener('discountdelete', this.onDiscountDelete.bind(this));
                 window.addEventListener('popup-blocked', this.onPopupBlocked.bind(this));
                 window.addEventListener('cvv-enter-key', this.clickBuyNow.bind(this));
+                window.addEventListener('p4m-consumer', this.consumerUpdated.bind(this));
 
                 self.sessionAddressId = hashThis(this.sessionId);   // default P4M Id for a DP
 
@@ -649,12 +650,6 @@
                             callback(err)
                         }
                         else {
-                            if (err) {
-                                self.initialising = false;
-                                console.error(err);
-                                console.log('...Initialisation aborted.');
-                                throw err;
-                            }
                             //Send info from cart and consumer to GFS
                             console.log('_gfs()');
                             self._runGFS_IfReady(function (err) {
@@ -703,26 +698,43 @@
                         callback(data.error);
                     }
                     else {
-                        self.set('consumerData', data.consumer);
-                        var addr = self.getDefaultAddr();
-                        var gfs = self._getWidget('gfsCheckoutWidget');
-                        if (!gfs.config) {
-                            // this can happen if P4M returns before the local cart - e.g. when consumer must be updated before sending cart
-                            self.gfsPostConfig.defaultAddress = p4mAddressToGfsAddress(addr);
-                            self.gfsPostConfig.favAddresses = self._getPreferredAddresses();
-                            self.gfsPostConfig.favDropPoints = self._getPreferredDropPoints();
-                        }
-                        else {
-                            gfs.config.defaultAddress = p4mAddressToGfsAddress(addr);
-                            gfs.setFavAddresses(self._getPreferredAddresses());
-                            gfs.setFavDropPoints(self._getPreferredDropPoints());
-                        }
-                        self.updateConsumerCookie(addr);
-                        if (data.consumer.hasInstalledApp)
-                            self._getWidget('downloadAppAd', wantDom).classList.add("hide");
-                        callback(err, data);
+                        self.gotNewConsumer(data.consumer);
+                        callback(null, data.consumer)
                     }
                 });
+            },
+
+            consumerUpdated: function (e) {
+                // clear all relevant cart data to force initialization
+                this.$.p4mCartAddressCookie.eraseCookie();  // this will force the cart address to be reassigned
+                this.cartData.addressId = null;
+                this.cartData.dropPointId = null;
+                this.cartData.serviceId = null;
+                this.cartData.serviceName = null;
+                this.cartData.expDeliveryDate = null;
+                this._gfsCurrentAddrId = null;
+                this.initialising = true;
+                this.gotNewConsumer(e.detail);
+                this._getWidget('gfsCheckoutWidget').clearSelectedService();
+                this._updateGfs(false);
+            },
+
+            gotNewConsumer: function(consumer) {
+                this.set('consumerData', consumer);
+                var addr = this.getDefaultAddr();
+                var gfs = this._getWidget('gfsCheckoutWidget');
+                // this can happen if P4M returns before the local cart - e.g. when consumer must be updated before sending cart
+                this.gfsPostConfig.defaultAddress = p4mAddressToGfsAddress(addr);
+                this.gfsPostConfig.favAddresses = this._getPreferredAddresses();
+                this.gfsPostConfig.favDropPoints = this._getPreferredDropPoints();
+                if (gfs.config) {
+                    gfs.config.defaultAddress = p4mAddressToGfsAddress(addr);
+                    gfs.setFavAddresses(this._getPreferredAddresses());
+                    gfs.setFavDropPoints(this._getPreferredDropPoints());
+                }
+                this.updateConsumerCookie(addr);
+                if (consumer.hasInstalledApp)
+                    this._getWidget('downloadAppAd', wantDom).classList.add("hide");
             },
 
             updateConsumerCookie: function(addr) {

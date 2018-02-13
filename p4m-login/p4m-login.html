@@ -236,14 +236,17 @@
                 else if (tokenState === 'expired') {
                     console.log('Consumer token has expired');
                     // if we're on the checkout page then let p4m-checkout refresh the token otherwise... chaos!
-                    var checkingOut = document.getElementsByTagName('p4m-checkout')[0];
-                    if (!checkingOut || !localCall)
+                    if (!this.checkingOut() || !localCall)
                         this.getAccessToken(callback);
                     else
                         callback("Await refresh from p4m-checkout");
                 }
                 else
                     callback(tokenState);
+            },
+
+            checkingOut: function() {
+                return document.getElementsByTagName('p4m-checkout')[0];
             },
 
             gettingAccessToken: false,
@@ -321,7 +324,42 @@
 
             notifyAccessToken: function () {
                 var event = new CustomEvent('p4m-token-valid');
+                this.registerForUpdates();
                 window.dispatchEvent(event);
+            },
+
+            signalRConnection: null,
+            signalRToken: null,
+            registerForUpdates: function() {
+                // call the P4M api server to register for updates to the consumer via websockets - only for the checkout page
+                if (!this.checkingOut() || (this.signalRConnection && this.signalRToken == this.p4mToken))
+                    return;
+                let transportType = signalR.TransportType.WebSockets;
+                let logger = new signalR.ConsoleLogger(signalR.LogLevel.Trace);
+                var apiUrl = this.$.p4mLoginApi.baseUrl();
+                this.signalRConnection = new signalR.HubConnection(apiUrl + 'registerConsumer?access_token=' + this.p4mToken, { jwtBearer: this.p4mToken, transport: transportType, logger: logger });
+                this.signalRToken = this.p4mToken;
+                this.signalRConnection.start();
+
+                this.signalRConnection.onclose(e => {
+                    if (e) {
+                        console.error('Connection closed with error: ', e);
+                    }
+                    else {
+                        console.log('SignalR Disconnected');
+                    }
+                    this.signalRConnection = null;
+                    this.signalRToken = null;
+                });
+
+                var self = this;
+                this.signalRConnection.on('consumer', updConsumer => {
+                    console.log('New consumer details: ', updConsumer);
+                    self.set('consumerData', updConsumer);
+                    self.updateConsumerCookie();
+                    var event = new CustomEvent('p4m-consumer', {'detail': updConsumer});
+                    window.dispatchEvent(event);
+                });
             },
 
             parseQueryString: function (queryString) {
@@ -412,11 +450,13 @@
                 var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" +
                     fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
-                var addrStr =
-                    fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
-                    fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
-                    fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
-                document.cookie = "p4mPrefAddress=" + addrStr;
+                if (addr) {
+                    var addrStr =
+                        fldStr(addr.id) + fldStr(addr.dropPointId) + fldStr(addr.street1) + fldStr(addr.street2) + fldStr(addr.city) +
+                        fldStr(addr.postCode) + fldStr(addr.state) + fldStr(addr.countryCode) +
+                        fldStr(addr.latitude) + fldStr(addr.longitude, true) + "; path=/;";
+                    document.cookie = "p4mPrefAddress=" + addrStr;
+                }
                 document.cookie = "p4mAvatarUrl=" + fldStr(consumer.profilePicUrl, true) + "; path=/;";
                 document.cookie = "p4mGivenName=" + fldStr(consumer.givenName, true) + "; path=/;";
             },
