@@ -618,8 +618,12 @@
                 window.addEventListener('p4m-consumer', this.consumerUpdated.bind(this));
 
                 self.sessionAddressId = hashThis(this.sessionId);   // default P4M Id for a DP
+                async.parallel([
+                    function _consumer(callback) { self._getConsumer(callback) },
+                    function _cart(callback) { self.getCartFromRetailer(callback) }
+                ]);
 
-                // check if the consumer details have changed since last retrieved
+                /* check if the consumer details have changed since last retrieved
                 var lastChanged = this.getConsumerLastChanged();
                 this.$.p4mCheckoutApi.call('consumerNeedsUpdating', { lastUpdated: lastChanged }, null, function (err, data) {
                     if (!data.result)
@@ -637,7 +641,7 @@
                             }
                         });
                     }
-                });
+                }); */
             },
 
             //Get local cart
