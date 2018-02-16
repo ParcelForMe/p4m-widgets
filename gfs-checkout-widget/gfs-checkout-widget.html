@@ -709,7 +709,7 @@
                                     callback(null, httpRequest.responseText);
                                 }
                                 else if (httpRequest.status == 401) {
-                                    this.fire('gfs-token-expired');
+                                    this.fire('gfs-token-expired', method);
                                     console.error(httpRequest.responseText);
                                 }
                                 else {

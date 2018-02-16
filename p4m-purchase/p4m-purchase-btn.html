@@ -5,7 +5,7 @@
 
     <template>
         <div id="p4mPurchaseBtnContainer" class$="{{_topClass}}">     
-            <button on-click="onClick" class$="button-container {{_btnClass}} payWith_{{_paymentType}} shadow">{{buttonText}}</button>
+            <button on-click="onClick" class$="button-container {{_btnClass}} payWith_{{paymentType}} shadow">{{buttonText}}</button>
         </div>
     </template>
 
@@ -56,7 +56,7 @@
                     type: String,
                     notify: true
                 },
-                _paymentType: {
+                paymentType: {
                     type: String,
                     notify: true
                 }
@@ -76,7 +76,7 @@
             },
 
             onClick: function() {
-                this.fire('buy', {paymentType: this._paymentType});
+                this.fire('buy', {paymentType: this.paymentType});
             },
 
 
@@ -86,7 +86,7 @@
             },
 
             onPaymentTypeEvent: function(e) {
-                this.set('_paymentType', e.detail);
+                this.set('paymentType', e.detail);
             },
 
             onStateChange: function () {

@@ -1806,9 +1806,15 @@
                         document.cookie = "gfsCheckoutToken=" + data.token + "; path=/;";
                         self.gfsCheckoutToken = data.token;
                     }
-                    self._gfsCurrentAddrId = null;
-                    self.toggleLoading('reset');
-                    self._updateGfs(false, function () { self._getWidget('gfsCheckoutWidget').refreshShippingTab(); });
+                    if (e.detail === 'PATCH') {
+                        // this happened when trying to purchase the cart
+                        this.fire('buy', { paymentType: self._getWidget('p4mPurchaseBtn').paymentType });
+                    }
+                    else {
+                        self._gfsCurrentAddrId = null;
+                        self.toggleLoading('reset');
+                        self._updateGfs(false, function () { self._getWidget('gfsCheckoutWidget').refreshShippingTab(); });
+                    }
                 });
             },
 
