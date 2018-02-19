@@ -150,7 +150,7 @@
                             <iron-page id="deliveryPage">
                                 <div id="shippingSelector" class="hidden">
 
-                                    <gfs-checkout id="gfsCheckoutWidget" access-token="{{gfsCheckoutToken}}" on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}"></gfs-checkout>
+                                    <gfs-checkout id="gfsCheckoutWidget" access-token="{{shippingToken}}" on-selectedservicechanged="onGfsServiceChanged" on-gfs-token-expired="onGfsSessionExpiry" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}"></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
                                     <p>Please <a class="link green" href="#">enter an address</a> to continue.</p>
@@ -205,7 +205,7 @@
                                 <p4m-spinner species="progress" id="delivery_spinner"></p4m-spinner>
                                 <div id="shippingSelector" class="hidden">
 
-                                    <gfs-checkout id="gfsCheckoutWidget" mobile="true" on-session-expiry="onGfsSessionExpiry" access-token="{{gfsCheckoutToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
+                                    <gfs-checkout id="gfsCheckoutWidget" mobile="true" on-session-expiry="onGfsSessionExpiry" access-token="{{shippingToken}}"  on-selectedservicechanged="onGfsServiceChanged" on-noservice="onGfsNoService" on-no-delivery-opts="onNoDeliveryOpts" delivery-preferences="{{deliveryPreferences}}" consumer-addresses="{{consumerData.addresses}}" ></gfs-checkout>
                                 </div>
                                 <div id="noShippingWarning">
                                     <p>Please <a class="link" href="#">enter an address</a> to continue</p>
@@ -237,7 +237,8 @@
         <polymer-cookie id="p4mPrefAddressCookie" name="p4mPrefAddress"></polymer-cookie>
         <polymer-cookie id="p4mCartCookie" name="p4mCart"></polymer-cookie>
         <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
-        <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
+        <polymer-cookie id="shippingTokenCookie" name="shippingToken"></polymer-cookie>
+        <polymer-cookie id="shippingTokenExpiresCookie" name="shippingTokenExpires"></polymer-cookie>
 
         <style include="p4m-shared">
             :host {
@@ -515,7 +516,7 @@
                     value: false,
                     notify: true
                 },
-                gfsCheckoutToken: {
+                shippingToken: {
                     type: String
                 },
                 gfsData: {
@@ -528,13 +529,6 @@
                 initialCountryCode: {
                     type: String,
                     value: "GB"
-                },
-                onSessionExpiry: {
-                    type: String
-                },
-                _notUseGfsCheckout: {
-                    type: Object,
-                    value: true
                 },
                 _changeTimer: {
                     //Timer object to allow sending of changes once user has finished interaction
@@ -575,10 +569,8 @@
                 //console.log('Async:',async);
                 var self = this;
                 this.Tabs = { "ORDER": 0, "ADDRESS": 1, "DELIVERY": 2, "PAYMENT": 3 };
-                this._notUseGfsCheckout = !this.useGfsCheckout;
-                if (!this.gfsCheckoutToken) {
-                    this.gfsCheckoutToken = this.$.gfsCheckoutTokenCookie.readCookie();
-                }
+                this.shippingToken = this.$.shippingTokenCookie.readCookie();
+                this.shippingTokenExpires = this.$.shippingTokenExpiresCookie.readCookie();
                 if (!this.sessionId) {
                     this.sessionId = this.$.sessionCookie.readCookie();
                 }
@@ -1803,12 +1795,16 @@
                         self.showGeneralFault("our shipping service");
                     }
                     else {
-                        document.cookie = "gfsCheckoutToken=" + data.token + "; path=/;";
-                        self.gfsCheckoutToken = data.token;
+                        document.cookie = "shippingToken=" + data.token + "; path=/;";
+                        document.cookie = "shippingTokenExpires=" + data.expires + "; path=/;";
+                        self.shippingToken = data.token;
+                        self.shippingTokenExpires = data.expires;
                     }
                     if (e.detail === 'PATCH') {
                         // this happened when trying to purchase the cart
-                        this.fire('buy', { paymentType: self._getWidget('p4mPurchaseBtn').paymentType });
+                        var purchase = self._getWidget('p4mPurchase');
+                        purchase._state = 1; // States.FAILED_PURCHASE;
+                        self.clickBuyNow();
                     }
                     else {
                         self._gfsCurrentAddrId = null;

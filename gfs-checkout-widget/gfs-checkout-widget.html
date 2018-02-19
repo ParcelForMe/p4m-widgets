@@ -683,8 +683,8 @@
 
                 if (this.accessToken === "") {
                     var error =  "No access token";
-                    this.$.errorNotification = error;
-                    this.$.errorNotification.show();
+                    //this.$.errorNotification = error;
+                    //this.$.errorNotification.show();
                     callback(error);
                 }
                 else {
@@ -701,11 +701,10 @@
                         else {
                             this._showAsLoading(false);
                             try {
-                                /*var throwErr = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-                                if (throwErr === 2) {
-                                    this.fire('gfs-token-expired');
+                                /*if (method === 'PATCH') {
+                                    this.fire('gfs-token-expired', method);
                                 }
-                                else */ if (httpRequest.status == 200 || httpRequest.status == 201) {
+                                else*/ if (httpRequest.status == 200 || httpRequest.status == 201) {
                                     callback(null, httpRequest.responseText);
                                 }
                                 else if (httpRequest.status == 401) {
@@ -713,7 +712,7 @@
                                     console.error(httpRequest.responseText);
                                 }
                                 else {
-                                    this.fire('noservice');
+                                    this.fire('noservice', method);
                                     console.error(httpRequest.responseText);
                                 }                                 
                             }

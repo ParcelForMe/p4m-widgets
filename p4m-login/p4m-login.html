@@ -78,7 +78,8 @@
             <polymer-cookie id="p4mCartAddressCookie" name="p4mCartAddress"></polymer-cookie>
             <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
-            <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
+            <polymer-cookie id="shippingTokenCookie" name="shippingToken"></polymer-cookie>
+            <polymer-cookie id="shippingTokenExpiresCookie" name="shippingTokenExpires"></polymer-cookie>
 
         </div>
     </template>
@@ -209,8 +210,8 @@
                                 if (!p4mCheckout || p4mCheckout.length === 0)
                                     self.$.lastCartDlg.open();
                             }
-                            if (!self.hasGfsToken())
-                                self.getGfsToken();
+                            if (!self.hasShipToken())
+                                self.getShipToken();
                         }
                     }
                     else if (err === "Await refresh from p4m-checkout")
@@ -377,16 +378,18 @@
                 return params;
             },
 
-            hasGfsToken: function() {
-                return this.$.gfsCheckoutTokenCookie.readCookie();
+            hasShipToken: function() {
+                return this.$.shippingTokenCookie.readCookie();
             },
 
-            getGfsToken: function (callback) {
-                console.log("Getting GFS token");
+            getShipToken: function (callback) {
+                console.log("Getting shipping token");
                 var self = this;
                 this.$.localApi.call('renewShippingToken', null, null, function (err, data) {
-                    if (!err) 
-                        document.cookie = "gfsCheckoutToken=" + data.token + "; path=/;";
+                    if (!err) {
+                        document.cookie = "shippingToken=" + data.token + "; path=/;";
+                        document.cookie = "shippingTokenExpires=" + data.expires + "; path=/;";
+                    }
                     if (callback)
                         callback(err);
                 });
@@ -449,8 +452,6 @@
                 // the consumer cookie stores default address details so that we can initiate GFS before getting the consumer
                 var consumer = this.consumerData;
                 var addr = this.getAddressById(this.consumerData.prefDeliveryAddressId);
-                var d = new Date();
-                var expires = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate()).toUTCString();
                 document.cookie = "p4mConsumer=" +
                     fldStr(consumer.id) + fldStr(consumer.deliveryPreferences) + fldStr(consumer.extras.localId) + fldStr(consumer.lastChanged, true) + "; path=/;";
                 if (addr) {
@@ -631,7 +632,7 @@
                     this.$.localApi.call('localLogin', null, data, this._onLocalLogin.bind(this));
                 }
                 else {
-                    this.checkForGfsTokenAndReload();
+                    this.checkForShipTokenAndReload();
                 }
             },
 
@@ -645,22 +646,22 @@
                 }
                 else if (self.consumerData.localId !== data.localId)
                     this.saveLocalId(data.localId, function (err) {
-                        self.checkForGfsTokenAndReload(data.redirectUrl);
+                        self.checkForShipTokenAndReload(data.redirectUrl);
                     });
                 else
-                    this.checkForGfsTokenAndReload(data.redirectUrl);
+                    this.checkForShipTokenAndReload(data.redirectUrl);
             },
 
-            checkForGfsTokenAndReload: function(url) {
+            checkForShipTokenAndReload: function(url) {
                 var self = this;
-                this.checkForGfsToken(function () {
+                this.checkForShipToken(function () {
                     self.reloadBrowser(url);
                 });
             },
 
-            checkForGfsToken: function(callback) {
-                if (!this.hasGfsToken())
-                    this.getGfsToken(callback);
+            checkForShipToken: function(callback) {
+                if (!this.hasShipToken())
+                    this.getShipToken(callback);
                 else if (callback)
                     callback();
             },
