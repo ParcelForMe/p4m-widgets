@@ -406,7 +406,7 @@
                 //Polymer.dom(this).setAttribute('addressid', this.addressData.id);
                 //this.$['country'].value = this.addressData.countryCode;//{ label: this.addressData.country, value: this.addressData.countryCode };
                 if (this.addressData.addressType === 'Collect')
-                    this.dpIcon = this.resolveUrl('../gfs-droppoint/images/' + this.addressData.dropPointProviderId + '.png');
+                    this.dpIcon = this.resolveUrl('../gfs-droppoint/images/' + this.addressData.dropPointProviderId.toLowerCase() + '.png');
                 this.addressData.prefDelivery ? this.$.defDelivery.classList.remove('hidden') : this.$.defDelivery.classList.add('hidden');
                 this.addressData.prefBilling ? this.$.defBilling.classList.remove('hidden') : this.$.defBilling.classList.add('hidden');
                 this.isBilling = (this.cartData.billingAddressId === this.addressData.id);
