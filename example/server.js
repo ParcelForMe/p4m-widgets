@@ -38,6 +38,9 @@ function logRoute(req, res, next) {
 var site = Express();
 
 site.use(BodyParser.json());
+site.use(BodyParser.urlencoded({
+    extended: true
+}));
 site.use(allowCrossDomain);
 site.set('port', SITE_PORT);
 
@@ -54,7 +57,7 @@ These are the minimum parcel 5 me endpoints we need to implement so
 that the widgets will actually work
 
 */
-site.use('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
+site.get('/p4m/getP4MAccessToken', p4mEndpoint.getP4MAccessToken); 
 site.post('/p4m/getP4MAccessToken', p4mEndpoint.postP4MAccessToken); 
 site.post('/p4m/localLogin', p4mEndpoint.localLogin); 
 site.use('/p4m/renewShippingToken', p4mEndpoint.renewShippingToken); 

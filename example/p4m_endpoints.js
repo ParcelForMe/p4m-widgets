@@ -19,24 +19,23 @@ exports.getP4MAccessToken = function(req, res) {
 }
 
 exports.postP4MAccessToken = function(req, res) {
-	
 	var cookies = new Cookies( req, res );
 
-	if (cookies.get('p4mState') != req.query.state) {
-	    res.status(500).send('Authentication error (p4mState)');
-	}
-	else {
-		var values = JSON.parse(body);
+	// if (cookies.get('p4mState') != req.query.state) {
+	//     res.status(500).send('Authentication error (p4mState)');
+	// }
+	// else {
+		var values = req.body;// JSON.parse(req.body);
+		console.log("Access token: " + values.access_token);
 		var expiresSecs = 0 + values.expires_in;
 		var expiresAt = new Date(Date.now() + expiresSecs * 1000);
 		var cookieConf = { path : '/', expires: null, httpOnly: false };
-		console.log(body);
 		cookies.set('p4mToken', values.access_token, cookieConf);
 		cookies.set('p4mTokenExpires', expiresAt.toUTCString(), cookieConf);
 		
 		res.status(200).send('<script>window.close();</script>');
 		res.end(); // needed for cookies to save !
-	}
+	//}
 
 /*
 	var url = "https://dev-ids.parcelfor.me/connect/token";
