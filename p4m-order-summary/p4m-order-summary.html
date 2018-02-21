@@ -19,9 +19,19 @@
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-start">{{currencySymbol}}{{_cartItemsTotalPriceString}}</div>
                 </div>
                 <div class="p4m-row horizontal layout">
-                    <div class="p4m-cell detail-col flex-2 self-center">Delivery via {{cartData.serviceName}}</div>
+                    <div class="p4m-cell detail-col flex-2 self-center">Delivery via: {{cartData.serviceName}}</div>
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_shipping}}</div>
                 </div>
+                <template is="dom-if" if="{{mobile}}">
+                    <div class="p4m-row horizontal layout">
+                        <div class="p4m-cell detail-col flex-2 self-center">To: {{_deliveryAddressStr}}</div>
+                        <div class="p4m-cell cost-col flex-1 layout end-justified self-center">&nbsp;</div>
+                    </div>
+                    <div class="p4m-row horizontal layout">
+                        <div class="p4m-cell detail-col flex-2 self-center">By: {{_deliveryDateStr}}</div>
+                        <div class="p4m-cell cost-col flex-1 layout end-justified self-center">&nbsp;</div>
+                    </div>
+                </template>
                 <div class="p4m-row horizontal layout">
                     <div class="p4m-cell detail-col flex-2 self-center">Tax</div>
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_tax}}</div>
@@ -67,8 +77,12 @@
 				    type: Boolean,
 					value: false
 				},
-				
                 cartData: {
+                    type: Object,
+                    notify: true,
+                    observer: "onCartDataModified"
+                },
+                consumerData: {
                     type: Object,
                     notify: true,
                     observer: "onCartDataModified"
@@ -108,14 +122,17 @@
                 _topClass: {
                     type: String,
                     value: ""
-                }
+                },
+                _deliveryAddressStr: String,
+                _deliveryDateStr: String
             },
+
             observers: [
                 "onCartDataModified(cartData.items.*)",
                 "onCartDataModified(cartData.discounts.*)",
-                "onCartDataModified(cartData.total)",
-
+                "onCartDataModified(cartData.total)"
             ],
+
             ready: function()
             {
                 this.update.bind(this)();
@@ -127,8 +144,13 @@
                     this._updateCartDescription();
                     this._updateDiscount();
                     this._updateCurrencyAmounts();
-                    this._updateTemplate();                   
-                }               
+                    this._updateTemplate();
+                    if (this.consumerData && this.mobile) {
+                        var deliveryAddr = this._addressById(this.cartData.addressId);
+                        this._deliveryAddressStr = this._addressToStr(deliveryAddr);
+                        this._deliveryDateStr = this._expectedDeliveryDateStr(this.cartData.expDeliveryDate);
+                    }
+                }
             },
 
             hasDiscount: function () {
@@ -151,7 +173,34 @@
                 }*/
             },
 
-            _updateItemCount: function() {
+            _addressById: function (id) {
+                if (this.consumerData && this.consumerData.addresses && this.consumerData.addresses.length) 
+                    for (var i = 0; i < this.consumerData.addresses.length; i++) 
+                        if (this.consumerData.addresses[i].id === id) 
+                            return this.consumerData.addresses[i];
+            },
+
+            _addressToStr: function (address) {
+                if (address) {
+                    var company = address.companyName ? address.companyName : '';
+                    return company + ' ' + address.street1;// + " " + address.Street2 + " in " + (address.City || address.PostCode);
+                }
+                else {
+                    return "";
+                }
+            },
+
+            _expectedDeliveryDateStr: function (dateStr) {
+                if (dateStr) {
+                    return moment(new Date(dateStr)).format('ddd Do MMM YYYY');
+                }
+                else {
+                    return "Select a delivery date";
+                }
+
+            },
+
+            _updateItemCount: function () {
                 this._cartItemCount = 0;
                 this._cartItemsTotalPrice = 0;
                 var self = this;

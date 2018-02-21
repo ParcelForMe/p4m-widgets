@@ -178,7 +178,7 @@
                     <div id="detailPanel" class="p4m-panel flex-2"> 
                         <iron-pages id="mobilepages" selected="{{selected}}" on-iron-select="_onSelectTab">    
                             <iron-page id="summaryPanel" class="p4m-panel smallSummary flex-1 page four">
-                                <p4m-order-summary id="orderSummary" mobile="true" cart-data="{{cartData}}"></p4m-order-summary>
+                                <p4m-order-summary id="orderSummary" mobile="true" consumer-data="{{consumerData}}" cart-data="{{cartData}}"></p4m-order-summary>
                                 <p4m-purchase id="p4mPurchase" mobile="true" cart-data="{{cartData}}" on-payment-complete="onPaymentComplete" on-request-payment-method="goToPaymentMethods" use-paypal="{{usePaypal}}" selected-card="{{selectedCard}}" use-paypal="true"></p4m-purchase>
                                 <p4m-footer mobile="true" consumer-data="{{consumerData}}" cart-data="{{cartData}}" change-indicator-class="{{_changeIndicatorClass}}"></p4m-footer>
                             </iron-page>
