@@ -11,24 +11,26 @@
             <h4>Order Summary</h4>
             <div class="p4m-table vertical layout">
                 <div class="p4m-row horizontal layout">
-                    <div class="p4m-cell detail-col flex-2 self-start">{{_cartItemCount}} {{_collectiveNoun}}: {{_cartDescription}} 
+                    <div class="p4m-cell detail-col flex-2 self-start">
+                        <span>{{_cartItemCount}} {{_collectiveNoun}}: {{_cartDescription}} 
                         <!-- RESP --><!-- SmallerThanDesktop  Notes: Added contextual 'Edit' button  -->
                         <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(1);">Edit</span></template>
+                        </span>
                         <!-- RESP --><!-- / SmallerThanDesktop -->
                     </div>
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-start">{{currencySymbol}}{{_cartItemsTotalPriceString}}</div>
                 </div>
                 <div class="p4m-row horizontal layout">
-                    <div class="p4m-cell detail-col flex-2 self-center">Delivery via: {{cartData.serviceName}}</div>
+                    <div class="p4m-cell detail-col flex-2 self-center"><span>Delivery via: {{cartData.serviceName}} <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(3);">Edit</span></template></span></div>
                     <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_shipping}}</div>
                 </div>
                 <template is="dom-if" if="{{mobile}}">
                     <div class="p4m-row horizontal layout">
-                        <div class="p4m-cell detail-col flex-2 self-center">To: {{_deliveryAddressStr}}</div>
+                        <div class="p4m-cell detail-col flex-2 self-center"><span>To: {{_deliveryAddressStr}} <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(2);">Edit</span></template></span></div>
                         <div class="p4m-cell cost-col flex-1 layout end-justified self-center">&nbsp;</div>
                     </div>
                     <div class="p4m-row horizontal layout">
-                        <div class="p4m-cell detail-col flex-2 self-center">By: {{_deliveryDateStr}}</div>
+                        <div class="p4m-cell detail-col flex-2 self-center"><span>By: {{_deliveryDateStr}} <template is="dom-if" if="{{mobile}}"><span class="edit-link SmallerThanDesktop" onclick="select(5);">Edit</span></template></span></div>
                         <div class="p4m-cell cost-col flex-1 layout end-justified self-center">&nbsp;</div>
                     </div>
                 </template>

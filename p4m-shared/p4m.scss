@@ -408,8 +408,17 @@ left: 0;
 }
 
 .edit-link {
+    color: #fff;
+    background: $p4m-green;
+    display: inline-flex;
+    height: 16px;
+    max-height: 16px;
+    padding: 0 6px;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px;
     font-weight: 400;
-    color: #38a552;
+    @include border-radius (16px);
 }
 
 button.inverse, .button.inverse, .p4m-button.inverse {
@@ -4948,7 +4957,7 @@ Smartphone <375px
     display: block ;
   }
   .SmallerThanDesktop.edit-link {
-    display: inline;
+    display: inline-flex;
   }
 
   p4m-checkout > #container {
@@ -5002,7 +5011,11 @@ Smartphone <375px
   paper-tabs paper-tab, 
   paper-tabs paper-tab .paper-tab, 
   .add-new {
-    height: 36px !important;
+    height: 32px !important;
+  }
+  paper-tabs.select-payment-type {
+    height: 32px !important;
+    margin-bottom: 10px;
   }
 
   p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
@@ -5134,9 +5147,22 @@ Smartphone <375px
       box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
       overflow: scroll;
       &#summaryPanel {
+        h4 {
+          height: 32px;
+          font-size: 12px;
+          margin: 0;
+          padding: 0 20px;
+          display: flex;
+          align-items: flex-end;
+          color: #aaa;
+          background: none;
+        }
         #orderSummary {
           width: 100%;
-          flex: initial;
+          flex: 1;
+          .p4m-table {
+            padding: 10px 20px;
+          }
         }
         #p4mPurchase {
           width: 100%;
@@ -5144,6 +5170,9 @@ Smartphone <375px
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
+          flex: initial;
+          height: initial;
+          align-self: stretch;
           #p4mPurchaseContainer {
             .select-payment-type {
               .edit-link {
@@ -5163,6 +5192,15 @@ Smartphone <375px
           flex: 1;
           flex-shrink: 0;
           display: block; // solves 'no height' issue - should be solved by flex-shrink: 0; but it's not for some unknown reason
+          
+          display: flex;
+          flex: 1;
+          flex-shrink: 0;
+          display: -webkit-box;
+          height: 42px;
+          max-height: 42px;
+          min-height: 42px;
+
           footer#footerpPanel {
             display: flex;
             flex-direction: column;
@@ -5184,6 +5222,7 @@ Smartphone <375px
               flex-shrink: 0;
               min-width: 100%;
               height: initial;
+              display: none;
               #container {
                 display: flex;
                 flex: 1;
@@ -5593,16 +5632,9 @@ SmallerThanDesktop <768px
   p4m-checkout .topPanel .logos h2 {
     font-size: 5vw;
   }
-}
-
-
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-SmallerThanDesktop <320px
-/////////////////////////////////////////////////////////////////////////// */
-
-@media (max-width: 320px) {
+  #tabsContent {
+    align-items: flex-end;
+  }
   p4m-card > div#container .card-panel .card-body .creditcard i {
       display: none;
   }
@@ -5664,6 +5696,7 @@ SmallerThanDesktop <320px
   }
   p4m-card {
     height: 92px;
+    margin: 5px;
   }
   iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase p4m-card > div#container {
     min-height: 92px;
@@ -5681,6 +5714,26 @@ SmallerThanDesktop <320px
       background-size: 64px auto;
     }
   }
+  p4m-checkout .select-payment-type paper-tab {
+    height: 32px !important;
+    * {
+      font-size: 32px;
+      height: 32px !important;
+      line-height: 32px;
+    }
+  }
+
+}
+
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+SmallerThanDesktop <320px
+/////////////////////////////////////////////////////////////////////////// */
+
+@media (max-width: 320px) {
+  
 
 }
 
