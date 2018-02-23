@@ -65,6 +65,7 @@
 
             <form id="p4mLogoutForm" method="post" action="/p4m/localLogout"><input type="hidden" name="logoutToken" value="{{logoutToken}}" /></form>
 
+            <polymer-cookie id="p4mHasAccountCookie" name="p4mHasAccount"></polymer-cookie>
             <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
             <polymer-cookie id="p4mTokenExpiresCookie" name="p4mTokenExpires"></polymer-cookie>
             <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
@@ -178,6 +179,7 @@
                 window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
                 //Close down the dialog if there is a general fault
                 window.addEventListener('generalFault', this._useNewCart.bind(this));
+                window.addEventListener("message", this._receiveMessage.bind(this));
                 //Move dialog out into the body
                 Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
                 this._showAsLoggedOut();
@@ -190,7 +192,7 @@
                     if (!err && token) 
                     {
                         if (!self.hasConsumer()) {
-                            if (!self.$.spinner.active) {
+                            //if (!self.$.spinner.active) { what was this for??
                                 self._showAsLoggingIn();
                                 self._getConsumer(function (err) {
                                     if (err)
@@ -198,7 +200,7 @@
                                     else
                                         self._doLocalLogin();
                                 });
-                            }
+                            //}
                         }
                         else {
                             self.notifyAccessToken();
@@ -234,7 +236,7 @@
                 var tokenState = this._checkTokenExpiry();
                 if (tokenState === 'valid')
                     callback(null, this.p4mToken)
-                else if (tokenState === 'expired') {
+                else if (tokenState === 'expired' || this.hasP4MAccount === 'Y') {
                     console.log('Consumer token has expired');
                     // if we're on the checkout page then let p4m-checkout refresh the token otherwise... chaos!
                     if (!this.checkingOut() || !localCall)
@@ -516,19 +518,17 @@
                     this.$.p4mLogoutForm.submit();
                 }
                 else
-                    this.clearCookies();
+                    this.clearCookies(true);
             },
 
             logoutThisDevice: function () {
                 var logoutUrl = this.idSrvUrl + "/connect/endsession";
                 this.popupCenter(logoutUrl, "Logout", 480, 560);
-                this.logoutThisSite();
             },
 			
             logoutAllDevices: function () {
                 var logoutUrl = this.idSrvUrl + "/ui/globalLogout";
                 this.popupCenter(logoutUrl, "Logout", 480, 560);
-                this.logoutThisSite();
             },
 
             clearCookies: function(loggingOut) {
@@ -590,7 +590,8 @@
                 return this._authUrl;
             },
 
-            _getTokenCookie: function() {
+            _getTokenCookie: function () {
+                this.hasP4MAccount = this.$.p4mHasAccountCookie.readCookie();
                 this.p4mToken = (this.p4mToken && this.p4mToken !== '') ? this.p4mToken : this.$.p4mTokenCookie.readCookie();
                 this.p4mTokenExpires = (this.p4mTokenExpires && this.p4mTokenExpires !== '') ? this.p4mTokenExpires : this.$.p4mTokenExpiresCookie.readCookie();
                 return this.p4mToken;
@@ -612,7 +613,13 @@
                 if (!this._authCompletionInterval) {
                     this._authCompletionInterval = window.setInterval(this._checkAuthIsComplete.bind(this), 200);
                 }
-                window.addEventListener("message", this._showAsLoggedOut.bind(this));
+            },
+
+            _receiveMessage: function(event)
+            {
+                this._showAsLoggedOut();
+                if (event.data === "loggedOut")
+                    this.logoutThisSite();
             },
 
             _checkAuthIsComplete: function() {
