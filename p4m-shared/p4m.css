@@ -3953,7 +3953,8 @@ Smartphone <375px
       -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
       /* Saf3.0+, Chrome */
       box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
-      overflow: scroll; }
+      overflow-x: hidden;
+      overflow-y: scroll; }
       iron-pages#mobilepages > iron-page#summaryPanel h4 {
         height: 32px;
         font-size: 12px;
