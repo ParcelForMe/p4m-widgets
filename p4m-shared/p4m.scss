@@ -5737,3 +5737,71 @@ SmallerThanDesktop <320px
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+OVERRIDES AHOY! - AKA the curse of the Shadow Dom, or lack thereof
+/////////////////////////////////////////////////////////////////////////// */
+
+
+p4m-checkout div#container.p4m-card {
+    z-index: initial;
+}
+
+@media screen and (max-width: 768px) {
+  
+p4m-checkout #panelContainer {
+    display: flex;
+    border-radius: 0;
+    background-color: white;
+    flex: 1;
+    overflow-x: hidden;
+}
+
+}
+
+
+
+@media (max-width: 375px) {
+
+p4m-checkout .topPanel .logos h2 {
+    font-size: 5vw;
+    line-height: initial !important;
+}
+
+p4m-checkout div#container.p4m-card {
+    z-index: initial;
+}
+
+p4m-checkout > .iron-selected.p4m-checkout:not(#summaryPanel) {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+    transition: transform 300ms ease-out;
+    will-change: transform;
+    overflow-x: hidden;
+}
+
+}
+
+
+
+
+
+
