@@ -1408,7 +1408,8 @@ p4m-card {
       p4m-card > div#container .card-panel .card-body {
         display: flex;
         flex: 1;
-        flex-direction: column; }
+        flex-direction: column;
+        justify-content: center; }
         p4m-card > div#container .card-panel .card-body .card-actions {
           justify-content: flex-end; }
           p4m-card > div#container .card-panel .card-body .card-actions #selectedToggle {
@@ -1422,7 +1423,7 @@ p4m-card {
           padding: 0; }
           p4m-card > div#container .card-panel .card-body .card-content .card-details {
             padding: 0;
-            min-height: 30px;
+            min-height: 24px;
             display: flex;
             flex-direction: row;
             position: relative;
@@ -3854,7 +3855,7 @@ Smartphone <375px
     height: 32px !important; }
   paper-tabs.select-payment-type {
     height: 32px !important;
-    margin-bottom: 10px; }
+    margin-bottom: 5px; }
   p4m-checkout #panelContainer .p4m-panel paper-tabs paper-tab .paper-tab {
     font-size: 11px; }
   .paper-input .input-content.paper-input-container label {
@@ -3956,7 +3957,7 @@ Smartphone <375px
       overflow-x: hidden;
       overflow-y: scroll; }
       iron-pages#mobilepages > iron-page#summaryPanel h4 {
-        height: 32px;
+        height: 28px;
         font-size: 12px;
         margin: 0;
         padding: 0 20px;
