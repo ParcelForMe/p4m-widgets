@@ -3944,7 +3944,7 @@ Smartphone <375px
       flex-direction: column;
       justify-content: flex-start; }
       iron-pages#mobilepages iron-page h4 {
-        height: 32px; }
+        height: 28px; }
     iron-pages#mobilepages > iron-page {
       height: 100% !important;
       box-sizing: border-box;
@@ -4059,7 +4059,8 @@ Smartphone <375px
               padding: 0;
               box-sizing: border-box;
               white-space: nowrap;
-              border-radius: 0 !important; }
+              border-radius: 0 !important;
+              text-decoration: none; }
               iron-pages#mobilepages > iron-page#summaryPanel p4m-footer footer#footerpPanel .action-buttons .p4m-button.back-to-site:hover, iron-pages#mobilepages > iron-page#summaryPanel p4m-footer footer#footerpPanel .action-buttons .p4m-button.back-to-site:active, iron-pages#mobilepages > iron-page#summaryPanel p4m-footer footer#footerpPanel .action-buttons .p4m-button.back-to-site:focus {
                 background-color: #eaeaea;
                 color: #555 !important; }
@@ -4316,6 +4317,8 @@ Smartphone <375px
 SmallerThanDesktop <768px
 /////////////////////////////////////////////////////////////////////////// */
 @media (max-width: 375px) {
+  p4m-checkout p4m-order-summary #spinner {
+    display: none; }
   p4m-checkout .topPanel .logos h2 {
     font-size: 5vw; }
   #tabsContent {
@@ -4358,10 +4361,12 @@ SmallerThanDesktop <768px
       border-left-color: #37a553;
       border-right: none; }
   p4m-card {
-    height: 92px;
+    height: 84px;
     margin: 5px; }
+    p4m-card .card-body {
+      padding: 10px !important; }
   iron-pages#mobilepages > iron-page#summaryPanel #p4mPurchase p4m-card > div#container {
-    min-height: 92px; }
+    min-height: 84px; }
   p4m-card > div#container .card-panel .card-body .creditcard {
     flex: 1;
     width: initial;
@@ -4373,7 +4378,10 @@ SmallerThanDesktop <768px
       margin-left: 6px;
       background-size: 64px auto; }
   p4m-checkout .select-payment-type paper-tab {
-    height: 32px !important; }
+    height: 32px !important;
+    margin-right: 8px; }
+    p4m-checkout .select-payment-type paper-tab:first-of-type {
+      width: 48px; }
     p4m-checkout .select-payment-type paper-tab * {
       font-size: 32px;
       height: 32px !important;
