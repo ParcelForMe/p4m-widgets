@@ -4109,7 +4109,11 @@ Smartphone <375px
             margin-bottom: 0; }
       iron-pages#mobilepages > iron-page#addressPage p4m-address-list {
         flex: 1;
-        width: 100%; }
+        width: 100%;
+        overflow: hidden; }
+        iron-pages#mobilepages > iron-page#addressPage p4m-address-list #addressSelectionPages {
+          overflow-y: scroll;
+          overflow-x: hidden; }
         iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address {
           margin-bottom: 3px; }
           iron-pages#mobilepages > iron-page#addressPage p4m-address-list p4m-address .toggle-button {
